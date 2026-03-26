@@ -2,7 +2,7 @@
 
 import Header from "@/components/header";
 import { Button as DefButton } from "@/components/ui";
-import SplitText, { HeroSplitTextLoop } from "@/components/typo/SplitText";
+import SplitText from "@/components/typo/SplitText";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -11,12 +11,48 @@ gsap.registerPlugin(ScrollTrigger);
 
 export default function LandingGradientV1Page() {
   useGSAP(() => {
+    let lastSnapProgress = 0;
+    const centerProgress = 1 / 3;
+    const title2Progress = 2 / 3;
+    const title3Progress = 1;
+
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: "#def-hero-main",
         start: "top top",
-        end: "+=2000",
+        end: "+=2800",
         scrub: 1,
+        snap: {
+          snapTo: (value) => {
+            if (value <= centerProgress) {
+              lastSnapProgress = value;
+
+              return value;
+            }
+
+            const snapPoints = [centerProgress, title2Progress, title3Progress];
+            const isForward = value >= lastSnapProgress;
+
+            if (isForward) {
+              const nextPoint =
+                snapPoints.find((point) => point >= value) ?? title3Progress;
+
+              lastSnapProgress = nextPoint;
+
+              return nextPoint;
+            }
+
+            const prevPoint =
+              [...snapPoints].reverse().find((point) => point <= value) ??
+              centerProgress;
+
+            lastSnapProgress = prevPoint;
+
+            return prevPoint;
+          },
+          duration: 0.25,
+          delay: 0.05,
+        },
         pin: true,
         pinSpacing: true,
         markers: false,
@@ -25,6 +61,7 @@ export default function LandingGradientV1Page() {
 
     tl.set("#def-hero-title-1", { opacity: 1, visibility: "visible" })
       .set("#def-hero-images", { opacity: 1, visibility: "visible" })
+      .set(["#def-hero-title-2", "#def-hero-title-3"], { autoAlpha: 0 })
       .to(
         "#def-hero-title-1",
         {
@@ -42,7 +79,50 @@ export default function LandingGradientV1Page() {
           duration: 1,
         },
         0,
-      );
+      )
+      .addLabel("centerReached", 1)
+      .to(
+        "#def-hero-image-mobile",
+        {
+          xPercent: -300,
+          duration: 1,
+        },
+        "centerReached",
+      )
+      .to(
+        "#def-hero-image-desktop",
+        {
+          xPercent: 170,
+          duration: 1,
+        },
+        "centerReached",
+      )
+      .to(
+        "#def-hero-title-2",
+        {
+          autoAlpha: 1,
+          duration: 1,
+        },
+        "centerReached",
+      )
+      .addLabel("title2Visible")
+      .to(
+        "#def-hero-title-2",
+        {
+          autoAlpha: 0,
+          duration: 1,
+        },
+        "title2Visible",
+      )
+      .to(
+        "#def-hero-title-3",
+        {
+          autoAlpha: 1,
+          duration: 1,
+        },
+        "title2Visible",
+      )
+      .addLabel("title3Visible");
   }, []);
 
   return (
@@ -70,7 +150,7 @@ export default function LandingGradientV1Page() {
 
           {/* IMAGES */}
           <div
-            className="absolute top-[100%] left-1/2 w-[50%] -translate-x-1/2 opacity-0 visibility-hidden"
+            className="absolute top-[70%] left-1/2 w-[50%] -translate-x-1/2 opacity-0 visibility-hidden"
             id="def-hero-images"
           >
             <div className="relative w-full" id="def-hero-image-desktop">

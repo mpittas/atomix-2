@@ -1,10 +1,13 @@
 Let's work on the animation inside hero again.
 
-After the image container reaches the middle of the screen, then I want to switch the scroll behaviour. When user scrolls only once an animation will execute (not scroll triggered anymore).
+After the image container reaches the middle of the screen (@page.tsx#L37-45), then I want to continue from this moment in timeline but switch the scroll behaviour. From this moment on (when two images reach the middle of screen) when user scrolls only once (no more scroll trigger) we do the following animation:
 
-The animation is:
+- "def-hero-image-mobile" goes to the left and "def-hero-image-desktop" goes to the right, they both animate at the same time outwards and they need to move out of the screen and #def-hero-title-2 appears in the middle with a simple fade. (this is one time animation after user scrolls one)
 
-- "def-hero-image-mobile" goes to the left and "def-hero-image-desktop" goes to the right, they both animate at the same time outwards.
-- Animation continues and aftrer images above are out of the screen we wanna show #def-hero-title-2, after another scroll we wanna show #def-hero-title-3
+When user scrolls once more then #def-hero-title-2 disappears and #def-hero-title-3 appears in the middle with a simple fade.
 
-basically we have 1 scroll action that triggers the animation, and then 2 more scroll actions that show the titles
+Make sure when user scrolls back up the animations reverse.
+
+---
+
+when user scrolls back and reaches the images being in the middle of the screen (just when we swtich the scroll behaviour) please make scroll to be scroll trigger again and reverse the animation, ensuring the title and animations are in the initial position.
