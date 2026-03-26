@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Menu, X, ChevronDown } from "lucide-react";
+import { Button as DefButton } from "@/components/ui";
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -61,18 +62,18 @@ export default function Header() {
                   onMouseEnter={() => setOpenDropdown(link.name)}
                   onMouseLeave={() => setOpenDropdown(null)}
                 >
-                  <button className="flex items-center gap-1 text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors py-2">
+                  <button className="flex items-center gap-1 text-md font-normal text-gray-700 hover:text-gray-900 transition-colors py-2">
                     {link.name}
                     <ChevronDown className="h-4 w-4" />
                   </button>
                   {openDropdown === link.name && (
                     <div className="absolute top-full left-0 pt-2">
-                      <div className="w-56 bg-white rounded-lg shadow-lg border border-gray-200 py-2">
+                      <div className="w-56 bg-white rounded-xl border border-gray-200 py-2">
                         {link.children.map((child) => (
                           <a
                             key={child.name}
                             href={child.href}
-                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition-colors"
+                            className="block px-4 py-2 text-md text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition-colors"
                           >
                             {child.name}
                           </a>
@@ -83,16 +84,13 @@ export default function Header() {
                 </div>
               ))}
             </div>
-            <button className="px-5 py-2 bg-gray-900 text-white text-sm font-medium rounded-lg hover:bg-gray-800 transition-colors">
-              Book a demo
-            </button>
+            <DefButton>Book a demo</DefButton>
           </div>
 
           {/* Mobile Menu Button + CTA */}
           <div className="flex md:hidden items-center gap-3">
-            <button className="px-4 py-2 bg-gray-900 text-white text-sm font-medium rounded-lg hover:bg-gray-800 transition-colors">
-              Book a demo
-            </button>
+            <DefButton>Book a demo</DefButton>
+
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="p-2 text-gray-700 hover:text-gray-900"
