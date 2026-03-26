@@ -21,8 +21,10 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} h-full antialiased`}>
       <body className={`${inter.className} min-h-full flex flex-col`}>
-        <Header />
-        <main className="flex-1 pt-16">{children}</main>
+        <div className="c-wrapper bg-white px-12 rounded-3xl">
+          <Header />
+          <main className="flex-1">{children}</main>
+        </div>
       </body>
     </html>
   );

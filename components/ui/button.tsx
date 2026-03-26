@@ -34,7 +34,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         return gradient;
       }
 
-      return "bg-gradient-to-r from-[#1C4FF5] to-[#2A85FA] hover:from-blue-700 hover:to-purple-700";
+      return "bg-gradient-to-r from-[#1C4FF5] to-[#2A85FA]";
     };
 
     const baseClasses =
