@@ -7,12 +7,12 @@ export default function LandingGradientV1Page() {
   return (
     <section
       className="flex h-[calc(100vh-116px)] bg-[#00081F] rounded-3xl overflow-hidden relative flex flex-col"
-      id="t-hero"
+      id="def-hero"
     >
       {/* HEADING */}
       <div
         className="text-white flex flex-col gap-y-8 justify-center items-center text-center bg-red-500/20 absolute left-1/2 -translate-x-1/2 top-[10%] w-[1000px] opacity-0 visibility-hidden"
-        id="t-hero-heading"
+        id="def-hero-title-1"
       >
         <img
           src="/logo/atomix-logo-big-white.svg"
@@ -26,9 +26,9 @@ export default function LandingGradientV1Page() {
       {/* IMAGES */}
       <div
         className="absolute top-[100%] left-1/2 w-[50%] -translate-x-1/2 opacity-0 visibility-hidden"
-        id="t-hero-images"
+        id="def-hero-images"
       >
-        <div className="relative w-full" id="t-hero-image-left">
+        <div className="relative w-full" id="def-hero-image-left">
           <img
             src="/dashboard/hero-desktop-img.svg"
             alt="Atomix desktop dashboard preview"
@@ -40,7 +40,7 @@ export default function LandingGradientV1Page() {
           />
         </div>
 
-        <div id="t-hero-image-right">
+        <div id="def-hero-image-right">
           <img
             src="/dashboard/hero-mobile-img.svg"
             alt="Atomix mobile form preview"
@@ -55,7 +55,7 @@ export default function LandingGradientV1Page() {
       {/* TITLE 1 */}
       <div
         className="text-white max-w-[1000px] mx-auto flex flex-col gap-y-8 justify-center items-center text-center bg-green-500/20 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 opacity-5 visibility-hidden"
-        id="t-hero-heading-1"
+        id="def-hero-title-2"
       >
         <div className="rounded-full bg-white/8 text-white text-sm font-semibold px-4 py-2 tracking-wide">
           Mission
@@ -76,7 +76,7 @@ export default function LandingGradientV1Page() {
       {/* TITLE 2 */}
       <div
         className="text-white max-w-[1000px] mx-auto flex flex-col gap-y-8 justify-center items-center text-center bg-yellow-500/20 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 opacity-5 visibility-hidden"
-        id="t-hero-heading-2"
+        id="def-hero-title-3"
       >
         <div className="rounded-full bg-white/8 text-white text-sm font-semibold px-4 py-2 tracking-wide">
           Vision
