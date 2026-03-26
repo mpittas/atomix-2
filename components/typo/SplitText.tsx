@@ -75,12 +75,12 @@ export interface HeroSplitTextLoopProps {
 
 const SplitText: React.FC<SplitTextProps> = ({
   text,
-  className = "",
-  delay = 50,
-  duration = 1.25,
+  className = "text-5xl leading-[1.2em] font-semibold",
+  delay = 20,
+  duration = 0.6,
   ease = "power3.out",
   splitType = "chars",
-  from = { opacity: 0, y: 40 },
+  from = { opacity: 0, y: 26 },
   to = { opacity: 1, y: 0 },
   threshold = 0.1,
   rootMargin = "-100px",
