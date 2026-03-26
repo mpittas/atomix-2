@@ -13,8 +13,8 @@ export default function LandingGradientV1Page() {
   useGSAP(() => {
     const tl = gsap.timeline({
       scrollTrigger: {
-        trigger: "#atomix-playground-v1",
-        start: "bottom bottom",
+        trigger: "#def-hero-main",
+        start: "top top",
         end: "+=2000",
         scrub: 1,
         pin: true,
@@ -47,7 +47,7 @@ export default function LandingGradientV1Page() {
 
   return (
     <div>
-      <div className="bg-white px-12">
+      <div className="bg-white px-12" id="def-hero-main">
         <Header />
 
         <section
