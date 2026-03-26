@@ -61,7 +61,8 @@ export default function LandingGradientV1Page() {
 
     tl.set("#def-hero-title-1", { opacity: 1, visibility: "visible" })
       .set("#def-hero-images", { opacity: 1, visibility: "visible" })
-      .set(["#def-hero-title-2", "#def-hero-title-3"], { autoAlpha: 0 })
+      .set("#def-hero-title-2", { autoAlpha: 0, scale: 0 })
+      .set("#def-hero-title-3", { autoAlpha: 0 })
       .to(
         "#def-hero-title-1",
         {
@@ -85,7 +86,8 @@ export default function LandingGradientV1Page() {
         "#def-hero-image-mobile",
         {
           xPercent: -300,
-          duration: 1,
+          duration: 1.35,
+          ease: "power2.inOut",
         },
         "centerReached",
       )
@@ -93,7 +95,8 @@ export default function LandingGradientV1Page() {
         "#def-hero-image-desktop",
         {
           xPercent: 170,
-          duration: 1,
+          duration: 1.35,
+          ease: "power2.inOut",
         },
         "centerReached",
       )
@@ -101,7 +104,9 @@ export default function LandingGradientV1Page() {
         "#def-hero-title-2",
         {
           autoAlpha: 1,
-          duration: 1,
+          scale: 1,
+          duration: 1.35,
+          ease: "power1.out",
         },
         "centerReached",
       )
@@ -110,17 +115,22 @@ export default function LandingGradientV1Page() {
         "#def-hero-title-2",
         {
           autoAlpha: 0,
-          duration: 1,
+          scale: 0,
+          duration: 0.5,
+          ease: "power1.in",
         },
         "title2Visible",
       )
+      .set("#def-hero-title-3", { scale: 0 })
       .to(
         "#def-hero-title-3",
         {
           autoAlpha: 1,
-          duration: 1,
+          scale: 1,
+          duration: 0.5,
+          ease: "power1.out",
         },
-        "title2Visible",
+        "title2Visible+=0.5",
       )
       .addLabel("title3Visible");
   }, []);
@@ -136,7 +146,7 @@ export default function LandingGradientV1Page() {
         >
           {/* HEADING */}
           <div
-            className="text-white flex flex-col gap-y-8 justify-center items-center text-center bg-red-500/20 absolute left-1/2 -translate-x-1/2 top-[10%] w-[1000px] opacity-0 visibility-hidden"
+            className="text-white flex flex-col gap-y-8 justify-center items-center text-center bg-red-500/0 absolute left-1/2 -translate-x-1/2 top-[10%] w-[1000px] opacity-0 visibility-hidden"
             id="def-hero-title-1"
           >
             <img
@@ -179,7 +189,7 @@ export default function LandingGradientV1Page() {
 
           {/* TITLE 1 */}
           <div
-            className="text-white max-w-[1000px] mx-auto flex flex-col gap-y-8 justify-center items-center text-center bg-green-500/20 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0 visibility-hidden"
+            className="text-white max-w-[1000px] mx-auto flex flex-col gap-y-8 justify-center items-center text-center bg-green-500/0 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0 visibility-hidden"
             id="def-hero-title-2"
           >
             <div className="rounded-full bg-white/8 text-white text-sm font-semibold px-4 py-2 tracking-wide">
@@ -191,7 +201,7 @@ export default function LandingGradientV1Page() {
 
           {/* TITLE 2 */}
           <div
-            className="text-white max-w-[1000px] mx-auto flex flex-col gap-y-8 justify-center items-center text-center bg-yellow-500/20 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0 visibility-hidden"
+            className="text-white max-w-[1000px] mx-auto flex flex-col gap-y-8 justify-center items-center text-center bg-yellow-500/0 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0 visibility-hidden"
             id="def-hero-title-3"
           >
             <div className="rounded-full bg-white/8 text-white text-sm font-semibold px-4 py-2 tracking-wide">
