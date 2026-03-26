@@ -73,7 +73,7 @@ export default function LandingGradientV1Page() {
             className="absolute top-[100%] left-1/2 w-[50%] -translate-x-1/2 opacity-0 visibility-hidden"
             id="def-hero-images"
           >
-            <div className="relative w-full" id="def-hero-image-left">
+            <div className="relative w-full" id="def-hero-image-desktop">
               <img
                 src="/dashboard/hero-desktop-img.svg"
                 alt="Atomix desktop dashboard preview"
@@ -85,7 +85,7 @@ export default function LandingGradientV1Page() {
               />
             </div>
 
-            <div id="def-hero-image-right">
+            <div id="def-hero-image-mobile">
               <img
                 src="/dashboard/hero-mobile-img.svg"
                 alt="Atomix mobile form preview"

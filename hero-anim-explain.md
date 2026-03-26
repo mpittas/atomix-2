@@ -1,17 +1,10 @@
-Using GSAP and timeline I wanna execute a specific animation combine with scroll trigger.
+Let's work on the animation inside hero again.
 
-When user scrolls the page I wanna pin the Hero section div with ID "atomix-playground-v1" to the bottom of screen and start performing scroll trigger animation inside the hero section.
+After the image container reaches the middle of the screen, then I want to switch the scroll behaviour. When user scrolls only once an animation will execute (not scroll triggered anymore).
 
-All animated containers contain position absolute so keep that in mind.
+The animation is:
 
-#def-hero-title-2 and #def-hero-title-3 will be hidden by default.
+- "def-hero-image-mobile" goes to the left and "def-hero-image-desktop" goes to the right, they both animate at the same time outwards.
+- Animation continues and aftrer images above are out of the screen we wanna show #def-hero-title-2, after another scroll we wanna show #def-hero-title-3
 
-1. When user strats scrolling I want to move the #def-hero-title-1 to the top until it hides and fades from the screen.
-
-2. At the same time I wanna move #def-hero-images upwards until it reaches the middle of the screen with top: 50%
-
-Then animation will continue but for now please complete what I've requested.
-
----
-
-It's important to note that the hero should be pinned to the bottom of the screen and while the animation in hero performs inside of it I don't want you to have a scroll inside. Instead we follow the main vertical scroll of page body as by default.
+basically we have 1 scroll action that triggers the animation, and then 2 more scroll actions that show the titles
