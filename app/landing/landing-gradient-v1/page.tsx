@@ -11,6 +11,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 export default function LandingGradientV1Page() {
   useGSAP(() => {
+    const heroPinTriggerId = "def-hero-main-pin";
     let lastSnapProgress = 0;
     const centerProgress = 1 / 3;
     const title2Progress = 2 / 3;
@@ -18,6 +19,7 @@ export default function LandingGradientV1Page() {
 
     const tl = gsap.timeline({
       scrollTrigger: {
+        id: heroPinTriggerId,
         trigger: "#def-hero-main",
         start: "top top",
         end: "+=2800",
@@ -133,10 +135,26 @@ export default function LandingGradientV1Page() {
         "title2Visible+=0.5",
       )
       .addLabel("title3Visible");
+
+    gsap.fromTo(
+      "#atomix-playground-v1",
+      { scale: 1, transformOrigin: "50% 50%" },
+      {
+        scale: 1.12,
+        ease: "none",
+        scrollTrigger: {
+          trigger: "#def-hero-main",
+          start: () => (ScrollTrigger.getById(heroPinTriggerId)?.end ?? 0) + 1,
+          end: () => (ScrollTrigger.getById(heroPinTriggerId)?.end ?? 0) + 501,
+          scrub: true,
+          markers: false,
+        },
+      },
+    );
   }, []);
 
   return (
-    <div>
+    <div className="overflow-x-hidden">
       <div className="bg-white px-12" id="def-hero-main">
         <Header />
 
@@ -213,7 +231,7 @@ export default function LandingGradientV1Page() {
         </section>
       </div>
 
-      <div className="h-[100vh]"></div>
+      <div className="h-[300vh]"></div>
     </div>
   );
 }

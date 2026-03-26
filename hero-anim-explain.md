@@ -1,3 +1,1 @@
-Whenever the #def-hero-title-2 and #def-hero-title-3 appear on the screen with their scale in animation, make each element inside animation with simple fade in up effect with a slight delay between each element.
-
-Also, make SplitText start it's animation ONLY after we show the element with the animation described above.
+when the final animation where #def-hero-title-3 is completed please make the div with id #atomix-playground-v1 to scale up from 1 to 1.15
