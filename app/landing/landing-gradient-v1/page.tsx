@@ -4,8 +4,10 @@ import Header from "@/components/header";
 import MainHero from "./components/MainHero";
 import DefHeading from "@/components/typo/DefHeading";
 import FlowGraphicLight from "@/components/FlowGraphicLight";
+import FlowCardsHor from "@/components/FlowCardsHor";
 import { Button as DefButton } from "@/components/ui";
 import { DefTabs } from "@/components/ui";
+
 import {
   CapitalProvidersContent,
   LendersContent,
@@ -88,6 +90,7 @@ built for real-world complexity."
               />
 
               <div className="mt-12 flex flex-col items-center">
+                <FlowCardsHor />
                 <div className="mt-14">
                   <DefButton size="large">Learn more</DefButton>
                 </div>

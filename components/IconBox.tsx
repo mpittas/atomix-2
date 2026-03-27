@@ -14,7 +14,7 @@ export default function IconBox({
   titleClassName = "",
 }: IconBoxProps) {
   return (
-    <div className="flex flex-col items-center gap-4 p-8 rounded-2xl text-center h-full border border-dashed bg-[#565e98] border-[#999fc7]">
+    <div className="flex flex-col items-center gap-4 p-6 rounded-2xl text-center h-full border border-dashed bg-[#565e98] border-[#999fc7]">
       <Image src={src} alt={title} width={width} height={width} />
       <div className={`text-md text-white ${titleClassName}`}>{title}</div>
     </div>
