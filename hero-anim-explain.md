@@ -1,6 +1,5 @@
-Let's create a new component called "IconBox".
+Create new DefTabs component. It should have the following features:
 
-Inside we'll have:
+Inside create a tabs functionality where you can switch between different tabs and show different content for each tab.
 
-- an image with defined width and option to change src.
-- a title (add option to change className as prop)
+The content inside now will be simple text string, focus on the tab switching functionality.
