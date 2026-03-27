@@ -1,4 +1,11 @@
+"use client";
+
+import { useEffect, useRef } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import IconBox from "@/components/IconBox";
+
+gsap.registerPlugin(ScrollTrigger);
 
 function IconText({ icon, text }: { icon: string; text: string }) {
   return (
@@ -18,24 +25,154 @@ function SquareBadge({ text }: { text: string }) {
 }
 
 export default function SolutionsRow() {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const iconText1Ref = useRef<HTMLDivElement>(null);
+  const iconText2Ref = useRef<HTMLDivElement>(null);
+  const iconText3Ref = useRef<HTMLDivElement>(null);
+
+  const connector1Ref = useRef<HTMLDivElement>(null);
+  const connector2Ref = useRef<HTMLImageElement>(null);
+  const connector3Ref = useRef<HTMLDivElement>(null);
+
+  const row2Box1Ref = useRef<HTMLDivElement>(null);
+  const row2Box2Ref = useRef<HTMLDivElement>(null);
+  const row2Box3Ref = useRef<HTMLDivElement>(null);
+  const row2Box4Ref = useRef<HTMLDivElement>(null);
+  const row2Box5Ref = useRef<HTMLDivElement>(null);
+  const row2Box6Ref = useRef<HTMLDivElement>(null);
+
+  const row3Connector1Ref = useRef<HTMLImageElement>(null);
+  const row3Connector2Ref = useRef<HTMLDivElement>(null);
+  const row3Connector3Ref = useRef<HTMLDivElement>(null);
+  const row3Badge1Ref = useRef<HTMLDivElement>(null);
+  const row3Badge2Ref = useRef<HTMLDivElement>(null);
+  const row3Badge3Ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: containerRef.current,
+        start: "top 80%",
+        toggleActions: "play none none none",
+      },
+    });
+
+    tl.fromTo(
+      [iconText1Ref.current, iconText2Ref.current, iconText3Ref.current],
+      { opacity: 0 },
+      { opacity: 1, duration: 1, ease: "power2.out" },
+    )
+      .fromTo(
+        connector1Ref.current,
+        { opacity: 0 },
+        { opacity: 1, duration: 0.7, ease: "power2.out" },
+        "-=0.2",
+      )
+      .fromTo(
+        connector2Ref.current,
+        { opacity: 0 },
+        { opacity: 1, duration: 0.7, ease: "power2.out" },
+        "<",
+      )
+      .fromTo(
+        connector3Ref.current,
+        { opacity: 0 },
+        { opacity: 1, duration: 0.7, ease: "power2.out" },
+        "<",
+      )
+      .fromTo(
+        row2Box1Ref.current,
+        { opacity: 0, scale: 0.8 },
+        { opacity: 1, scale: 1, duration: 0.6, ease: "back.out(1.7)" },
+        "-=0.3",
+      )
+      .fromTo(
+        row2Box2Ref.current,
+        { opacity: 0, scale: 0.8 },
+        { opacity: 1, scale: 1, duration: 0.6, ease: "back.out(1.7)" },
+        "-=0.35",
+      )
+      .fromTo(
+        row2Box3Ref.current,
+        { opacity: 0, scale: 0.8 },
+        { opacity: 1, scale: 1, duration: 0.6, ease: "back.out(1.7)" },
+        "-=0.35",
+      )
+      .fromTo(
+        row2Box4Ref.current,
+        { opacity: 0, scale: 0.8 },
+        { opacity: 1, scale: 1, duration: 0.6, ease: "back.out(1.7)" },
+        "-=0.35",
+      )
+      .fromTo(
+        row2Box5Ref.current,
+        { opacity: 0, scale: 0.8 },
+        { opacity: 1, scale: 1, duration: 0.6, ease: "back.out(1.7)" },
+        "-=0.35",
+      )
+      .fromTo(
+        row2Box6Ref.current,
+        { opacity: 0, scale: 0.8 },
+        { opacity: 1, scale: 1, duration: 0.6, ease: "back.out(1.7)" },
+        "-=0.35",
+      )
+      .fromTo(
+        row3Connector1Ref.current,
+        { opacity: 0 },
+        { opacity: 1, duration: 0.7, ease: "power2.out" },
+        "-=0.3",
+      )
+      .fromTo(
+        row3Connector2Ref.current,
+        { opacity: 0 },
+        { opacity: 1, duration: 0.7, ease: "power2.out" },
+        "<",
+      )
+      .fromTo(
+        row3Connector3Ref.current,
+        { opacity: 0 },
+        { opacity: 1, duration: 0.7, ease: "power2.out" },
+        "<",
+      )
+      .fromTo(
+        [row3Badge1Ref.current, row3Badge2Ref.current, row3Badge3Ref.current],
+        { opacity: 0 },
+        { opacity: 1, duration: 0.6, ease: "power2.out" },
+        "-=0.2",
+      );
+
+    return () => {
+      tl.kill();
+    };
+  }, []);
+
   return (
-    <div className="w-full space-y-0">
+    <div ref={containerRef} className="w-full space-y-0">
       {/* Row 1: 1 col / 4 cols / 1 col */}
       <div className="grid grid-cols-6 gap-4">
         {/* COLUMN 1 */}
         <div className="bg-blue-500/0 col-span-1 flex flex-col items-center gap-y-3">
-          <IconText icon="/icons/white/ai-chip.svg" text="AI" />
-          <div className="h-18 w-1 border-l border-dashed border-[#999fc7] mx-auto"></div>
+          <div ref={iconText1Ref}>
+            <IconText icon="/icons/white/ai-chip.svg" text="AI" />
+          </div>
+          <div
+            ref={connector1Ref}
+            className="h-18 w-1 border-l border-dashed border-[#999fc7] mx-auto"
+          ></div>
         </div>
 
         {/* COLUMN 2 */}
         <div className="bg-purple-500/0 col-span-4 flex flex-col items-center gap-y-3">
-          <IconText
-            icon="/icons/white/brain-links.svg"
-            text="Complex Reasoning"
-          />
+          <div ref={iconText2Ref}>
+            <IconText
+              icon="/icons/white/brain-links.svg"
+              text="Complex Reasoning"
+            />
+          </div>
 
           <img
+            ref={connector2Ref}
             src="/global/conecting-lins-to-t.svg"
             alt="Connecting dashed lines"
             className="h-18 mx-auto"
@@ -44,14 +181,19 @@ export default function SolutionsRow() {
 
         {/* COLUMN 3 */}
         <div className="bg-green-500/0 col-span-1 flex flex-col items-center gap-y-3">
-          <IconText icon="/icons/white/blockchain.svg" text="Blockchain" />
-          <div className="h-18 w-1 border-l border-dashed border-white/70 mx-auto"></div>
+          <div ref={iconText3Ref}>
+            <IconText icon="/icons/white/blockchain.svg" text="Blockchain" />
+          </div>
+          <div
+            ref={connector3Ref}
+            className="h-18 w-1 border-l border-dashed border-white/70 mx-auto"
+          ></div>
         </div>
       </div>
 
       {/* Row 2: 1 col / 1 col / 1 col / 1 col / 1 col / 1 col */}
       <div className="grid grid-cols-6 gap-4">
-        <div className="col-span-1">
+        <div ref={row2Box1Ref} className="col-span-1">
           <IconBox
             src="/icons/white/document-check.svg"
             imageSize="small"
@@ -65,7 +207,7 @@ export default function SolutionsRow() {
             className="!p-4"
           />
         </div>
-        <div className="col-span-1">
+        <div ref={row2Box2Ref} className="col-span-1">
           <IconBox
             src="/icons/white/puzzle-piece.svg"
             imageSize="small"
@@ -74,7 +216,7 @@ export default function SolutionsRow() {
             className="!p-4"
           />
         </div>
-        <div className="col-span-1">
+        <div ref={row2Box3Ref} className="col-span-1">
           <IconBox
             src="/icons/white/target-arrow.svg"
             imageSize="small"
@@ -83,7 +225,7 @@ export default function SolutionsRow() {
             className="!p-4"
           />
         </div>
-        <div className="col-span-1">
+        <div ref={row2Box4Ref} className="col-span-1">
           <IconBox
             src="/icons/white/shield-check-white.svg"
             imageSize="small"
@@ -92,7 +234,7 @@ export default function SolutionsRow() {
             className="!p-4"
           />
         </div>
-        <div className="col-span-1">
+        <div ref={row2Box5Ref} className="col-span-1">
           <IconBox
             src="/icons/white/users-group.svg"
             imageSize="small"
@@ -101,7 +243,7 @@ export default function SolutionsRow() {
             className="!p-4"
           />
         </div>
-        <div className="col-span-1">
+        <div ref={row2Box6Ref} className="col-span-1">
           <IconBox
             src="/icons/white/dolcument-search.svg"
             imageSize="small"
@@ -116,20 +258,33 @@ export default function SolutionsRow() {
       <div className="grid grid-cols-6 gap-4">
         <div className="bg-cyan-500/0 col-span-4 flex flex-col items-center">
           <img
+            ref={row3Connector1Ref}
             src="/global/conecting-lins-to-b.svg"
             alt="Connecting dashed lines"
             className="h-18 mx-auto"
           />
 
-          <SquareBadge text="Full automation end-to-end" />
+          <div ref={row3Badge1Ref}>
+            <SquareBadge text="Full automation end-to-end" />
+          </div>
         </div>
         <div className="bg-violet-500/0 col-span-1 flex flex-col items-center">
-          <div className="h-18 w-1 border-l border-dashed border-white/70 mx-auto"></div>
-          <SquareBadge text="Collaboration" />
+          <div
+            ref={row3Connector2Ref}
+            className="h-18 w-1 border-l border-dashed border-white/70 mx-auto"
+          ></div>
+          <div ref={row3Badge2Ref}>
+            <SquareBadge text="Collaboration" />
+          </div>
         </div>
         <div className="bg-emerald-500/0 col-span-1 flex flex-col items-center">
-          <div className="h-18 w-1 border-l border-dashed border-white/70 mx-auto"></div>
-          <SquareBadge text="Trust" />
+          <div
+            ref={row3Connector3Ref}
+            className="h-18 w-1 border-l border-dashed border-white/70 mx-auto"
+          ></div>
+          <div ref={row3Badge3Ref}>
+            <SquareBadge text="Trust" />
+          </div>
         </div>
       </div>
     </div>
