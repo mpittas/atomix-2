@@ -2,6 +2,7 @@
 
 import Header from "@/components/header";
 import MainHero from "./components/MainHero";
+import DefHeading from "@/components/typo/DefHeading";
 
 export default function LandingGradientV1Page() {
   return (
@@ -11,7 +12,17 @@ export default function LandingGradientV1Page() {
         <MainHero />
       </div>
 
-      <div className="h-[300vh]"></div>
+      <div className="px-12 mt-16 min-h-[300vh]">
+        <div className="bg-black/8 rounded-3xl h-full p-12">
+          <DefHeading
+            theme="dark"
+            badgeText="Executive Summary"
+            badgeColor="blue"
+            title="Automating the UK Bridging Loans Market"
+            description="Collaborative, Trusted, End-to-End Automation"
+          />
+        </div>
+      </div>
     </div>
   );
 }
