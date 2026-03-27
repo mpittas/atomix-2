@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import { ReactNode, useRef } from "react";
 import gsap from "gsap";
@@ -54,15 +56,6 @@ export default function IconBox({
       },
       0,
     )
-      .to(
-        containerRef.current,
-        {
-          scale: 1,
-          duration: 0.4,
-          ease: "elastic.out(1, 0.5)",
-        },
-        0.3,
-      )
       .fromTo(
         shineRef1.current,
         {
@@ -93,11 +86,20 @@ export default function IconBox({
       );
   };
 
+  const handleMouseLeave = () => {
+    gsap.to(containerRef.current, {
+      scale: 1,
+      duration: 0.4,
+      ease: "elastic.out(1, 0.5)",
+    });
+  };
+
   return (
     <div
       ref={containerRef}
       className={`relative flex flex-col items-center gap-1 p-7 rounded-2xl text-center h-full border border-dashed bg-[#565e98] border-[#999fc7] overflow-hidden ${className}`}
       onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     >
       <div className="pointer-events-none absolute inset-0 rounded-2xl overflow-hidden">
         <div

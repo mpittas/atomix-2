@@ -1,5 +1,8 @@
 "use client";
 
+import { useEffect, useRef } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Header from "@/components/header";
 import MainHero from "./components/MainHero";
 import DefHeading from "@/components/typo/DefHeading";
@@ -12,6 +15,8 @@ import InfoRow from "@/components/InfoRow";
 import IconBoxHorizontal from "@/components/IconBoxHorizontal";
 import IconBox from "@/components/IconBox";
 
+gsap.registerPlugin(ScrollTrigger);
+
 import {
   CapitalProvidersContent,
   LendersContent,
@@ -19,6 +24,43 @@ import {
 } from "./components/SimpleIconBoxRows";
 
 export default function LandingGradientV1Page() {
+  const careersContainerRef = useRef<HTMLDivElement>(null);
+  const careersBox1Ref = useRef<HTMLDivElement>(null);
+  const careersBox2Ref = useRef<HTMLDivElement>(null);
+  const careersBox3Ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: careersContainerRef.current,
+        start: "top 80%",
+        toggleActions: "play none none none",
+      },
+    });
+
+    tl.fromTo(
+      careersBox1Ref.current,
+      { opacity: 0, scale: 0.8 },
+      { opacity: 1, scale: 1, duration: 0.6, ease: "back.out(1.7)" },
+    )
+      .fromTo(
+        careersBox2Ref.current,
+        { opacity: 0, scale: 0.8 },
+        { opacity: 1, scale: 1, duration: 0.6, ease: "back.out(1.7)" },
+        "-=0.35",
+      )
+      .fromTo(
+        careersBox3Ref.current,
+        { opacity: 0, scale: 0.8 },
+        { opacity: 1, scale: 1, duration: 0.6, ease: "back.out(1.7)" },
+        "-=0.35",
+      );
+
+    return () => {
+      tl.kill();
+    };
+  }, []);
+
   return (
     <div className="overflow-x-hidden">
       <div className="bg-white px-12" id="def-hero-main">
@@ -261,8 +303,11 @@ built for real-world complexity."
               </div>
 
               <div className="mt-16 flex flex-col items-center">
-                <div className="bg-red-500/0 flex items-stretch gap-6">
-                  <div className="flex-1">
+                <div
+                  ref={careersContainerRef}
+                  className="bg-red-500/0 flex items-stretch gap-6"
+                >
+                  <div ref={careersBox1Ref} className="flex-1">
                     <IconBox
                       src="/icons/white/globe.svg"
                       title="Real-World Financial Infrastructure"
@@ -271,7 +316,7 @@ built for real-world complexity."
                     />
                   </div>
 
-                  <div className="flex-1">
+                  <div ref={careersBox2Ref} className="flex-1">
                     <IconBox
                       src="/icons/white/users-group.svg"
                       title="Small Team, Big Impact"
@@ -280,7 +325,7 @@ built for real-world complexity."
                     />
                   </div>
 
-                  <div className="flex-1">
+                  <div ref={careersBox3Ref} className="flex-1">
                     <IconBox
                       src="/icons/white/ai-chip.svg"
                       title="Cutting-Edge Technology"
