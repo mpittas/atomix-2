@@ -1,5 +1,7 @@
-Inside @SolutionsRow create sub component as separate functions with return JSX
+For the <IconBox> component, create a hover animation using GSAP.
 
-One component inside the file is IconText. It will contain an icon and a text below it.
+I wanna have 1 blurred white square that will move diagonally from top left to bottom right when hovered and ending up off the icon box.
 
-The other component is SquareBadge. It will contain a text inside a square badge, no fixed height, only padding, border and slight border radius.
+Make sure it replicates a shining effect.
+
+Add overflow hidden to aprent card container

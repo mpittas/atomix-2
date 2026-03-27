@@ -121,6 +121,43 @@ built for real-world complexity."
             </div>
           </div>
         </div>
+
+        <div className="h-full">
+          <div className="px-18 py-36 rounded-t-3xl bg-linear-to-b from-[#020637] to-[#BFC3ED]">
+            <div className="max-w-[1060px] mx-auto px-4">
+              <DefHeading
+                theme="light"
+                badgeText="Platform Advantages"
+                title="Benefits"
+                description="Purpose-built lending infrastructure that reduces friction, accelerates decisions, and creates measurable advantages for capital providers, lenders, and borrowers alike."
+              />
+
+              <div className="mt-12 flex flex-col items-center">
+                <h1 className="bg-red-500/10">Temp 1</h1>
+              </div>
+            </div>
+          </div>
+
+          <div className="px-18 py-36 rounded-b-3xl bg-linear-to-t from-[#020637] to-[#BFC3ED]">
+            <div className="max-w-[1260px] mx-auto px-4">
+              <div className="max-w-[1060px] mx-auto">
+                <DefHeading
+                  theme="light"
+                  badgeText="Careers"
+                  title="Why Work With Us"
+                  description="We are building a platform that automates and modernises the global lending ecosystem. Our team combines expertise in finance, AI, engineering and blockchain to create infrastructure for the future of asset-backed credit."
+                />
+              </div>
+
+              <div className="mt-12 flex flex-col items-center">
+                <h1 className="bg-red-500/10">Temp 2</h1>
+                <div className="mt-14">
+                  <DefButton size="large">Learn more</DefButton>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
