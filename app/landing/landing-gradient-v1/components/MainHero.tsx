@@ -5,6 +5,7 @@ import SplitText from "@/components/typo/SplitText";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import SoftAurora from "@/components/backgrounds/SoftAurora";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -157,6 +158,23 @@ export default function MainHero() {
       className="flex h-[calc(100vh-116px)] bg-[#00081F] rounded-3xl overflow-hidden relative flex flex-col"
       id="atomix-playground-v1"
     >
+      <SoftAurora
+        speed={1.3}
+        scale={1.6}
+        brightness={0.8}
+        color1="#61b8ff"
+        color2="#00bbff"
+        noiseFrequency={1.25}
+        noiseAmplitude={2.5}
+        bandHeight={0.85}
+        bandSpread={0.7}
+        octaveDecay={0.12}
+        layerOffset={0.5}
+        colorSpeed={1.4}
+        enableMouseInteraction
+        mouseInfluence={0.2}
+      />
+
       {/* HEADING */}
       <div
         className="text-white flex flex-col gap-y-8 justify-center items-center text-center bg-red-500/0 absolute left-1/2 -translate-x-1/2 top-[10%] w-[1000px] opacity-0 visibility-hidden"
