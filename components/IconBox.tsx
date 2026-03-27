@@ -29,6 +29,7 @@ export default function IconBox({
 
   const finalWidth = width !== 48 ? width : sizeMap[imageSize];
 
+  const containerRef = useRef<HTMLDivElement>(null);
   const shineRef1 = useRef<HTMLDivElement>(null);
   const shineRef2 = useRef<HTMLDivElement>(null);
   const isAnimatingRef = useRef(false);
@@ -44,37 +45,57 @@ export default function IconBox({
       },
     });
 
-    tl.fromTo(
-      shineRef1.current,
+    tl.to(
+      containerRef.current,
       {
-        x: "140",
-        opacity: 0,
-      },
-      {
-        x: "-400",
-        opacity: 1,
-        duration: 0.5,
-        ease: "power2.inOut",
+        scale: 1.05,
+        duration: 0.3,
+        ease: "back.out(3)",
       },
       0,
-    ).fromTo(
-      shineRef2.current,
-      {
-        x: "180",
-        opacity: 0,
-      },
-      {
-        x: "-600",
-        opacity: 1,
-        duration: 0.7,
-        ease: "power2.inOut",
-      },
-      0.15,
-    );
+    )
+      .to(
+        containerRef.current,
+        {
+          scale: 1,
+          duration: 0.4,
+          ease: "elastic.out(1, 0.5)",
+        },
+        0.3,
+      )
+      .fromTo(
+        shineRef1.current,
+        {
+          x: "140",
+          opacity: 0,
+        },
+        {
+          x: "-400",
+          opacity: 1,
+          duration: 0.5,
+          ease: "power2.inOut",
+        },
+        0,
+      )
+      .fromTo(
+        shineRef2.current,
+        {
+          x: "180",
+          opacity: 0,
+        },
+        {
+          x: "-600",
+          opacity: 1,
+          duration: 0.7,
+          ease: "power2.inOut",
+        },
+        0.15,
+      );
   };
 
   return (
     <div
+      ref={containerRef}
       className={`relative flex flex-col items-center gap-1 p-7 rounded-2xl text-center h-full border border-dashed bg-[#565e98] border-[#999fc7] overflow-hidden ${className}`}
       onMouseEnter={handleMouseEnter}
     >
