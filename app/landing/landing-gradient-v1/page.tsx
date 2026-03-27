@@ -113,6 +113,10 @@ built for real-world complexity."
 
               <div className="mt-12 flex flex-col items-center">
                 <SolutionsRow />
+
+                <div className="mt-14">
+                  <DefButton size="large">Learn more</DefButton>
+                </div>
               </div>
             </div>
           </div>

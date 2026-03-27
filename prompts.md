@@ -1,10 +1,5 @@
-In the newly created SolutionsRow component, I want to add 3 rows of content.
+Inside @SolutionsRow create sub component as separate functions with return JSX
 
-Each row will have Grid.
-Each row will have 6 columns.
+One component inside the file is IconText. It will contain an icon and a text below it.
 
-Row 1: 1 col / 4 cols / 1 col
-Row 2: 1 col / 1 col / 1 col / 1 col / 1 col / 1 col
-Row 3: 4 col / 1 cols / 1 col
-
-Please only make the boxes with solid color for testing before i start adding content.
+The other component is SquareBadge. It will contain a text inside a square badge, no fixed height, only padding, border and slight border radius.

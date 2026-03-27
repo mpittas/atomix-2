@@ -1,13 +1,52 @@
 import IconBox from "@/components/IconBox";
 
+function IconText({ icon, text }: { icon: string; text: string }) {
+  return (
+    <div className="flex flex-col items-center gap-2">
+      <img src={icon} alt="" className="w-10 h-10" />
+      <p className="text-md font-semibold text-white text-center">{text}</p>
+    </div>
+  );
+}
+
+function SquareBadge({ text }: { text: string }) {
+  return (
+    <div className="w-full px-3 py-2 border border-dashed border-[#999fc7] rounded-md text-center text-sm text-white font-bold bg-[#565e98]">
+      {text}
+    </div>
+  );
+}
+
 export default function SolutionsRow() {
   return (
-    <div className="w-full space-y-4">
+    <div className="w-full space-y-0">
       {/* Row 1: 1 col / 4 cols / 1 col */}
       <div className="grid grid-cols-6 gap-4">
-        <div className="col-span-1 bg-blue-500 h-32 rounded-lg"></div>
-        <div className="col-span-4 bg-purple-500 h-32 rounded-lg"></div>
-        <div className="col-span-1 bg-green-500 h-32 rounded-lg"></div>
+        {/* COLUMN 1 */}
+        <div className="bg-blue-500/0 col-span-1 flex flex-col items-center gap-y-3">
+          <IconText icon="/icons/white/ai-chip.svg" text="AI" />
+          <div className="h-18 w-1 border-l border-dashed border-[#999fc7] mx-auto"></div>
+        </div>
+
+        {/* COLUMN 2 */}
+        <div className="bg-purple-500/0 col-span-4 flex flex-col items-center gap-y-3">
+          <IconText
+            icon="/icons/white/brain-links.svg"
+            text="Complex Reasoning"
+          />
+
+          <img
+            src="/global/conecting-lins-to-t.svg"
+            alt="Connecting dashed lines"
+            className="h-18 mx-auto"
+          />
+        </div>
+
+        {/* COLUMN 3 */}
+        <div className="bg-green-500/0 col-span-1 flex flex-col items-center gap-y-3">
+          <IconText icon="/icons/white/blockchain.svg" text="Blockchain" />
+          <div className="h-18 w-1 border-l border-dashed border-white/70 mx-auto"></div>
+        </div>
       </div>
 
       {/* Row 2: 1 col / 1 col / 1 col / 1 col / 1 col / 1 col */}
@@ -75,9 +114,23 @@ export default function SolutionsRow() {
 
       {/* Row 3: 4 cols / 1 col / 1 col */}
       <div className="grid grid-cols-6 gap-4">
-        <div className="col-span-4 bg-cyan-500 h-32 rounded-lg"></div>
-        <div className="col-span-1 bg-violet-500 h-32 rounded-lg"></div>
-        <div className="col-span-1 bg-emerald-500 h-32 rounded-lg"></div>
+        <div className="bg-cyan-500/0 col-span-4 flex flex-col items-center">
+          <img
+            src="/global/conecting-lins-to-b.svg"
+            alt="Connecting dashed lines"
+            className="h-18 mx-auto"
+          />
+
+          <SquareBadge text="Full automation end-to-end" />
+        </div>
+        <div className="bg-violet-500/0 col-span-1 flex flex-col items-center">
+          <div className="h-18 w-1 border-l border-dashed border-white/70 mx-auto"></div>
+          <SquareBadge text="Collaboration" />
+        </div>
+        <div className="bg-emerald-500/0 col-span-1 flex flex-col items-center">
+          <div className="h-18 w-1 border-l border-dashed border-white/70 mx-auto"></div>
+          <SquareBadge text="Trust" />
+        </div>
       </div>
     </div>
   );
