@@ -6,6 +6,11 @@ import DefHeading from "@/components/typo/DefHeading";
 import FlowGraphicLight from "@/components/FlowGraphicLight";
 import { Button as DefButton } from "@/components/ui";
 import { DefTabs } from "@/components/ui";
+import {
+  CapitalProvidersContent,
+  LendersContent,
+  BorrowersContent,
+} from "./components/SimpleIconBoxRows";
 
 export default function LandingGradientV1Page() {
   return (
@@ -52,20 +57,17 @@ export default function LandingGradientV1Page() {
                     {
                       id: "capital-providers",
                       label: "Capital Providers",
-                      content:
-                        "Capital providers must trust lenders to follow lending rules with no real-time visibility into the process.",
+                      content: <CapitalProvidersContent />,
                     },
                     {
                       id: "lenders",
                       label: "Lenders",
-                      content:
-                        "Lenders deal with 100+ manual touchpoints per loan, creating inefficiencies and delays.",
+                      content: <LendersContent />,
                     },
                     {
                       id: "borrowers",
                       label: "Borrowers",
-                      content:
-                        "Borrowers face an opaque and slow process with limited transparency throughout their journey.",
+                      content: <BorrowersContent />,
                     },
                   ]}
                 />

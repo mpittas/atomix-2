@@ -9,7 +9,7 @@ gsap.registerPlugin(useGSAP);
 export interface Tab {
   id: string;
   label: string;
-  content: string;
+  content: React.ReactNode;
 }
 
 export interface DefTabsProps {
@@ -56,7 +56,7 @@ const DefTabs: React.FC<DefTabsProps> = ({
   const activeTabContent = tabs.find((tab) => tab.id === activeTab)?.content;
 
   return (
-    <div className={`w-full flex flex-col gap-y-6 ${className}`}>
+    <div className={`w-full flex flex-col gap-y-16 ${className}`}>
       <div className="flex justify-center items-center gap-2">
         {tabs.map((tab) => (
           <button
