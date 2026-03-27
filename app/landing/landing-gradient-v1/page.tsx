@@ -8,12 +8,15 @@ import FlowCardsHor from "@/components/FlowCardsHor";
 import { Button as DefButton } from "@/components/ui";
 import { DefTabs } from "@/components/ui";
 import SolutionsRow from "./components/SolutionsRow";
+import InfoRow from "@/components/InfoRow";
+import IconBoxHorizontal from "@/components/IconBoxHorizontal";
 
 import {
   CapitalProvidersContent,
   LendersContent,
   BorrowersContent,
 } from "./components/SimpleIconBoxRows";
+import { Info } from "lucide-react";
 
 export default function LandingGradientV1Page() {
   return (
@@ -35,7 +38,7 @@ export default function LandingGradientV1Page() {
                 description="Collaborative, Trusted, End-to-End Automation"
               />
 
-              <div className="mt-12 flex flex-col items-center">
+              <div className="mt-16 flex flex-col items-center">
                 <FlowGraphicLight />
 
                 <div className="mt-14">
@@ -54,7 +57,7 @@ export default function LandingGradientV1Page() {
                 description="Opaque systems limit control, visibility and trust across capital providers, lenders and borrowers."
               />
 
-              <div className="mt-12 flex flex-col items-center">
+              <div className="mt-16 flex flex-col items-center">
                 <DefTabs
                   tabs={[
                     {
@@ -90,7 +93,7 @@ export default function LandingGradientV1Page() {
 built for real-world complexity."
               />
 
-              <div className="mt-12 flex flex-col items-center">
+              <div className="mt-16 flex flex-col items-center">
                 <FlowCardsHor />
                 <div className="mt-14">
                   <DefButton size="large">Learn more</DefButton>
@@ -111,7 +114,7 @@ built for real-world complexity."
                 />
               </div>
 
-              <div className="mt-12 flex flex-col items-center">
+              <div className="mt-16 flex flex-col items-center">
                 <SolutionsRow />
 
                 <div className="mt-14">
@@ -124,16 +127,124 @@ built for real-world complexity."
 
         <div className="h-full">
           <div className="px-18 py-36 rounded-t-3xl bg-linear-to-b from-[#020637] to-[#BFC3ED]">
-            <div className="max-w-[1060px] mx-auto px-4">
-              <DefHeading
-                theme="light"
-                badgeText="Platform Advantages"
-                title="Benefits"
-                description="Purpose-built lending infrastructure that reduces friction, accelerates decisions, and creates measurable advantages for capital providers, lenders, and borrowers alike."
-              />
+            <div className="max-w-[1260px] mx-auto px-4">
+              <div className="max-w-[1060px] mx-auto">
+                <DefHeading
+                  theme="light"
+                  badgeText="Platform Advantages"
+                  title="Benefits"
+                  description="Purpose-built lending infrastructure that reduces friction, accelerates decisions, and creates measurable advantages for capital providers, lenders, and borrowers alike."
+                />
+              </div>
 
-              <div className="mt-12 flex flex-col items-center">
-                <h1 className="bg-red-500/10">Temp 1</h1>
+              <div className="mt-16 flex flex-col items-center">
+                <div className="flex flex-col items-center gap-y-28 w-full">
+                  <InfoRow
+                    title="Capital Providers"
+                    subtitle="Invest with full transparency, automated compliance, and access to diversified lending opportunities."
+                  >
+                    <div className="flex flex-col gap-y-6">
+                      <IconBoxHorizontal src="/icons/white/shield-check-white.svg">
+                        <div className="max-w-[400px]">
+                          <span className="font-semibold text-white">
+                            Continuous compliance assuranceless
+                          </span>{" "}
+                          variance, easier audits
+                        </div>
+                      </IconBoxHorizontal>
+
+                      <IconBoxHorizontal src="/icons/white/target-arrow.svg">
+                        <div className="max-w-[340px]">
+                          <span className="font-semibold">
+                            Deploy capital exactly as intended <br></br>
+                          </span>{" "}
+                          with lower risk and lower upfront costs
+                        </div>
+                      </IconBoxHorizontal>
+
+                      <IconBoxHorizontal src="/icons/white/module-simple.svg">
+                        <div className="max-w-[340px]">
+                          <span className="font-semibold">
+                            One platform, many lenders<br></br>
+                          </span>{" "}
+                          removes barriers for all investor types
+                        </div>
+                      </IconBoxHorizontal>
+                    </div>
+                  </InfoRow>
+
+                  <InfoRow
+                    title="Lenders"
+                    subtitle="Automate lending workflows, access capital faster, and scale operations without increasing headcount."
+                    reverse={true}
+                    imageSrc="/images/dashboard-lenders.svg"
+                  >
+                    <div className="flex flex-col gap-y-6">
+                      <IconBoxHorizontal src="/icons/white/shield-check-white.svg">
+                        <div className="max-w-[500px]">
+                          <span className="font-semibold text-white">
+                            Access funding at any scale <br></br>
+                          </span>{" "}
+                          platform handles compliance, auditing and access,
+                          attracting both institutional and private investors
+                        </div>
+                      </IconBoxHorizontal>
+
+                      <IconBoxHorizontal src="/icons/white/user-minus.svg">
+                        <div className="max-w-[400px]">
+                          <span className="font-semibold text-white">
+                            Scale business without scaling workforce <br></br>
+                          </span>{" "}
+                          grow volume without hiring
+                        </div>
+                      </IconBoxHorizontal>
+
+                      <IconBoxHorizontal src="/icons/white/scales.svg">
+                        <div className="max-w-[400px]">
+                          <span className="font-semibold text-white">
+                            Costs scale with loan size <br></br>
+                          </span>{" "}
+                          making smaller in-demand loans profitable
+                        </div>
+                      </IconBoxHorizontal>
+                    </div>
+                  </InfoRow>
+
+                  <InfoRow
+                    title="Borrowers"
+                    subtitle="Borrowers move from enquiry to drawdown in a structured, transparent journey."
+                    imageSrc="/images/dashboard-auction-finance.svg"
+                  >
+                    <div className="flex flex-col gap-y-6">
+                      <IconBoxHorizontal src="/icons/white/electricity-simple.svg">
+                        <div className="max-w-[400px]">
+                          <span className="font-semibold text-white">
+                            Receive instant offer <br></br>
+                          </span>{" "}
+                          that improves as you add more details
+                        </div>
+                      </IconBoxHorizontal>
+
+                      <IconBoxHorizontal src="/icons/white/rocket-simple.svg">
+                        <div className="max-w-[340px]">
+                          <span className="font-semibold text-white">
+                            Complete in &lt; 2 days<br></br>
+                          </span>{" "}
+                          meet deadlines, seize opportunities
+                        </div>
+                      </IconBoxHorizontal>
+
+                      <IconBoxHorizontal src="/icons/white/path-arrows.svg">
+                        <div className="max-w-[440px]">
+                          <span className="font-semibold text-white">
+                            Always know your status and next steps<br></br>
+                          </span>{" "}
+                          no chasing, no guessing, consistent outcomes
+                        </div>
+                      </IconBoxHorizontal>
+                    </div>
+                  </InfoRow>
+                </div>
               </div>
             </div>
           </div>
@@ -149,7 +260,7 @@ built for real-world complexity."
                 />
               </div>
 
-              <div className="mt-12 flex flex-col items-center">
+              <div className="mt-16 flex flex-col items-center">
                 <h1 className="bg-red-500/10">Temp 2</h1>
                 <div className="mt-14">
                   <DefButton size="large">Learn more</DefButton>

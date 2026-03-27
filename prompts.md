@@ -1,7 +1,4 @@
-For the <IconBox> component, create a hover animation using GSAP.
+please update inside @IconBoxHorizontal
 
-I wanna have 1 blurred white square that will move diagonally from top left to bottom right when hovered and ending up off the icon box.
-
-Make sure it replicates a shining effect.
-
-Add overflow hidden to aprent card container
+I want only one title, no subtitle.
+If user defines a children and opens the component to add JSX inside, then consider this to be an alternative to title, so change the title prop to be optional and use the children as the title.
