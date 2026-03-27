@@ -10,13 +10,13 @@ import { DefTabs } from "@/components/ui";
 import SolutionsRow from "./components/SolutionsRow";
 import InfoRow from "@/components/InfoRow";
 import IconBoxHorizontal from "@/components/IconBoxHorizontal";
+import IconBox from "@/components/IconBox";
 
 import {
   CapitalProvidersContent,
   LendersContent,
   BorrowersContent,
 } from "./components/SimpleIconBoxRows";
-import { Info } from "lucide-react";
 
 export default function LandingGradientV1Page() {
   return (
@@ -125,7 +125,7 @@ built for real-world complexity."
           </div>
         </div>
 
-        <div className="h-full">
+        <div className="h-full mb-12">
           <div className="px-18 py-36 rounded-t-3xl bg-linear-to-b from-[#020637] to-[#BFC3ED]">
             <div className="max-w-[1260px] mx-auto px-4">
               <div className="max-w-[1060px] mx-auto">
@@ -261,7 +261,34 @@ built for real-world complexity."
               </div>
 
               <div className="mt-16 flex flex-col items-center">
-                <h1 className="bg-red-500/10">Temp 2</h1>
+                <div className="bg-red-500/0 flex items-stretch gap-6">
+                  <div className="flex-1">
+                    <IconBox
+                      src="/icons/white/globe.svg"
+                      title="Real-World Financial Infrastructure"
+                      titleClassName="text-md font-semibold"
+                      description="Build technology that powers real lending markets and impacts billions in asset-backed finance."
+                    />
+                  </div>
+
+                  <div className="flex-1">
+                    <IconBox
+                      src="/icons/white/users-group.svg"
+                      title="Small Team, Big Impact"
+                      titleClassName="text-md font-semibold"
+                      description="Join a focused team where every contribution directly shapes the product, technology, and company."
+                    />
+                  </div>
+
+                  <div className="flex-1">
+                    <IconBox
+                      src="/icons/white/ai-chip.svg"
+                      title="Cutting-Edge Technology"
+                      titleClassName="text-md font-semibold"
+                      description="Work across AI, automation, data systems, and blockchain-backed infrastructure."
+                    />
+                  </div>
+                </div>
                 <div className="mt-14">
                   <DefButton size="large">Learn more</DefButton>
                 </div>
