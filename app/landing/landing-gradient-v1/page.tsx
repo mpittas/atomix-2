@@ -7,6 +7,7 @@ import FlowGraphicLight from "@/components/FlowGraphicLight";
 import FlowCardsHor from "@/components/FlowCardsHor";
 import { Button as DefButton } from "@/components/ui";
 import { DefTabs } from "@/components/ui";
+import SolutionsRow from "./components/SolutionsRow";
 
 import {
   CapitalProvidersContent,
@@ -94,6 +95,24 @@ built for real-world complexity."
                 <div className="mt-14">
                   <DefButton size="large">Learn more</DefButton>
                 </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="px-18 py-36 rounded-b-3xl bg-linear-to-t from-[#020637] to-[#BFC3ED]">
+            <div className="max-w-[1260px] mx-auto px-4">
+              <div className="max-w-[1060px] mx-auto">
+                <DefHeading
+                  theme="light"
+                  badgeText="Solutions"
+                  title="The Tech Stack Solution"
+                  description="AI-powered rule enforcement, full end-to-end automation, and blockchain-backed auditability
+— delivering visibility, collaboration, and trust across the lending ecosystem."
+                />
+              </div>
+
+              <div className="mt-12 flex flex-col items-center">
+                <SolutionsRow />
               </div>
             </div>
           </div>

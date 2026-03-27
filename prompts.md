@@ -1,7 +1,10 @@
-Please, add content for the newly created FlowCardsHor component.
+In the newly created SolutionsRow component, I want to add 3 rows of content.
 
-Inside i want a row which will have 4 boxes inside.
+Each row will have Grid.
+Each row will have 6 columns.
 
-The boxes are <IconBox /> components.
+Row 1: 1 col / 4 cols / 1 col
+Row 2: 1 col / 1 col / 1 col / 1 col / 1 col / 1 col
+Row 3: 4 col / 1 cols / 1 col
 
-As you can see in the image, the second and third boxes are slightlybigger than the first and fourth boxes.
+Please only make the boxes with solid color for testing before i start adding content.
