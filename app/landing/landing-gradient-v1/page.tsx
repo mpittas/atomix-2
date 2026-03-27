@@ -75,6 +75,26 @@ export default function LandingGradientV1Page() {
             </div>
           </div>
         </div>
+
+        <div className="h-full">
+          <div className="px-18 py-36 rounded-t-3xl bg-linear-to-b from-[#020637] to-[#BFC3ED]">
+            <div className="max-w-[1060px] mx-auto px-4">
+              <DefHeading
+                theme="light"
+                badgeText="The Opportunity"
+                title="Existing Tech Limitations"
+                description="Move beyond fragmented tools and manual coordination. Experience collaborative, secure, end-to-end automation 
+built for real-world complexity."
+              />
+
+              <div className="mt-12 flex flex-col items-center">
+                <div className="mt-14">
+                  <DefButton size="large">Learn more</DefButton>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
