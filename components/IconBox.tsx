@@ -1,5 +1,6 @@
 import Image from "next/image";
-import { ReactNode } from "react";
+import { ReactNode, useRef } from "react";
+import gsap from "gsap";
 
 interface IconBoxProps {
   src?: string;
@@ -28,21 +29,89 @@ export default function IconBox({
 
   const finalWidth = width !== 48 ? width : sizeMap[imageSize];
 
+  const shineRef1 = useRef<HTMLDivElement>(null);
+  const shineRef2 = useRef<HTMLDivElement>(null);
+  const isAnimatingRef = useRef(false);
+
+  const handleMouseEnter = () => {
+    if (isAnimatingRef.current) return;
+
+    isAnimatingRef.current = true;
+
+    const tl = gsap.timeline({
+      onComplete: () => {
+        isAnimatingRef.current = false;
+      },
+    });
+
+    tl.fromTo(
+      shineRef1.current,
+      {
+        x: "140",
+        opacity: 0,
+      },
+      {
+        x: "-400",
+        opacity: 1,
+        duration: 0.5,
+        ease: "power2.inOut",
+      },
+      0,
+    ).fromTo(
+      shineRef2.current,
+      {
+        x: "180",
+        opacity: 0,
+      },
+      {
+        x: "-600",
+        opacity: 1,
+        duration: 0.7,
+        ease: "power2.inOut",
+      },
+      0.15,
+    );
+  };
+
   return (
     <div
-      className={`flex flex-col items-center gap-1 p-7 rounded-2xl text-center h-full border border-dashed bg-[#565e98] border-[#999fc7] ${className}`}
+      className={`relative flex flex-col items-center gap-1 p-7 rounded-2xl text-center h-full border border-dashed bg-[#565e98] border-[#999fc7] overflow-hidden ${className}`}
+      onMouseEnter={handleMouseEnter}
     >
-      <Image
-        src={src}
-        alt={title}
-        width={finalWidth}
-        height={finalWidth}
-        className="mb-2"
-      />
-      <div className={`text-md text-white ${titleClassName}`}>{title}</div>
-      {description && (
-        <div className="text-md text-white/80 mt-2">{description}</div>
-      )}
+      <div className="pointer-events-none absolute inset-0 rounded-2xl overflow-hidden">
+        <div
+          ref={shineRef1}
+          className="absolute -top-10 -bottom-10 w-8 bg-white/40 blur-xl"
+          style={{
+            transform: "translateX(150%) rotate(15deg)",
+            right: "0",
+            opacity: 0,
+          }}
+        />
+        <div
+          ref={shineRef2}
+          className="absolute -top-10 -bottom-10 w-24 bg-white/30 blur-2xl"
+          style={{
+            transform: "translateX(150%) rotate(15deg)",
+            right: "0",
+            opacity: 0,
+          }}
+        />
+      </div>
+
+      <div className="relative z-10 flex flex-col items-center gap-1">
+        <Image
+          src={src}
+          alt={title}
+          width={finalWidth}
+          height={finalWidth}
+          className="mb-2"
+        />
+        <div className={`text-md text-white ${titleClassName}`}>{title}</div>
+        {description && (
+          <div className="text-md text-white/80 mt-2">{description}</div>
+        )}
+      </div>
     </div>
   );
 }
