@@ -1,28 +1,59 @@
-import SimpleIconBox from "@/components/SimpleIconBox";
+"use client";
+
+import IconBox from "@/components/IconBox";
+import { useRef, useEffect } from "react";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
 
 export function CapitalProvidersContent() {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useGSAP(
+    () => {
+      if (!containerRef.current) return;
+
+      const cards = gsap.utils.toArray(containerRef.current.children);
+
+      gsap.fromTo(
+        cards,
+        {
+          scale: 0.8,
+          opacity: 0,
+        },
+        {
+          scale: 1,
+          opacity: 1,
+          duration: 0.5,
+          ease: "back.out(1.7)",
+          stagger: 0.1,
+        },
+      );
+    },
+    { scope: containerRef },
+  );
+
   return (
     <div className="flex flex-col gap-8">
-      <div className="grid grid-cols-4 gap-6">
-        <SimpleIconBox
+      <div ref={containerRef} className="grid grid-cols-4 gap-6">
+        <IconBox
           src="/icons/white/money-coins-white.svg"
           title="High Fixed Fees"
-          subtitle="Make smaller, most in-demand loans economic"
+          description="Make smaller, most in-demand loans economic"
         />
-        <SimpleIconBox
+        <IconBox
           src="/icons/white/clock-white.svg"
           title="Slow Process"
-          subtitle=">35-day completions"
+          description=">35-day completions"
         />
-        <SimpleIconBox
+        <IconBox
           src="/icons/white/arrows-white.svg"
           title="Repeat Data Entry"
-          subtitle="Enter same data for each lender application"
+          description="Enter same data for each lender application"
         />
-        <SimpleIconBox
+        <IconBox
           src="/icons/white/eye-white-crossed.svg"
           title="Opaque"
-          subtitle="Process lacks transparency, and consistency"
+          description="Process lacks transparency, and consistency"
         />
       </div>
     </div>
@@ -30,28 +61,54 @@ export function CapitalProvidersContent() {
 }
 
 export function LendersContent() {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useGSAP(
+    () => {
+      if (!containerRef.current) return;
+
+      const cards = gsap.utils.toArray(containerRef.current.children);
+
+      gsap.fromTo(
+        cards,
+        {
+          scale: 0.8,
+          opacity: 0,
+        },
+        {
+          scale: 1,
+          opacity: 1,
+          duration: 0.5,
+          ease: "back.out(1.7)",
+          stagger: 0.1,
+        },
+      );
+    },
+    { scope: containerRef },
+  );
+
   return (
     <div className="flex flex-col gap-8">
-      <div className="grid grid-cols-4 gap-6">
-        <SimpleIconBox
+      <div ref={containerRef} className="grid grid-cols-4 gap-6">
+        <IconBox
           src="/icons/white/money-coins-white.svg"
           title="High Fixed Fees 2"
-          subtitle="Make smaller, most in-demand loans economic"
+          description="Make smaller, most in-demand loans economic"
         />
-        <SimpleIconBox
+        <IconBox
           src="/icons/white/clock-white.svg"
           title="Slow Process 2"
-          subtitle=">35-day completions"
+          description=">35-day completions"
         />
-        <SimpleIconBox
+        <IconBox
           src="/icons/white/arrows-white.svg"
           title="Repeat Data Entry 2"
-          subtitle="Enter same data for each lender application"
+          description="Enter same data for each lender application"
         />
-        <SimpleIconBox
+        <IconBox
           src="/icons/white/eye-white-crossed.svg"
           title="Opaque 2"
-          subtitle="Process lacks transparency, and consistency"
+          description="Process lacks transparency, and consistency"
         />
       </div>
     </div>
@@ -59,28 +116,54 @@ export function LendersContent() {
 }
 
 export function BorrowersContent() {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useGSAP(
+    () => {
+      if (!containerRef.current) return;
+
+      const cards = gsap.utils.toArray(containerRef.current.children);
+
+      gsap.fromTo(
+        cards,
+        {
+          scale: 0.8,
+          opacity: 0,
+        },
+        {
+          scale: 1,
+          opacity: 1,
+          duration: 0.5,
+          ease: "back.out(1.7)",
+          stagger: 0.1,
+        },
+      );
+    },
+    { scope: containerRef },
+  );
+
   return (
     <div className="flex flex-col gap-8">
-      <div className="grid grid-cols-4 gap-6">
-        <SimpleIconBox
+      <div ref={containerRef} className="grid grid-cols-4 gap-6">
+        <IconBox
           src="/icons/white/money-coins-white.svg"
           title="High Fixed Fees 3"
-          subtitle="Make smaller, most in-demand loans economic"
+          description="Make smaller, most in-demand loans economic"
         />
-        <SimpleIconBox
+        <IconBox
           src="/icons/white/clock-white.svg"
           title="Slow Process 3"
-          subtitle=">35-day completions"
+          description=">35-day completions"
         />
-        <SimpleIconBox
+        <IconBox
           src="/icons/white/arrows-white.svg"
           title="Repeat Data Entry 3"
-          subtitle="Enter same data for each lender application"
+          description="Enter same data for each lender application"
         />
-        <SimpleIconBox
+        <IconBox
           src="/icons/white/eye-white-crossed.svg"
           title="Opaque3"
-          subtitle="Process lacks transparency, and consistency"
+          description="Process lacks transparency, and consistency"
         />
       </div>
     </div>

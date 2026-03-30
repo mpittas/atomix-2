@@ -34,25 +34,22 @@ export default function IconBox({
   const containerRef = useRef<HTMLDivElement>(null);
   const shineRef1 = useRef<HTMLDivElement>(null);
   const shineRef2 = useRef<HTMLDivElement>(null);
-  const isAnimatingRef = useRef(false);
 
   const handleMouseEnter = () => {
-    if (isAnimatingRef.current) return;
+    gsap.killTweensOf([
+      containerRef.current,
+      shineRef1.current,
+      shineRef2.current,
+    ]);
 
-    isAnimatingRef.current = true;
-
-    const tl = gsap.timeline({
-      onComplete: () => {
-        isAnimatingRef.current = false;
-      },
-    });
+    const tl = gsap.timeline();
 
     tl.to(
       containerRef.current,
       {
-        scale: 1.05,
-        duration: 0.3,
-        ease: "back.out(3)",
+        scale: 1.07,
+        duration: 0.6,
+        ease: "power3.out",
       },
       0,
     )
@@ -87,6 +84,12 @@ export default function IconBox({
   };
 
   const handleMouseLeave = () => {
+    gsap.killTweensOf([
+      containerRef.current,
+      shineRef1.current,
+      shineRef2.current,
+    ]);
+
     gsap.to(containerRef.current, {
       scale: 1,
       duration: 0.4,

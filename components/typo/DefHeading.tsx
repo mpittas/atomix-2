@@ -3,6 +3,7 @@ import { BadgeHeadingPill } from "../ui/BadgeHeadingPill";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
+import SplitText from "./SplitText";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -27,7 +28,6 @@ const DefHeading: React.FC<DefHeadingProps> = ({
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const badgeRef = useRef<HTMLDivElement>(null);
-  const titleRef = useRef<HTMLHeadingElement>(null);
   const descRef = useRef<HTMLDivElement>(null);
 
   const titleColor = theme === "dark" ? "text-[#212329]" : "text-white";
@@ -37,7 +37,7 @@ const DefHeading: React.FC<DefHeadingProps> = ({
     () => {
       if (!containerRef.current) return;
 
-      const elements = [badgeRef.current, titleRef.current, descRef.current];
+      const elements = [badgeRef.current, descRef.current];
 
       gsap.fromTo(
         elements,
@@ -72,12 +72,17 @@ const DefHeading: React.FC<DefHeadingProps> = ({
         </BadgeHeadingPill>
       </div>
 
-      <h2
-        ref={titleRef}
+      <SplitText
+        text={title}
+        tag="h2"
         className={`text-5xl leading-[1.2em] font-semibold ${titleColor}`}
-      >
-        {title}
-      </h2>
+        splitType="chars"
+        delay={20}
+        duration={0.6}
+        from={{ opacity: 0, y: 26 }}
+        to={{ opacity: 1, y: 0 }}
+        threshold={0.2}
+      />
 
       <div ref={descRef} className={`${descriptionColor} text-lg`}>
         {description}

@@ -84,38 +84,38 @@ export default function SolutionsRow() {
       .fromTo(
         row2Box1Ref.current,
         { opacity: 0, scale: 0.8 },
-        { opacity: 1, scale: 1, duration: 0.6, ease: "back.out(1.7)" },
+        { opacity: 1, scale: 1, duration: 0.8, ease: "back.out(1.7)" },
         "-=0.3",
       )
       .fromTo(
         row2Box2Ref.current,
         { opacity: 0, scale: 0.8 },
-        { opacity: 1, scale: 1, duration: 0.6, ease: "back.out(1.7)" },
-        "-=0.35",
+        { opacity: 1, scale: 1, duration: 0.8, ease: "back.out(1.7)" },
+        "-=0.1",
       )
       .fromTo(
         row2Box3Ref.current,
         { opacity: 0, scale: 0.8 },
-        { opacity: 1, scale: 1, duration: 0.6, ease: "back.out(1.7)" },
-        "-=0.35",
+        { opacity: 1, scale: 1, duration: 0.8, ease: "back.out(1.7)" },
+        "-=0.1",
       )
       .fromTo(
         row2Box4Ref.current,
         { opacity: 0, scale: 0.8 },
-        { opacity: 1, scale: 1, duration: 0.6, ease: "back.out(1.7)" },
-        "-=0.35",
+        { opacity: 1, scale: 1, duration: 0.8, ease: "back.out(1.7)" },
+        "-=0.1",
       )
       .fromTo(
         row2Box5Ref.current,
         { opacity: 0, scale: 0.8 },
-        { opacity: 1, scale: 1, duration: 0.6, ease: "back.out(1.7)" },
-        "-=0.35",
+        { opacity: 1, scale: 1, duration: 0.8, ease: "back.out(1.7)" },
+        "-=0.1",
       )
       .fromTo(
         row2Box6Ref.current,
         { opacity: 0, scale: 0.8 },
-        { opacity: 1, scale: 1, duration: 0.6, ease: "back.out(1.7)" },
-        "-=0.35",
+        { opacity: 1, scale: 1, duration: 0.8, ease: "back.out(1.7)" },
+        "-=0.1",
       )
       .fromTo(
         row3Connector1Ref.current,
