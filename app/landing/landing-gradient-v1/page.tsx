@@ -447,6 +447,8 @@ built for real-world complexity."
                       title="Real-World Financial Infrastructure"
                       titleClassName="text-md font-semibold"
                       description="Build technology that powers real lending markets and impacts billions in asset-backed finance."
+                      staticShine={1}
+                      disableHover
                     />
                   </div>
 
@@ -456,6 +458,8 @@ built for real-world complexity."
                       title="Small Team, Big Impact"
                       titleClassName="text-md font-semibold"
                       description="Join a focused team where every contribution directly shapes the product, technology, and company."
+                      staticShine={2}
+                      disableHover
                     />
                   </div>
 
@@ -465,6 +469,8 @@ built for real-world complexity."
                       title="Cutting-Edge Technology"
                       titleClassName="text-md font-semibold"
                       description="Work across AI, automation, data systems, and blockchain-backed infrastructure."
+                      staticShine={3}
+                      disableHover
                     />
                   </div>
                 </div>

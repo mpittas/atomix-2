@@ -1,4 +1,3 @@
-please update inside @IconBoxHorizontal
+Please for every IconBox component inside div with ref "careersContainerRef" add a background effect.
 
-I want only one title, no subtitle.
-If user defines a children and opens the component to add JSX inside, then consider this to be an alternative to title, so change the title prop to be optional and use the children as the title.
+Each card should have different shine effect.
