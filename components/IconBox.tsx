@@ -113,19 +113,19 @@ export default function IconBox({
       <div className="pointer-events-none absolute inset-0 rounded-2xl overflow-hidden">
         {staticShine === 1 && (
           <>
-            <div className="absolute -top-8 -right-4 w-32 h-32 bg-white/15 rounded-full blur-2xl" />
+            <div className="absolute -top-8 -right-4 w-32 h-32 bg-white/20 rounded-full blur-2xl" />
 
-            <div className="absolute -bottom-8 -left-4 w-32 h-32 bg-white/15 rounded-full blur-2xl" />
+            <div className="absolute -bottom-8 -left-4 w-32 h-32 bg-white/20 rounded-full blur-2xl" />
           </>
         )}
         {staticShine === 2 && (
           <>
-            <div className="absolute -bottom-30 -top-30 right-5 w-22 bg-white/6 rotate-20 blur-lg" />
-            <div className="absolute -bottom-30 -top-30 right-40 w-12 bg-white/6 rotate-20 blur-lg" />
+            <div className="absolute -bottom-30 -top-30 right-5 w-22 bg-white/9 rotate-20 blur-lg" />
+            <div className="absolute -bottom-30 -top-30 right-40 w-12 bg-white/9 rotate-20 blur-lg" />
           </>
         )}
         {staticShine === 3 && (
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[70%] aspect-square rounded-full shadow-[0_0_40px_rgba(255,255,255,0.06),inset_0_0_40px_rgba(255,255,255,0.06)]" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[70%] aspect-square rounded-full shadow-[0_0_60px_rgba(255,255,255,0.1),inset_0_0_60px_rgba(255,255,255,0.1)]" />
         )}
         <div
           ref={shineRef1}
