@@ -88,9 +88,28 @@ export default function LandingGradientV1Page() {
       width: "100%",
       y: "-50%",
     });
+    const getColumns = (rowEl: HTMLElement) => {
+      const left = rowEl.querySelector('[class*="order-1"]') as HTMLElement;
+      const right = rowEl.querySelector('[class*="order-2"]') as HTMLElement;
+      return { left, right };
+    };
+
+    const row1Cols = getColumns(infoRow1Ref.current);
+    const row2Cols = getColumns(infoRow2Ref.current);
+    const row3Cols = getColumns(infoRow3Ref.current);
+
     gsap.set(infoRow1Ref.current, { opacity: 1, zIndex: 3 });
-    gsap.set(infoRow2Ref.current, { opacity: 0, zIndex: 2 });
-    gsap.set(infoRow3Ref.current, { opacity: 0, zIndex: 1 });
+    gsap.set(infoRow2Ref.current, { opacity: 1, zIndex: 2 });
+    gsap.set(infoRow3Ref.current, { opacity: 1, zIndex: 1 });
+
+    gsap.set([row1Cols.left, row2Cols.left, row3Cols.left], {
+      x: -80,
+      opacity: 0,
+    });
+    gsap.set([row1Cols.right, row2Cols.right, row3Cols.right], {
+      x: 80,
+      opacity: 0,
+    });
 
     const tl = gsap.timeline({
       scrollTrigger: {
@@ -103,34 +122,60 @@ export default function LandingGradientV1Page() {
       },
     });
 
-    tl.to(infoRow1Ref.current, {
-      opacity: 0,
-      scale: 0.95,
-      duration: 1,
-    })
+    tl.to(
+      row1Cols.left,
+      { x: 0, opacity: 1, duration: 1, ease: "power2.out" },
+      0,
+    )
       .to(
-        infoRow2Ref.current,
-        {
-          opacity: 1,
-          zIndex: 3,
-          duration: 1,
-        },
-        "-=0.5",
+        row1Cols.right,
+        { x: 0, opacity: 1, duration: 1, ease: "power2.out" },
+        0,
       )
-      .to(infoRow2Ref.current, {
-        opacity: 0,
-        scale: 0.95,
-        duration: 1,
-      })
       .to(
-        infoRow3Ref.current,
-        {
-          opacity: 1,
-          zIndex: 3,
-          duration: 1,
-        },
-        "-=0.5",
-      );
+        row1Cols.left,
+        { x: -80, opacity: 0, duration: 1, ease: "power2.in" },
+        1,
+      )
+      .to(
+        row1Cols.right,
+        { x: 80, opacity: 0, duration: 1, ease: "power2.in" },
+        1,
+      )
+      .set(infoRow1Ref.current, { zIndex: 0 })
+      .to(
+        row2Cols.left,
+        { x: 0, opacity: 1, duration: 1, ease: "power2.out" },
+        1.5,
+      )
+      .to(
+        row2Cols.right,
+        { x: 0, opacity: 1, duration: 1, ease: "power2.out" },
+        1.5,
+      )
+      .set(infoRow2Ref.current, { zIndex: 3 }, 1.5)
+      .to(
+        row2Cols.left,
+        { x: -80, opacity: 0, duration: 1, ease: "power2.in" },
+        3,
+      )
+      .to(
+        row2Cols.right,
+        { x: 80, opacity: 0, duration: 1, ease: "power2.in" },
+        3,
+      )
+      .set(infoRow2Ref.current, { zIndex: 0 })
+      .to(
+        row3Cols.left,
+        { x: 0, opacity: 1, duration: 1, ease: "power2.out" },
+        3.5,
+      )
+      .to(
+        row3Cols.right,
+        { x: 0, opacity: 1, duration: 1, ease: "power2.out" },
+        3.5,
+      )
+      .set(infoRow3Ref.current, { zIndex: 3 }, 3.5);
 
     return () => {
       tl.kill();
@@ -265,6 +310,7 @@ built for real-world complexity."
                     <InfoRow
                       title="Capital Providers"
                       subtitle="Invest with full transparency, automated compliance, and access to diversified lending opportunities."
+                      disableAnimation
                     >
                       <div className="flex flex-col gap-y-6">
                         <IconBoxHorizontal src="/icons/white/shield-check-white.svg">
@@ -303,6 +349,7 @@ built for real-world complexity."
                       subtitle="Automate lending workflows, access capital faster, and scale operations without increasing headcount."
                       reverse={true}
                       imageSrc="/images/dashboard-lenders.svg"
+                      disableAnimation
                     >
                       <div className="flex flex-col gap-y-6">
                         <IconBoxHorizontal src="/icons/white/shield-check-white.svg">
@@ -341,6 +388,7 @@ built for real-world complexity."
                       title="Borrowers"
                       subtitle="Borrowers move from enquiry to drawdown in a structured, transparent journey."
                       imageSrc="/images/dashboard-auction-finance.svg"
+                      disableAnimation
                     >
                       <div className="flex flex-col gap-y-6">
                         <IconBoxHorizontal src="/icons/white/electricity-simple.svg">

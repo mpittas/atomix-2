@@ -14,6 +14,7 @@ interface InfoRowProps {
   subtitle?: string;
   reverse?: boolean;
   children?: React.ReactNode;
+  disableAnimation?: boolean;
 }
 
 export default function InfoRow({
@@ -23,12 +24,15 @@ export default function InfoRow({
   subtitle,
   reverse = false,
   children,
+  disableAnimation = false,
 }: InfoRowProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const leftSideRef = useRef<HTMLDivElement>(null);
   const rightSideRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (disableAnimation) return;
+
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: containerRef.current,
@@ -51,7 +55,7 @@ export default function InfoRow({
     return () => {
       tl.kill();
     };
-  }, []);
+  }, [disableAnimation]);
 
   return (
     <div
