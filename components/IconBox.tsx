@@ -12,7 +12,7 @@ interface IconBoxProps {
   description?: ReactNode;
   className?: string;
   imageSize?: "small" | "medium" | "large";
-  staticShine?: 1 | 2 | 3;
+  staticShine?: 1 | 2 | 3 | 4 | 5 | 6;
   disableHover?: boolean;
 }
 
@@ -127,15 +127,27 @@ export default function IconBox({
         {staticShine === 3 && (
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[70%] aspect-square rounded-full shadow-[0_0_60px_rgba(255,255,255,0.15),inset_0_0_60px_rgba(255,255,255,0.15)]" />
         )}
-        <div
-          ref={shineRef1}
-          className="absolute -top-10 -bottom-10 w-8 bg-white/40 blur-xl"
-          style={{
-            transform: "translateX(150%) rotate(15deg)",
-            right: "0",
-            opacity: 0,
-          }}
-        />
+        {staticShine === 4 && (
+          <>
+            <div className="absolute -bottom-30 -top-30 -left-10 w-32 bg-white/12 -rotate-20 blur-xl" />
+            <div className="absolute -bottom-30 -top-30 right-30 w-12 bg-white/12 -rotate-20 blur-md" />
+            <div className="absolute -bottom-30 -top-30 right-10 w-6 bg-white/12 -rotate-20 blur-md" />
+          </>
+        )}
+        {staticShine === 5 && (
+          <>
+            <div className="absolute -top-8 left-20 w-32 h-32 bg-white/25 rounded-full blur-2xl" />
+
+            <div className="absolute -bottom-14 -left-4 w-32 h-32 bg-white/25 rounded-full blur-2xl" />
+          </>
+        )}
+        {staticShine === 6 && (
+          <>
+            <div className="absolute -bottom-8 left-50 -translate-x-1/2 w-2/3 h-24 bg-white/20 rounded-full blur-2xl" />
+
+            <div className="absolute bottom-24 left-50 -translate-x-1/2 w-20 h-20 bg-white/35 rounded-full blur-xl" />
+          </>
+        )}
         <div
           ref={shineRef2}
           className="absolute -top-10 -bottom-10 w-24 bg-white/30 blur-2xl"
