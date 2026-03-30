@@ -29,6 +29,11 @@ export default function LandingGradientV1Page() {
   const careersBox2Ref = useRef<HTMLDivElement>(null);
   const careersBox3Ref = useRef<HTMLDivElement>(null);
 
+  const infoRowsContainerRef = useRef<HTMLDivElement>(null);
+  const infoRow1Ref = useRef<HTMLDivElement>(null);
+  const infoRow2Ref = useRef<HTMLDivElement>(null);
+  const infoRow3Ref = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     const tl = gsap.timeline({
       scrollTrigger: {
@@ -54,6 +59,77 @@ export default function LandingGradientV1Page() {
         { opacity: 0, scale: 0.8 },
         { opacity: 1, scale: 1, duration: 0.6, ease: "back.out(1.7)" },
         "-=0.35",
+      );
+
+    return () => {
+      tl.kill();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (
+      !infoRowsContainerRef.current ||
+      !infoRow1Ref.current ||
+      !infoRow2Ref.current ||
+      !infoRow3Ref.current
+    )
+      return;
+
+    const rows = [
+      infoRow1Ref.current,
+      infoRow2Ref.current,
+      infoRow3Ref.current,
+    ];
+
+    gsap.set(rows, {
+      position: "absolute",
+      top: "50%",
+      left: 0,
+      width: "100%",
+      y: "-50%",
+    });
+    gsap.set(infoRow1Ref.current, { opacity: 1, zIndex: 3 });
+    gsap.set(infoRow2Ref.current, { opacity: 0, zIndex: 2 });
+    gsap.set(infoRow3Ref.current, { opacity: 0, zIndex: 1 });
+
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: infoRowsContainerRef.current,
+        start: "bottom bottom",
+        end: "+=300%",
+        pin: true,
+        pinSpacing: true,
+        scrub: 1,
+      },
+    });
+
+    tl.to(infoRow1Ref.current, {
+      opacity: 0,
+      scale: 0.95,
+      duration: 1,
+    })
+      .to(
+        infoRow2Ref.current,
+        {
+          opacity: 1,
+          zIndex: 3,
+          duration: 1,
+        },
+        "-=0.5",
+      )
+      .to(infoRow2Ref.current, {
+        opacity: 0,
+        scale: 0.95,
+        duration: 1,
+      })
+      .to(
+        infoRow3Ref.current,
+        {
+          opacity: 1,
+          zIndex: 3,
+          duration: 1,
+        },
+        "-=0.5",
       );
 
     return () => {
@@ -180,112 +256,122 @@ built for real-world complexity."
               </div>
 
               <div className="mt-16 flex flex-col items-center">
-                <div className="flex flex-col items-center gap-y-28 w-full">
-                  <InfoRow
-                    title="Capital Providers"
-                    subtitle="Invest with full transparency, automated compliance, and access to diversified lending opportunities."
-                  >
-                    <div className="flex flex-col gap-y-6">
-                      <IconBoxHorizontal src="/icons/white/shield-check-white.svg">
-                        <div className="max-w-[400px]">
-                          <span className="font-semibold text-white">
-                            Continuous compliance assuranceless
-                          </span>{" "}
-                          variance, easier audits
-                        </div>
-                      </IconBoxHorizontal>
+                <div
+                  ref={infoRowsContainerRef}
+                  className="relative w-full h-screen flex items-center justify-center"
+                  id="info-rows"
+                >
+                  <div ref={infoRow1Ref}>
+                    <InfoRow
+                      title="Capital Providers"
+                      subtitle="Invest with full transparency, automated compliance, and access to diversified lending opportunities."
+                    >
+                      <div className="flex flex-col gap-y-6">
+                        <IconBoxHorizontal src="/icons/white/shield-check-white.svg">
+                          <div className="max-w-[400px]">
+                            <span className="font-semibold text-white">
+                              Continuous compliance assuranceless
+                            </span>{" "}
+                            variance, easier audits
+                          </div>
+                        </IconBoxHorizontal>
 
-                      <IconBoxHorizontal src="/icons/white/target-arrow.svg">
-                        <div className="max-w-[340px]">
-                          <span className="font-semibold">
-                            Deploy capital exactly as intended <br></br>
-                          </span>{" "}
-                          with lower risk and lower upfront costs
-                        </div>
-                      </IconBoxHorizontal>
+                        <IconBoxHorizontal src="/icons/white/target-arrow.svg">
+                          <div className="max-w-[340px]">
+                            <span className="font-semibold">
+                              Deploy capital exactly as intended <br></br>
+                            </span>{" "}
+                            with lower risk and lower upfront costs
+                          </div>
+                        </IconBoxHorizontal>
 
-                      <IconBoxHorizontal src="/icons/white/module-simple.svg">
-                        <div className="max-w-[340px]">
-                          <span className="font-semibold">
-                            One platform, many lenders<br></br>
-                          </span>{" "}
-                          removes barriers for all investor types
-                        </div>
-                      </IconBoxHorizontal>
-                    </div>
-                  </InfoRow>
+                        <IconBoxHorizontal src="/icons/white/module-simple.svg">
+                          <div className="max-w-[340px]">
+                            <span className="font-semibold">
+                              One platform, many lenders<br></br>
+                            </span>{" "}
+                            removes barriers for all investor types
+                          </div>
+                        </IconBoxHorizontal>
+                      </div>
+                    </InfoRow>
+                  </div>
 
-                  <InfoRow
-                    title="Lenders"
-                    subtitle="Automate lending workflows, access capital faster, and scale operations without increasing headcount."
-                    reverse={true}
-                    imageSrc="/images/dashboard-lenders.svg"
-                  >
-                    <div className="flex flex-col gap-y-6">
-                      <IconBoxHorizontal src="/icons/white/shield-check-white.svg">
-                        <div className="max-w-[500px]">
-                          <span className="font-semibold text-white">
-                            Access funding at any scale <br></br>
-                          </span>{" "}
-                          platform handles compliance, auditing and access,
-                          attracting both institutional and private investors
-                        </div>
-                      </IconBoxHorizontal>
+                  <div ref={infoRow2Ref}>
+                    <InfoRow
+                      title="Lenders"
+                      subtitle="Automate lending workflows, access capital faster, and scale operations without increasing headcount."
+                      reverse={true}
+                      imageSrc="/images/dashboard-lenders.svg"
+                    >
+                      <div className="flex flex-col gap-y-6">
+                        <IconBoxHorizontal src="/icons/white/shield-check-white.svg">
+                          <div className="max-w-[500px]">
+                            <span className="font-semibold text-white">
+                              Access funding at any scale <br></br>
+                            </span>{" "}
+                            platform handles compliance, auditing and access,
+                            attracting both institutional and private investors
+                          </div>
+                        </IconBoxHorizontal>
 
-                      <IconBoxHorizontal src="/icons/white/user-minus.svg">
-                        <div className="max-w-[400px]">
-                          <span className="font-semibold text-white">
-                            Scale business without scaling workforce <br></br>
-                          </span>{" "}
-                          grow volume without hiring
-                        </div>
-                      </IconBoxHorizontal>
+                        <IconBoxHorizontal src="/icons/white/user-minus.svg">
+                          <div className="max-w-[400px]">
+                            <span className="font-semibold text-white">
+                              Scale business without scaling workforce <br></br>
+                            </span>{" "}
+                            grow volume without hiring
+                          </div>
+                        </IconBoxHorizontal>
 
-                      <IconBoxHorizontal src="/icons/white/scales.svg">
-                        <div className="max-w-[400px]">
-                          <span className="font-semibold text-white">
-                            Costs scale with loan size <br></br>
-                          </span>{" "}
-                          making smaller in-demand loans profitable
-                        </div>
-                      </IconBoxHorizontal>
-                    </div>
-                  </InfoRow>
+                        <IconBoxHorizontal src="/icons/white/scales.svg">
+                          <div className="max-w-[400px]">
+                            <span className="font-semibold text-white">
+                              Costs scale with loan size <br></br>
+                            </span>{" "}
+                            making smaller in-demand loans profitable
+                          </div>
+                        </IconBoxHorizontal>
+                      </div>
+                    </InfoRow>
+                  </div>
 
-                  <InfoRow
-                    title="Borrowers"
-                    subtitle="Borrowers move from enquiry to drawdown in a structured, transparent journey."
-                    imageSrc="/images/dashboard-auction-finance.svg"
-                  >
-                    <div className="flex flex-col gap-y-6">
-                      <IconBoxHorizontal src="/icons/white/electricity-simple.svg">
-                        <div className="max-w-[400px]">
-                          <span className="font-semibold text-white">
-                            Receive instant offer <br></br>
-                          </span>{" "}
-                          that improves as you add more details
-                        </div>
-                      </IconBoxHorizontal>
+                  <div ref={infoRow3Ref}>
+                    <InfoRow
+                      title="Borrowers"
+                      subtitle="Borrowers move from enquiry to drawdown in a structured, transparent journey."
+                      imageSrc="/images/dashboard-auction-finance.svg"
+                    >
+                      <div className="flex flex-col gap-y-6">
+                        <IconBoxHorizontal src="/icons/white/electricity-simple.svg">
+                          <div className="max-w-[400px]">
+                            <span className="font-semibold text-white">
+                              Receive instant offer <br></br>
+                            </span>{" "}
+                            that improves as you add more details
+                          </div>
+                        </IconBoxHorizontal>
 
-                      <IconBoxHorizontal src="/icons/white/rocket-simple.svg">
-                        <div className="max-w-[340px]">
-                          <span className="font-semibold text-white">
-                            Complete in &lt; 2 days<br></br>
-                          </span>{" "}
-                          meet deadlines, seize opportunities
-                        </div>
-                      </IconBoxHorizontal>
+                        <IconBoxHorizontal src="/icons/white/rocket-simple.svg">
+                          <div className="max-w-[340px]">
+                            <span className="font-semibold text-white">
+                              Complete in &lt; 2 days<br></br>
+                            </span>{" "}
+                            meet deadlines, seize opportunities
+                          </div>
+                        </IconBoxHorizontal>
 
-                      <IconBoxHorizontal src="/icons/white/path-arrows.svg">
-                        <div className="max-w-[440px]">
-                          <span className="font-semibold text-white">
-                            Always know your status and next steps<br></br>
-                          </span>{" "}
-                          no chasing, no guessing, consistent outcomes
-                        </div>
-                      </IconBoxHorizontal>
-                    </div>
-                  </InfoRow>
+                        <IconBoxHorizontal src="/icons/white/path-arrows.svg">
+                          <div className="max-w-[440px]">
+                            <span className="font-semibold text-white">
+                              Always know your status and next steps<br></br>
+                            </span>{" "}
+                            no chasing, no guessing, consistent outcomes
+                          </div>
+                        </IconBoxHorizontal>
+                      </div>
+                    </InfoRow>
+                  </div>
                 </div>
               </div>
             </div>
