@@ -120,12 +120,12 @@ export default function IconBox({
         )}
         {staticShine === 2 && (
           <>
-            <div className="absolute -bottom-30 -top-30 right-5 w-22 bg-white/8 rotate-20 blur-lg" />
-            <div className="absolute -bottom-30 -top-30 right-40 w-12 bg-white/8 rotate-20 blur-lg" />
+            <div className="absolute -bottom-30 -top-30 right-5 w-22 bg-white/6 rotate-20 blur-lg" />
+            <div className="absolute -bottom-30 -top-30 right-40 w-12 bg-white/6 rotate-20 blur-lg" />
           </>
         )}
         {staticShine === 3 && (
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[70%] aspect-square rounded-full shadow-[0_0_40px_rgba(255,255,255,0.08),inset_0_0_40px_rgba(255,255,255,0.08)]" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[70%] aspect-square rounded-full shadow-[0_0_40px_rgba(255,255,255,0.06),inset_0_0_40px_rgba(255,255,255,0.06)]" />
         )}
         <div
           ref={shineRef1}
