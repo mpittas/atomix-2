@@ -17,6 +17,7 @@ import CustomerStoryCard from "@/components/CustomerStoryCard";
 import DefCta from "@/components/DefCta";
 import Footer from "@/components/Footer";
 import SoftAurora from "@/components/backgrounds/SoftAurora";
+import BenefitsLayout from "@/components/BenefitsLayout";
 
 export default function LandingGradientV1Page() {
   const careersContainerRef = useRef<HTMLDivElement>(null);
@@ -383,114 +384,7 @@ built for real-world complexity."
 
               <div className="mt-16 flex flex-col items-center">
                 <div className="w-full flex flex-col gap-32" id="info-rows">
-                  <InfoRow
-                    title="Capital Providers"
-                    subtitle="Invest with full transparency, automated compliance, and access to diversified lending opportunities."
-                    disableAnimation
-                  >
-                    <div className="flex flex-col gap-y-6">
-                      <IconBoxHorizontal src="/icons/white/shield-check-white.svg">
-                        <div className="max-w-[400px]">
-                          <span className="font-semibold text-white">
-                            Continuous compliance assuranceless
-                          </span>{" "}
-                          variance, easier audits
-                        </div>
-                      </IconBoxHorizontal>
-
-                      <IconBoxHorizontal src="/icons/white/target-arrow.svg">
-                        <div className="max-w-[340px]">
-                          <span className="font-semibold">
-                            Deploy capital exactly as intended <br></br>
-                          </span>{" "}
-                          with lower risk and lower upfront costs
-                        </div>
-                      </IconBoxHorizontal>
-
-                      <IconBoxHorizontal src="/icons/white/module-simple.svg">
-                        <div className="max-w-[340px]">
-                          <span className="font-semibold">
-                            One platform, many lenders<br></br>
-                          </span>{" "}
-                          removes barriers for all investor types
-                        </div>
-                      </IconBoxHorizontal>
-                    </div>
-                  </InfoRow>
-
-                  <InfoRow
-                    title="Lenders"
-                    subtitle="Automate lending workflows, access capital faster, and scale operations without increasing headcount."
-                    reverse={true}
-                    imageSrc="/images/dashboard-lenders.svg"
-                    disableAnimation
-                  >
-                    <div className="flex flex-col gap-y-6">
-                      <IconBoxHorizontal src="/icons/white/shield-check-white.svg">
-                        <div className="max-w-[500px]">
-                          <span className="font-semibold text-white">
-                            Access funding at any scale <br></br>
-                          </span>{" "}
-                          platform handles compliance, auditing and access,
-                          attracting both institutional and private investors
-                        </div>
-                      </IconBoxHorizontal>
-
-                      <IconBoxHorizontal src="/icons/white/user-minus.svg">
-                        <div className="max-w-[400px]">
-                          <span className="font-semibold text-white">
-                            Scale business without scaling workforce <br></br>
-                          </span>{" "}
-                          grow volume without hiring
-                        </div>
-                      </IconBoxHorizontal>
-
-                      <IconBoxHorizontal src="/icons/white/scales.svg">
-                        <div className="max-w-[400px]">
-                          <span className="font-semibold text-white">
-                            Costs scale with loan size <br></br>
-                          </span>{" "}
-                          making smaller in-demand loans profitable
-                        </div>
-                      </IconBoxHorizontal>
-                    </div>
-                  </InfoRow>
-
-                  <InfoRow
-                    title="Borrowers"
-                    subtitle="Borrowers move from enquiry to drawdown in a structured, transparent journey."
-                    imageSrc="/images/dashboard-auction-finance.svg"
-                    disableAnimation
-                  >
-                    <div className="flex flex-col gap-y-6">
-                      <IconBoxHorizontal src="/icons/white/electricity-simple.svg">
-                        <div className="max-w-[400px]">
-                          <span className="font-semibold text-white">
-                            Receive instant offer <br></br>
-                          </span>{" "}
-                          that improves as you add more details
-                        </div>
-                      </IconBoxHorizontal>
-
-                      <IconBoxHorizontal src="/icons/white/rocket-simple.svg">
-                        <div className="max-w-[340px]">
-                          <span className="font-semibold text-white">
-                            Complete in &lt; 2 days<br></br>
-                          </span>{" "}
-                          meet deadlines, seize opportunities
-                        </div>
-                      </IconBoxHorizontal>
-
-                      <IconBoxHorizontal src="/icons/white/path-arrows.svg">
-                        <div className="max-w-[440px]">
-                          <span className="font-semibold text-white">
-                            Always know your status and next steps<br></br>
-                          </span>{" "}
-                          no chasing, no guessing, consistent outcomes
-                        </div>
-                      </IconBoxHorizontal>
-                    </div>
-                  </InfoRow>
+                  <BenefitsLayout />
                 </div>
               </div>
             </div>
