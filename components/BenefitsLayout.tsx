@@ -15,10 +15,20 @@ export default function BenefitsLayout() {
   const stackedImagesRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
 
+  const row2Ref = useRef<HTMLDivElement>(null);
+  const row2ContentRef = useRef<HTMLDivElement>(null);
+  const row2MainImageRef = useRef<HTMLDivElement>(null);
+  const row2SmallImageRef = useRef<HTMLImageElement>(null);
+
+  const row3Ref = useRef<HTMLDivElement>(null);
+  const row3MainImageRef = useRef<HTMLDivElement>(null);
+  const row3SmallImageRef = useRef<HTMLImageElement>(null);
+  const row3ContentRef = useRef<HTMLDivElement>(null);
+
   useGSAP(
     () => {
       const ctx = gsap.context(() => {
-        gsap.set(mainImageRef.current, { opacity: 0 });
+        gsap.set(mainImageRef.current, { opacity: 0, scale: 0.8 });
         gsap.set(stackedImagesRef.current?.children || [], {
           opacity: 0,
           x: 50,
@@ -39,8 +49,9 @@ export default function BenefitsLayout() {
 
         tl.to(mainImageRef.current, {
           opacity: 1,
-          duration: 0.6,
-          ease: "power2.out",
+          scale: 1,
+          duration: 0.7,
+          ease: "back.out(1.4)",
         });
 
         tl.to(
@@ -72,6 +83,118 @@ export default function BenefitsLayout() {
     },
     { scope: row1Ref },
   );
+
+  useGSAP(
+    () => {
+      const ctx = gsap.context(() => {
+        gsap.set(row2ContentRef.current?.children || [], {
+          opacity: 0,
+          y: 30,
+        });
+        gsap.set(row2MainImageRef.current, { opacity: 0, scale: 0.8 });
+        gsap.set(row2SmallImageRef.current, { opacity: 0, y: 30 });
+
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: row2Ref.current,
+            start: "top 80%",
+            end: "top 30%",
+            toggleActions: "play none none reverse",
+          },
+        });
+
+        tl.to(row2ContentRef.current?.children || [], {
+          opacity: 1,
+          y: 0,
+          duration: 0.5,
+          stagger: 0.1,
+          ease: "power2.out",
+        });
+
+        tl.to(
+          row2MainImageRef.current,
+          {
+            opacity: 1,
+            scale: 1,
+            duration: 0.7,
+            ease: "back.out(1.4)",
+          },
+          "-=0.2",
+        );
+
+        tl.to(
+          row2SmallImageRef.current,
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.5,
+            ease: "power2.out",
+          },
+          "-=0.2",
+        );
+      }, row2Ref);
+
+      return () => ctx.revert();
+    },
+    { scope: row2Ref },
+  );
+
+  useGSAP(
+    () => {
+      const ctx = gsap.context(() => {
+        gsap.set(row3MainImageRef.current, { opacity: 0, scale: 0.8 });
+        gsap.set(row3SmallImageRef.current, { opacity: 0, x: 50 });
+        gsap.set(row3ContentRef.current?.children || [], {
+          opacity: 0,
+          y: 30,
+        });
+
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: row3Ref.current,
+            start: "top 80%",
+            end: "top 30%",
+            toggleActions: "play none none reverse",
+          },
+        });
+
+        tl.to(row3MainImageRef.current, {
+          opacity: 1,
+          scale: 1,
+          duration: 0.7,
+          ease: "back.out(1.4)",
+        });
+
+        tl.to(
+          row3SmallImageRef.current,
+          {
+            opacity: 1,
+            x: 20,
+            y: 20,
+            duration: 0.5,
+            ease: "power2.out",
+          },
+          "-=0.2",
+        );
+
+        tl.to(
+          row3ContentRef.current?.children || [],
+          {
+            opacity: 1,
+            y: 20,
+            duration: 0.5,
+            stagger: 0.1,
+            ease: "power2.out",
+          },
+          "-=0.3",
+        );
+      }, row3Ref);
+
+      return () => ctx.revert();
+    },
+    { scope: row3Ref },
+  );
+
   return (
     <div className="bg-red-500/0 flex flex-col gap-y-32">
       {/* ROW 1 */}
@@ -161,19 +284,36 @@ export default function BenefitsLayout() {
       </div>
 
       {/* ROW 2 */}
-      <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+      <div
+        ref={row2Ref}
+        className="w-full grid grid-cols-1 md:grid-cols-2 gap-16 items-center"
+      >
         <div className="bg-green-500/0 order-1">
-          <div className="relative w-full aspect-[4/3]">
-            <Image
-              src="images/dashboard-lenders.svg"
-              alt=""
-              fill
-              className="object-contain rounded-lg"
-            />
+          <div className="relative w-full pr-8 pb-8 bg-red-500/0">
+            <div className="relative">
+              <div ref={row2MainImageRef}>
+                <Image
+                  src="images/dashboard-lenders-main.svg"
+                  alt=""
+                  width={600}
+                  height={400}
+                  className="object-contain rounded-lg w-full h-auto"
+                />
+              </div>
+
+              <Image
+                ref={row2SmallImageRef}
+                src="images/dashboard-lenders-small.svg"
+                alt=""
+                width={360}
+                height={200}
+                className="object-cover rounded-lg absolute -bottom-4 left-1/2 -translate-x-1/2"
+              />
+            </div>
           </div>
         </div>
 
-        <div className="bg-yellow-500/0">
+        <div ref={row2ContentRef} className="bg-yellow-500/0">
           <h2 className="text-3xl font-bold mb-4 text-white">Lenders</h2>
           <div className="text-lg text-white/80 mb-8">
             Automate lending workflows, access capital faster, and scale
@@ -212,18 +352,35 @@ export default function BenefitsLayout() {
       </div>
 
       {/* ROW 3 */}
-      <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+      <div
+        ref={row3Ref}
+        className="w-full grid grid-cols-1 md:grid-cols-2 gap-16 items-center"
+      >
         <div className="bg-green-500/0">
-          <div className="relative w-full aspect-[4/3]">
-            <Image
-              src="images/dashboard-auction-finance.svg"
-              alt=""
-              fill
-              className="object-contain rounded-lg"
-            />
+          <div className="relative w-full pr-8 pb-8 bg-red-500/0">
+            <div className="relative">
+              <div ref={row3MainImageRef}>
+                <Image
+                  src="images/dashboard-partner-main.svg"
+                  alt=""
+                  width={600}
+                  height={400}
+                  className="object-contain rounded-lg w-full h-auto"
+                />
+              </div>
+
+              <Image
+                ref={row3SmallImageRef}
+                src="images/dashboard-partner-small.svg"
+                alt=""
+                width={200}
+                height={100}
+                className="object-contain absolute bottom-0 right-0 h-auto"
+              />
+            </div>
           </div>
         </div>
-        <div className="bg-yellow-500/0">
+        <div ref={row3ContentRef} className="bg-yellow-500/0">
           <h2 className="text-3xl font-bold mb-4 text-white">Borrowers</h2>
           <div className="text-lg text-white/80 mb-8">
             Borrowers move from enquiry to drawdown in a structured, transparent
