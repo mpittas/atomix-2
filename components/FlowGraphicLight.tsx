@@ -18,6 +18,7 @@ export default function FlowGraphicLight() {
   const row2Card2Ref = useRef<HTMLDivElement | null>(null);
   const row2Card3Ref = useRef<HTMLDivElement | null>(null);
   const badge2Ref = useRef<HTMLDivElement | null>(null);
+  const row2BgRef = useRef<HTMLDivElement | null>(null);
 
   const setupHoverEffect = (ref: React.RefObject<HTMLDivElement | null>) => {
     if (!ref.current) return;
@@ -82,10 +83,16 @@ export default function FlowGraphicLight() {
         "+=0.1",
       )
       .fromTo(
+        row2BgRef.current,
+        { opacity: 0 },
+        { opacity: 1, duration: 0.4, ease: "power2.out" },
+        "+=0.1",
+      )
+      .fromTo(
         row2Card1Ref.current,
         { opacity: 0, scale: 0.8 },
         { opacity: 1, scale: 1, duration: 0.8, ease: "back.out(1.7)" },
-        "+=0.2",
+        "-=0.2",
       )
       .fromTo(
         row2Card2Ref.current,
@@ -165,7 +172,11 @@ per loan"
       </div>
 
       {/* ROW 2 */}
-      <div className="flex gap-4 w-full items-stretch p-2 bg-white/10 border border-dashed border-white/40 rounded-3xl">
+      <div className="flex gap-4 w-full items-stretch relative mt-3 mb-3">
+        <div
+          ref={row2BgRef}
+          className="absolute -left-3 -top-3 -bottom-3 -right-3 bg-white/10 border border-dashed border-white/40 rounded-3xl"
+        ></div>
         <div ref={row2Card1Ref} className="flex-1 relative">
           <IconBox
             src="/icons/white/eye-white.svg"

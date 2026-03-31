@@ -9,19 +9,10 @@ import DefHeading from "@/components/typo/DefHeading";
 import FlowGraphicLight from "@/components/FlowGraphicLight";
 import FlowCardsHor from "@/components/FlowCardsHor";
 import { Button as DefButton } from "@/components/ui";
-import { DefTabs } from "@/components/ui";
 import SolutionsRow from "./components/SolutionsRow";
 import InfoRow from "@/components/InfoRow";
 import IconBoxHorizontal from "@/components/IconBoxHorizontal";
 import IconBox from "@/components/IconBox";
-
-gsap.registerPlugin(ScrollTrigger);
-
-import {
-  CapitalProvidersContent,
-  LendersContent,
-  BorrowersContent,
-} from "./components/SimpleIconBoxRows";
 
 export default function LandingGradientV1Page() {
   const careersContainerRef = useRef<HTMLDivElement>(null);
@@ -127,26 +118,111 @@ export default function LandingGradientV1Page() {
                 description="Opaque systems limit control, visibility and trust across capital providers, lenders and borrowers."
               />
 
-              <div className="mt-16 flex flex-col items-center">
-                <DefTabs
-                  tabs={[
-                    {
-                      id: "capital-providers",
-                      label: "Capital Providers",
-                      content: <CapitalProvidersContent />,
-                    },
-                    {
-                      id: "lenders",
-                      label: "Lenders",
-                      content: <LendersContent />,
-                    },
-                    {
-                      id: "borrowers",
-                      label: "Borrowers",
-                      content: <BorrowersContent />,
-                    },
-                  ]}
-                />
+              <div className="mt-16 flex flex-col items-center gap-16">
+                {/* Capital Providers Section */}
+                <div className="w-full">
+                  <div className="text-center mb-8">
+                    <h3 className="text-2xl font-semibold text-white mb-2">
+                      Capital Providers
+                    </h3>
+                    <p className="text-white/70">
+                      Invest with full transparency, automated compliance, and
+                      access to diversified lending opportunities.
+                    </p>
+                  </div>
+                  <div className="grid grid-cols-4 gap-6">
+                    <IconBox
+                      src="/icons/white/money-coins-white.svg"
+                      title="High Fixed Fees"
+                      description="Make smaller, most in-demand loans economic"
+                    />
+                    <IconBox
+                      src="/icons/white/clock-white.svg"
+                      title="Slow Process"
+                      description=">35-day completions"
+                    />
+                    <IconBox
+                      src="/icons/white/arrows-white.svg"
+                      title="Repeat Data Entry"
+                      description="Enter same data for each lender application"
+                    />
+                    <IconBox
+                      src="/icons/white/eye-white-crossed.svg"
+                      title="Opaque"
+                      description="Process lacks transparency, and consistency"
+                    />
+                  </div>
+                </div>
+
+                {/* Lenders Section */}
+                <div className="w-full flex flex-col gap-6">
+                  <div className="text-center mb-4">
+                    <h3 className="text-2xl font-semibold text-white mb-2">
+                      Lenders
+                    </h3>
+                    <p className="text-white/70 max-w-md mx-auto">
+                      Automate lending workflows, access capital faster, and
+                      scale operations without increasing headcount.
+                    </p>
+                  </div>
+                  <div className="grid grid-cols-4 gap-6">
+                    <IconBox
+                      src="/icons/white/money-coins-white.svg"
+                      title="High Fixed Fees 2"
+                      description="Make smaller, most in-demand loans economic"
+                    />
+                    <IconBox
+                      src="/icons/white/clock-white.svg"
+                      title="Slow Process 2"
+                      description=">35-day completions"
+                    />
+                    <IconBox
+                      src="/icons/white/arrows-white.svg"
+                      title="Repeat Data Entry 2"
+                      description="Enter same data for each lender application"
+                    />
+                    <IconBox
+                      src="/icons/white/eye-white-crossed.svg"
+                      title="Opaque 2"
+                      description="Process lacks transparency, and consistency"
+                    />
+                  </div>
+                </div>
+
+                {/* Borrowers Section */}
+                <div className="w-full flex flex-col gap-6">
+                  <div className="text-center mb-4">
+                    <h3 className="text-2xl font-semibold text-white mb-2">
+                      Borrowers
+                    </h3>
+                    <p className="text-white/70 max-w-md mx-auto">
+                      Borrowers experience delays and lack of transparency
+                      throughout the process.
+                    </p>
+                  </div>
+                  <div className="grid grid-cols-4 gap-6">
+                    <IconBox
+                      src="/icons/white/money-coins-white.svg"
+                      title="High Fixed Fees 3"
+                      description="Make smaller, most in-demand loans economic"
+                    />
+                    <IconBox
+                      src="/icons/white/clock-white.svg"
+                      title="Slow Process 3"
+                      description=">35-day completions"
+                    />
+                    <IconBox
+                      src="/icons/white/arrows-white.svg"
+                      title="Repeat Data Entry 3"
+                      description="Enter same data for each lender application"
+                    />
+                    <IconBox
+                      src="/icons/white/eye-white-crossed.svg"
+                      title="Opaque3"
+                      description="Process lacks transparency, and consistency"
+                    />
+                  </div>
+                </div>
               </div>
             </div>
           </div>
