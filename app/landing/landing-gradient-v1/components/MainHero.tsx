@@ -139,14 +139,14 @@ export default function MainHero() {
 
   return (
     <section
-      className="flex h-[calc(100vh-116px)] bg-[#00081F] rounded-3xl overflow-hidden relative flex flex-col"
+      className="flex h-[calc(100vh-116px)] bg-[#004054] rounded-3xl overflow-hidden relative flex flex-col"
       id="atomix-playground-v1"
     >
       <SoftAurora
         speed={1.3}
         scale={1.6}
-        brightness={0.8}
-        color1="#61b8ff"
+        brightness={0.95}
+        color1="#5292ff"
         color2="#00bbff"
         noiseFrequency={1.25}
         noiseAmplitude={2.5}

@@ -132,7 +132,7 @@ export default function LandingGradientV1Page() {
 
       <div className="px-12 mt-16 flex flex-col gap-2">
         <div className="h-full">
-          <div className="px-18 py-36 rounded-t-3xl bg-linear-to-b from-[#020637] to-[#BFC3ED]">
+          <div className="px-18 py-36 rounded-t-3xl bg-linear-to-b from-[#749CA5] to-[#66878E]">
             <div className="max-w-[1060px] mx-auto px-4">
               <DefHeading
                 theme="light"
@@ -152,7 +152,7 @@ export default function LandingGradientV1Page() {
             </div>
           </div>
 
-          <div className="px-18 py-36 rounded-b-3xl bg-linear-to-t from-[#020637] to-[#BFC3ED]">
+          <div className="px-18 py-36 rounded-b-3xl bg-linear-to-t from-[#749CA5] to-[#66878E]">
             <div className="max-w-[1060px] mx-auto px-4">
               <DefHeading
                 theme="light"
@@ -272,7 +272,7 @@ export default function LandingGradientV1Page() {
         </div>
 
         <div className="h-full">
-          <div className="px-18 py-36 rounded-t-3xl bg-linear-to-b from-[#020637] to-[#BFC3ED]">
+          <div className="px-18 py-36 rounded-t-3xl bg-linear-to-b from-[#749CA5] to-[#66878E]">
             <div className="max-w-[1060px] mx-auto px-4">
               <DefHeading
                 theme="light"
@@ -291,7 +291,7 @@ built for real-world complexity."
             </div>
           </div>
 
-          <div className="px-18 py-36 rounded-b-3xl bg-linear-to-t from-[#020637] to-[#BFC3ED]">
+          <div className="px-18 py-36 rounded-b-3xl bg-linear-to-t from-[#749CA5] to-[#66878E]">
             <div className="max-w-[1260px] mx-auto px-4">
               <div className="max-w-[1060px] mx-auto">
                 <DefHeading
@@ -315,7 +315,7 @@ built for real-world complexity."
         </div>
 
         <div className="h-full mb-12">
-          <div className="px-18 py-36 rounded-t-3xl bg-linear-to-b from-[#020637] to-[#BFC3ED]">
+          <div className="px-18 py-36 rounded-t-3xl bg-linear-to-b from-[#749CA5] to-[#66878E]">
             <div className="max-w-[1260px] mx-auto px-4">
               <div className="max-w-[1060px] mx-auto">
                 <DefHeading
@@ -441,7 +441,7 @@ built for real-world complexity."
             </div>
           </div>
 
-          <div className="px-18 py-36 rounded-b-3xl bg-linear-to-t from-[#020637] to-[#BFC3ED]">
+          <div className="px-18 py-36 rounded-b-3xl bg-linear-to-t from-[#749CA5] to-[#66878E]">
             <div className="max-w-[1260px] mx-auto px-4">
               <div className="max-w-[1060px] mx-auto">
                 <DefHeading

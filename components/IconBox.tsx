@@ -32,7 +32,7 @@ export default function IconBox({
 
   return (
     <div
-      className={`relative flex flex-col items-center gap-1 p-7 rounded-2xl text-center h-full border border-dashed bg-[#565e98] border-[#999fc7] overflow-hidden ${className}`}
+      className={`relative flex flex-col items-center gap-1 p-7 rounded-2xl text-center h-full border border-dashed bg-[#124652] border-[#82b0ba] overflow-hidden ${className}`}
     >
       <div className="pointer-events-none absolute inset-0 rounded-2xl overflow-hidden">
         <div className="absolute -top-8 -right-4 w-32 h-32 bg-white/25 rounded-full blur-2xl" />

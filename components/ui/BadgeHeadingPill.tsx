@@ -13,8 +13,8 @@ export const BadgeHeadingPill: React.FC<BadgeHeadingPillProps> = ({
 }) => {
   const colorStyles = {
     blue: {
-      background: "bg-[#EDF1FF]",
-      textGradient: "from-[#1C50F5] to-[#2E91FB]",
+      background: "bg-[#eaeff1]",
+      textGradient: "from-[#1ba4c9] to-[#1991af]",
     },
     red: {
       background: "bg-[#FEEAE9]",

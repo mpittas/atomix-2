@@ -40,7 +40,7 @@ const DefCta: React.FC<DefCtaProps> = ({ title }) => {
   return (
     <div
       ref={sectionRef}
-      className="flex items-center gap-2 bg-blue-950 py-30 relative overflow-hidden"
+      className="flex items-center gap-2 bg-gradient-to-r from-[#004151] to-[#06677E] py-30 relative overflow-hidden"
     >
       <div className="max-w-[1260px] w-full mx-auto px-4">
         <div className="max-w-xl">
