@@ -13,6 +13,7 @@ import SolutionsRow from "./components/SolutionsRow";
 import InfoRow from "@/components/InfoRow";
 import IconBoxHorizontal from "@/components/IconBoxHorizontal";
 import IconBox from "@/components/IconBox";
+import CustomerStoryCard from "@/components/CustomerStoryCard";
 
 export default function LandingGradientV1Page() {
   const careersContainerRef = useRef<HTMLDivElement>(null);
@@ -87,7 +88,7 @@ export default function LandingGradientV1Page() {
         <MainHero />
       </div>
 
-      <div className="px-12 mt-16 min-h-[300vh] flex flex-col gap-2">
+      <div className="px-12 mt-16 flex flex-col gap-2">
         <div className="h-full">
           <div className="px-18 py-36 rounded-t-3xl bg-linear-to-b from-[#020637] to-[#BFC3ED]">
             <div className="max-w-[1060px] mx-auto px-4">
@@ -447,6 +448,40 @@ built for real-world complexity."
                   <DefButton size="large">Learn more</DefButton>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="mb-64 bg-red-500/0 min-h-[50vh]">
+          <div className="max-w-[1260px] mx-auto px-4">
+            <div className="max-w-[1060px] mx-auto">
+              <DefHeading
+                theme="dark"
+                badgeText="Use Cases"
+                title="Delivering Real Results"
+                description="Lorem ipsum"
+              />
+            </div>
+
+            <div className="w-full mt-16 flex items-center gap-6 bg-red-500/0">
+              <CustomerStoryCard
+                title="Customer Story 1"
+                description="Lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit."
+              />
+
+              <CustomerStoryCard
+                title="Customer Story 2"
+                description="Lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit."
+              />
+
+              <CustomerStoryCard
+                title="Customer Story 3"
+                description="Lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit."
+              />
+            </div>
+
+            <div className="flex justify-center mt-12">
+              <DefButton size="large">Read more</DefButton>
             </div>
           </div>
         </div>

@@ -31,7 +31,8 @@ const DefHeading: React.FC<DefHeadingProps> = ({
   const descRef = useRef<HTMLDivElement>(null);
 
   const titleColor = theme === "dark" ? "text-[#212329]" : "text-white";
-  const descriptionColor = theme === "dark" ? "text-[#fff]" : "text-white/80";
+  const descriptionColor =
+    theme === "dark" ? "text-[#474D5D]" : "text-white/80";
 
   useGSAP(
     () => {
