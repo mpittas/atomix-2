@@ -1,0 +1,87 @@
+"use client";
+
+import React, { useRef, useEffect } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import SplitText from "@/components/typo/SplitText";
+
+gsap.registerPlugin(ScrollTrigger);
+
+interface DefCtaProps {
+  title: string;
+}
+
+const DefCta: React.FC<DefCtaProps> = ({ title }) => {
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const imagesRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!sectionRef.current || !imagesRef.current) return;
+
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: sectionRef.current,
+        start: "top 80%",
+        toggleActions: "play none none none",
+      },
+    });
+
+    tl.fromTo(
+      imagesRef.current,
+      { opacity: 0, x: 100 },
+      { opacity: 1, x: 0, duration: 0.8, ease: "power2.out" },
+    );
+
+    return () => {
+      tl.kill();
+    };
+  }, []);
+
+  return (
+    <div
+      ref={sectionRef}
+      className="flex items-center gap-2 bg-blue-950 py-30 relative overflow-hidden"
+    >
+      <div className="max-w-[1260px] w-full mx-auto px-4">
+        <div className="max-w-xl">
+          <SplitText
+            text={title}
+            tag="h2"
+            className="text-5xl font-semibold text-white leading-tight"
+            splitType="words"
+            delay={30}
+            duration={0.6}
+            textAlign="left"
+          />
+        </div>
+      </div>
+
+      <div ref={imagesRef} className="absolute top-[10%] right-0 w-[40%]">
+        <div className="relative w-full">
+          <img
+            src="/dashboard/hero-desktop-img.svg"
+            alt="Atomix desktop dashboard preview"
+            className="w-full select-none"
+            style={{
+              objectFit: "contain",
+              paddingLeft: "12%",
+            }}
+          />
+        </div>
+
+        <div>
+          <img
+            src="/dashboard/hero-mobile-img.svg"
+            alt="Atomix mobile form preview"
+            className="absolute left-0 bottom-0 w-[22%] select-none"
+            style={{
+              objectFit: "contain",
+            }}
+          />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default DefCta;

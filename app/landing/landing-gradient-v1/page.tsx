@@ -14,12 +14,17 @@ import InfoRow from "@/components/InfoRow";
 import IconBoxHorizontal from "@/components/IconBoxHorizontal";
 import IconBox from "@/components/IconBox";
 import CustomerStoryCard from "@/components/CustomerStoryCard";
+import DefCta from "@/components/DefCta";
 
 export default function LandingGradientV1Page() {
   const careersContainerRef = useRef<HTMLDivElement>(null);
   const careersBox1Ref = useRef<HTMLDivElement>(null);
   const careersBox2Ref = useRef<HTMLDivElement>(null);
   const careersBox3Ref = useRef<HTMLDivElement>(null);
+  const useCasesRef = useRef<HTMLDivElement>(null);
+  const card1Ref = useRef<HTMLDivElement>(null);
+  const card2Ref = useRef<HTMLDivElement>(null);
+  const card3Ref = useRef<HTMLDivElement>(null);
 
   const setupHoverEffect = (ref: React.RefObject<HTMLDivElement | null>) => {
     if (!ref.current) return;
@@ -75,6 +80,42 @@ export default function LandingGradientV1Page() {
     setupHoverEffect(careersBox1Ref);
     setupHoverEffect(careersBox2Ref);
     setupHoverEffect(careersBox3Ref);
+
+    return () => {
+      tl.kill();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (
+      !useCasesRef.current ||
+      !card1Ref.current ||
+      !card2Ref.current ||
+      !card3Ref.current
+    )
+      return;
+
+    const cards = [card1Ref.current, card2Ref.current, card3Ref.current];
+
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: useCasesRef.current,
+        start: "top 80%",
+        toggleActions: "play none none none",
+      },
+    });
+
+    tl.fromTo(
+      cards,
+      { opacity: 0, scale: 0.8 },
+      {
+        opacity: 1,
+        scale: 1,
+        duration: 0.6,
+        ease: "back.out(1.7)",
+        stagger: 0.15,
+      },
+    );
 
     return () => {
       tl.kill();
@@ -452,7 +493,7 @@ built for real-world complexity."
           </div>
         </div>
 
-        <div className="mb-64 bg-red-500/0 min-h-[50vh]">
+        <div ref={useCasesRef} className="mb-64 bg-red-500/0 min-h-[50vh]">
           <div className="max-w-[1260px] mx-auto px-4">
             <div className="max-w-[1060px] mx-auto">
               <DefHeading
@@ -464,20 +505,26 @@ built for real-world complexity."
             </div>
 
             <div className="w-full mt-16 flex items-center gap-6 bg-red-500/0">
-              <CustomerStoryCard
-                title="Customer Story 1"
-                description="Lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit."
-              />
+              <div ref={card1Ref} className="flex-1">
+                <CustomerStoryCard
+                  title="Customer Story 1"
+                  description="Lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit."
+                />
+              </div>
 
-              <CustomerStoryCard
-                title="Customer Story 2"
-                description="Lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit."
-              />
+              <div ref={card2Ref} className="flex-1">
+                <CustomerStoryCard
+                  title="Customer Story 2"
+                  description="Lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit."
+                />
+              </div>
 
-              <CustomerStoryCard
-                title="Customer Story 3"
-                description="Lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit."
-              />
+              <div ref={card3Ref} className="flex-1">
+                <CustomerStoryCard
+                  title="Customer Story 3"
+                  description="Lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit."
+                />
+              </div>
             </div>
 
             <div className="flex justify-center mt-12">
@@ -486,6 +533,11 @@ built for real-world complexity."
           </div>
         </div>
       </div>
+
+      <DefCta
+        title="Build the Future of
+Asset-Backed Lending"
+      />
     </div>
   );
 }

@@ -1,3 +1,15 @@
-Please for every IconBox component inside div with ref "careersContainerRef" add a background effect.
+Crerate Footer component.
 
-Each card should have different shine effect.
+We'll have similar structure
+
+<footer>
+<top-footer></top-footer>
+<bottom-footer></bottom-footer>
+</footer>
+
+Follow the image I attach and recreate it.
+
+Footer top has left and right column with flex and space between.
+
+For logo image use: /public/logo/atomix-lending-reimagined-dark.svg
+Below the logo we have a simple icon list
