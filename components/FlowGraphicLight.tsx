@@ -165,7 +165,7 @@ per loan"
       </div>
 
       {/* ROW 2 */}
-      <div className="flex gap-4 w-full items-stretch">
+      <div className="flex gap-4 w-full items-stretch p-2 bg-white/10 border border-dashed border-white/40 rounded-3xl">
         <div ref={row2Card1Ref} className="flex-1 relative">
           <IconBox
             src="/icons/white/eye-white.svg"
