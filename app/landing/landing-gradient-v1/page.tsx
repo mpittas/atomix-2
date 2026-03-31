@@ -15,6 +15,7 @@ import IconBoxHorizontal from "@/components/IconBoxHorizontal";
 import IconBox from "@/components/IconBox";
 import CustomerStoryCard from "@/components/CustomerStoryCard";
 import DefCta from "@/components/DefCta";
+import Footer from "@/components/Footer";
 
 export default function LandingGradientV1Page() {
   const careersContainerRef = useRef<HTMLDivElement>(null);
@@ -538,6 +539,8 @@ built for real-world complexity."
         title="Build the Future of
 Asset-Backed Lending"
       />
+
+      <Footer />
     </div>
   );
 }
