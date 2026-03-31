@@ -14,10 +14,34 @@ export default function FlowGraphicLight() {
   const row1Card2Ref = useRef<HTMLDivElement>(null);
   const row1Card3Ref = useRef<HTMLDivElement>(null);
   const arrowsRef = useRef<HTMLImageElement>(null);
-  const row2Card1Ref = useRef<HTMLDivElement>(null);
-  const row2Card2Ref = useRef<HTMLDivElement>(null);
-  const row2Card3Ref = useRef<HTMLDivElement>(null);
-  const badge2Ref = useRef<HTMLDivElement>(null);
+  const row2Card1Ref = useRef<HTMLDivElement | null>(null);
+  const row2Card2Ref = useRef<HTMLDivElement | null>(null);
+  const row2Card3Ref = useRef<HTMLDivElement | null>(null);
+  const badge2Ref = useRef<HTMLDivElement | null>(null);
+
+  const setupHoverEffect = (ref: React.RefObject<HTMLDivElement | null>) => {
+    if (!ref.current) return;
+
+    const element = ref.current;
+
+    element.addEventListener("mouseenter", () => {
+      gsap.to(element, {
+        scale: 1.2,
+        zIndex: 10,
+        duration: 0.3,
+        ease: "power2.out",
+      });
+    });
+
+    element.addEventListener("mouseleave", () => {
+      gsap.to(element, {
+        scale: 1,
+        zIndex: 1,
+        duration: 0.3,
+        ease: "power2.out",
+      });
+    });
+  };
 
   useEffect(() => {
     const tl = gsap.timeline({
@@ -36,19 +60,19 @@ export default function FlowGraphicLight() {
       .fromTo(
         row1Card1Ref.current,
         { opacity: 0, scale: 0.8 },
-        { opacity: 1, scale: 1, duration: 0.5, ease: "back.out(1.7)" },
+        { opacity: 1, scale: 1, duration: 0.8, ease: "back.out(1.7)" },
         "+=0.2",
       )
       .fromTo(
         row1Card2Ref.current,
         { opacity: 0, scale: 0.8 },
-        { opacity: 1, scale: 1, duration: 0.5, ease: "back.out(1.7)" },
+        { opacity: 1, scale: 1, duration: 0.8, ease: "back.out(1.7)" },
         "-=0.3",
       )
       .fromTo(
         row1Card3Ref.current,
         { opacity: 0, scale: 0.8 },
-        { opacity: 1, scale: 1, duration: 0.5, ease: "back.out(1.7)" },
+        { opacity: 1, scale: 1, duration: 0.8, ease: "back.out(1.7)" },
         "-=0.3",
       )
       .fromTo(
@@ -60,19 +84,19 @@ export default function FlowGraphicLight() {
       .fromTo(
         row2Card1Ref.current,
         { opacity: 0, scale: 0.8 },
-        { opacity: 1, scale: 1, duration: 0.5, ease: "back.out(1.7)" },
+        { opacity: 1, scale: 1, duration: 0.8, ease: "back.out(1.7)" },
         "+=0.2",
       )
       .fromTo(
         row2Card2Ref.current,
         { opacity: 0, scale: 0.8 },
-        { opacity: 1, scale: 1, duration: 0.5, ease: "back.out(1.7)" },
+        { opacity: 1, scale: 1, duration: 0.8, ease: "back.out(1.7)" },
         "-=0.3",
       )
       .fromTo(
         row2Card3Ref.current,
         { opacity: 0, scale: 0.8 },
-        { opacity: 1, scale: 1, duration: 0.5, ease: "back.out(1.7)" },
+        { opacity: 1, scale: 1, duration: 0.8, ease: "back.out(1.7)" },
         "-=0.3",
       )
       .fromTo(
@@ -81,6 +105,13 @@ export default function FlowGraphicLight() {
         { opacity: 1, duration: 0.6, ease: "power2.out" },
         "+=0.1",
       );
+
+    setupHoverEffect(row1Card1Ref);
+    setupHoverEffect(row1Card2Ref);
+    setupHoverEffect(row1Card3Ref);
+    setupHoverEffect(row2Card1Ref);
+    setupHoverEffect(row2Card2Ref);
+    setupHoverEffect(row2Card3Ref);
 
     return () => {
       tl.kill();
@@ -99,7 +130,7 @@ export default function FlowGraphicLight() {
 
       {/* ROW 1 */}
       <div className="flex gap-4 w-full items-stretch">
-        <div ref={row1Card1Ref} className="flex-1">
+        <div ref={row1Card1Ref} className="flex-1 relative">
           <IconBox
             src="/icons/white/eye-closed-white.svg"
             title="Capital providers must trust lenders to follow
@@ -107,7 +138,7 @@ lending rules with no real-time visibility"
           />
         </div>
 
-        <div ref={row1Card2Ref} className="flex-1">
+        <div ref={row1Card2Ref} className="flex-1 relative">
           <IconBox
             src="/icons/white/arrows-white.svg"
             title="Lenders deal with 100+ manual touchpoints
@@ -115,7 +146,7 @@ per loan"
           />
         </div>
 
-        <div ref={row1Card3Ref} className="flex-1">
+        <div ref={row1Card3Ref} className="flex-1 relative">
           <IconBox
             src="/icons/white/clock-white.svg"
             title="Borrowers face an opaque slow process"
@@ -135,21 +166,21 @@ per loan"
 
       {/* ROW 2 */}
       <div className="flex gap-4 w-full items-stretch">
-        <div ref={row2Card1Ref} className="flex-1">
+        <div ref={row2Card1Ref} className="flex-1 relative">
           <IconBox
             src="/icons/white/eye-white.svg"
             title="Enforced lending rules with real-time visibility for capital providers"
           />
         </div>
 
-        <div ref={row2Card2Ref} className="flex-1">
+        <div ref={row2Card2Ref} className="flex-1 relative">
           <IconBox
             src="/icons/white/electricity-a-white.svg"
             title="Near-zero manual touch-points for lenders"
           />
         </div>
 
-        <div ref={row2Card3Ref} className="flex-1">
+        <div ref={row2Card3Ref} className="flex-1 relative">
           <IconBox
             src="/icons/white/rocket-launch-white.svg"
             title="Transparent, fast lending for borrowers"

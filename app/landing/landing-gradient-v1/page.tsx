@@ -29,6 +29,30 @@ export default function LandingGradientV1Page() {
   const careersBox2Ref = useRef<HTMLDivElement>(null);
   const careersBox3Ref = useRef<HTMLDivElement>(null);
 
+  const setupHoverEffect = (ref: React.RefObject<HTMLDivElement | null>) => {
+    if (!ref.current) return;
+
+    const element = ref.current;
+
+    element.addEventListener("mouseenter", () => {
+      gsap.to(element, {
+        scale: 1.2,
+        zIndex: 10,
+        duration: 0.3,
+        ease: "power2.out",
+      });
+    });
+
+    element.addEventListener("mouseleave", () => {
+      gsap.to(element, {
+        scale: 1,
+        zIndex: 1,
+        duration: 0.3,
+        ease: "power2.out",
+      });
+    });
+  };
+
   useEffect(() => {
     const tl = gsap.timeline({
       scrollTrigger: {
@@ -55,6 +79,10 @@ export default function LandingGradientV1Page() {
         { opacity: 1, scale: 1, duration: 0.6, ease: "back.out(1.7)" },
         "-=0.35",
       );
+
+    setupHoverEffect(careersBox1Ref);
+    setupHoverEffect(careersBox2Ref);
+    setupHoverEffect(careersBox3Ref);
 
     return () => {
       tl.kill();
@@ -311,7 +339,7 @@ built for real-world complexity."
                   className="bg-red-500/0 flex flex-col items-stretch gap-6"
                 >
                   <div className="flex items-stretch gap-6">
-                    <div ref={careersBox1Ref} className="flex-1">
+                    <div ref={careersBox1Ref} className="flex-1 relative">
                       <IconBox
                         src="/icons/white/globe.svg"
                         title="Real-World Financial Infrastructure"
@@ -320,7 +348,7 @@ built for real-world complexity."
                       />
                     </div>
 
-                    <div ref={careersBox2Ref} className="flex-1">
+                    <div ref={careersBox2Ref} className="flex-1 relative">
                       <IconBox
                         src="/icons/white/users-group.svg"
                         title="Small Team, Big Impact"
@@ -329,7 +357,7 @@ built for real-world complexity."
                       />
                     </div>
 
-                    <div ref={careersBox3Ref} className="flex-1">
+                    <div ref={careersBox3Ref} className="flex-1 relative">
                       <IconBox
                         src="/icons/white/ai-chip.svg"
                         title="Cutting-Edge Technology"

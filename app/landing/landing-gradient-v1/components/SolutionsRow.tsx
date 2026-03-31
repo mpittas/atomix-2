@@ -49,6 +49,30 @@ export default function SolutionsRow() {
   const row3Badge2Ref = useRef<HTMLDivElement>(null);
   const row3Badge3Ref = useRef<HTMLDivElement>(null);
 
+  const setupHoverEffect = (ref: React.RefObject<HTMLDivElement | null>) => {
+    if (!ref.current) return;
+
+    const element = ref.current;
+
+    element.addEventListener("mouseenter", () => {
+      gsap.to(element, {
+        scale: 1.2,
+        zIndex: 10,
+        duration: 0.3,
+        ease: "power2.out",
+      });
+    });
+
+    element.addEventListener("mouseleave", () => {
+      gsap.to(element, {
+        scale: 1,
+        zIndex: 1,
+        duration: 0.3,
+        ease: "power2.out",
+      });
+    });
+  };
+
   useEffect(() => {
     const tl = gsap.timeline({
       scrollTrigger: {
@@ -142,6 +166,13 @@ export default function SolutionsRow() {
         "-=0.2",
       );
 
+    setupHoverEffect(row2Box1Ref);
+    setupHoverEffect(row2Box2Ref);
+    setupHoverEffect(row2Box3Ref);
+    setupHoverEffect(row2Box4Ref);
+    setupHoverEffect(row2Box5Ref);
+    setupHoverEffect(row2Box6Ref);
+
     return () => {
       tl.kill();
     };
@@ -193,7 +224,7 @@ export default function SolutionsRow() {
 
       {/* Row 2: 1 col / 1 col / 1 col / 1 col / 1 col / 1 col */}
       <div className="grid grid-cols-6 gap-4">
-        <div ref={row2Box1Ref} className="col-span-1">
+        <div ref={row2Box1Ref} className="col-span-1 relative">
           <IconBox
             src="/icons/white/document-check.svg"
             imageSize="small"
@@ -207,7 +238,7 @@ export default function SolutionsRow() {
             className="!p-4"
           />
         </div>
-        <div ref={row2Box2Ref} className="col-span-1">
+        <div ref={row2Box2Ref} className="col-span-1 relative">
           <IconBox
             src="/icons/white/puzzle-piece.svg"
             imageSize="small"
@@ -216,7 +247,7 @@ export default function SolutionsRow() {
             className="!p-4"
           />
         </div>
-        <div ref={row2Box3Ref} className="col-span-1">
+        <div ref={row2Box3Ref} className="col-span-1 relative">
           <IconBox
             src="/icons/white/target-arrow.svg"
             imageSize="small"
@@ -225,7 +256,7 @@ export default function SolutionsRow() {
             className="!p-4"
           />
         </div>
-        <div ref={row2Box4Ref} className="col-span-1">
+        <div ref={row2Box4Ref} className="col-span-1 relative">
           <IconBox
             src="/icons/white/shield-check-white.svg"
             imageSize="small"
@@ -234,7 +265,7 @@ export default function SolutionsRow() {
             className="!p-4"
           />
         </div>
-        <div ref={row2Box5Ref} className="col-span-1">
+        <div ref={row2Box5Ref} className="col-span-1 relative">
           <IconBox
             src="/icons/white/users-group.svg"
             imageSize="small"
@@ -243,7 +274,7 @@ export default function SolutionsRow() {
             className="!p-4"
           />
         </div>
-        <div ref={row2Box6Ref} className="col-span-1">
+        <div ref={row2Box6Ref} className="col-span-1 relative">
           <IconBox
             src="/icons/white/dolcument-search.svg"
             imageSize="small"
