@@ -78,8 +78,8 @@ float quinticSmooth(float t) {
   return 6.0 * t3 * t2 - 15.0 * t2 * t2 + 10.0 * t3;
 }
 
-vec3 cosineGradient(float t, vec3 a, vec3 b, vec3 c, vec3 d) {
-  return a + b * cos(TAU * (c * t + d));
+float glowPulse(float phase) {
+  return 0.72 + 0.28 * sin(phase);
 }
 
 float perlin3D(float amplitude, float frequency, float px, float py, float pz) {
@@ -150,12 +150,20 @@ void main() {
     shift = (uMouse - 0.5) * uMouseInfluence;
   }
 
+  float layer1 = auroraGlow(t, shift);
+  float layer2 = auroraGlow(t + uLayerOffset, shift);
+  float pulse1 = glowPulse(TAU * (uv.x * 0.7 + uTime * uSpeed * 0.08 * uColorSpeed));
+  float pulse2 = glowPulse(TAU * (uv.x * 1.05 + 0.18 + uTime * uSpeed * 0.05 * uColorSpeed));
+
+  vec3 layer1Color = mix(uColor1 * 0.7, uColor1, pulse1);
+  vec3 layer2Color = mix(uColor2 * 0.7, uColor2, pulse2);
+
   vec3 col = vec3(0.0);
-  col += 0.99 * auroraGlow(t, shift) * cosineGradient(uv.x + uTime * uSpeed * 0.2 * uColorSpeed, vec3(0.5), vec3(0.5), vec3(1.0), vec3(0.3, 0.20, 0.20)) * uColor1;
-  col += 0.99 * auroraGlow(t + uLayerOffset, shift) * cosineGradient(uv.x + uTime * uSpeed * 0.1 * uColorSpeed, vec3(0.5), vec3(0.5), vec3(2.0, 1.0, 0.0), vec3(0.5, 0.20, 0.25)) * uColor2;
+  col += layer1 * layer1Color;
+  col += layer2 * layer2Color;
 
   col *= uBrightness;
-  float alpha = clamp(length(col), 0.0, 1.0);
+  float alpha = clamp(max(max(col.r, col.g), col.b), 0.0, 1.0);
   gl_FragColor = vec4(col, alpha);
 }
 `;

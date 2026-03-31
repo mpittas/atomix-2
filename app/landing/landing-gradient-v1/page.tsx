@@ -16,6 +16,7 @@ import IconBox from "@/components/IconBox";
 import CustomerStoryCard from "@/components/CustomerStoryCard";
 import DefCta from "@/components/DefCta";
 import Footer from "@/components/Footer";
+import SoftAurora from "@/components/backgrounds/SoftAurora";
 
 export default function LandingGradientV1Page() {
   const careersContainerRef = useRef<HTMLDivElement>(null);
@@ -130,9 +131,27 @@ export default function LandingGradientV1Page() {
         <MainHero />
       </div>
 
-      <div className="px-12 mt-16 flex flex-col gap-2">
+      <div className="px-12 mt-2 flex flex-col gap-2">
         <div className="h-full">
-          <div className="px-18 py-36 rounded-t-3xl bg-linear-to-b from-[#749CA5] to-[#66878E]">
+          <div className="px-18 py-36 rounded-t-3xl bg-linear-to-b from-[#749CA5] to-[#66878E] relative overflow-hidden">
+            <div className="absolute -top-0 left-0 w-full h-[500px]">
+              <SoftAurora
+                speed={1.3}
+                scale={1.2}
+                brightness={0.65}
+                color1="#78cfe3"
+                color2="#87b9d4"
+                noiseFrequency={1}
+                noiseAmplitude={3.5}
+                bandHeight={0.85}
+                bandSpread={1}
+                octaveDecay={0.12}
+                layerOffset={0.5}
+                colorSpeed={1}
+                enableMouseInteraction={false}
+                mouseInfluence={0.2}
+              />
+            </div>
             <div className="max-w-[1060px] mx-auto px-4">
               <DefHeading
                 theme="light"
@@ -152,7 +171,7 @@ export default function LandingGradientV1Page() {
             </div>
           </div>
 
-          <div className="px-18 py-36 rounded-b-3xl bg-linear-to-t from-[#749CA5] to-[#66878E]">
+          <div className="px-18 py-36 rounded-b-3xl bg-linear-to-t from-[#749CA5] to-[#66878E] relative overflow-hidden">
             <div className="max-w-[1060px] mx-auto px-4">
               <DefHeading
                 theme="light"
@@ -272,7 +291,25 @@ export default function LandingGradientV1Page() {
         </div>
 
         <div className="h-full">
-          <div className="px-18 py-36 rounded-t-3xl bg-linear-to-b from-[#749CA5] to-[#66878E]">
+          <div className="px-18 py-36 rounded-t-3xl bg-linear-to-b from-[#749CA5] to-[#66878E] relative overflow-hidden">
+            <div className="absolute -top-10 left-0 w-full h-[500px]">
+              <SoftAurora
+                speed={1.3}
+                scale={1.2}
+                brightness={0.65}
+                color1="#78cfe3"
+                color2="#87b9d4"
+                noiseFrequency={1}
+                noiseAmplitude={3.5}
+                bandHeight={0.85}
+                bandSpread={1}
+                octaveDecay={0.12}
+                layerOffset={0.5}
+                colorSpeed={1}
+                enableMouseInteraction={false}
+                mouseInfluence={0.2}
+              />
+            </div>
             <div className="max-w-[1060px] mx-auto px-4">
               <DefHeading
                 theme="light"
@@ -315,7 +352,25 @@ built for real-world complexity."
         </div>
 
         <div className="h-full mb-12">
-          <div className="px-18 py-36 rounded-t-3xl bg-linear-to-b from-[#749CA5] to-[#66878E]">
+          <div className="px-18 py-36 rounded-t-3xl bg-linear-to-b from-[#749CA5] to-[#66878E] relative overflow-hidden">
+            <div className="absolute -top-10 left-0 w-full h-[500px]">
+              <SoftAurora
+                speed={1.3}
+                scale={1.2}
+                brightness={0.65}
+                color1="#78cfe3"
+                color2="#87b9d4"
+                noiseFrequency={1}
+                noiseAmplitude={3.5}
+                bandHeight={0.85}
+                bandSpread={1}
+                octaveDecay={0.12}
+                layerOffset={0.5}
+                colorSpeed={1}
+                enableMouseInteraction={false}
+                mouseInfluence={0.2}
+              />
+            </div>
             <div className="max-w-[1260px] mx-auto px-4">
               <div className="max-w-[1060px] mx-auto">
                 <DefHeading

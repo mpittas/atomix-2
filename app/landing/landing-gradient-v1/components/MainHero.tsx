@@ -146,8 +146,8 @@ export default function MainHero() {
         speed={1.3}
         scale={1.6}
         brightness={0.95}
-        color1="#5292ff"
-        color2="#00bbff"
+        color1="#20797b"
+        color2="#359aa9"
         noiseFrequency={1.25}
         noiseAmplitude={2.5}
         bandHeight={0.85}
