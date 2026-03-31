@@ -175,7 +175,7 @@ export default function MainHero() {
 
       {/* IMAGES */}
       <div
-        className="absolute top-[70%] left-1/2 w-[50%] -translate-x-1/2 opacity-0 visibility-hidden"
+        className="absolute top-[70%] left-1/2 -translate-x-1/2  w-[65%] opacity-0 visibility-hidden"
         id="def-hero-images"
       >
         <div className="relative w-full" id="def-hero-image-desktop">
