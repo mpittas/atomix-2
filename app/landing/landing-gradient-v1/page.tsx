@@ -19,6 +19,7 @@ import DefCta from "@/components/DefCta";
 import Footer from "@/components/Footer";
 import SoftAurora from "@/components/backgrounds/SoftAurora";
 import BenefitsLayout from "@/components/BenefitsLayout";
+import ScrollableTabs from "@/components/ScrollableTabs";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -215,17 +216,19 @@ export default function LandingGradientV1Page() {
           </div>
 
           <div className="px-18 py-36 rounded-b-3xl bg-linear-to-t from-[#0B4858] to-[#81A6AF] relative overflow-hidden">
-            <div className="max-w-[1060px] mx-auto px-4">
-              <DefHeading
-                theme="light"
-                badgeText="The Market Reality"
-                title="Market Problems in Bridging Loans"
-                description="Opaque systems limit control, visibility and trust across capital providers, lenders and borrowers."
-              />
-            </div>
+            <div className="-mb-30">
+              <div className="max-w-[1060px] mx-auto px-4 -bottom-36 relative">
+                <DefHeading
+                  theme="light"
+                  badgeText="The Market Reality"
+                  title="Market Problems in Bridging Loans"
+                  description="Opaque systems limit control, visibility and trust across capital providers, lenders and borrowers."
+                />
+              </div>
 
-            <div className="mt-16 flex flex-col items-center gap-16">
-              {/* Add new functionality here */}
+              <div className="mt-16 flex flex-col items-center gap-16">
+                <ScrollableTabs />
+              </div>
             </div>
           </div>
         </div>

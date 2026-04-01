@@ -9,4 +9,4 @@ Inside, we'll have the following:
 
 After we have the wrapper section with top and bottom inside, when user scrolls to it, make it sticky.
 
-IN top row, make the first box with active colors, when user scrolls once the second box gets the active colors and the content for the bottom section changes accordingly, same func for third box.
+In top row, make the first box with active colors, when user scrolls once the second box gets the active colors and the content for the bottom section changes accordingly, same func for third box.
