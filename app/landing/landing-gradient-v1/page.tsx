@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
 import Header from "@/components/header";
 import MainHero from "./components/MainHero";
 import DefHeading from "@/components/typo/DefHeading";
@@ -19,6 +20,8 @@ import Footer from "@/components/Footer";
 import SoftAurora from "@/components/backgrounds/SoftAurora";
 import BenefitsLayout from "@/components/BenefitsLayout";
 
+gsap.registerPlugin(ScrollTrigger, useGSAP);
+
 export default function LandingGradientV1Page() {
   const careersContainerRef = useRef<HTMLDivElement>(null);
   const careersBox1Ref = useRef<HTMLDivElement>(null);
@@ -28,21 +31,8 @@ export default function LandingGradientV1Page() {
   const card1Ref = useRef<HTMLDivElement>(null);
   const card2Ref = useRef<HTMLDivElement>(null);
   const card3Ref = useRef<HTMLDivElement>(null);
-
-  const cpSectionRef = useRef<HTMLDivElement>(null);
-  const cpTitleRef = useRef<HTMLHeadingElement>(null);
-  const cpSubtitleRef = useRef<HTMLParagraphElement>(null);
-  const cpCardsRef = useRef<HTMLDivElement>(null);
-
-  const lendersSectionRef = useRef<HTMLDivElement>(null);
-  const lendersTitleRef = useRef<HTMLHeadingElement>(null);
-  const lendersSubtitleRef = useRef<HTMLParagraphElement>(null);
-  const lendersCardsRef = useRef<HTMLDivElement>(null);
-
-  const borrowersSectionRef = useRef<HTMLDivElement>(null);
-  const borrowersTitleRef = useRef<HTMLHeadingElement>(null);
-  const borrowersSubtitleRef = useRef<HTMLParagraphElement>(null);
-  const borrowersCardsRef = useRef<HTMLDivElement>(null);
+  const flowGraphicRef = useRef<HTMLDivElement>(null);
+  const learnMoreBtnRef = useRef<HTMLDivElement>(null);
 
   const setupHoverEffect = (ref: React.RefObject<HTMLDivElement | null>) => {
     if (!ref.current) return;
@@ -140,71 +130,40 @@ export default function LandingGradientV1Page() {
     };
   }, []);
 
-  useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
+  useGSAP(
+    () => {
+      if (!flowGraphicRef.current || !learnMoreBtnRef.current) return;
 
-    const animateSection = (
-      sectionRef: React.RefObject<HTMLDivElement | null>,
-      titleRef: React.RefObject<HTMLHeadingElement | null>,
-      subtitleRef: React.RefObject<HTMLParagraphElement | null>,
-      cardsRef: React.RefObject<HTMLDivElement | null>,
-    ) => {
-      gsap.set(titleRef.current, { opacity: 0, y: 30 });
-      gsap.set(subtitleRef.current, { opacity: 0, y: 30 });
-      gsap.set(cardsRef.current?.children || [], { opacity: 0, y: 30 });
+      gsap.set(flowGraphicRef.current, { opacity: 0, y: 60 });
+      gsap.set(learnMoreBtnRef.current, { opacity: 0, y: 40 });
 
       const tl = gsap.timeline({
         scrollTrigger: {
-          trigger: sectionRef.current,
+          trigger: flowGraphicRef.current,
           start: "top 80%",
-          end: "top 30%",
           toggleActions: "play none none reverse",
         },
       });
 
-      tl.to(titleRef.current, {
+      tl.to(flowGraphicRef.current, {
         opacity: 1,
         y: 0,
-        duration: 0.5,
-        ease: "power2.out",
-      })
-        .to(
-          subtitleRef.current,
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.5,
-            ease: "power2.out",
-          },
-          "-=0.3",
-        )
-        .to(
-          cardsRef.current?.children || [],
-          {
-            opacity: 1,
-            y: 0,
-            duration: 1,
-            stagger: 0.3,
-            ease: "power2.out",
-          },
-          "-=0.3",
-        );
-    };
-
-    animateSection(cpSectionRef, cpTitleRef, cpSubtitleRef, cpCardsRef);
-    animateSection(
-      lendersSectionRef,
-      lendersTitleRef,
-      lendersSubtitleRef,
-      lendersCardsRef,
-    );
-    animateSection(
-      borrowersSectionRef,
-      borrowersTitleRef,
-      borrowersSubtitleRef,
-      borrowersCardsRef,
-    );
-  }, []);
+        duration: 1,
+        ease: "power3.out",
+        delay: 0.5,
+      }).to(
+        learnMoreBtnRef.current,
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          ease: "power3.out",
+        },
+        "+=4.5",
+      );
+    },
+    { scope: flowGraphicRef },
+  );
 
   return (
     <div className="overflow-x-hidden">
@@ -244,9 +203,11 @@ export default function LandingGradientV1Page() {
               />
 
               <div className="mt-16 flex flex-col items-center">
-                <FlowGraphicLight />
+                <div ref={flowGraphicRef}>
+                  <FlowGraphicLight />
+                </div>
 
-                <div className="mt-14">
+                <div ref={learnMoreBtnRef} className="mt-14">
                   <DefButton size="large">Learn more</DefButton>
                 </div>
               </div>
@@ -261,137 +222,10 @@ export default function LandingGradientV1Page() {
                 title="Market Problems in Bridging Loans"
                 description="Opaque systems limit control, visibility and trust across capital providers, lenders and borrowers."
               />
+            </div>
 
-              <div className="mt-16 flex flex-col items-center gap-16">
-                {/* Capital Providers Section */}
-                <div ref={cpSectionRef} className="w-full">
-                  <div className="text-center mb-8">
-                    <h3
-                      ref={cpTitleRef}
-                      className="text-2xl font-semibold text-white mb-2"
-                    >
-                      Capital Providers
-                    </h3>
-                    <p ref={cpSubtitleRef} className="text-white/70">
-                      Invest with full transparency, automated compliance, and
-                      access to diversified lending opportunities.
-                    </p>
-                  </div>
-                  <div ref={cpCardsRef} className="grid grid-cols-4 gap-6">
-                    <IconBox
-                      src="/icons/white/money-coins-white.svg"
-                      title="High Fixed Fees"
-                      description="Make smaller, most in-demand loans economic"
-                    />
-                    <IconBox
-                      src="/icons/white/clock-white.svg"
-                      title="Slow Process"
-                      description=">35-day completions"
-                    />
-                    <IconBox
-                      src="/icons/white/arrows-white.svg"
-                      title="Repeat Data Entry"
-                      description="Enter same data for each lender application"
-                    />
-                    <IconBox
-                      src="/icons/white/eye-white-crossed.svg"
-                      title="Opaque"
-                      description="Process lacks transparency, and consistency"
-                    />
-                  </div>
-                </div>
-
-                {/* Lenders Section */}
-                <div
-                  ref={lendersSectionRef}
-                  className="w-full flex flex-col gap-6"
-                >
-                  <div className="text-center mb-4">
-                    <h3
-                      ref={lendersTitleRef}
-                      className="text-2xl font-semibold text-white mb-2"
-                    >
-                      Lenders
-                    </h3>
-                    <p
-                      ref={lendersSubtitleRef}
-                      className="text-white/70 max-w-md mx-auto"
-                    >
-                      Automate lending workflows, access capital faster, and
-                      scale operations without increasing headcount.
-                    </p>
-                  </div>
-                  <div ref={lendersCardsRef} className="grid grid-cols-4 gap-6">
-                    <IconBox
-                      src="/icons/white/money-coins-white.svg"
-                      title="High Fixed Fees 2"
-                      description="Make smaller, most in-demand loans economic"
-                    />
-                    <IconBox
-                      src="/icons/white/clock-white.svg"
-                      title="Slow Process 2"
-                      description=">35-day completions"
-                    />
-                    <IconBox
-                      src="/icons/white/arrows-white.svg"
-                      title="Repeat Data Entry 2"
-                      description="Enter same data for each lender application"
-                    />
-                    <IconBox
-                      src="/icons/white/eye-white-crossed.svg"
-                      title="Opaque 2"
-                      description="Process lacks transparency, and consistency"
-                    />
-                  </div>
-                </div>
-
-                {/* Borrowers Section */}
-                <div
-                  ref={borrowersSectionRef}
-                  className="w-full flex flex-col gap-6"
-                >
-                  <div className="text-center mb-4">
-                    <h3
-                      ref={borrowersTitleRef}
-                      className="text-2xl font-semibold text-white mb-2"
-                    >
-                      Borrowers
-                    </h3>
-                    <p
-                      ref={borrowersSubtitleRef}
-                      className="text-white/70 max-w-md mx-auto"
-                    >
-                      Borrowers experience delays and lack of transparency
-                      throughout the process.
-                    </p>
-                  </div>
-                  <div
-                    ref={borrowersCardsRef}
-                    className="grid grid-cols-4 gap-6"
-                  >
-                    <IconBox
-                      src="/icons/white/money-coins-white.svg"
-                      title="High Fixed Fees 3"
-                      description="Make smaller, most in-demand loans economic"
-                    />
-                    <IconBox
-                      src="/icons/white/clock-white.svg"
-                      title="Slow Process 3"
-                      description=">35-day completions"
-                    />
-                    <IconBox
-                      src="/icons/white/arrows-white.svg"
-                      title="Repeat Data Entry 3"
-                      description="Enter same data for each lender application"
-                    />
-                    <IconBox
-                      src="/icons/white/eye-white-crossed.svg"
-                      title="Opaque3"
-                      description="Process lacks transparency, and consistency"
-                    />
-                  </div>
-                </div>
-              </div>
+            <div className="mt-16 flex flex-col items-center gap-16">
+              {/* Add new functionality here */}
             </div>
           </div>
         </div>
@@ -507,12 +341,9 @@ built for real-world complexity."
               </div>
 
               <div className="mt-16 flex flex-col items-center">
-                <div
-                  ref={careersContainerRef}
-                  className="bg-red-500/0 flex flex-col items-stretch gap-6"
-                >
+                <div className="bg-red-500/0 flex flex-col items-stretch gap-6">
                   <div className="flex items-stretch gap-6">
-                    <div ref={careersBox1Ref} className="flex-1 relative">
+                    <div className="flex-1 relative">
                       <IconBox
                         src="/icons/white/globe.svg"
                         title="Real-World Financial Infrastructure"

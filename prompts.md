@@ -1,19 +1,12 @@
-Crerate Footer component.
+Please, create a new component called ScrollableTabs.tsx
 
-We'll have similar structure
+Inside, we'll have the following:
 
-<footer>
-<top-footer></top-footer>
-<bottom-footer></bottom-footer>
-</footer>
+- Wrapper for sections below - make it vertically centered
+- Top section - a row with 3 boxes inside. Eachh box will contain a title and a list with 4 text items.
 
-Follow the image I attach and recreate it.
+- Bottom section - a row with 4 IconBox components inside next to each other.
 
-Footer top has left and right column with flex and space between.
+After we have the wrapper section with top and bottom inside, when user scrolls to it, make it sticky.
 
-For logo image use: /public/logo/atomix-lending-reimagined-dark.svg
-Below the logo we have a simple icon list, use icons from react-icons (install it).
-
-On the right column we have navigation links with header on top.
-
-For bottom footer we have copyright text on left "© 2026 Atomix. All rights reserved" and on the right a language selector (for now static, icon and text) and social links next to it (use react-icons for social links)
+IN top row, make the first box with active colors, when user scrolls once the second box gets the active colors and the content for the bottom section changes accordingly, same func for third box.
