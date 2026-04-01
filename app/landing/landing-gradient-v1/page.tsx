@@ -217,14 +217,14 @@ export default function LandingGradientV1Page() {
 
           <div className="px-18 py-36 rounded-b-3xl bg-linear-to-t from-[#0B4858] to-[#81A6AF] relative overflow-hidden">
             <div className="-mb-30">
-              <div className="max-w-[1060px] mx-auto px-4 -bottom-36 relative">
+              {/* <div className="max-w-[1060px] mx-auto px-4 -bottom-36 relative">
                 <DefHeading
                   theme="light"
                   badgeText="The Market Reality"
                   title="Market Problems in Bridging Loans"
                   description="Opaque systems limit control, visibility and trust across capital providers, lenders and borrowers."
                 />
-              </div>
+              </div> */}
 
               <div className="mt-16 flex flex-col items-center gap-16">
                 <ScrollableTabs />
@@ -254,14 +254,6 @@ export default function LandingGradientV1Page() {
               />
             </div>
             <div className="max-w-[1060px] mx-auto px-4">
-              <DefHeading
-                theme="light"
-                badgeText="The Opportunity"
-                title="Existing Tech Limitations"
-                description="Move beyond fragmented tools and manual coordination. Experience collaborative, secure, end-to-end automation 
-built for real-world complexity."
-              />
-
               <div className="mt-16 flex flex-col items-center">
                 <FlowCardsHor />
                 <div className="mt-14">

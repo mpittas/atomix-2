@@ -5,6 +5,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import { useGSAP } from "@gsap/react";
+import DefHeading from "@/components/typo/DefHeading";
 import IconBox from "@/components/IconBox";
 
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
@@ -193,58 +194,69 @@ export default function ScrollableTabs() {
     <div ref={sectionRef} className="relative">
       <div
         ref={wrapperRef}
-        className="min-h-screen flex flex-col items-center justify-center py-20"
+        className="h-screen flex flex-col items-center justify-between py-16 px-4"
       >
-        {/* Top Section - 3 Boxes */}
-        <div className="flex gap-3 mb-10 w-full">
-          {tabsData.map((tab, index) => (
-            <div
-              key={tab.title}
-              onClick={() => handleTabClick(index)}
-              className={`flex-1 flex flex-col gap-4 p-8 rounded-2xl transition-all duration-500 cursor-pointer ${
-                index === activeIndex
-                  ? "bg-[#eaeff1] text-black"
-                  : "bg-white/15 opacity-60"
-              }`}
-            >
-              <h3
-                className={`text-2xl font-semibold text-left ${
-                  index === activeIndex ? "text-[#0f1b1e]" : "text-white"
+        {/* Top - DefHeading */}
+        <DefHeading
+          theme="light"
+          badgeText="The Market Reality"
+          title="Market Problems in Bridging Loans"
+          description="Opaque systems limit control, visibility and trust across capital providers, lenders and borrowers."
+        />
+
+        {/* Bottom Section - Tabs and IconBoxes */}
+        <div className="flex flex-col items-center w-full max-w-6xl">
+          {/* Tab Buttons */}
+          <div className="flex gap-3 mb-6 w-full">
+            {tabsData.map((tab, index) => (
+              <div
+                key={tab.title}
+                onClick={() => handleTabClick(index)}
+                className={`flex-1 flex flex-col gap-4 p-8 rounded-2xl transition-all duration-500 cursor-pointer ${
+                  index === activeIndex
+                    ? "bg-[#eaeff1] text-black"
+                    : "bg-white/15 opacity-60"
                 }`}
               >
-                {tab.title}
-              </h3>
-              <ul className="flex flex-col gap-1">
-                {tab.items.map((item, itemIndex) => (
-                  <li
-                    key={itemIndex}
-                    className={`text-md ${
-                      index === activeIndex
-                        ? "text-[#0f1b1e]/80"
-                        : "text-white/50"
-                    }`}
-                  >
-                    • {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
+                <h3
+                  className={`text-2xl font-semibold text-left ${
+                    index === activeIndex ? "text-[#0f1b1e]" : "text-white"
+                  }`}
+                >
+                  {tab.title}
+                </h3>
+                <ul className="flex flex-col gap-1">
+                  {tab.items.map((item, itemIndex) => (
+                    <li
+                      key={itemIndex}
+                      className={`text-md ${
+                        index === activeIndex
+                          ? "text-[#0f1b1e]/80"
+                          : "text-white/50"
+                      }`}
+                    >
+                      • {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
 
-        {/* Bottom Section - 4 IconBoxes */}
-        <div
-          ref={iconBoxesRef}
-          className="grid grid-cols-4 gap-3 w-full max-w-6xl"
-        >
-          {currentTab.iconBoxes.map((iconBox, index) => (
-            <IconBox
-              key={`${activeIndex}-${index}`}
-              src={iconBox.src}
-              title={iconBox.title}
-              description={iconBox.description}
-            />
-          ))}
+          {/* Bottom Section - 4 IconBoxes */}
+          <div
+            ref={iconBoxesRef}
+            className="grid grid-cols-4 gap-3 w-full max-w-6xl"
+          >
+            {currentTab.iconBoxes.map((iconBox, index) => (
+              <IconBox
+                key={`${activeIndex}-${index}`}
+                src={iconBox.src}
+                title={iconBox.title}
+                description={iconBox.description}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </div>
