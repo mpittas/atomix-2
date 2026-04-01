@@ -32,8 +32,19 @@ export default function SolutionsRow() {
   const iconText3Ref = useRef<HTMLDivElement>(null);
 
   const connector1Ref = useRef<HTMLDivElement>(null);
-  const connector2Ref = useRef<HTMLImageElement>(null);
   const connector3Ref = useRef<HTMLDivElement>(null);
+
+  // Top dashed line refs
+  const topArrow1Ref = useRef<HTMLImageElement>(null);
+  const topArrow2Ref = useRef<HTMLImageElement>(null);
+  const topArrow3Ref = useRef<HTMLImageElement>(null);
+  const topArrow4Ref = useRef<HTMLImageElement>(null);
+
+  // Bottom dashed line refs
+  const bottomArrow1Ref = useRef<HTMLImageElement>(null);
+  const bottomArrow2Ref = useRef<HTMLImageElement>(null);
+  const bottomArrow3Ref = useRef<HTMLImageElement>(null);
+  const bottomArrow4Ref = useRef<HTMLImageElement>(null);
 
   const row2Box1Ref = useRef<HTMLDivElement>(null);
   const row2Box2Ref = useRef<HTMLDivElement>(null);
@@ -42,7 +53,6 @@ export default function SolutionsRow() {
   const row2Box5Ref = useRef<HTMLDivElement>(null);
   const row2Box6Ref = useRef<HTMLDivElement>(null);
 
-  const row3Connector1Ref = useRef<HTMLImageElement>(null);
   const row3Connector2Ref = useRef<HTMLDivElement>(null);
   const row3Connector3Ref = useRef<HTMLDivElement>(null);
   const row3Badge1Ref = useRef<HTMLDivElement>(null);
@@ -85,18 +95,29 @@ export default function SolutionsRow() {
     tl.fromTo(
       [iconText1Ref.current, iconText2Ref.current, iconText3Ref.current],
       { opacity: 0 },
-      { opacity: 1, duration: 1, ease: "power2.out" },
+      { opacity: 1, duration: 1, stagger: 0.5, ease: "power2.out" },
     )
       .fromTo(
         connector1Ref.current,
         { opacity: 0 },
         { opacity: 1, duration: 0.7, ease: "power2.out" },
-        "-=0.2",
+        "<",
       )
+      // Top arrows - animate with clip-path to create drawing effect (top to bottom)
       .fromTo(
-        connector2Ref.current,
-        { opacity: 0 },
-        { opacity: 1, duration: 0.7, ease: "power2.out" },
+        [
+          topArrow1Ref.current,
+          topArrow2Ref.current,
+          topArrow3Ref.current,
+          topArrow4Ref.current,
+        ],
+        { clipPath: "inset(0 0 100% 0)" },
+        {
+          clipPath: "inset(0 0 0% 0)",
+          duration: 1,
+          stagger: 0.1,
+          ease: "power2.inOut",
+        },
         "<",
       )
       .fromTo(
@@ -109,7 +130,7 @@ export default function SolutionsRow() {
         row2Box1Ref.current,
         { opacity: 0, scale: 0.8 },
         { opacity: 1, scale: 1, duration: 0.8, ease: "back.out(1.7)" },
-        "-=0.3",
+        "-=1.25",
       )
       .fromTo(
         row2Box2Ref.current,
@@ -141,17 +162,27 @@ export default function SolutionsRow() {
         { opacity: 1, scale: 1, duration: 0.8, ease: "back.out(1.7)" },
         "-=0.1",
       )
+      // Bottom arrows - animate with clip-path to create drawing effect (top to bottom)
       .fromTo(
-        row3Connector1Ref.current,
-        { opacity: 0 },
-        { opacity: 1, duration: 0.7, ease: "power2.out" },
-        "-=0.3",
+        [
+          bottomArrow1Ref.current,
+          bottomArrow2Ref.current,
+          bottomArrow3Ref.current,
+          bottomArrow4Ref.current,
+        ],
+        { clipPath: "inset(0 0 100% 0)" },
+        {
+          clipPath: "inset(0 0 0% 0)",
+          duration: 1,
+          ease: "power2.inOut",
+        },
+        "-=1",
       )
       .fromTo(
         row3Connector2Ref.current,
         { opacity: 0 },
         { opacity: 1, duration: 0.7, ease: "power2.out" },
-        "<",
+        "-=0.3",
       )
       .fromTo(
         row3Connector3Ref.current,
@@ -163,7 +194,7 @@ export default function SolutionsRow() {
         [row3Badge1Ref.current, row3Badge2Ref.current, row3Badge3Ref.current],
         { opacity: 0 },
         { opacity: 1, duration: 0.6, ease: "power2.out" },
-        "-=0.2",
+        "-=0.3",
       );
 
     setupHoverEffect(row2Box1Ref);
@@ -202,12 +233,35 @@ export default function SolutionsRow() {
             />
           </div>
 
-          <img
-            ref={connector2Ref}
-            src="/global/conecting-lins-to-t.svg"
-            alt="Connecting dashed lines"
-            className="h-18 mx-auto"
-          />
+          <div className="w-full min-h-[72px] bg-red-500/0 relative">
+            <img
+              ref={topArrow1Ref}
+              src="/dashed-lines/connect-arrow-top-1.svg"
+              alt="Connecting dashed lines"
+              className="object-contain absolute bottom-0 left-[81px]"
+            />
+
+            <img
+              ref={topArrow2Ref}
+              src="/dashed-lines/connect-arrow-top-2.svg"
+              alt="Connecting dashed lines"
+              className="object-contain absolute bottom-0 left-[296px]"
+            />
+
+            <img
+              ref={topArrow3Ref}
+              src="/dashed-lines/connect-arrow-top-3.svg"
+              alt="Connecting dashed lines"
+              className="object-contain absolute bottom-0 right-[81px]"
+            />
+
+            <img
+              ref={topArrow4Ref}
+              src="/dashed-lines/connect-arrow-top-4.svg"
+              alt="Connecting dashed lines"
+              className="object-contain absolute bottom-0 right-[296px]"
+            />
+          </div>
         </div>
 
         {/* COLUMN 3 */}
@@ -288,12 +342,35 @@ export default function SolutionsRow() {
       {/* Row 3: 4 cols / 1 col / 1 col */}
       <div className="grid grid-cols-6 gap-4">
         <div className="bg-cyan-500/0 col-span-4 flex flex-col items-center">
-          <img
-            ref={row3Connector1Ref}
-            src="/global/conecting-lins-to-b.svg"
-            alt="Connecting dashed lines"
-            className="h-18 mx-auto"
-          />
+          <div className="w-full min-h-[72px] bg-red-500/0 relative">
+            <img
+              ref={bottomArrow1Ref}
+              src="/dashed-lines/connect-arrow-bottom-1.svg"
+              alt="Connecting dashed lines"
+              className="object-contain absolute bottom-0 left-[81px]"
+            />
+
+            <img
+              ref={bottomArrow2Ref}
+              src="/dashed-lines/connect-arrow-bottom-2.svg"
+              alt="Connecting dashed lines"
+              className="object-contain absolute bottom-0 left-[296px]"
+            />
+
+            <img
+              ref={bottomArrow3Ref}
+              src="/dashed-lines/connect-arrow-bottom-3.svg"
+              alt="Connecting dashed lines"
+              className="object-contain absolute bottom-0 right-[81px]"
+            />
+
+            <img
+              ref={bottomArrow4Ref}
+              src="/dashed-lines/connect-arrow-bottom-4.svg"
+              alt="Connecting dashed lines"
+              className="object-contain absolute bottom-0 right-[296px]"
+            />
+          </div>
 
           <div ref={row3Badge1Ref}>
             <SquareBadge text="Full automation end-to-end" />
