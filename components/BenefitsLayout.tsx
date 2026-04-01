@@ -50,7 +50,7 @@ export default function BenefitsLayout() {
         tl.to(mainImageRef.current, {
           opacity: 1,
           scale: 1,
-          duration: 0.7,
+          duration: 1.6,
           ease: "back.out(1.4)",
         });
 
@@ -59,11 +59,11 @@ export default function BenefitsLayout() {
           {
             opacity: 1,
             x: 0,
-            duration: 0.5,
-            stagger: 0.15,
+            duration: 1.6,
+            stagger: 0.3,
             ease: "power2.out",
           },
-          "-=0.3",
+          "-=0.5",
         );
 
         tl.to(
@@ -71,11 +71,11 @@ export default function BenefitsLayout() {
           {
             opacity: 1,
             y: 0,
-            duration: 0.5,
-            stagger: 0.1,
+            duration: 1.6,
+            stagger: 0.2,
             ease: "power2.out",
           },
-          "-=0.3",
+          "-=1.0",
         );
       }, row1Ref);
 
@@ -106,8 +106,8 @@ export default function BenefitsLayout() {
         tl.to(row2ContentRef.current?.children || [], {
           opacity: 1,
           y: 0,
-          duration: 0.5,
-          stagger: 0.1,
+          duration: 1.6,
+          stagger: 0.2,
           ease: "power2.out",
         });
 
@@ -116,10 +116,10 @@ export default function BenefitsLayout() {
           {
             opacity: 1,
             scale: 1,
-            duration: 0.7,
+            duration: 1.6,
             ease: "back.out(1.4)",
           },
-          "-=0.2",
+          "-=0.8",
         );
 
         tl.to(
@@ -127,10 +127,10 @@ export default function BenefitsLayout() {
           {
             opacity: 1,
             y: 0,
-            duration: 0.5,
+            duration: 1.6,
             ease: "power2.out",
           },
-          "-=0.2",
+          "-=0.8",
         );
       }, row2Ref);
 
@@ -161,7 +161,7 @@ export default function BenefitsLayout() {
         tl.to(row3MainImageRef.current, {
           opacity: 1,
           scale: 1,
-          duration: 0.7,
+          duration: 1.6,
           ease: "back.out(1.4)",
         });
 
@@ -171,22 +171,22 @@ export default function BenefitsLayout() {
             opacity: 1,
             x: 20,
             y: 20,
-            duration: 0.5,
+            duration: 1.6,
             ease: "power2.out",
           },
-          "-=0.2",
+          "-=0.8",
         );
 
         tl.to(
           row3ContentRef.current?.children || [],
           {
             opacity: 1,
-            y: 20,
-            duration: 0.5,
-            stagger: 0.1,
+            y: 0,
+            duration: 1.6,
+            stagger: 0.2,
             ease: "power2.out",
           },
-          "-=0.3",
+          "-=0.8",
         );
       }, row3Ref);
 
