@@ -130,7 +130,7 @@ export default function ScrollableTabs() {
     const scrollToY = st.start + (st.end - st.start) * targetProgress;
     gsap.to(window, {
       scrollTo: { y: scrollToY },
-      duration: 0.6,
+      duration: 0.4,
       ease: "power2.inOut",
     });
   };
@@ -183,9 +183,9 @@ export default function ScrollableTabs() {
       {
         scale: 1,
         opacity: 1,
-        duration: 1,
+        duration: 1.6,
         stagger: 0.15,
-        ease: "back.out(1.3)",
+        ease: "back.out(1.5)",
       },
     );
   }, [activeIndex]);

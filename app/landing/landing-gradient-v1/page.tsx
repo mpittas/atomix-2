@@ -254,6 +254,15 @@ export default function LandingGradientV1Page() {
               />
             </div>
             <div className="max-w-[1060px] mx-auto px-4">
+              <div className="">
+                <DefHeading
+                  theme="light"
+                  badgeText="The Opportunity"
+                  title="Existing Tech Limitations"
+                  description="Move beyond fragmented tools and manual coordination. Experience collaborative, secure, end-to-end automation 
+built for real-world complexity."
+                />
+              </div>
               <div className="mt-16 flex flex-col items-center">
                 <FlowCardsHor />
                 <div className="mt-14">

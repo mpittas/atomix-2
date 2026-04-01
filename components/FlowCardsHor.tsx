@@ -54,42 +54,42 @@ export default function FlowCardsHor() {
     tl.fromTo(
       card1Ref.current,
       { opacity: 0, scale: 0.8 },
-      { opacity: 1, scale: 1, duration: 0.8, ease: "back.out(1.7)" },
+      { opacity: 1, scale: 1, duration: 1.6, ease: "back.out(1.7)" },
     )
       .fromTo(
         arrow1Ref.current,
         { opacity: 0, x: -20 },
-        { opacity: 1, x: 0, duration: 0.4, ease: "power2.out" },
+        { opacity: 1, x: 0, duration: 0.8, ease: "power2.out" },
         "-=0.2",
       )
       .fromTo(
         card2Ref.current,
         { opacity: 0, scale: 0.8 },
-        { opacity: 1, scale: 1, duration: 0.8, ease: "back.out(1.7)" },
+        { opacity: 1, scale: 1, duration: 1.6, ease: "back.out(1.7)" },
         "-=0.2",
       )
       .fromTo(
         arrow2Ref.current,
         { opacity: 0, x: -20 },
-        { opacity: 1, x: 0, duration: 0.4, ease: "power2.out" },
+        { opacity: 1, x: 0, duration: 0.8, ease: "power2.out" },
         "-=0.2",
       )
       .fromTo(
         card3Ref.current,
         { opacity: 0, scale: 0.8 },
-        { opacity: 1, scale: 1, duration: 0.8, ease: "back.out(1.7)" },
+        { opacity: 1, scale: 1, duration: 1.6, ease: "back.out(1.7)" },
         "-=0.2",
       )
       .fromTo(
         arrow3Ref.current,
         { opacity: 0, x: -20 },
-        { opacity: 1, x: 0, duration: 0.4, ease: "power2.out" },
+        { opacity: 1, x: 0, duration: 0.8, ease: "power2.out" },
         "-=0.2",
       )
       .fromTo(
         card4Ref.current,
         { opacity: 0, scale: 0.8 },
-        { opacity: 1, scale: 1, duration: 0.8, ease: "back.out(1.7)" },
+        { opacity: 1, scale: 1, duration: 1.6, ease: "back.out(1.7)" },
         "-=0.2",
       );
 
