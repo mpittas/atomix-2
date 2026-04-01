@@ -100,8 +100,8 @@ export default function SolutionsRow() {
     )
       .fromTo(
         connector1Ref.current,
-        { opacity: 0 },
-        { opacity: 1, duration: 0.7, ease: "power2.out" },
+        { clipPath: "inset(0 0 100% 0)" },
+        { clipPath: "inset(0 0 0% 0)", duration: 0.7, ease: "power2.out" },
       )
       .fromTo(
         row2Box1Ref.current,
@@ -188,8 +188,8 @@ export default function SolutionsRow() {
       )
       .fromTo(
         row3Connector2Ref.current,
-        { opacity: 0 },
-        { opacity: 1, duration: 0.7, ease: "power2.out" },
+        { clipPath: "inset(0 0 100% 0)" },
+        { clipPath: "inset(0 0 0% 0)", duration: 0.7, ease: "power2.out" },
       )
       .fromTo(
         row3Badge2Ref.current,
@@ -205,8 +205,8 @@ export default function SolutionsRow() {
       )
       .fromTo(
         connector3Ref.current,
-        { opacity: 0 },
-        { opacity: 1, duration: 0.7, ease: "power2.out" },
+        { clipPath: "inset(0 0 100% 0)" },
+        { clipPath: "inset(0 0 0% 0)", duration: 0.7, ease: "power2.out" },
       )
       .fromTo(
         row2Box6Ref.current,
@@ -215,8 +215,8 @@ export default function SolutionsRow() {
       )
       .fromTo(
         row3Connector3Ref.current,
-        { opacity: 0 },
-        { opacity: 1, duration: 0.7, ease: "power2.out" },
+        { clipPath: "inset(0 0 100% 0)" },
+        { clipPath: "inset(0 0 0% 0)", duration: 0.7, ease: "power2.out" },
       )
       .fromTo(
         row3Badge3Ref.current,
