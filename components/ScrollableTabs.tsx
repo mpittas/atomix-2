@@ -125,8 +125,12 @@ export default function ScrollableTabs() {
     const st = scrollTriggerRef.current;
     if (!st) return;
     const targetProgress = index / 3 + 1 / 6;
-    const scrollTo = st.start + (st.end - st.start) * targetProgress;
-    gsap.to(window, { scrollTo, duration: 0.6, ease: "power2.inOut" });
+    const scrollToY = st.start + (st.end - st.start) * targetProgress;
+    gsap.to(window, {
+      scrollTo: { y: scrollToY },
+      duration: 0.6,
+      ease: "power2.inOut",
+    });
   };
 
   useGSAP(
