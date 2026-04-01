@@ -138,7 +138,7 @@ export default function FlowGraphicLight() {
       {/* BADGE 1 */}
       <div
         ref={badge1Ref}
-        className="mb-3 rounded-full px-3 py-1.5 border border-dashed border-[#b3b9ec] text-white bg-linear-to-r from-[#124652] to-[#1e5a68]"
+        className="mb-3 rounded-full px-3 py-1.5 border border-dashed border-[#82b0ba] text-white bg-linear-to-r from-[#124652] to-[#1e5a68]"
       >
         Market Problems
       </div>
@@ -224,7 +224,7 @@ per loan"
       {/* BADGE 2 */}
       <div
         ref={badge2Ref}
-        className="mt-3 rounded-full px-3 py-1.5 border border-dashed border-[#b3b9ec] text-white bg-linear-to-r from-[#124652] to-[#1e5a68]"
+        className="mt-3 rounded-full px-3 py-1.5 border border-dashed border-[#82b0ba] text-white bg-linear-to-r from-[#124652] to-[#1e5a68]"
       >
         The Atomix Solution
       </div>
