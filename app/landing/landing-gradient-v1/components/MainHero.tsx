@@ -6,6 +6,7 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import SoftAurora from "@/components/backgrounds/SoftAurora";
+import { BadgeHeadingPill } from "@/components/ui/BadgeHeadingPill";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -144,18 +145,18 @@ export default function MainHero() {
     >
       <SoftAurora
         speed={1.3}
-        scale={1.6}
-        brightness={0.95}
-        color1="#20797b"
-        color2="#359aa9"
-        noiseFrequency={1.25}
-        noiseAmplitude={2.5}
+        scale={1.2}
+        brightness={0.65}
+        color1="#78cfe3"
+        color2="#87b9d4"
+        noiseFrequency={1}
+        noiseAmplitude={3.5}
         bandHeight={0.85}
-        bandSpread={0.7}
+        bandSpread={1}
         octaveDecay={0.12}
         layerOffset={0.5}
-        colorSpeed={1.4}
-        enableMouseInteraction
+        colorSpeed={1}
+        enableMouseInteraction={false}
         mouseInfluence={0.2}
       />
 
@@ -207,9 +208,8 @@ export default function MainHero() {
         className="text-white max-w-[1000px] mx-auto flex flex-col gap-y-8 justify-center items-center text-center bg-green-500/0 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0 visibility-hidden"
         id="def-hero-title-2"
       >
-        <div className="rounded-full bg-white/8 text-white text-sm font-semibold px-4 py-2 tracking-wide">
-          Mission
-        </div>
+        <BadgeHeadingPill>Mission</BadgeHeadingPill>
+
         <SplitText text="Atomix offers a toolkit to structure loan and investment products which are fast, flexible, and secure." />
         <DefButton size="large">Learn More</DefButton>
       </div>
@@ -219,9 +219,7 @@ export default function MainHero() {
         className="text-white max-w-[1000px] mx-auto flex flex-col gap-y-8 justify-center items-center text-center bg-yellow-500/0 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0 visibility-hidden"
         id="def-hero-title-3"
       >
-        <div className="rounded-full bg-white/8 text-white text-sm font-semibold px-4 py-2 tracking-wide">
-          Vision
-        </div>
+        <BadgeHeadingPill>Vision</BadgeHeadingPill>
         <SplitText text="Atomix will be the leading automated loan-processing platform & marketplace for asset-backed lending worldwide." />
         <DefButton size="large">Learn More</DefButton>
       </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
@@ -119,6 +119,7 @@ export default function ScrollableTabs() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const scrollTriggerRef = useRef<ScrollTrigger | null>(null);
+  const iconBoxesRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
 
   const handleTabClick = (index: number) => {
@@ -171,6 +172,23 @@ export default function ScrollableTabs() {
 
   const currentTab = tabsData[activeIndex];
 
+  useEffect(() => {
+    if (!iconBoxesRef.current) return;
+
+    const boxes = iconBoxesRef.current.children;
+    gsap.fromTo(
+      boxes,
+      { scale: 0, opacity: 0 },
+      {
+        scale: 1,
+        opacity: 1,
+        duration: 1,
+        stagger: 0.15,
+        ease: "back.out(1.3)",
+      },
+    );
+  }, [activeIndex]);
+
   return (
     <div ref={sectionRef} className="relative">
       <div
@@ -190,7 +208,7 @@ export default function ScrollableTabs() {
               }`}
             >
               <h3
-                className={`text-xl font-semibold text-center ${
+                className={`text-2xl font-semibold text-left ${
                   index === activeIndex ? "text-[#0f1b1e]" : "text-white"
                 }`}
               >
@@ -215,7 +233,10 @@ export default function ScrollableTabs() {
         </div>
 
         {/* Bottom Section - 4 IconBoxes */}
-        <div className="grid grid-cols-4 gap-3 w-full max-w-6xl">
+        <div
+          ref={iconBoxesRef}
+          className="grid grid-cols-4 gap-3 w-full max-w-6xl"
+        >
           {currentTab.iconBoxes.map((iconBox, index) => (
             <IconBox
               key={`${activeIndex}-${index}`}
