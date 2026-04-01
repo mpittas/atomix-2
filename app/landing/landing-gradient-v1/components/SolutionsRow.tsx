@@ -92,109 +92,136 @@ export default function SolutionsRow() {
       },
     });
 
+    // First animate: iconText1Ref, connector1Ref, row2Box1Ref, bottomArrow1Ref, row3Badge1Ref
     tl.fromTo(
-      [iconText1Ref.current, iconText2Ref.current, iconText3Ref.current],
+      iconText1Ref.current,
       { opacity: 0 },
-      { opacity: 1, duration: 1, stagger: 0.5, ease: "power2.out" },
+      { opacity: 1, duration: 0.8, ease: "power2.out" },
     )
       .fromTo(
         connector1Ref.current,
         { opacity: 0 },
         { opacity: 1, duration: 0.7, ease: "power2.out" },
-        "<",
-      )
-      // Top arrows - animate with clip-path to create drawing effect (top to bottom)
-      .fromTo(
-        [
-          topArrow1Ref.current,
-          topArrow2Ref.current,
-          topArrow3Ref.current,
-          topArrow4Ref.current,
-        ],
-        { clipPath: "inset(0 0 100% 0)" },
-        {
-          clipPath: "inset(0 0 0% 0)",
-          duration: 1,
-          stagger: 0.1,
-          ease: "power2.inOut",
-        },
-        "<",
-      )
-      .fromTo(
-        connector3Ref.current,
-        { opacity: 0 },
-        { opacity: 1, duration: 0.7, ease: "power2.out" },
-        "<",
       )
       .fromTo(
         row2Box1Ref.current,
         { opacity: 0, scale: 0.8 },
         { opacity: 1, scale: 1, duration: 0.8, ease: "back.out(1.7)" },
-        "-=1.25",
+      )
+      .fromTo(
+        bottomArrow1Ref.current,
+        { clipPath: "inset(0 0 100% 0)" },
+        { clipPath: "inset(0 0 0% 0)", duration: 1, ease: "power2.inOut" },
+      )
+      .fromTo(
+        row3Badge1Ref.current,
+        { opacity: 0 },
+        { opacity: 1, duration: 0.6, ease: "power2.out" },
+      )
+
+      // Second animate: iconText2Ref, topArrow1Ref, row2Box2Ref, bottomArrow2Ref
+      .fromTo(
+        iconText2Ref.current,
+        { opacity: 0 },
+        { opacity: 1, duration: 0.8, ease: "power2.out" },
+      )
+      .fromTo(
+        topArrow1Ref.current,
+        { clipPath: "inset(0 0 100% 0)" },
+        { clipPath: "inset(0 0 0% 0)", duration: 1, ease: "power2.inOut" },
       )
       .fromTo(
         row2Box2Ref.current,
         { opacity: 0, scale: 0.8 },
         { opacity: 1, scale: 1, duration: 0.8, ease: "back.out(1.7)" },
-        "-=0.1",
+      )
+      .fromTo(
+        bottomArrow2Ref.current,
+        { clipPath: "inset(0 0 100% 0)" },
+        { clipPath: "inset(0 0 0% 0)", duration: 1, ease: "power2.inOut" },
+      )
+
+      // Third animate: topArrow2Ref, row2Box3Ref, bottomArrow3Ref
+      .fromTo(
+        topArrow2Ref.current,
+        { clipPath: "inset(0 0 100% 0)" },
+        { clipPath: "inset(0 0 0% 0)", duration: 1, ease: "power2.inOut" },
       )
       .fromTo(
         row2Box3Ref.current,
         { opacity: 0, scale: 0.8 },
         { opacity: 1, scale: 1, duration: 0.8, ease: "back.out(1.7)" },
-        "-=0.1",
+      )
+      .fromTo(
+        bottomArrow3Ref.current,
+        { clipPath: "inset(0 0 100% 0)" },
+        { clipPath: "inset(0 0 0% 0)", duration: 1, ease: "power2.inOut" },
+      )
+
+      // Fourth animate: topArrow3Ref, row2Box4Ref, bottomArrow4Ref
+      .fromTo(
+        topArrow3Ref.current,
+        { clipPath: "inset(0 0 100% 0)" },
+        { clipPath: "inset(0 0 0% 0)", duration: 1, ease: "power2.inOut" },
       )
       .fromTo(
         row2Box4Ref.current,
         { opacity: 0, scale: 0.8 },
         { opacity: 1, scale: 1, duration: 0.8, ease: "back.out(1.7)" },
-        "-=0.1",
+      )
+      .fromTo(
+        bottomArrow4Ref.current,
+        { clipPath: "inset(0 0 100% 0)" },
+        { clipPath: "inset(0 0 0% 0)", duration: 1, ease: "power2.inOut" },
+      )
+
+      // Fifth animate: topArrow4Ref, row2Box5Ref, row3Connector2Ref, row3Badge2Ref
+      .fromTo(
+        topArrow4Ref.current,
+        { clipPath: "inset(0 0 100% 0)" },
+        { clipPath: "inset(0 0 0% 0)", duration: 1, ease: "power2.inOut" },
       )
       .fromTo(
         row2Box5Ref.current,
         { opacity: 0, scale: 0.8 },
         { opacity: 1, scale: 1, duration: 0.8, ease: "back.out(1.7)" },
-        "-=0.1",
-      )
-      .fromTo(
-        row2Box6Ref.current,
-        { opacity: 0, scale: 0.8 },
-        { opacity: 1, scale: 1, duration: 0.8, ease: "back.out(1.7)" },
-        "-=0.1",
-      )
-      // Bottom arrows - animate with clip-path to create drawing effect (top to bottom)
-      .fromTo(
-        [
-          bottomArrow1Ref.current,
-          bottomArrow2Ref.current,
-          bottomArrow3Ref.current,
-          bottomArrow4Ref.current,
-        ],
-        { clipPath: "inset(0 0 100% 0)" },
-        {
-          clipPath: "inset(0 0 0% 0)",
-          duration: 1,
-          ease: "power2.inOut",
-        },
-        "-=1",
       )
       .fromTo(
         row3Connector2Ref.current,
         { opacity: 0 },
         { opacity: 1, duration: 0.7, ease: "power2.out" },
-        "-=0.3",
+      )
+      .fromTo(
+        row3Badge2Ref.current,
+        { opacity: 0 },
+        { opacity: 1, duration: 0.6, ease: "power2.out" },
+      )
+
+      // Sixth animate: iconText3Ref, connector3Ref, row2Box6Ref, row3Connector3Ref, row3Badge3Ref
+      .fromTo(
+        iconText3Ref.current,
+        { opacity: 0 },
+        { opacity: 1, duration: 0.8, ease: "power2.out" },
+      )
+      .fromTo(
+        connector3Ref.current,
+        { opacity: 0 },
+        { opacity: 1, duration: 0.7, ease: "power2.out" },
+      )
+      .fromTo(
+        row2Box6Ref.current,
+        { opacity: 0, scale: 0.8 },
+        { opacity: 1, scale: 1, duration: 0.8, ease: "back.out(1.7)" },
       )
       .fromTo(
         row3Connector3Ref.current,
         { opacity: 0 },
         { opacity: 1, duration: 0.7, ease: "power2.out" },
-        "<",
       )
       .fromTo(
-        [row3Badge1Ref.current, row3Badge2Ref.current, row3Badge3Ref.current],
+        row3Badge3Ref.current,
         { opacity: 0 },
         { opacity: 1, duration: 0.6, ease: "power2.out" },
-        "-=0.3",
       );
 
     setupHoverEffect(row2Box1Ref);
@@ -220,7 +247,7 @@ export default function SolutionsRow() {
           </div>
           <div
             ref={connector1Ref}
-            className="h-18 w-1 border-l border-dashed border-[#999fc7] mx-auto"
+            className="h-18 w-1 border-l border-dashed border-white/70 mx-auto"
           ></div>
         </div>
 
@@ -249,14 +276,14 @@ export default function SolutionsRow() {
             />
 
             <img
-              ref={topArrow3Ref}
+              ref={topArrow4Ref}
               src="/dashed-lines/connect-arrow-top-3.svg"
               alt="Connecting dashed lines"
               className="object-contain absolute bottom-0 right-[81px]"
             />
 
             <img
-              ref={topArrow4Ref}
+              ref={topArrow3Ref}
               src="/dashed-lines/connect-arrow-top-4.svg"
               alt="Connecting dashed lines"
               className="object-contain absolute bottom-0 right-[296px]"
@@ -358,14 +385,14 @@ export default function SolutionsRow() {
             />
 
             <img
-              ref={bottomArrow3Ref}
+              ref={bottomArrow4Ref}
               src="/dashed-lines/connect-arrow-bottom-3.svg"
               alt="Connecting dashed lines"
               className="object-contain absolute bottom-0 right-[81px]"
             />
 
             <img
-              ref={bottomArrow4Ref}
+              ref={bottomArrow3Ref}
               src="/dashed-lines/connect-arrow-bottom-4.svg"
               alt="Connecting dashed lines"
               className="object-contain absolute bottom-0 right-[296px]"
