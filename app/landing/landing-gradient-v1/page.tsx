@@ -29,6 +29,21 @@ export default function LandingGradientV1Page() {
   const card2Ref = useRef<HTMLDivElement>(null);
   const card3Ref = useRef<HTMLDivElement>(null);
 
+  const cpSectionRef = useRef<HTMLDivElement>(null);
+  const cpTitleRef = useRef<HTMLHeadingElement>(null);
+  const cpSubtitleRef = useRef<HTMLParagraphElement>(null);
+  const cpCardsRef = useRef<HTMLDivElement>(null);
+
+  const lendersSectionRef = useRef<HTMLDivElement>(null);
+  const lendersTitleRef = useRef<HTMLHeadingElement>(null);
+  const lendersSubtitleRef = useRef<HTMLParagraphElement>(null);
+  const lendersCardsRef = useRef<HTMLDivElement>(null);
+
+  const borrowersSectionRef = useRef<HTMLDivElement>(null);
+  const borrowersTitleRef = useRef<HTMLHeadingElement>(null);
+  const borrowersSubtitleRef = useRef<HTMLParagraphElement>(null);
+  const borrowersCardsRef = useRef<HTMLDivElement>(null);
+
   const setupHoverEffect = (ref: React.RefObject<HTMLDivElement | null>) => {
     if (!ref.current) return;
 
@@ -125,6 +140,72 @@ export default function LandingGradientV1Page() {
     };
   }, []);
 
+  useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
+
+    const animateSection = (
+      sectionRef: React.RefObject<HTMLDivElement | null>,
+      titleRef: React.RefObject<HTMLHeadingElement | null>,
+      subtitleRef: React.RefObject<HTMLParagraphElement | null>,
+      cardsRef: React.RefObject<HTMLDivElement | null>,
+    ) => {
+      gsap.set(titleRef.current, { opacity: 0, y: 30 });
+      gsap.set(subtitleRef.current, { opacity: 0, y: 30 });
+      gsap.set(cardsRef.current?.children || [], { opacity: 0, y: 30 });
+
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top 80%",
+          end: "top 30%",
+          toggleActions: "play none none reverse",
+        },
+      });
+
+      tl.to(titleRef.current, {
+        opacity: 1,
+        y: 0,
+        duration: 0.5,
+        ease: "power2.out",
+      })
+        .to(
+          subtitleRef.current,
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.5,
+            ease: "power2.out",
+          },
+          "-=0.3",
+        )
+        .to(
+          cardsRef.current?.children || [],
+          {
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            stagger: 0.3,
+            ease: "power2.out",
+          },
+          "-=0.3",
+        );
+    };
+
+    animateSection(cpSectionRef, cpTitleRef, cpSubtitleRef, cpCardsRef);
+    animateSection(
+      lendersSectionRef,
+      lendersTitleRef,
+      lendersSubtitleRef,
+      lendersCardsRef,
+    );
+    animateSection(
+      borrowersSectionRef,
+      borrowersTitleRef,
+      borrowersSubtitleRef,
+      borrowersCardsRef,
+    );
+  }, []);
+
   return (
     <div className="overflow-x-hidden">
       <div className="bg-white px-12" id="def-hero-main">
@@ -134,7 +215,7 @@ export default function LandingGradientV1Page() {
 
       <div className="px-12 mt-2 flex flex-col gap-2">
         <div className="h-full">
-          <div className="px-18 py-36 rounded-t-3xl bg-linear-to-b from-[#749CA5] to-[#66878E] relative overflow-hidden">
+          <div className="px-18 py-36 rounded-t-3xl bg-linear-to-b from-[#0B4858] to-[#81A6AF] relative overflow-hidden">
             <div className="absolute -top-0 left-0 w-full h-[500px]">
               <SoftAurora
                 speed={1.3}
@@ -172,7 +253,7 @@ export default function LandingGradientV1Page() {
             </div>
           </div>
 
-          <div className="px-18 py-36 rounded-b-3xl bg-linear-to-t from-[#749CA5] to-[#66878E] relative overflow-hidden">
+          <div className="px-18 py-36 rounded-b-3xl bg-linear-to-t from-[#0B4858] to-[#81A6AF] relative overflow-hidden">
             <div className="max-w-[1060px] mx-auto px-4">
               <DefHeading
                 theme="light"
@@ -183,17 +264,20 @@ export default function LandingGradientV1Page() {
 
               <div className="mt-16 flex flex-col items-center gap-16">
                 {/* Capital Providers Section */}
-                <div className="w-full">
+                <div ref={cpSectionRef} className="w-full">
                   <div className="text-center mb-8">
-                    <h3 className="text-2xl font-semibold text-white mb-2">
+                    <h3
+                      ref={cpTitleRef}
+                      className="text-2xl font-semibold text-white mb-2"
+                    >
                       Capital Providers
                     </h3>
-                    <p className="text-white/70">
+                    <p ref={cpSubtitleRef} className="text-white/70">
                       Invest with full transparency, automated compliance, and
                       access to diversified lending opportunities.
                     </p>
                   </div>
-                  <div className="grid grid-cols-4 gap-6">
+                  <div ref={cpCardsRef} className="grid grid-cols-4 gap-6">
                     <IconBox
                       src="/icons/white/money-coins-white.svg"
                       title="High Fixed Fees"
@@ -218,17 +302,26 @@ export default function LandingGradientV1Page() {
                 </div>
 
                 {/* Lenders Section */}
-                <div className="w-full flex flex-col gap-6">
+                <div
+                  ref={lendersSectionRef}
+                  className="w-full flex flex-col gap-6"
+                >
                   <div className="text-center mb-4">
-                    <h3 className="text-2xl font-semibold text-white mb-2">
+                    <h3
+                      ref={lendersTitleRef}
+                      className="text-2xl font-semibold text-white mb-2"
+                    >
                       Lenders
                     </h3>
-                    <p className="text-white/70 max-w-md mx-auto">
+                    <p
+                      ref={lendersSubtitleRef}
+                      className="text-white/70 max-w-md mx-auto"
+                    >
                       Automate lending workflows, access capital faster, and
                       scale operations without increasing headcount.
                     </p>
                   </div>
-                  <div className="grid grid-cols-4 gap-6">
+                  <div ref={lendersCardsRef} className="grid grid-cols-4 gap-6">
                     <IconBox
                       src="/icons/white/money-coins-white.svg"
                       title="High Fixed Fees 2"
@@ -253,17 +346,29 @@ export default function LandingGradientV1Page() {
                 </div>
 
                 {/* Borrowers Section */}
-                <div className="w-full flex flex-col gap-6">
+                <div
+                  ref={borrowersSectionRef}
+                  className="w-full flex flex-col gap-6"
+                >
                   <div className="text-center mb-4">
-                    <h3 className="text-2xl font-semibold text-white mb-2">
+                    <h3
+                      ref={borrowersTitleRef}
+                      className="text-2xl font-semibold text-white mb-2"
+                    >
                       Borrowers
                     </h3>
-                    <p className="text-white/70 max-w-md mx-auto">
+                    <p
+                      ref={borrowersSubtitleRef}
+                      className="text-white/70 max-w-md mx-auto"
+                    >
                       Borrowers experience delays and lack of transparency
                       throughout the process.
                     </p>
                   </div>
-                  <div className="grid grid-cols-4 gap-6">
+                  <div
+                    ref={borrowersCardsRef}
+                    className="grid grid-cols-4 gap-6"
+                  >
                     <IconBox
                       src="/icons/white/money-coins-white.svg"
                       title="High Fixed Fees 3"
@@ -292,7 +397,7 @@ export default function LandingGradientV1Page() {
         </div>
 
         <div className="h-full">
-          <div className="px-18 py-36 rounded-t-3xl bg-linear-to-b from-[#749CA5] to-[#66878E] relative overflow-hidden">
+          <div className="px-18 py-36 rounded-t-3xl bg-linear-to-b from-[#0B4858] to-[#81A6AF] relative overflow-hidden">
             <div className="absolute -top-10 left-0 w-full h-[500px]">
               <SoftAurora
                 speed={1.3}
@@ -329,7 +434,7 @@ built for real-world complexity."
             </div>
           </div>
 
-          <div className="px-18 py-36 rounded-b-3xl bg-linear-to-t from-[#749CA5] to-[#66878E]">
+          <div className="px-18 py-36 rounded-b-3xl bg-linear-to-t from-[#0B4858] to-[#81A6AF]">
             <div className="max-w-[1260px] mx-auto px-4">
               <div className="max-w-[1060px] mx-auto">
                 <DefHeading
@@ -353,7 +458,7 @@ built for real-world complexity."
         </div>
 
         <div className="h-full mb-12">
-          <div className="px-18 py-36 rounded-t-3xl bg-linear-to-b from-[#749CA5] to-[#66878E] relative overflow-hidden">
+          <div className="px-18 py-36 rounded-t-3xl bg-linear-to-b from-[#0B4858] to-[#81A6AF] relative overflow-hidden">
             <div className="absolute -top-10 left-0 w-full h-[500px]">
               <SoftAurora
                 speed={1.3}
@@ -390,7 +495,7 @@ built for real-world complexity."
             </div>
           </div>
 
-          <div className="px-18 py-36 rounded-b-3xl bg-linear-to-t from-[#749CA5] to-[#66878E]">
+          <div className="px-18 py-36 rounded-b-3xl bg-linear-to-t from-[#0B4858] to-[#81A6AF]">
             <div className="max-w-[1260px] mx-auto px-4">
               <div className="max-w-[1060px] mx-auto">
                 <DefHeading
