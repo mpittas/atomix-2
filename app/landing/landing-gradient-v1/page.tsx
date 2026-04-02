@@ -192,23 +192,7 @@ export default function LandingGradientV1Page() {
                 mouseInfluence={0.2}
               />
             </div>
-            <div className="max-w-[1060px] mx-auto px-4">
-              <div className="">
-                <DefHeading
-                  theme="light"
-                  badgeText="The Opportunity"
-                  title="Existing Tech Limitations"
-                  description="Move beyond fragmented tools and manual coordination. Experience collaborative, secure, end-to-end automation 
-built for real-world complexity."
-                />
-              </div>
-              <div className="mt-16 flex flex-col items-center">
-                <FlowCardsHor />
-                <div className="mt-14">
-                  <DefButton size="large">Learn more</DefButton>
-                </div>
-              </div>
-            </div>
+            <div className="max-w-[1060px] mx-auto px-4"></div>
           </div>
 
           <div className="px-18 py-36 rounded-b-3xl bg-linear-to-t from-[#0B4858] to-[#81A6AF]">

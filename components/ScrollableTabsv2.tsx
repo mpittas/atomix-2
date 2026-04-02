@@ -68,27 +68,23 @@ const tabsData: TabData[] = [
     iconBoxes: [
       {
         src: "/icons/white/money-coins-white.svg",
-        title: "Lorem ipsum dolor",
-        description:
-          "Sit amet consectetur adipiscing elit sed do eiusmod tempor",
+        title: "Handle 100+ <br>touchpoints per loan",
+        description: "Sit amet consectetur adipiscing elit",
       },
       {
         src: "/icons/white/clock-white.svg",
-        title: "Lorem ipsum dolor",
-        description:
-          "Sit amet consectetur adipiscing elit sed do eiusmod tempor",
+        title: "Smaller loans are uneconomic",
+        description: "Sit amet consectetur adipiscing elit",
       },
       {
         src: "/icons/white/arrows-white.svg",
-        title: "Lorem ipsum dolor",
-        description:
-          "Sit amet consectetur adipiscing elit sed do eiusmod tempor",
+        title: "Growth requires<br>hiring",
+        description: "Sit amet consectetur adipiscing elit",
       },
       {
         src: "/icons/white/eye-white-crossed.svg",
-        title: "Lorem ipsum dolor",
-        description:
-          "Sit amet consectetur adipiscing elit sed do eiusmod tempor",
+        title: "Fraud and misrepresentation are systemic risks",
+        description: "Sit amet consectetur adipiscing elit",
       },
     ],
   },

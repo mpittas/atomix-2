@@ -38,15 +38,10 @@
   - [x] Remove content and add lorem ipsum
   - [x] The order for website is correct
   - [x] Animate boxes on initial scroll and make them appear slower
-  - [x] Add Aurora BG back
+  - [x] Update content for "Lenders"
 
-- For Lenders boxes:
-- until "per loan"
-- Smaller loans are uneconomic
-- Gowth requires hiring
-- Fraud mispre are systemic risks
+- [x] Remove "Existing Tech Limitations" section
 
-- Remove "Theg opportunity" badge section (Whole section) (replace with 2 below sections)
 - Add new section "Whgy existing texh falls short "
   - Badge (lorem iopsum) Title, subittle, and 3 boxes
 

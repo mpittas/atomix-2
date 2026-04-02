@@ -47,7 +47,10 @@ export default function IconBox({
           height={finalWidth}
           className="mb-2"
         />
-        <div className={`text-md text-white ${titleClassName}`}>{title}</div>
+        <div
+          className={`text-md text-white ${titleClassName}`}
+          dangerouslySetInnerHTML={{ __html: title }}
+        />
         {description && (
           <div className="text-md text-white/80 mt-2">{description}</div>
         )}
