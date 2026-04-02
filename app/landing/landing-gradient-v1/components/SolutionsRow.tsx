@@ -35,7 +35,10 @@ export default function SolutionsRow() {
   const connector3Ref = useRef<HTMLDivElement>(null);
 
   // Top dashed line refs
-  const topArrow1Ref = useRef<HTMLImageElement>(null);
+  const topArrow1SvgRef = useRef<SVGSVGElement>(null);
+  const topArrow1Path1Ref = useRef<SVGPathElement>(null);
+  const topArrow1Path2Ref = useRef<SVGPathElement>(null);
+  const topArrow1DotRef = useRef<SVGCircleElement>(null);
   const topArrow2Ref = useRef<HTMLImageElement>(null);
   const topArrow3Ref = useRef<HTMLImageElement>(null);
   const topArrow4Ref = useRef<HTMLImageElement>(null);
@@ -125,11 +128,58 @@ export default function SolutionsRow() {
         { opacity: 0 },
         { opacity: 1, duration: 0.8, ease: "power2.out" },
       )
-      .fromTo(
-        topArrow1Ref.current,
-        { clipPath: "inset(0 0 100% 0)" },
-        { clipPath: "inset(0 0 0% 0)", duration: 1, ease: "power2.inOut" },
-      )
+      .add(() => {
+        const path1 = topArrow1Path1Ref.current;
+        const path2 = topArrow1Path2Ref.current;
+        const dot = topArrow1DotRef.current;
+        if (!path1 || !path2 || !dot) return;
+
+        const len = path1.getTotalLength();
+
+        // Draw-on animation
+        gsap.set([path1, path2], {
+          strokeDasharray: len,
+          strokeDashoffset: len,
+        });
+        gsap.to([path1, path2], {
+          strokeDashoffset: 0,
+          duration: 1,
+          ease: "power2.inOut",
+        });
+
+        // Traveling dot — starts after draw completes
+        gsap.set(dot, { opacity: 0 });
+        gsap.to(dot, {
+          opacity: 1,
+          duration: 0.3,
+          delay: 1,
+        });
+
+        // Pulse the dot
+        gsap.to(dot, {
+          attr: { r: 6 },
+          opacity: 0.6,
+          duration: 0.8,
+          repeat: -1,
+          yoyo: true,
+          ease: "sine.inOut",
+          delay: 1,
+        });
+
+        // Move dot along path
+        const proxy = { t: 0 };
+        gsap.to(proxy, {
+          t: 1,
+          duration: 3,
+          repeat: -1,
+          ease: "none",
+          delay: 1,
+          onUpdate: () => {
+            const pt = path1.getPointAtLength(proxy.t * len);
+            gsap.set(dot, { attr: { cx: pt.x, cy: pt.y } });
+          },
+        });
+      })
       .fromTo(
         row2Box2Ref.current,
         { opacity: 0, scale: 0.8 },
@@ -261,33 +311,81 @@ export default function SolutionsRow() {
           </div>
 
           <div className="w-full min-h-[72px] bg-red-500/0 relative">
-            <img
-              ref={topArrow1Ref}
-              src="/dashed-lines/connect-arrow-top-1.svg"
-              alt="Connecting dashed lines"
-              className="object-contain absolute bottom-0 left-[81px]"
-            />
+            <div className="w-[325px] absolute left-[84px]">
+              <svg
+                viewBox="0 0 325 80"
+                xmlns="http://www.w3.org/2000/svg"
+                preserveAspectRatio="xMidYMid meet"
+                style={{ width: "100%", height: "auto", display: "block" }}
+              >
+                <path
+                  d="M 2 78 L 2 55 Q 2 40 17 40 L 308 40 Q 323 40 323 25 L 323 2"
+                  fill="none"
+                  stroke="#90abb3"
+                  strokeWidth="2"
+                  strokeDasharray="10,7"
+                  strokeLinecap="round"
+                  vectorEffect="non-scaling-stroke"
+                />
+              </svg>
+            </div>
 
-            <img
-              ref={topArrow2Ref}
-              src="/dashed-lines/connect-arrow-top-2.svg"
-              alt="Connecting dashed lines"
-              className="object-contain absolute bottom-0 left-[296px]"
-            />
+            <div className="w-[111px] absolute left-[298px]">
+              <svg
+                viewBox="0 0 111 80"
+                xmlns="http://www.w3.org/2000/svg"
+                preserveAspectRatio="xMidYMid meet"
+                style={{ width: "100%", height: "auto", display: "block" }}
+              >
+                <path
+                  d="M 2 78 L 2 55 Q 2 40 17 40 L 94 40 Q 109 40 109 25 L 109 2"
+                  fill="none"
+                  stroke="#90abb3"
+                  strokeWidth="2"
+                  strokeDasharray="10,8"
+                  strokeLinecap="round"
+                  vectorEffect="non-scaling-stroke"
+                />
+              </svg>
+            </div>
 
-            <img
-              ref={topArrow4Ref}
-              src="/dashed-lines/connect-arrow-top-3.svg"
-              alt="Connecting dashed lines"
-              className="object-contain absolute bottom-0 right-[81px]"
-            />
+            <div className="w-[325px] absolute right-[83px]">
+              <svg
+                viewBox="0 0 325 80"
+                xmlns="http://www.w3.org/2000/svg"
+                preserveAspectRatio="xMidYMid meet"
+                style={{ width: "100%", height: "auto", display: "block" }}
+              >
+                <path
+                  d="M 323 78 L 323 55 Q 323 40 308 40 L 17 40 Q 2 40 2 25 L 2 2"
+                  fill="none"
+                  stroke="#90abb3"
+                  strokeWidth="2"
+                  strokeDasharray="10,7"
+                  strokeLinecap="round"
+                  vectorEffect="non-scaling-stroke"
+                />
+              </svg>
+            </div>
 
-            <img
-              ref={topArrow3Ref}
-              src="/dashed-lines/connect-arrow-top-4.svg"
-              alt="Connecting dashed lines"
-              className="object-contain absolute bottom-0 right-[296px]"
-            />
+            <div className="w-[111px] absolute right-[297px]">
+              <svg
+                viewBox="0 0 111 80"
+                xmlns="http://www.w3.org/2000/svg"
+                preserveAspectRatio="xMidYMid meet"
+                style={{ width: "100%", height: "auto", display: "block" }}
+              >
+                <path
+                  d="M 109 78 L 109 55 Q 109 40 94 40 L 17 40 Q 2 40 2 25 L 2 2"
+                  fill="none"
+                  stroke="#90abb3"
+                  strokeWidth="2"
+                  strokeDasharray="10,8"
+                  strokeLinecap="round"
+                  vectorEffect="non-scaling-stroke"
+                />
+              </svg>
+            </div>
           </div>
         </div>
 

@@ -20,6 +20,7 @@
 ## Solutions
 
 - [ ] Make the lines still dashed and animated
+- [ ] Make all badges full width
 
 ## New content
 
