@@ -13,9 +13,9 @@
 
 ## Scrollable tabs:
 
-- [ ] Remove the list from the toggles
-- [ ] Redo the sticky behavior
-- [ ] Make inactive state for toggles to be solid dark background
+- [x] Remove the list from the toggles
+- [x] Redo the sticky behavior
+- [x] Make inactive state for toggles to be solid dark background
 
 ## Solutions
 

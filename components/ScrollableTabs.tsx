@@ -144,7 +144,7 @@ export default function ScrollableTabs() {
         scrollTrigger: {
           trigger: sectionRef.current,
           start: "top top",
-          end: `+=${window.innerHeight * 0.8}`,
+          end: `+=${window.innerHeight * 0.7}`,
           pin: wrapperRef.current,
           scrub: 0.5,
           onUpdate: (self) => {
@@ -194,7 +194,7 @@ export default function ScrollableTabs() {
     <div ref={sectionRef} className="relative">
       <div
         ref={wrapperRef}
-        className="h-screen flex flex-col items-center justify-between py-16 px-4"
+        className=" flex flex-col items-center py-16 px-4 gap-y-24"
       >
         {/* Top - DefHeading */}
         <DefHeading
@@ -207,38 +207,24 @@ export default function ScrollableTabs() {
         {/* Bottom Section - Tabs and IconBoxes */}
         <div className="flex flex-col items-center w-full max-w-6xl">
           {/* Tab Buttons */}
-          <div className="flex gap-3 mb-6 w-full">
+          <div className="flex gap-4 mb-6 w-full">
             {tabsData.map((tab, index) => (
               <div
                 key={tab.title}
                 onClick={() => handleTabClick(index)}
-                className={`flex-1 flex flex-col gap-4 p-8 rounded-2xl transition-all duration-500 cursor-pointer ${
+                className={`flex-1 flex flex-col gap-4 rounded-xl transition-all duration-500 cursor-pointer p-5 ${
                   index === activeIndex
                     ? "bg-[#eaeff1] text-black"
-                    : "bg-white/15 opacity-60"
+                    : "bg-[#124652]"
                 }`}
               >
                 <h3
-                  className={`text-2xl font-semibold text-left ${
+                  className={`text-xl font-semibold text-center ${
                     index === activeIndex ? "text-[#0f1b1e]" : "text-white"
                   }`}
                 >
                   {tab.title}
                 </h3>
-                <ul className="flex flex-col gap-1">
-                  {tab.items.map((item, itemIndex) => (
-                    <li
-                      key={itemIndex}
-                      className={`text-md ${
-                        index === activeIndex
-                          ? "text-[#0f1b1e]/80"
-                          : "text-white/50"
-                      }`}
-                    >
-                      • {item}
-                    </li>
-                  ))}
-                </ul>
               </div>
             ))}
           </div>

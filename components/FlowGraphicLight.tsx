@@ -102,6 +102,12 @@ export default function FlowGraphicLight({
         "+=0.1",
       )
       .fromTo(
+        badge2Ref.current,
+        { opacity: 0 },
+        { opacity: 1, duration: 1.2, ease: "power2.out" },
+        "+=0.1",
+      )
+      .fromTo(
         row2Card1Ref.current,
         { opacity: 0, scale: 0.8 },
         { opacity: 1, scale: 1, duration: 1.6, ease: "back.out(1.7)" },
@@ -118,12 +124,6 @@ export default function FlowGraphicLight({
         { opacity: 0, scale: 0.8 },
         { opacity: 1, scale: 1, duration: 1.6, ease: "back.out(1.7)" },
         "-=0.3",
-      )
-      .fromTo(
-        badge2Ref.current,
-        { opacity: 0 },
-        { opacity: 1, duration: 1.2, ease: "power2.out" },
-        "+=0.1",
       );
 
     tlRef.current = tl;
