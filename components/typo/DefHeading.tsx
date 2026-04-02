@@ -74,6 +74,7 @@ const DefHeading: React.FC<DefHeadingProps> = ({
             duration: 1,
             ease: "power3.out",
             stagger: 0.02,
+            onComplete: onAnimationComplete,
           },
           "-=0.4",
         )
@@ -84,7 +85,6 @@ const DefHeading: React.FC<DefHeadingProps> = ({
             y: 0,
             duration: 1,
             ease: "power3.out",
-            onComplete: onAnimationComplete,
           },
           "-=0.3",
         );

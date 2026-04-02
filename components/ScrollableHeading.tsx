@@ -87,7 +87,7 @@ export default function ScrollableHeading() {
         scrollTrigger: {
           trigger: sectionRef.current,
           start: "top top",
-          end: "+=1200",
+          end: "+=800",
           scrub: 1,
           snap: {
             snapTo: [0, slide1Progress, slide2Progress, endProgress],
