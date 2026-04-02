@@ -170,8 +170,8 @@ export default function LandingGradientV1Page() {
       </div>
 
       <div className="px-12 mt-2 flex flex-col gap-2">
-        <div className="h-full">
-          <div className="px-18 py-36 rounded-t-3xl bg-linear-to-b from-[#0B4858] to-[#81A6AF] relative overflow-hidden">
+        <div className="">
+          <div className="px-18 py-36 rounded-3xl bg-linear-to-b from-[#0B4858] to-[#81A6AF] relative overflow-hidden min-h-[calc(100vh-60px)]">
             <div className="absolute -top-0 left-0 w-full h-[500px]">
               <SoftAurora
                 speed={1.3}
@@ -190,32 +190,8 @@ export default function LandingGradientV1Page() {
                 mouseInfluence={0.2}
               />
             </div>
-            <div className="max-w-[1060px] mx-auto px-4">
-              <DefHeading
-                theme="light"
-                badgeText="Executive Summary"
-                badgeColor="blue"
-                title="Automating the UK Bridging Loans Market"
-                description="Collaborative, Trusted, End-to-End Automation"
-                onAnimationComplete={handleDefHeadingComplete}
-              />
 
-              <div className="mt-16 flex flex-col items-center">
-                <div ref={flowGraphicRef}>
-                  <FlowGraphicLight startAnimation={flowAnimationReady} />
-                </div>
-
-                <div ref={learnMoreBtnRef} className="mt-14">
-                  <DefButton size="large">Learn more</DefButton>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="px-18 py-36 rounded-b-3xl bg-linear-to-t from-[#0B4858] to-[#81A6AF] overflow-hidden">
-            <div className="flex flex-col items-center gap-16">
-              <ScrollableTabs />
-            </div>
+            <ScrollableTabs />
           </div>
         </div>
 

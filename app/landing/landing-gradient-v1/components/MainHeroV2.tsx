@@ -10,16 +10,13 @@ import { BadgeHeadingPill } from "@/components/ui/BadgeHeadingPill";
 
 gsap.registerPlugin(ScrollTrigger);
 
-export default function MainHero() {
+export default function MainHeroV2() {
   useGSAP(() => {
     const heroPinTriggerId = "def-hero-main-pin";
     let lastSnapProgress = 0;
-    const centerProgress = 1 / 6;
-    const title2Progress = 2 / 6;
-    const title3Progress = 3 / 6;
-    const title4Progress = 4 / 6;
-    const title5Progress = 5 / 6;
-    const title6Progress = 1;
+    const centerProgress = 1 / 3;
+    const title2Progress = 2 / 3;
+    const title3Progress = 1;
 
     const tl = gsap.timeline({
       scrollTrigger: {
@@ -36,14 +33,7 @@ export default function MainHero() {
               return value;
             }
 
-            const snapPoints = [
-              centerProgress,
-              title2Progress,
-              title3Progress,
-              title4Progress,
-              title5Progress,
-              title6Progress,
-            ];
+            const snapPoints = [centerProgress, title2Progress, title3Progress];
             const isForward = value >= lastSnapProgress;
 
             if (isForward) {
@@ -76,9 +66,6 @@ export default function MainHero() {
       .set("#def-hero-images", { opacity: 1, visibility: "visible" })
       .set("#def-hero-title-2", { autoAlpha: 0, scale: 0 })
       .set("#def-hero-title-3", { autoAlpha: 0 })
-      .set("#def-hero-title-4", { autoAlpha: 0, scale: 0 })
-      .set("#def-hero-title-5", { autoAlpha: 0, scale: 0 })
-      .set("#def-hero-title-6", { autoAlpha: 0, scale: 0 })
       .to(
         "#def-hero-title-1",
         {
@@ -148,79 +135,13 @@ export default function MainHero() {
         },
         "title2Visible+=0.5",
       )
-      .addLabel("title3Visible")
-      .to(
-        "#def-hero-title-3",
-        {
-          autoAlpha: 0,
-          scale: 0,
-          duration: 0.5,
-          ease: "power1.in",
-        },
-        "title3Visible",
-      )
-      .set("#def-hero-title-4", { scale: 0 })
-      .to(
-        "#def-hero-title-4",
-        {
-          autoAlpha: 1,
-          scale: 1,
-          duration: 0.5,
-          ease: "power1.out",
-        },
-        "title3Visible+=0.5",
-      )
-      .addLabel("title4Visible")
-      .to(
-        "#def-hero-title-4",
-        {
-          autoAlpha: 0,
-          scale: 0,
-          duration: 0.5,
-          ease: "power1.in",
-        },
-        "title4Visible",
-      )
-      .set("#def-hero-title-5", { scale: 0 })
-      .to(
-        "#def-hero-title-5",
-        {
-          autoAlpha: 1,
-          scale: 1,
-          duration: 0.5,
-          ease: "power1.out",
-        },
-        "title4Visible+=0.5",
-      )
-      .addLabel("title5Visible")
-      .to(
-        "#def-hero-title-5",
-        {
-          autoAlpha: 0,
-          scale: 0,
-          duration: 0.5,
-          ease: "power1.in",
-        },
-        "title5Visible",
-      )
-      .set("#def-hero-title-6", { scale: 0 })
-      .to(
-        "#def-hero-title-6",
-        {
-          autoAlpha: 1,
-          scale: 1,
-          duration: 0.5,
-          ease: "power1.out",
-        },
-        "title5Visible+=0.5",
-      )
-      .addLabel("title6Visible");
+      .addLabel("title3Visible");
   }, []);
 
   return (
     <section
       className="flex h-[calc(100vh-116px)] bg-[#004054] rounded-3xl overflow-hidden relative flex flex-col"
-      id="atomix-playground-v1"
+      id="atomix-playground-v2"
     >
       <SoftAurora
         speed={1.3}
@@ -287,9 +208,9 @@ export default function MainHero() {
         className="text-white max-w-[1000px] mx-auto flex flex-col gap-y-8 justify-center items-center text-center bg-green-500/0 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0 visibility-hidden"
         id="def-hero-title-2"
       >
-        <BadgeHeadingPill>About Atomix</BadgeHeadingPill>
+        <BadgeHeadingPill>Mission</BadgeHeadingPill>
 
-        <SplitText text="Property lending is overdue for a rebuild. Atomix is it." />
+        <SplitText text="Atomix offers a toolkit to structure loan and investment products which are fast, flexible, and secure." />
         <DefButton size="large">Learn More</DefButton>
       </div>
 
@@ -298,47 +219,8 @@ export default function MainHero() {
         className="text-white max-w-[1000px] mx-auto flex flex-col gap-y-8 justify-center items-center text-center bg-yellow-500/0 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0 visibility-hidden"
         id="def-hero-title-3"
       >
-        <BadgeHeadingPill>Rules-first architecture</BadgeHeadingPill>
-        <SplitText
-          text="Credit policies enforced with mathematical certainty; zero
-tolerance for non-compliant loans"
-        />
-        <DefButton size="large">Learn More</DefButton>
-      </div>
-
-      {/* TITLE 3 */}
-      <div
-        className="text-white max-w-[1000px] mx-auto flex flex-col gap-y-8 justify-center items-center text-center bg-blue-500/0 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0 visibility-hidden"
-        id="def-hero-title-4"
-      >
-        <BadgeHeadingPill>AI layer</BadgeHeadingPill>
-        <SplitText
-          text="Optimal workflow construction, real-time underwriting adaptation and natural
-language interaction"
-        />
-        <DefButton size="large">Learn More</DefButton>
-      </div>
-
-      {/* TITLE 4 */}
-      <div
-        className="text-white max-w-[1000px] mx-auto flex flex-col gap-y-8 justify-center items-center text-center bg-purple-500/0 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0 visibility-hidden"
-        id="def-hero-title-5"
-      >
-        <BadgeHeadingPill>Complex reasoning engine</BadgeHeadingPill>
-        <SplitText text="Dynamic orchestration across any loan type or complexity" />
-        <DefButton size="large">Learn More</DefButton>
-      </div>
-
-      {/* TITLE 5 */}
-      <div
-        className="text-white max-w-[1000px] mx-auto flex flex-col gap-y-8 justify-center items-center text-center bg-pink-500/0 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0 visibility-hidden"
-        id="def-hero-title-6"
-      >
-        <BadgeHeadingPill>Blockchain audit layer</BadgeHeadingPill>
-        <SplitText
-          text="Every decision immutably recorded; fraud and misrepresentation
-eliminated at source"
-        />
+        <BadgeHeadingPill>Vision</BadgeHeadingPill>
+        <SplitText text="Atomix will be the leading automated loan-processing platform & marketplace for asset-backed lending worldwide." />
         <DefButton size="large">Learn More</DefButton>
       </div>
     </section>

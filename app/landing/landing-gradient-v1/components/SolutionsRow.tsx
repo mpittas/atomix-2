@@ -34,14 +34,17 @@ export default function SolutionsRow() {
   const connector1Ref = useRef<HTMLDivElement>(null);
   const connector3Ref = useRef<HTMLDivElement>(null);
 
-  // Top dashed line refs
-  const topArrow1SvgRef = useRef<SVGSVGElement>(null);
-  const topArrow1Path1Ref = useRef<SVGPathElement>(null);
-  const topArrow1Path2Ref = useRef<SVGPathElement>(null);
-  const topArrow1DotRef = useRef<SVGCircleElement>(null);
-  const topArrow2Ref = useRef<HTMLImageElement>(null);
-  const topArrow3Ref = useRef<HTMLImageElement>(null);
-  const topArrow4Ref = useRef<HTMLImageElement>(null);
+  // Top dashed line wrapper refs
+  const topLine1Ref = useRef<HTMLDivElement>(null);
+  const topLine2Ref = useRef<HTMLDivElement>(null);
+  const topLine3Ref = useRef<HTMLDivElement>(null);
+  const topLine4Ref = useRef<HTMLDivElement>(null);
+
+  // Path element refs for stroke-based animation
+  const topPath1Ref = useRef<SVGPathElement>(null);
+  const topPath2Ref = useRef<SVGPathElement>(null);
+  const topPath3Ref = useRef<SVGPathElement>(null);
+  const topPath4Ref = useRef<SVGPathElement>(null);
 
   // Bottom dashed line refs
   const bottomArrow1Ref = useRef<HTMLImageElement>(null);
@@ -87,6 +90,24 @@ export default function SolutionsRow() {
   };
 
   useEffect(() => {
+    // Helper: initialize a path for stroke-draw animation and return a tween
+    const drawPath = (
+      pathRef: React.RefObject<SVGPathElement | null>,
+      duration: number,
+    ) => {
+      const path = pathRef.current;
+      if (!path) return gsap.to({}, { duration: 0 });
+      const len = path.getTotalLength();
+      gsap.set(path, {
+        attr: { "stroke-dasharray": `${len}`, "stroke-dashoffset": `${-len}` },
+      });
+      return gsap.to(path, {
+        attr: { "stroke-dashoffset": "0" },
+        duration,
+        ease: "power2.inOut",
+      });
+    };
+
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: containerRef.current,
@@ -122,68 +143,18 @@ export default function SolutionsRow() {
         { opacity: 1, duration: 0.6, ease: "power2.out" },
       )
 
-      // Second animate: iconText2Ref, topArrow1Ref, row2Box2Ref, bottomArrow2Ref
+      // Second animate: iconText2Ref, topPath1, row2Box2Ref, bottomArrow2Ref
       .fromTo(
         iconText2Ref.current,
         { opacity: 0 },
         { opacity: 1, duration: 0.8, ease: "power2.out" },
       )
-      .add(() => {
-        const path1 = topArrow1Path1Ref.current;
-        const path2 = topArrow1Path2Ref.current;
-        const dot = topArrow1DotRef.current;
-        if (!path1 || !path2 || !dot) return;
-
-        const len = path1.getTotalLength();
-
-        // Draw-on animation
-        gsap.set([path1, path2], {
-          strokeDasharray: len,
-          strokeDashoffset: len,
-        });
-        gsap.to([path1, path2], {
-          strokeDashoffset: 0,
-          duration: 1,
-          ease: "power2.inOut",
-        });
-
-        // Traveling dot — starts after draw completes
-        gsap.set(dot, { opacity: 0 });
-        gsap.to(dot, {
-          opacity: 1,
-          duration: 0.3,
-          delay: 1,
-        });
-
-        // Pulse the dot
-        gsap.to(dot, {
-          attr: { r: 6 },
-          opacity: 0.6,
-          duration: 0.8,
-          repeat: -1,
-          yoyo: true,
-          ease: "sine.inOut",
-          delay: 1,
-        });
-
-        // Move dot along path
-        const proxy = { t: 0 };
-        gsap.to(proxy, {
-          t: 1,
-          duration: 3,
-          repeat: -1,
-          ease: "none",
-          delay: 1,
-          onUpdate: () => {
-            const pt = path1.getPointAtLength(proxy.t * len);
-            gsap.set(dot, { attr: { cx: pt.x, cy: pt.y } });
-          },
-        });
-      })
+      .add(drawPath(topPath1Ref, 2))
       .fromTo(
         row2Box2Ref.current,
         { opacity: 0, scale: 0.8 },
         { opacity: 1, scale: 1, duration: 0.8, ease: "back.out(1.7)" },
+        "-=0.3",
       )
       .fromTo(
         bottomArrow2Ref.current,
@@ -191,16 +162,13 @@ export default function SolutionsRow() {
         { clipPath: "inset(0 0 0% 0)", duration: 1, ease: "power2.inOut" },
       )
 
-      // Third animate: topArrow2Ref, row2Box3Ref, bottomArrow3Ref
-      .fromTo(
-        topArrow2Ref.current,
-        { clipPath: "inset(0 0 100% 0)" },
-        { clipPath: "inset(0 0 0% 0)", duration: 1, ease: "power2.inOut" },
-      )
+      // Third animate: topPath2, row2Box3Ref, bottomArrow3Ref
+      .add(drawPath(topPath2Ref, 2))
       .fromTo(
         row2Box3Ref.current,
         { opacity: 0, scale: 0.8 },
         { opacity: 1, scale: 1, duration: 0.8, ease: "back.out(1.7)" },
+        "-=0.3",
       )
       .fromTo(
         bottomArrow3Ref.current,
@@ -208,16 +176,13 @@ export default function SolutionsRow() {
         { clipPath: "inset(0 0 0% 0)", duration: 1, ease: "power2.inOut" },
       )
 
-      // Fourth animate: topArrow3Ref, row2Box4Ref, bottomArrow4Ref
-      .fromTo(
-        topArrow3Ref.current,
-        { clipPath: "inset(0 0 100% 0)" },
-        { clipPath: "inset(0 0 0% 0)", duration: 1, ease: "power2.inOut" },
-      )
+      // Fourth animate: topPath3, row2Box4Ref, bottomArrow4Ref
+      .add(drawPath(topPath3Ref, 2))
       .fromTo(
         row2Box4Ref.current,
         { opacity: 0, scale: 0.8 },
         { opacity: 1, scale: 1, duration: 0.8, ease: "back.out(1.7)" },
+        "-=0.3",
       )
       .fromTo(
         bottomArrow4Ref.current,
@@ -225,16 +190,13 @@ export default function SolutionsRow() {
         { clipPath: "inset(0 0 0% 0)", duration: 1, ease: "power2.inOut" },
       )
 
-      // Fifth animate: topArrow4Ref, row2Box5Ref, row3Connector2Ref, row3Badge2Ref
-      .fromTo(
-        topArrow4Ref.current,
-        { clipPath: "inset(0 0 100% 0)" },
-        { clipPath: "inset(0 0 0% 0)", duration: 1, ease: "power2.inOut" },
-      )
+      // Fifth animate: topPath4, row2Box5Ref, row3Connector2Ref, row3Badge2Ref
+      .add(drawPath(topPath4Ref, 2))
       .fromTo(
         row2Box5Ref.current,
         { opacity: 0, scale: 0.8 },
         { opacity: 1, scale: 1, duration: 0.8, ease: "back.out(1.7)" },
+        "-=0.3",
       )
       .fromTo(
         row3Connector2Ref.current,
@@ -311,7 +273,7 @@ export default function SolutionsRow() {
           </div>
 
           <div className="w-full min-h-[72px] bg-red-500/0 relative">
-            <div className="w-[325px] absolute left-[84px]">
+            <div ref={topLine1Ref} className="w-[325px] absolute left-[84px]">
               <svg
                 viewBox="0 0 325 80"
                 xmlns="http://www.w3.org/2000/svg"
@@ -319,18 +281,19 @@ export default function SolutionsRow() {
                 style={{ width: "100%", height: "auto", display: "block" }}
               >
                 <path
+                  ref={topPath1Ref}
                   d="M 2 78 L 2 55 Q 2 40 17 40 L 308 40 Q 323 40 323 25 L 323 2"
                   fill="none"
                   stroke="#90abb3"
                   strokeWidth="2"
-                  strokeDasharray="10,7"
                   strokeLinecap="round"
                   vectorEffect="non-scaling-stroke"
+                  strokeDasharray="0 99999"
                 />
               </svg>
             </div>
 
-            <div className="w-[111px] absolute left-[298px]">
+            <div ref={topLine2Ref} className="w-[111px] absolute left-[298px]">
               <svg
                 viewBox="0 0 111 80"
                 xmlns="http://www.w3.org/2000/svg"
@@ -338,18 +301,19 @@ export default function SolutionsRow() {
                 style={{ width: "100%", height: "auto", display: "block" }}
               >
                 <path
+                  ref={topPath2Ref}
                   d="M 2 78 L 2 55 Q 2 40 17 40 L 94 40 Q 109 40 109 25 L 109 2"
                   fill="none"
                   stroke="#90abb3"
                   strokeWidth="2"
-                  strokeDasharray="10,8"
                   strokeLinecap="round"
                   vectorEffect="non-scaling-stroke"
+                  strokeDasharray="0 99999"
                 />
               </svg>
             </div>
 
-            <div className="w-[325px] absolute right-[83px]">
+            <div ref={topLine3Ref} className="w-[325px] absolute right-[83px]">
               <svg
                 viewBox="0 0 325 80"
                 xmlns="http://www.w3.org/2000/svg"
@@ -357,18 +321,19 @@ export default function SolutionsRow() {
                 style={{ width: "100%", height: "auto", display: "block" }}
               >
                 <path
+                  ref={topPath3Ref}
                   d="M 323 78 L 323 55 Q 323 40 308 40 L 17 40 Q 2 40 2 25 L 2 2"
                   fill="none"
                   stroke="#90abb3"
                   strokeWidth="2"
-                  strokeDasharray="10,7"
                   strokeLinecap="round"
                   vectorEffect="non-scaling-stroke"
+                  strokeDasharray="0 99999"
                 />
               </svg>
             </div>
 
-            <div className="w-[111px] absolute right-[297px]">
+            <div ref={topLine4Ref} className="w-[111px] absolute right-[297px]">
               <svg
                 viewBox="0 0 111 80"
                 xmlns="http://www.w3.org/2000/svg"
@@ -376,13 +341,14 @@ export default function SolutionsRow() {
                 style={{ width: "100%", height: "auto", display: "block" }}
               >
                 <path
+                  ref={topPath4Ref}
                   d="M 109 78 L 109 55 Q 109 40 94 40 L 17 40 Q 2 40 2 25 L 2 2"
                   fill="none"
                   stroke="#90abb3"
                   strokeWidth="2"
-                  strokeDasharray="10,8"
                   strokeLinecap="round"
                   vectorEffect="non-scaling-stroke"
+                  strokeDasharray="0 99999"
                 />
               </svg>
             </div>
