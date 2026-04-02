@@ -19,7 +19,7 @@ import DefCta from "@/components/DefCta";
 import Footer from "@/components/Footer";
 import SoftAurora from "@/components/backgrounds/SoftAurora";
 import BenefitsLayout from "@/components/BenefitsLayout";
-import ScrollableTabs from "@/components/ScrollableTabs";
+import ScrollableTabsv2 from "@/components/ScrollableTabsv2";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -170,30 +170,7 @@ export default function LandingGradientV1Page() {
       </div>
 
       <div className="px-12 mt-2 flex flex-col gap-2">
-        <div className="">
-          <div className="px-18 py-36 rounded-3xl bg-linear-to-b from-[#0B4858] to-[#81A6AF] relative overflow-hidden min-h-[calc(100vh-60px)]">
-            <div className="absolute -top-0 left-0 w-full h-[500px]">
-              <SoftAurora
-                speed={1.3}
-                scale={1.2}
-                brightness={0.65}
-                color1="#78cfe3"
-                color2="#87b9d4"
-                noiseFrequency={1}
-                noiseAmplitude={3.5}
-                bandHeight={0.85}
-                bandSpread={1}
-                octaveDecay={0.12}
-                layerOffset={0.5}
-                colorSpeed={1}
-                enableMouseInteraction={false}
-                mouseInfluence={0.2}
-              />
-            </div>
-
-            <ScrollableTabs />
-          </div>
-        </div>
+        <ScrollableTabsv2 />
 
         <div className="h-full">
           <div className="px-18 py-36 rounded-t-3xl bg-linear-to-b from-[#0B4858] to-[#81A6AF] relative overflow-hidden">

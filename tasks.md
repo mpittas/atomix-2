@@ -31,12 +31,14 @@
 
 ---
 
-- [ ] Make Hero section have 5 slides with updated content from the document
-- [ ] Remove "Executive summary" section (in copied page)
-- [ ] Scrollable tabs is "The problem" - no desc in heading
-- [ ] Scvrollable tabs is order correct in website
-  - [] aniamte the boxes on initial scroll and make them slower
-- [ ] Change the tiele and descs with Lorem ipsum
+- [x] Make Hero section have 5 slides with updated content from the document
+- [x] Remove "Market Problems in Bridging Loans" section
+- [ ] Scrollable tabs
+  - [x] Fix section layout shift issue when pinned
+  - [x] Remove content and add lorem ipsum
+  - [x] The order for website is correct
+  - [x] Animate boxes on initial scroll and make them appear slower
+  - [x] Add Aurora BG back
 
 - For Lenders boxes:
 - until "per loan"
