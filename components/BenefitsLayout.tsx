@@ -293,7 +293,7 @@ export default function BenefitsLayout() {
             <div className="relative">
               <div ref={row2MainImageRef}>
                 <Image
-                  src="/ images/dashboard-lenders-main.svg"
+                  src="/images/dashboard-lenders-main.svg"
                   alt=""
                   width={600}
                   height={400}
@@ -303,7 +303,7 @@ export default function BenefitsLayout() {
 
               <Image
                 ref={row2SmallImageRef}
-                src="/ images/dashboard-lenders-small.svg"
+                src="/images/dashboard-lenders-small.svg"
                 alt=""
                 width={360}
                 height={200}
@@ -361,7 +361,7 @@ export default function BenefitsLayout() {
             <div className="relative">
               <div ref={row3MainImageRef}>
                 <Image
-                  src="/ images/dashboard-partner-main.svg"
+                  src="/images/dashboard-partner-main.svg"
                   alt=""
                   width={600}
                   height={400}
@@ -371,7 +371,7 @@ export default function BenefitsLayout() {
 
               <Image
                 ref={row3SmallImageRef}
-                src="/ images/dashboard-partner-small.svg"
+                src="/images/dashboard-partner-small.svg"
                 alt=""
                 width={200}
                 height={100}
