@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
@@ -34,6 +34,7 @@ export default function LandingGradientV1Page() {
   const card3Ref = useRef<HTMLDivElement>(null);
   const flowGraphicRef = useRef<HTMLDivElement>(null);
   const learnMoreBtnRef = useRef<HTMLDivElement>(null);
+  const [flowAnimationReady, setFlowAnimationReady] = useState(false);
 
   const setupHoverEffect = (ref: React.RefObject<HTMLDivElement | null>) => {
     if (!ref.current) return;
@@ -131,40 +132,35 @@ export default function LandingGradientV1Page() {
     };
   }, []);
 
-  useGSAP(
-    () => {
-      if (!flowGraphicRef.current || !learnMoreBtnRef.current) return;
+  useGSAP(() => {
+    if (!flowGraphicRef.current || !learnMoreBtnRef.current) return;
+    gsap.set(flowGraphicRef.current, { opacity: 0, y: 60 });
+    gsap.set(learnMoreBtnRef.current, { opacity: 0, y: 40 });
+  });
 
-      gsap.set(flowGraphicRef.current, { opacity: 0, y: 60 });
-      gsap.set(learnMoreBtnRef.current, { opacity: 0, y: 40 });
+  const handleDefHeadingComplete = useCallback(() => {
+    if (!flowGraphicRef.current || !learnMoreBtnRef.current) return;
 
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: flowGraphicRef.current,
-          start: "top 80%",
-          toggleActions: "play none none reverse",
-        },
-      });
+    setFlowAnimationReady(true);
 
-      tl.to(flowGraphicRef.current, {
+    const tl = gsap.timeline();
+
+    tl.to(flowGraphicRef.current, {
+      opacity: 1,
+      y: 0,
+      duration: 1,
+      ease: "power3.out",
+    }).to(
+      learnMoreBtnRef.current,
+      {
         opacity: 1,
         y: 0,
-        duration: 1,
+        duration: 0.8,
         ease: "power3.out",
-        delay: 0.5,
-      }).to(
-        learnMoreBtnRef.current,
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.8,
-          ease: "power3.out",
-        },
-        "+=4.5",
-      );
-    },
-    { scope: flowGraphicRef },
-  );
+      },
+      "+=4.5",
+    );
+  }, []);
 
   return (
     <div className="overflow-x-hidden">
@@ -201,11 +197,12 @@ export default function LandingGradientV1Page() {
                 badgeColor="blue"
                 title="Automating the UK Bridging Loans Market"
                 description="Collaborative, Trusted, End-to-End Automation"
+                onAnimationComplete={handleDefHeadingComplete}
               />
 
               <div className="mt-16 flex flex-col items-center">
                 <div ref={flowGraphicRef}>
-                  <FlowGraphicLight />
+                  <FlowGraphicLight startAnimation={flowAnimationReady} />
                 </div>
 
                 <div ref={learnMoreBtnRef} className="mt-14">

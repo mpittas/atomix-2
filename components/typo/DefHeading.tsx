@@ -15,6 +15,7 @@ export interface DefHeadingProps {
   className?: string;
   badgeClassName?: string;
   theme?: "dark" | "light";
+  onAnimationComplete?: () => void;
 }
 
 const DefHeading: React.FC<DefHeadingProps> = ({
@@ -25,6 +26,7 @@ const DefHeading: React.FC<DefHeadingProps> = ({
   className = "",
   badgeClassName = "",
   theme = "dark",
+  onAnimationComplete,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const badgeRef = useRef<HTMLDivElement>(null);
@@ -82,6 +84,7 @@ const DefHeading: React.FC<DefHeadingProps> = ({
             y: 0,
             duration: 1,
             ease: "power3.out",
+            onComplete: onAnimationComplete,
           },
           "-=0.3",
         );

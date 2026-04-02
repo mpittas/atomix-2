@@ -1,13 +1,19 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import IconBox from "./IconBox";
 
 gsap.registerPlugin(ScrollTrigger);
 
-export default function FlowGraphicLight() {
+interface FlowGraphicLightProps {
+  startAnimation?: boolean;
+}
+
+export default function FlowGraphicLight({
+  startAnimation = true,
+}: FlowGraphicLightProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const badge1Ref = useRef<HTMLDivElement>(null);
   const row1Card1Ref = useRef<HTMLDivElement>(null);
@@ -47,14 +53,13 @@ export default function FlowGraphicLight() {
     });
   };
 
+  const tlRef = useRef<gsap.core.Timeline | null>(null);
+  const [isInView, setIsInView] = useState(false);
+  const hasPlayedRef = useRef(false);
+
+  // Build timeline paused
   useEffect(() => {
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: containerRef.current,
-        start: "top 80%",
-        toggleActions: "play none none none",
-      },
-    });
+    const tl = gsap.timeline({ paused: true });
 
     tl.fromTo(
       badge1Ref.current,
@@ -121,6 +126,8 @@ export default function FlowGraphicLight() {
         "+=0.1",
       );
 
+    tlRef.current = tl;
+
     setupHoverEffect(row1Card1Ref);
     setupHoverEffect(row1Card2Ref);
     setupHoverEffect(row1Card3Ref);
@@ -132,6 +139,29 @@ export default function FlowGraphicLight() {
       tl.kill();
     };
   }, []);
+
+  // Track visibility via ScrollTrigger
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    const st = ScrollTrigger.create({
+      trigger: containerRef.current,
+      start: "top 80%",
+      onEnter: () => setIsInView(true),
+    });
+
+    return () => {
+      st.kill();
+    };
+  }, []);
+
+  // Play only when both in view AND startAnimation is true
+  useEffect(() => {
+    if (startAnimation && isInView && tlRef.current && !hasPlayedRef.current) {
+      hasPlayedRef.current = true;
+      tlRef.current.play();
+    }
+  }, [startAnimation, isInView]);
 
   return (
     <div ref={containerRef} className="w-full flex flex-col items-center">
