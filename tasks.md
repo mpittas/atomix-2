@@ -46,6 +46,7 @@
 
 - [x] Add new section "Why existing tech falls short" (Badge, Title, Subittle, and 3 Boxes)
 - [ ] Mission and Vision are separate section (after above section) with scroll trigger similar to hero
+  - [ ] Add buttons in content
 
 - [ ] BEfore "Why work with us" section add 3 sections Why atomix / the market / current statuts
       (think about design)
