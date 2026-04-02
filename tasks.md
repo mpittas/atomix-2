@@ -6,10 +6,10 @@
 
 ## Section "Executive Summary"
 
-- [ ] Make animation load after title
-- [ ] Move "The Atomix Solution" badge above the 3 cards
-- [ ] Make arrows bigger and more visible
-- [ ] Update arrows color
+- [x] Make animation load after title
+- [x] Move "The Atomix Solution" badge above the 3 cards
+- [x] Make arrows bigger and more visible
+- [x] Update arrows color
 
 ## Scrollable tabs:
 

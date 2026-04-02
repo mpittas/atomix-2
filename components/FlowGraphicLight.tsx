@@ -223,11 +223,19 @@ per loan"
         />
       </div>
 
+      {/* BADGE 2 */}
+      <div
+        ref={badge2Ref}
+        className="mt-3 rounded-full px-3 py-1.5 border border-dashed border-[#82b0ba] text-white bg-linear-to-r from-[#124652] to-[#1e5a68]"
+      >
+        The Atomix Solution
+      </div>
+
       {/* ROW 2 */}
       <div className="flex gap-4 w-full items-stretch relative mt-3 mb-3">
         <div
           ref={row2BgRef}
-          className="absolute -left-3 -top-3 -bottom-19 -right-3 bg-white/10 border border-dashed border-white/40 rounded-3xl"
+          className="absolute -left-3 -bottom-3 -top-15 -right-3 bg-white/10 border border-dashed border-white/40 rounded-3xl"
         ></div>
         <div ref={row2Card1Ref} className="flex-1 relative">
           <IconBox
@@ -249,14 +257,6 @@ per loan"
             title="Transparent, fast lending for borrowers"
           />
         </div>
-      </div>
-
-      {/* BADGE 2 */}
-      <div
-        ref={badge2Ref}
-        className="mt-3 rounded-full px-3 py-1.5 border border-dashed border-[#82b0ba] text-white bg-linear-to-r from-[#124652] to-[#1e5a68]"
-      >
-        The Atomix Solution
       </div>
     </div>
   );
