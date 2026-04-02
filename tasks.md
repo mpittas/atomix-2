@@ -31,6 +31,8 @@
 
 ---
 
+## Content update:
+
 - [x] Make Hero section have 5 slides with updated content from the document
 - [x] Remove "Market Problems in Bridging Loans" section
 - [ ] Scrollable tabs
@@ -40,12 +42,10 @@
   - [x] Animate boxes on initial scroll and make them appear slower
   - [x] Update content for "Lenders"
 
-- [x] Remove "Existing Tech Limitations" section
+- [x] Remove "Existing Tech Limitations" section (In place of this section add thew two sections below)
 
-- Add new section "Whgy existing texh falls short "
-  - Badge (lorem iopsum) Title, subittle, and 3 boxes
+- [x] Add new section "Why existing tech falls short" (Badge, Title, Subittle, and 3 Boxes)
+- [ ] Mission and Vision are separate section (after above section) with scroll trigger similar to hero
 
-- Mission and Vision are separate section (after above section) with scroll trigger similar to hero
-
-- BEfore "Why work with us" section add 3 sections Why atomix / the market / current statuts
-  (think about design)
+- [ ] BEfore "Why work with us" section add 3 sections Why atomix / the market / current statuts
+      (think about design)

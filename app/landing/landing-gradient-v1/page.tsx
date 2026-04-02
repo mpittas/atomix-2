@@ -20,6 +20,7 @@ import Footer from "@/components/Footer";
 import SoftAurora from "@/components/backgrounds/SoftAurora";
 import BenefitsLayout from "@/components/BenefitsLayout";
 import ScrollableTabsv2 from "@/components/ScrollableTabsv2";
+import TechLimitations from "@/components/TechLimitations";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -192,7 +193,9 @@ export default function LandingGradientV1Page() {
                 mouseInfluence={0.2}
               />
             </div>
-            <div className="max-w-[1060px] mx-auto px-4"></div>
+            <div className="max-w-[1060px] mx-auto px-4">
+              <TechLimitations />
+            </div>
           </div>
 
           <div className="px-18 py-36 rounded-b-3xl bg-linear-to-t from-[#0B4858] to-[#81A6AF]">
