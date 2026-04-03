@@ -48,7 +48,7 @@ export default function IconBox({
           className="mb-2"
         />
         <div
-          className={`text-md text-white ${titleClassName}`}
+          className={`text-lg font-semibold leading-[1.3em] text-white ${titleClassName}`}
           dangerouslySetInnerHTML={{ __html: title }}
         />
         {description && (

@@ -35,7 +35,7 @@
 
 - [x] Make Hero section have 5 slides with updated content from the document
 - [x] Remove "Market Problems in Bridging Loans" section
-- [ ] Scrollable tabs
+- [x] Scrollable tabs
   - [x] Fix section layout shift issue when pinned
   - [x] Remove content and add lorem ipsum
   - [x] The order for website is correct
@@ -43,10 +43,6 @@
   - [x] Update content for "Lenders"
 
 - [x] Remove "Existing Tech Limitations" section (In place of this section add thew two sections below)
-
+- [x] Add one-time scroll animation for Vision and Mission
 - [x] Add new section "Why existing tech falls short" (Badge, Title, Subittle, and 3 Boxes)
-- [ ] Mission and Vision are separate section (after above section) with scroll trigger similar to hero
-  - [ ] Add buttons in content
-
-- [ ] BEfore "Why work with us" section add 3 sections Why atomix / the market / current statuts
-      (think about design)
+- [x] Add sections for Why Atomix / The market . Add new design

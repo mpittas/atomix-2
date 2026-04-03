@@ -23,9 +23,9 @@ export function CapitalProvidersContent() {
         {
           scale: 1,
           opacity: 1,
-          duration: 0.5,
+          duration: 0.9,
           ease: "back.out(1.7)",
-          stagger: 0.1,
+          stagger: 0.2,
         },
       );
     },
@@ -78,9 +78,9 @@ export function LendersContent() {
         {
           scale: 1,
           opacity: 1,
-          duration: 0.5,
+          duration: 0.9,
           ease: "back.out(1.7)",
-          stagger: 0.1,
+          stagger: 0.2,
         },
       );
     },
@@ -133,9 +133,9 @@ export function BorrowersContent() {
         {
           scale: 1,
           opacity: 1,
-          duration: 0.5,
+          duration: 0.9,
           ease: "back.out(1.7)",
-          stagger: 0.1,
+          stagger: 0.2,
         },
       );
     },

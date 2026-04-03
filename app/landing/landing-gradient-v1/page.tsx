@@ -22,6 +22,8 @@ import BenefitsLayout from "@/components/BenefitsLayout";
 import ScrollableTabsv2 from "@/components/ScrollableTabsv2";
 import TechLimitations from "@/components/TechLimitations";
 import ScrollableHeading from "@/components/ScrollableHeading";
+import WhyAtomix from "@/components/WhyAtomix";
+import TheMarket from "@/components/TheMarket";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -89,14 +91,19 @@ export default function LandingGradientV1Page() {
         "-=0.35",
       );
 
-    setupHoverEffect(careersBox1Ref);
-    setupHoverEffect(careersBox2Ref);
-    setupHoverEffect(careersBox3Ref);
-
     return () => {
       tl.kill();
     };
   }, []);
+
+  useGSAP(
+    () => {
+      setupHoverEffect(careersBox1Ref);
+      setupHoverEffect(careersBox2Ref);
+      setupHoverEffect(careersBox3Ref);
+    },
+    { scope: careersContainerRef },
+  );
 
   useEffect(() => {
     if (
@@ -277,7 +284,7 @@ export default function LandingGradientV1Page() {
               <div className="mt-16 flex flex-col items-center">
                 <div className="bg-red-500/0 flex flex-col items-stretch gap-6">
                   <div className="flex items-stretch gap-6">
-                    <div className="flex-1 relative">
+                    <div ref={careersBox1Ref} className="flex-1 relative">
                       <IconBox
                         src="/icons/white/globe.svg"
                         title="Real-World Financial Infrastructure"
@@ -309,6 +316,20 @@ export default function LandingGradientV1Page() {
                   <DefButton size="large">Learn more</DefButton>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="h-full mb-12">
+          <div className="px-18 py-36 rounded-t-3xl bg-linear-to-t from-[#0B4858] to-[#81A6AF]">
+            <div className="max-w-[1260px] mx-auto px-4">
+              <WhyAtomix />
+            </div>
+          </div>
+
+          <div className="px-18 py-36 rounded-b-3xl bg-linear-to-b from-[#0B4858] to-[#81A6AF]">
+            <div className="max-w-[1260px] mx-auto px-4">
+              <TheMarket />
             </div>
           </div>
         </div>
