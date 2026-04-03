@@ -46,11 +46,11 @@ export default function SolutionsRow() {
   const topPath3Ref = useRef<SVGPathElement>(null);
   const topPath4Ref = useRef<SVGPathElement>(null);
 
-  // Bottom dashed line refs
-  const bottomArrow1Ref = useRef<HTMLImageElement>(null);
-  const bottomArrow2Ref = useRef<HTMLImageElement>(null);
-  const bottomArrow3Ref = useRef<HTMLImageElement>(null);
-  const bottomArrow4Ref = useRef<HTMLImageElement>(null);
+  // Bottom arrow SVG refs (using same pattern as top arrows but flipped)
+  const bottomPath1Ref = useRef<SVGPathElement>(null);
+  const bottomPath2Ref = useRef<SVGPathElement>(null);
+  const bottomPath3Ref = useRef<SVGPathElement>(null);
+  const bottomPath4Ref = useRef<SVGPathElement>(null);
 
   const row2Box1Ref = useRef<HTMLDivElement>(null);
   const row2Box2Ref = useRef<HTMLDivElement>(null);
@@ -90,7 +90,7 @@ export default function SolutionsRow() {
   };
 
   useEffect(() => {
-    // Helper: initialize a path for stroke-draw animation and return a tween
+    // Helper: initialize a path for stroke-draw animation from start to end
     const drawPath = (
       pathRef: React.RefObject<SVGPathElement | null>,
       duration: number,
@@ -108,6 +108,24 @@ export default function SolutionsRow() {
       });
     };
 
+    // Helper: initialize a path for stroke-draw animation from end to start (reverse)
+    const drawPathReverse = (
+      pathRef: React.RefObject<SVGPathElement | null>,
+      duration: number,
+    ) => {
+      const path = pathRef.current;
+      if (!path) return gsap.to({}, { duration: 0 });
+      const len = path.getTotalLength();
+      gsap.set(path, {
+        attr: { "stroke-dasharray": `${len}`, "stroke-dashoffset": `${len}` },
+      });
+      return gsap.to(path, {
+        attr: { "stroke-dashoffset": "0" },
+        duration,
+        ease: "power2.inOut",
+      });
+    };
+
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: containerRef.current,
@@ -115,6 +133,12 @@ export default function SolutionsRow() {
         toggleActions: "play none none none",
       },
     });
+
+    // Pre-create bottom path animations (reverse direction - from opposite side)
+    const drawBottomPath1 = drawPathReverse(bottomPath1Ref, 1);
+    const drawBottomPath2 = drawPathReverse(bottomPath2Ref, 1);
+    const drawBottomPath3 = drawPathReverse(bottomPath3Ref, 1);
+    const drawBottomPath4 = drawPathReverse(bottomPath4Ref, 1);
 
     // First animate: iconText1Ref, connector1Ref, row2Box1Ref, bottomArrow1Ref, row3Badge1Ref
     tl.fromTo(
@@ -132,11 +156,7 @@ export default function SolutionsRow() {
         { opacity: 0, scale: 0.8 },
         { opacity: 1, scale: 1, duration: 0.8, ease: "back.out(1.7)" },
       )
-      .fromTo(
-        bottomArrow1Ref.current,
-        { clipPath: "inset(0 0 100% 0)" },
-        { clipPath: "inset(0 0 0% 0)", duration: 1, ease: "power2.inOut" },
-      )
+      .add(drawBottomPath1, "-=0.3")
       .fromTo(
         row3Badge1Ref.current,
         { opacity: 0 },
@@ -156,13 +176,7 @@ export default function SolutionsRow() {
         { opacity: 1, scale: 1, duration: 0.8, ease: "back.out(1.7)" },
         "-=0.3",
       )
-      .fromTo(
-        bottomArrow2Ref.current,
-        { clipPath: "inset(0 0 100% 0)" },
-        { clipPath: "inset(0 0 0% 0)", duration: 1, ease: "power2.inOut" },
-      )
-
-      // Third animate: topPath2, row2Box3Ref, bottomArrow3Ref
+      .add(drawBottomPath2, "-=0.3")
       .add(drawPath(topPath2Ref, 2))
       .fromTo(
         row2Box3Ref.current,
@@ -170,11 +184,7 @@ export default function SolutionsRow() {
         { opacity: 1, scale: 1, duration: 0.8, ease: "back.out(1.7)" },
         "-=0.3",
       )
-      .fromTo(
-        bottomArrow3Ref.current,
-        { clipPath: "inset(0 0 100% 0)" },
-        { clipPath: "inset(0 0 0% 0)", duration: 1, ease: "power2.inOut" },
-      )
+      .add(drawBottomPath4, "-=0.3")
 
       // Fourth animate: topPath3, row2Box4Ref, bottomArrow4Ref
       .add(drawPath(topPath4Ref, 2))
@@ -184,11 +194,7 @@ export default function SolutionsRow() {
         { opacity: 1, scale: 1, duration: 0.8, ease: "back.out(1.7)" },
         "-=0.3",
       )
-      .fromTo(
-        bottomArrow4Ref.current,
-        { clipPath: "inset(0 0 100% 0)" },
-        { clipPath: "inset(0 0 0% 0)", duration: 1, ease: "power2.inOut" },
-      )
+      .add(drawBottomPath3, "-=0.3")
 
       // Fifth animate: topPath4, row2Box5Ref, row3Connector2Ref, row3Badge2Ref
       .add(drawPath(topPath3Ref, 2))
@@ -368,7 +374,7 @@ export default function SolutionsRow() {
       </div>
 
       {/* Row 2: 1 col / 1 col / 1 col / 1 col / 1 col / 1 col */}
-      <div className="grid grid-cols-6 gap-4">
+      <div className="grid grid-cols-6 gap-4 relative z-1">
         <div ref={row2Box1Ref} className="col-span-1 relative">
           <IconBox
             src="/icons/white/document-check.svg"
@@ -434,33 +440,89 @@ export default function SolutionsRow() {
       <div className="grid grid-cols-6 gap-4">
         <div className="bg-cyan-500/0 col-span-4 flex flex-col items-center">
           <div className="w-full min-h-[72px] bg-red-500/0 relative">
-            <img
-              ref={bottomArrow1Ref}
-              src="/dashed-lines/connect-arrow-bottom-1.svg"
-              alt="Connecting dashed lines"
-              className="object-contain absolute bottom-0 left-[81px]"
-            />
+            {/* Bottom arrow 1 - flipped from topPath1 */}
+            <div className="w-[325px] absolute left-[83px] bottom-0">
+              <svg
+                viewBox="0 0 325 80"
+                xmlns="http://www.w3.org/2000/svg"
+                preserveAspectRatio="xMidYMid meet"
+                style={{ width: "100%", height: "auto", display: "block" }}
+              >
+                <path
+                  ref={bottomPath1Ref}
+                  d="M 2 2 L 2 25 Q 2 40 17 40 L 308 40 Q 323 40 323 55 L 323 78"
+                  fill="none"
+                  stroke="#90abb3"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  vectorEffect="non-scaling-stroke"
+                  strokeDasharray="0 99999"
+                />
+              </svg>
+            </div>
 
-            <img
-              ref={bottomArrow2Ref}
-              src="/dashed-lines/connect-arrow-bottom-2.svg"
-              alt="Connecting dashed lines"
-              className="object-contain absolute bottom-0 left-[296px]"
-            />
+            {/* Bottom arrow 2 - flipped from topPath2 */}
+            <div className="w-[111px] absolute left-[297px] bottom-0">
+              <svg
+                viewBox="0 0 111 80"
+                xmlns="http://www.w3.org/2000/svg"
+                preserveAspectRatio="xMidYMid meet"
+                style={{ width: "100%", height: "auto", display: "block" }}
+              >
+                <path
+                  ref={bottomPath2Ref}
+                  d="M 2 2 L 2 25 Q 2 40 17 40 L 94 40 Q 109 40 109 55 L 109 78"
+                  fill="none"
+                  stroke="#90abb3"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  vectorEffect="non-scaling-stroke"
+                  strokeDasharray="0 99999"
+                />
+              </svg>
+            </div>
 
-            <img
-              ref={bottomArrow4Ref}
-              src="/dashed-lines/connect-arrow-bottom-3.svg"
-              alt="Connecting dashed lines"
-              className="object-contain absolute bottom-0 right-[81px]"
-            />
+            {/* Bottom arrow 4 - flipped from topPath3 (right side) */}
+            <div className="w-[325px] absolute right-[84px] bottom-0">
+              <svg
+                viewBox="0 0 325 80"
+                xmlns="http://www.w3.org/2000/svg"
+                preserveAspectRatio="xMidYMid meet"
+                style={{ width: "100%", height: "auto", display: "block" }}
+              >
+                <path
+                  ref={bottomPath3Ref}
+                  d="M 323 2 L 323 25 Q 323 40 308 40 L 17 40 Q 2 40 2 55 L 2 78"
+                  fill="none"
+                  stroke="#90abb3"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  vectorEffect="non-scaling-stroke"
+                  strokeDasharray="0 99999"
+                />
+              </svg>
+            </div>
 
-            <img
-              ref={bottomArrow3Ref}
-              src="/dashed-lines/connect-arrow-bottom-4.svg"
-              alt="Connecting dashed lines"
-              className="object-contain absolute bottom-0 right-[296px]"
-            />
+            {/* Bottom arrow 3 - flipped from topPath4 (right side) */}
+            <div className="w-[111px] absolute right-[298px] bottom-0">
+              <svg
+                viewBox="0 0 111 80"
+                xmlns="http://www.w3.org/2000/svg"
+                preserveAspectRatio="xMidYMid meet"
+                style={{ width: "100%", height: "auto", display: "block" }}
+              >
+                <path
+                  ref={bottomPath4Ref}
+                  d="M 109 2 L 109 25 Q 109 40 94 40 L 17 40 Q 2 40 2 55 L 2 78"
+                  fill="none"
+                  stroke="#90abb3"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  vectorEffect="non-scaling-stroke"
+                  strokeDasharray="0 99999"
+                />
+              </svg>
+            </div>
           </div>
 
           <div ref={row3Badge1Ref} className="w-full">
