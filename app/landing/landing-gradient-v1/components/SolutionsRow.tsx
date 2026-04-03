@@ -329,7 +329,10 @@ export default function SolutionsRow() {
   }, []);
 
   return (
-    <div ref={containerRef} className="w-full space-y-0 max-w-7xl mx-auto p-8">
+    <div
+      ref={containerRef}
+      className="w-full space-y-0 max-w-[1200px] mx-auto px-8"
+    >
       {/* Row 1: 1 col / 4 cols / 1 col */}
       <div className="grid grid-cols-6 gap-4">
         {/* COLUMN 1 */}
@@ -386,7 +389,7 @@ export default function SolutionsRow() {
           </div>
 
           <div className="w-full min-h-[72px] relative">
-            <div className="w-[304px] absolute left-[84px]">
+            <div className="w-[294px] absolute left-[84px]">
               <svg
                 viewBox="0 0 325 80"
                 xmlns="http://www.w3.org/2000/svg"
@@ -421,7 +424,7 @@ export default function SolutionsRow() {
               </svg>
             </div>
 
-            <div className="w-[111px] absolute left-[276px] -bottom-[5px]">
+            <div className="w-[101px] absolute left-[276px] -bottom-[0px]">
               <svg
                 viewBox="0 0 111 80"
                 xmlns="http://www.w3.org/2000/svg"
@@ -456,7 +459,7 @@ export default function SolutionsRow() {
               </svg>
             </div>
 
-            <div className="w-[304px] absolute right-[83px] opacity-100">
+            <div className="w-[294px] absolute right-[83px] opacity-100">
               <svg
                 viewBox="0 0 325 80"
                 xmlns="http://www.w3.org/2000/svg"
@@ -491,7 +494,7 @@ export default function SolutionsRow() {
               </svg>
             </div>
 
-            <div className="w-[111px] absolute right-[276px] -bottom-[5px]">
+            <div className="w-[101px] absolute right-[276px] -bottom-[0px]">
               <svg
                 viewBox="0 0 111 80"
                 xmlns="http://www.w3.org/2000/svg"
@@ -641,7 +644,7 @@ export default function SolutionsRow() {
         <div className="col-span-4 flex flex-col items-center">
           <div className="w-full min-h-[72px] relative">
             {/* Bottom arrow 1 - flipped from topPath1 */}
-            <div className="w-[304px] absolute left-[83px] bottom-0">
+            <div className="w-[294px] absolute left-[83px] bottom-0">
               <svg
                 viewBox="0 0 325 80"
                 xmlns="http://www.w3.org/2000/svg"
@@ -677,7 +680,7 @@ export default function SolutionsRow() {
             </div>
 
             {/* Bottom arrow 2 - flipped from topPath2 */}
-            <div className="w-[111px] absolute left-[276px] -bottom-[3px] opacity-100">
+            <div className="w-[101px] absolute left-[276px] -bottom-[1px] opacity-100">
               <svg
                 viewBox="0 0 111 80"
                 xmlns="http://www.w3.org/2000/svg"
@@ -713,7 +716,7 @@ export default function SolutionsRow() {
             </div>
 
             {/* Bottom arrow 4 - flipped from topPath3 (right side) */}
-            <div className="w-[304px] absolute right-[83px] bottom-0">
+            <div className="w-[294px] absolute right-[83px] bottom-0">
               <svg
                 viewBox="0 0 325 80"
                 xmlns="http://www.w3.org/2000/svg"
@@ -749,7 +752,7 @@ export default function SolutionsRow() {
             </div>
 
             {/* Bottom arrow 3 - flipped from topPath4 (right side) */}
-            <div className="w-[111px] absolute right-[276px] -bottom-[3px]">
+            <div className="w-[101px] absolute right-[276px] -bottom-[1px]">
               <svg
                 viewBox="0 0 111 80"
                 xmlns="http://www.w3.org/2000/svg"

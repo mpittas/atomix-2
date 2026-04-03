@@ -204,13 +204,16 @@ export default function LandingGradientV1Page() {
 
             <ScrollableHeading />
 
-            <div className="max-w-[1060px] mx-auto px-4" id="tech-limitations">
+            <div
+              className="max-w-[1160px] px-8 mx-auto bg-red-500/0"
+              id="tech-limitations"
+            >
               <TechLimitations />
             </div>
           </div>
 
           <div className="px-18 py-36 rounded-b-3xl bg-linear-to-t from-[#0B4858] to-[#81A6AF]">
-            <div className="max-w-[1260px] mx-auto px-4">
+            <div className="max-w-[126 0px] mx-auto px-4">
               <div className="max-w-[1060px] mx-auto">
                 <DefHeading
                   theme="light"
@@ -252,7 +255,7 @@ export default function LandingGradientV1Page() {
                 mouseInfluence={0.2}
               />
             </div>
-            <div className="max-w-[1260px] mx-auto px-4">
+            <div className="max-w-[1200px] px-8 mx-auto bg-red-500/0">
               <div className="max-w-[1060px] mx-auto">
                 <DefHeading
                   theme="light"
@@ -270,8 +273,24 @@ export default function LandingGradientV1Page() {
             </div>
           </div>
 
+          {/* <div className="px-18 py-36 rounded-b-3xl bg-linear-to-t from-[#0B4858] to-[#81A6AF]">
+            
+          </div> */}
+        </div>
+
+        <div className="h-full mb-12">
+          <div className="px-18 py-36 rounded-t-3xl bg-linear-to-b from-[#0B4858] to-[#81A6AF]">
+            <div className="max-w-[1200px] px-8 mx-auto bg-red-500/0">
+              <WhyAtomix />
+            </div>
+          </div>
+
           <div className="px-18 py-36 rounded-b-3xl bg-linear-to-t from-[#0B4858] to-[#81A6AF]">
-            <div className="max-w-[1260px] mx-auto px-4">
+            <div className="max-w-[1200px] px-8 mx-auto bg-red-500/0">
+              <TheMarket />
+            </div>
+
+            <div className="max-w-[1200px] px-8 mx-auto bg-red-500/0">
               <div className="max-w-[1060px] mx-auto">
                 <DefHeading
                   theme="light"
@@ -320,22 +339,8 @@ export default function LandingGradientV1Page() {
           </div>
         </div>
 
-        <div className="h-full mb-12">
-          <div className="px-18 py-36 rounded-t-3xl bg-linear-to-t from-[#0B4858] to-[#81A6AF]">
-            <div className="max-w-[1260px] mx-auto px-4">
-              <WhyAtomix />
-            </div>
-          </div>
-
-          <div className="px-18 py-36 rounded-b-3xl bg-linear-to-b from-[#0B4858] to-[#81A6AF]">
-            <div className="max-w-[1260px] mx-auto px-4">
-              <TheMarket />
-            </div>
-          </div>
-        </div>
-
         <div ref={useCasesRef} className="mb-64 bg-red-500/0 min-h-[50vh]">
-          <div className="max-w-[1260px] mx-auto px-4">
+          <div className="max-w-[1200px] mx-auto px-4">
             <div className="max-w-[1060px] mx-auto">
               <DefHeading
                 theme="dark"

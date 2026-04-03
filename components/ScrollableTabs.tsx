@@ -205,7 +205,7 @@ export default function ScrollableTabs() {
         />
 
         {/* Bottom Section - Tabs and IconBoxes */}
-        <div className="flex flex-col items-center w-full max-w-6xl">
+        <div className="flex flex-col items-center w-full">
           {/* Tab Buttons */}
           <div className="flex gap-4 mb-6 w-full">
             {tabsData.map((tab, index) => (

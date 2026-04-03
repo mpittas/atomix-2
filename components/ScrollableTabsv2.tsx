@@ -272,7 +272,7 @@ export default function ScrollableTabsv2() {
         {/* Bottom Section - Tabs and IconBoxes */}
         <div
           ref={tabsSectionRef}
-          className="flex flex-col items-center w-full max-w-6xl"
+          className="flex flex-col items-center w-full max-w-[1200px] px-8 bg-red-500/20"
           id="main-scoll-tabs"
           style={{ opacity: 0 }}
         >
@@ -300,10 +300,7 @@ export default function ScrollableTabsv2() {
           </div>
 
           {/* Bottom Section - 4 IconBoxes */}
-          <div
-            ref={iconBoxesRef}
-            className="grid grid-cols-4 gap-3 w-full max-w-6xl"
-          >
+          <div ref={iconBoxesRef} className="grid grid-cols-4 gap-3 w-full">
             {currentTab.iconBoxes.map((iconBox, index) => (
               <IconBox
                 key={`${activeIndex}-${index}`}

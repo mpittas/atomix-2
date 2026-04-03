@@ -82,16 +82,16 @@ export default function TheMarket() {
 
       <div
         ref={statsRef}
-        className="mt-16 grid grid-cols-1 md:grid-cols-2 gap-4 max-w-[1000px] mx-auto"
+        className="mt-16 grid grid-cols-1 md:grid-cols-4 gap-4"
       >
         {marketStats.map((stat, index) => (
           <div key={index}>
             <IconBox
               src={stat.icon}
-              title={`<span class="text-4xl font-bold block mb-2">${stat.value}</span>`}
+              imageSize="medium"
+              title={`<span class="text-3xl font-bold block">${stat.value}</span>`}
               description={stat.description}
               titleClassName="text-xl"
-              imageSize="large"
             />
           </div>
         ))}
