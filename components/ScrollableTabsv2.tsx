@@ -272,7 +272,7 @@ export default function ScrollableTabsv2() {
         {/* Bottom Section - Tabs and IconBoxes */}
         <div
           ref={tabsSectionRef}
-          className="flex flex-col items-center w-full max-w-[1200px] px-8 bg-red-500/20"
+          className="flex flex-col items-center w-full max-w-[1200px] px-8 bg-red-500/0"
           id="main-scoll-tabs"
           style={{ opacity: 0 }}
         >

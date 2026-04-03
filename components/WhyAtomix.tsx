@@ -52,7 +52,7 @@ export default function WhyAtomix() {
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: sectionRef.current,
-          start: "top 70%",
+          start: "top 10%",
           toggleActions: "play none none none",
         },
       });
@@ -61,7 +61,7 @@ export default function WhyAtomix() {
         opacity: 1,
         y: 0,
         scale: 1,
-        duration: 0.9,
+        duration: 2,
         ease: "power3.out",
         stagger: 0.12,
       });
