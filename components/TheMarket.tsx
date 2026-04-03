@@ -38,6 +38,7 @@ const marketStats = [
 export default function TheMarket() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const statsRef = useRef<HTMLDivElement>(null);
+  const statsTlRef = useRef<gsap.core.Timeline | null>(null);
 
   useGSAP(
     () => {
@@ -47,15 +48,8 @@ export default function TheMarket() {
         scale: 0.75,
       });
 
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 40%",
-          toggleActions: "play none none none",
-        },
-      });
-
-      tl.to(statsRef.current?.children || [], {
+      statsTlRef.current = gsap.timeline({ paused: true });
+      statsTlRef.current.to(statsRef.current?.children || [], {
         opacity: 1,
         y: 0,
         scale: 1,
@@ -65,11 +59,15 @@ export default function TheMarket() {
       });
 
       return () => {
-        tl.kill();
+        statsTlRef.current?.kill();
       };
     },
     { scope: sectionRef },
   );
+
+  const handleHeadingAnimationComplete = () => {
+    statsTlRef.current?.play();
+  };
 
   return (
     <div ref={sectionRef} className="py-36">
@@ -78,6 +76,7 @@ export default function TheMarket() {
         badgeText="Opportunity"
         title="The Market"
         description="UK property lending is large, active and chronically under-automated."
+        onAnimationComplete={handleHeadingAnimationComplete}
       />
 
       <div

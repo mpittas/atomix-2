@@ -40,6 +40,7 @@ const features = [
 export default function WhyAtomix() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const itemsRef = useRef<HTMLDivElement>(null);
+  const itemsTlRef = useRef<gsap.core.Timeline | null>(null);
 
   useGSAP(
     () => {
@@ -49,15 +50,8 @@ export default function WhyAtomix() {
         scale: 0.75,
       });
 
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 40%",
-          toggleActions: "play none none none",
-        },
-      });
-
-      tl.to(itemsRef.current?.children || [], {
+      itemsTlRef.current = gsap.timeline({ paused: true });
+      itemsTlRef.current.to(itemsRef.current?.children || [], {
         opacity: 1,
         y: 0,
         scale: 1,
@@ -67,11 +61,15 @@ export default function WhyAtomix() {
       });
 
       return () => {
-        tl.kill();
+        itemsTlRef.current?.kill();
       };
     },
     { scope: sectionRef },
   );
+
+  const handleHeadingAnimationComplete = () => {
+    itemsTlRef.current?.play();
+  };
 
   return (
     <div ref={sectionRef} className="py-36">
@@ -80,6 +78,7 @@ export default function WhyAtomix() {
         badgeText="Platform"
         title="Why Atomix"
         description="No other platform delivers this combination."
+        onAnimationComplete={handleHeadingAnimationComplete}
       />
 
       <div

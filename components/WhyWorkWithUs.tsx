@@ -31,6 +31,7 @@ const careers = [
 export default function WhyWorkWithUs() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const itemsRef = useRef<HTMLDivElement>(null);
+  const itemsTlRef = useRef<gsap.core.Timeline | null>(null);
 
   useGSAP(
     () => {
@@ -40,15 +41,8 @@ export default function WhyWorkWithUs() {
         scale: 0.75,
       });
 
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 40%",
-          toggleActions: "play none none none",
-        },
-      });
-
-      tl.to(itemsRef.current?.children || [], {
+      itemsTlRef.current = gsap.timeline({ paused: true });
+      itemsTlRef.current.to(itemsRef.current?.children || [], {
         opacity: 1,
         y: 0,
         scale: 1,
@@ -58,11 +52,15 @@ export default function WhyWorkWithUs() {
       });
 
       return () => {
-        tl.kill();
+        itemsTlRef.current?.kill();
       };
     },
     { scope: sectionRef },
   );
+
+  const handleHeadingAnimationComplete = () => {
+    itemsTlRef.current?.play();
+  };
 
   return (
     <div ref={sectionRef} className="">
@@ -71,6 +69,7 @@ export default function WhyWorkWithUs() {
         badgeText="Careers"
         title="Why Work With Us"
         description="Join us in building the future of lending technology."
+        onAnimationComplete={handleHeadingAnimationComplete}
       />
 
       <div
