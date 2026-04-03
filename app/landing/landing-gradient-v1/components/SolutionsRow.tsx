@@ -263,10 +263,23 @@ export default function SolutionsRow() {
           <div ref={iconText1Ref}>
             <IconText icon="/icons/white/ai-chip.svg" text="AI" />
           </div>
-          <div
-            ref={connector1Ref}
-            className="h-18 w-1 border-l border-dashed border-white/70 mx-auto"
-          ></div>
+          <div ref={connector1Ref} className="h-[72px] w-[2px] mx-auto">
+            <svg
+              viewBox="0 0 2 72"
+              xmlns="http://www.w3.org/2000/svg"
+              preserveAspectRatio="xMidYMid meet"
+              style={{ width: "100%", height: "100%", display: "block" }}
+            >
+              <path
+                d="M 1 0 L 1 72"
+                fill="none"
+                stroke="#90abb3"
+                strokeWidth="2"
+                strokeLinecap="round"
+                vectorEffect="non-scaling-stroke"
+              />
+            </svg>
+          </div>
         </div>
 
         {/* COLUMN 2 */}
@@ -366,10 +379,23 @@ export default function SolutionsRow() {
           <div ref={iconText3Ref}>
             <IconText icon="/icons/white/blockchain.svg" text="Blockchain" />
           </div>
-          <div
-            ref={connector3Ref}
-            className="h-18 w-1 border-l border-dashed border-white/70 mx-auto"
-          ></div>
+          <div ref={connector3Ref} className="h-[72px] w-[2px] mx-auto">
+            <svg
+              viewBox="0 0 2 72"
+              xmlns="http://www.w3.org/2000/svg"
+              preserveAspectRatio="xMidYMid meet"
+              style={{ width: "100%", height: "100%", display: "block" }}
+            >
+              <path
+                d="M 1 0 L 1 72"
+                fill="none"
+                stroke="#90abb3"
+                strokeWidth="2"
+                strokeLinecap="round"
+                vectorEffect="non-scaling-stroke"
+              />
+            </svg>
+          </div>
         </div>
       </div>
 
@@ -530,19 +556,45 @@ export default function SolutionsRow() {
           </div>
         </div>
         <div className="bg-violet-500/0 col-span-1 flex flex-col items-center">
-          <div
-            ref={row3Connector2Ref}
-            className="h-18 w-1 border-l border-dashed border-white/70 mx-auto"
-          ></div>
+          <div ref={row3Connector2Ref} className="h-[72px] w-[2px] mx-auto">
+            <svg
+              viewBox="0 0 2 72"
+              xmlns="http://www.w3.org/2000/svg"
+              preserveAspectRatio="xMidYMid meet"
+              style={{ width: "100%", height: "100%", display: "block" }}
+            >
+              <path
+                d="M 1 0 L 1 72"
+                fill="none"
+                stroke="#90abb3"
+                strokeWidth="2"
+                strokeLinecap="round"
+                vectorEffect="non-scaling-stroke"
+              />
+            </svg>
+          </div>
           <div ref={row3Badge2Ref}>
             <SquareBadge text="Collaboration" />
           </div>
         </div>
         <div className="bg-emerald-500/0 col-span-1 flex flex-col items-center">
-          <div
-            ref={row3Connector3Ref}
-            className="h-18 w-1 border-l border-dashed border-white/70 mx-auto"
-          ></div>
+          <div ref={row3Connector3Ref} className="h-[72px] w-[2px] mx-auto">
+            <svg
+              viewBox="0 0 2 72"
+              xmlns="http://www.w3.org/2000/svg"
+              preserveAspectRatio="xMidYMid meet"
+              style={{ width: "100%", height: "100%", display: "block" }}
+            >
+              <path
+                d="M 1 0 L 1 72"
+                fill="none"
+                stroke="#90abb3"
+                strokeWidth="2"
+                strokeLinecap="round"
+                vectorEffect="non-scaling-stroke"
+              />
+            </svg>
+          </div>
           <div ref={row3Badge3Ref}>
             <SquareBadge text="Trust" />
           </div>
