@@ -1,5 +1,4 @@
 "use client";
-
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -31,26 +30,28 @@ export default function SolutionsRow() {
   const iconText2Ref = useRef<HTMLDivElement>(null);
   const iconText3Ref = useRef<HTMLDivElement>(null);
 
-  const connector1Ref = useRef<HTMLDivElement>(null);
-  const connector3Ref = useRef<HTMLDivElement>(null);
+  const connector1PathRef = useRef<SVGPathElement>(null);
+  const connector1GlowRef = useRef<SVGPathElement>(null);
+  const connector3PathRef = useRef<SVGPathElement>(null);
+  const connector3GlowRef = useRef<SVGPathElement>(null);
 
-  // Top dashed line wrapper refs
-  const topLine1Ref = useRef<HTMLDivElement>(null);
-  const topLine2Ref = useRef<HTMLDivElement>(null);
-  const topLine3Ref = useRef<HTMLDivElement>(null);
-  const topLine4Ref = useRef<HTMLDivElement>(null);
-
-  // Path element refs for stroke-based animation
   const topPath1Ref = useRef<SVGPathElement>(null);
+  const topGlow1Ref = useRef<SVGPathElement>(null);
   const topPath2Ref = useRef<SVGPathElement>(null);
+  const topGlow2Ref = useRef<SVGPathElement>(null);
   const topPath3Ref = useRef<SVGPathElement>(null);
+  const topGlow3Ref = useRef<SVGPathElement>(null);
   const topPath4Ref = useRef<SVGPathElement>(null);
+  const topGlow4Ref = useRef<SVGPathElement>(null);
 
-  // Bottom arrow SVG refs (using same pattern as top arrows but flipped)
   const bottomPath1Ref = useRef<SVGPathElement>(null);
+  const bottomGlow1Ref = useRef<SVGPathElement>(null);
   const bottomPath2Ref = useRef<SVGPathElement>(null);
+  const bottomGlow2Ref = useRef<SVGPathElement>(null);
   const bottomPath3Ref = useRef<SVGPathElement>(null);
+  const bottomGlow3Ref = useRef<SVGPathElement>(null);
   const bottomPath4Ref = useRef<SVGPathElement>(null);
+  const bottomGlow4Ref = useRef<SVGPathElement>(null);
 
   const row2Box1Ref = useRef<HTMLDivElement>(null);
   const row2Box2Ref = useRef<HTMLDivElement>(null);
@@ -59,20 +60,24 @@ export default function SolutionsRow() {
   const row2Box5Ref = useRef<HTMLDivElement>(null);
   const row2Box6Ref = useRef<HTMLDivElement>(null);
 
-  const row3Connector2Ref = useRef<HTMLDivElement>(null);
-  const row3Connector3Ref = useRef<HTMLDivElement>(null);
+  const row3Connector2PathRef = useRef<SVGPathElement>(null);
+  const row3Connector2GlowRef = useRef<SVGPathElement>(null);
+  const row3Connector3PathRef = useRef<SVGPathElement>(null);
+  const row3Connector3GlowRef = useRef<SVGPathElement>(null);
+
   const row3Badge1Ref = useRef<HTMLDivElement>(null);
   const row3Badge2Ref = useRef<HTMLDivElement>(null);
   const row3Badge3Ref = useRef<HTMLDivElement>(null);
 
+  const glowTimelines = useRef<gsap.core.Timeline[]>([]);
+
   const setupHoverEffect = (ref: React.RefObject<HTMLDivElement | null>) => {
     if (!ref.current) return;
-
     const element = ref.current;
 
     element.addEventListener("mouseenter", () => {
       gsap.to(element, {
-        scale: 1.2,
+        scale: 1.05,
         zIndex: 10,
         duration: 0.3,
         ease: "power2.out",
@@ -90,40 +95,89 @@ export default function SolutionsRow() {
   };
 
   useEffect(() => {
-    // Helper: initialize a path for stroke-draw animation from start to end
-    const drawPath = (
+    const animatePathAndGlow = (
       pathRef: React.RefObject<SVGPathElement | null>,
+      glowRef: React.RefObject<SVGPathElement | null>,
       duration: number,
+      drawFromStart: boolean = false,
     ) => {
       const path = pathRef.current;
-      if (!path) return gsap.to({}, { duration: 0 });
-      const len = path.getTotalLength();
-      gsap.set(path, {
-        attr: { "stroke-dasharray": `${len}`, "stroke-dashoffset": `${-len}` },
-      });
-      return gsap.to(path, {
-        attr: { "stroke-dashoffset": "0" },
-        duration,
-        ease: "power2.inOut",
-      });
-    };
+      const glow = glowRef.current;
+      if (!path) return gsap.timeline();
 
-    // Helper: initialize a path for stroke-draw animation from end to start (reverse)
-    const drawPathReverse = (
-      pathRef: React.RefObject<SVGPathElement | null>,
-      duration: number,
-    ) => {
-      const path = pathRef.current;
-      if (!path) return gsap.to({}, { duration: 0 });
-      const len = path.getTotalLength();
-      gsap.set(path, {
-        attr: { "stroke-dasharray": `${len}`, "stroke-dashoffset": `${len}` },
-      });
-      return gsap.to(path, {
-        attr: { "stroke-dashoffset": "0" },
-        duration,
-        ease: "power2.inOut",
-      });
+      const len = path.getTotalLength ? path.getTotalLength() : 1000;
+      const tl = gsap.timeline();
+
+      if (drawFromStart) {
+        gsap.set(path, {
+          attr: {
+            "stroke-dasharray": `${len} ${len}`,
+            "stroke-dashoffset": `${len}`,
+          },
+        });
+        tl.to(path, {
+          attr: { "stroke-dashoffset": "0" },
+          duration,
+          ease: "power2.inOut",
+        });
+      } else {
+        gsap.set(path, {
+          attr: {
+            "stroke-dasharray": `${len} ${len}`,
+            "stroke-dashoffset": `${-len}`,
+          },
+        });
+        tl.to(path, {
+          attr: { "stroke-dashoffset": "0" },
+          duration,
+          ease: "power2.inOut",
+        });
+      }
+
+      if (glow) {
+        const glowLen = Math.min(100, len / 2);
+        const startOffset = drawFromStart ? `${glowLen}` : `${-len}`;
+        const endOffset = drawFromStart ? `${-len}` : `${glowLen}`;
+
+        tl.add(() => {
+          const glowTl = gsap.timeline({ repeat: -1, repeatDelay: 1.5 });
+          glowTimelines.current.push(glowTl);
+
+          glowTl
+            .set(glow, {
+              attr: {
+                "stroke-dasharray": `${glowLen} ${len}`,
+                "stroke-dashoffset": startOffset,
+              },
+              opacity: 0,
+            })
+            .to(glow, {
+              attr: { "stroke-dashoffset": endOffset },
+              duration: 3,
+              ease: "power1.inOut",
+            })
+            .to(
+              glow,
+              {
+                opacity: 0.8,
+                duration: 0.4,
+                ease: "power2.out",
+              },
+              "<",
+            )
+            .to(
+              glow,
+              {
+                opacity: 0,
+                duration: 0.4,
+                ease: "power2.in",
+              },
+              "-=0.4",
+            );
+        }, "<+=0.2");
+      }
+
+      return tl;
     };
 
     const tl = gsap.timeline({
@@ -134,33 +188,25 @@ export default function SolutionsRow() {
       },
     });
 
-    // Pre-create bottom path animations (reverse direction - from opposite side)
-    const drawBottomPath1 = drawPathReverse(bottomPath1Ref, 1);
-    const drawBottomPath2 = drawPathReverse(bottomPath2Ref, 1);
-    const drawBottomPath3 = drawPathReverse(bottomPath3Ref, 1);
-    const drawBottomPath4 = drawPathReverse(bottomPath4Ref, 1);
-
     // First animate: iconText1Ref, connector1Ref, row2Box1Ref, bottomArrow1Ref, row3Badge1Ref
     tl.fromTo(
       iconText1Ref.current,
       { opacity: 0 },
       { opacity: 1, duration: 0.8, ease: "power2.out" },
     )
-      .fromTo(
-        connector1Ref.current,
-        { clipPath: "inset(0 0 100% 0)" },
-        { clipPath: "inset(0 0 0% 0)", duration: 0.7, ease: "power2.out" },
-      )
+      .add(animatePathAndGlow(connector1PathRef, connector1GlowRef, 0.7, true))
       .fromTo(
         row2Box1Ref.current,
         { opacity: 0, scale: 0.8 },
         { opacity: 1, scale: 1, duration: 0.8, ease: "back.out(1.7)" },
+        "-=0.3",
       )
-      .add(drawBottomPath1, "-=0.3")
+      .add(animatePathAndGlow(bottomPath1Ref, bottomGlow1Ref, 1, true), "-=0.3")
       .fromTo(
         row3Badge1Ref.current,
         { opacity: 0 },
         { opacity: 1, duration: 0.6, ease: "power2.out" },
+        "-=0.3",
       )
 
       // Second animate: iconText2Ref, topPath1, row2Box2Ref, bottomArrow2Ref
@@ -169,50 +215,54 @@ export default function SolutionsRow() {
         { opacity: 0 },
         { opacity: 1, duration: 0.8, ease: "power2.out" },
       )
-      .add(drawPath(topPath1Ref, 2))
+      .add(animatePathAndGlow(topPath1Ref, topGlow1Ref, 1.5, false))
       .fromTo(
         row2Box2Ref.current,
         { opacity: 0, scale: 0.8 },
         { opacity: 1, scale: 1, duration: 0.8, ease: "back.out(1.7)" },
-        "-=0.3",
+        "-=0.5",
       )
-      .add(drawBottomPath2, "-=0.3")
-      .add(drawPath(topPath2Ref, 2))
+      .add(animatePathAndGlow(bottomPath2Ref, bottomGlow2Ref, 1, true), "-=0.3")
+      .add(animatePathAndGlow(topPath2Ref, topGlow2Ref, 1.5, false))
       .fromTo(
         row2Box3Ref.current,
         { opacity: 0, scale: 0.8 },
         { opacity: 1, scale: 1, duration: 0.8, ease: "back.out(1.7)" },
-        "-=0.3",
+        "-=0.5",
       )
-      .add(drawBottomPath4, "-=0.3")
+      .add(animatePathAndGlow(bottomPath4Ref, bottomGlow4Ref, 1, true), "-=0.3")
 
       // Fourth animate: topPath3, row2Box4Ref, bottomArrow4Ref
-      .add(drawPath(topPath4Ref, 2))
+      .add(animatePathAndGlow(topPath4Ref, topGlow4Ref, 1.5, false))
       .fromTo(
         row2Box4Ref.current,
         { opacity: 0, scale: 0.8 },
         { opacity: 1, scale: 1, duration: 0.8, ease: "back.out(1.7)" },
-        "-=0.3",
+        "-=0.5",
       )
-      .add(drawBottomPath3, "-=0.3")
+      .add(animatePathAndGlow(bottomPath3Ref, bottomGlow3Ref, 1, true), "-=0.3")
 
       // Fifth animate: topPath4, row2Box5Ref, row3Connector2Ref, row3Badge2Ref
-      .add(drawPath(topPath3Ref, 2))
+      .add(animatePathAndGlow(topPath3Ref, topGlow3Ref, 1.5, false))
       .fromTo(
         row2Box5Ref.current,
         { opacity: 0, scale: 0.8 },
         { opacity: 1, scale: 1, duration: 0.8, ease: "back.out(1.7)" },
-        "-=0.3",
+        "-=0.5",
       )
-      .fromTo(
-        row3Connector2Ref.current,
-        { clipPath: "inset(0 0 100% 0)" },
-        { clipPath: "inset(0 0 0% 0)", duration: 0.7, ease: "power2.out" },
+      .add(
+        animatePathAndGlow(
+          row3Connector2PathRef,
+          row3Connector2GlowRef,
+          0.7,
+          true,
+        ),
       )
       .fromTo(
         row3Badge2Ref.current,
         { opacity: 0 },
         { opacity: 1, duration: 0.6, ease: "power2.out" },
+        "-=0.3",
       )
 
       // Sixth animate: iconText3Ref, connector3Ref, row2Box6Ref, row3Connector3Ref, row3Badge3Ref
@@ -221,25 +271,26 @@ export default function SolutionsRow() {
         { opacity: 0 },
         { opacity: 1, duration: 0.8, ease: "power2.out" },
       )
-      .fromTo(
-        connector3Ref.current,
-        { clipPath: "inset(0 0 100% 0)" },
-        { clipPath: "inset(0 0 0% 0)", duration: 0.7, ease: "power2.out" },
-      )
+      .add(animatePathAndGlow(connector3PathRef, connector3GlowRef, 0.7, true))
       .fromTo(
         row2Box6Ref.current,
         { opacity: 0, scale: 0.8 },
         { opacity: 1, scale: 1, duration: 0.8, ease: "back.out(1.7)" },
+        "-=0.3",
       )
-      .fromTo(
-        row3Connector3Ref.current,
-        { clipPath: "inset(0 0 100% 0)" },
-        { clipPath: "inset(0 0 0% 0)", duration: 0.7, ease: "power2.out" },
+      .add(
+        animatePathAndGlow(
+          row3Connector3PathRef,
+          row3Connector3GlowRef,
+          0.7,
+          true,
+        ),
       )
       .fromTo(
         row3Badge3Ref.current,
         { opacity: 0 },
         { opacity: 1, duration: 0.6, ease: "power2.out" },
+        "-=0.3",
       );
 
     setupHoverEffect(row2Box1Ref);
@@ -251,26 +302,36 @@ export default function SolutionsRow() {
 
     return () => {
       tl.kill();
+      glowTimelines.current.forEach((t) => t.kill());
     };
   }, []);
 
   return (
-    <div ref={containerRef} className="w-full space-y-0">
+    <div ref={containerRef} className="w-full space-y-0 max-w-7xl mx-auto p-8">
       {/* Row 1: 1 col / 4 cols / 1 col */}
       <div className="grid grid-cols-6 gap-4">
         {/* COLUMN 1 */}
-        <div className="bg-blue-500/0 col-span-1 flex flex-col items-center gap-y-3">
+        <div className="col-span-1 flex flex-col items-center gap-y-3">
           <div ref={iconText1Ref}>
-            <IconText icon="/icons/white/ai-chip.svg" text="AI" />
+            <IconText
+              icon="https://api.iconify.design/lucide:cpu.svg?color=white"
+              text="AI"
+            />
           </div>
-          <div ref={connector1Ref} className="h-[72px] w-[2px] mx-auto">
+          <div className="h-[72px] w-[2px] mx-auto">
             <svg
               viewBox="0 0 2 72"
               xmlns="http://www.w3.org/2000/svg"
               preserveAspectRatio="xMidYMid meet"
-              style={{ width: "100%", height: "100%", display: "block" }}
+              style={{
+                width: "100%",
+                height: "100%",
+                display: "block",
+                overflow: "visible",
+              }}
             >
               <path
+                ref={connector1PathRef}
                 d="M 1 0 L 1 72"
                 fill="none"
                 stroke="#90abb3"
@@ -278,26 +339,42 @@ export default function SolutionsRow() {
                 strokeLinecap="round"
                 vectorEffect="non-scaling-stroke"
               />
+              <path
+                ref={connector1GlowRef}
+                d="M 1 0 L 1 72"
+                fill="none"
+                stroke="#00ffff"
+                strokeWidth="8"
+                strokeLinecap="round"
+                vectorEffect="non-scaling-stroke"
+                style={{ filter: "blur(4px)" }}
+                opacity="0"
+              />
             </svg>
           </div>
         </div>
 
         {/* COLUMN 2 */}
-        <div className="bg-purple-500/0 col-span-4 flex flex-col items-center gap-y-3">
+        <div className="col-span-4 flex flex-col items-center gap-y-3">
           <div ref={iconText2Ref}>
             <IconText
-              icon="/icons/white/brain-links.svg"
+              icon="https://api.iconify.design/lucide:brain-circuit.svg?color=white"
               text="Complex Reasoning"
             />
           </div>
 
-          <div className="w-full min-h-[72px] bg-red-500/0 relative">
-            <div ref={topLine1Ref} className="w-[325px] absolute left-[84px]">
+          <div className="w-full min-h-[72px] relative">
+            <div className="w-[304px] absolute left-[84px]">
               <svg
                 viewBox="0 0 325 80"
                 xmlns="http://www.w3.org/2000/svg"
                 preserveAspectRatio="xMidYMid meet"
-                style={{ width: "100%", height: "auto", display: "block" }}
+                style={{
+                  width: "100%",
+                  height: "auto",
+                  display: "block",
+                  overflow: "visible",
+                }}
               >
                 <path
                   ref={topPath1Ref}
@@ -307,17 +384,32 @@ export default function SolutionsRow() {
                   strokeWidth="2"
                   strokeLinecap="round"
                   vectorEffect="non-scaling-stroke"
-                  strokeDasharray="0 99999"
+                />
+                <path
+                  ref={topGlow1Ref}
+                  d="M 2 78 L 2 55 Q 2 40 17 40 L 308 40 Q 323 40 323 25 L 323 2"
+                  fill="none"
+                  stroke="#00ffff"
+                  strokeWidth="8"
+                  strokeLinecap="round"
+                  vectorEffect="non-scaling-stroke"
+                  style={{ filter: "blur(4px)" }}
+                  opacity="0"
                 />
               </svg>
             </div>
 
-            <div ref={topLine2Ref} className="w-[111px] absolute left-[298px]">
+            <div className="w-[111px] absolute left-[276px] -bottom-[5px]">
               <svg
                 viewBox="0 0 111 80"
                 xmlns="http://www.w3.org/2000/svg"
                 preserveAspectRatio="xMidYMid meet"
-                style={{ width: "100%", height: "auto", display: "block" }}
+                style={{
+                  width: "100%",
+                  height: "auto",
+                  display: "block",
+                  overflow: "visible",
+                }}
               >
                 <path
                   ref={topPath2Ref}
@@ -327,17 +419,32 @@ export default function SolutionsRow() {
                   strokeWidth="2"
                   strokeLinecap="round"
                   vectorEffect="non-scaling-stroke"
-                  strokeDasharray="0 99999"
+                />
+                <path
+                  ref={topGlow2Ref}
+                  d="M 2 78 L 2 55 Q 2 40 17 40 L 94 40 Q 109 40 109 25 L 109 2"
+                  fill="none"
+                  stroke="#00ffff"
+                  strokeWidth="8"
+                  strokeLinecap="round"
+                  vectorEffect="non-scaling-stroke"
+                  style={{ filter: "blur(4px)" }}
+                  opacity="0"
                 />
               </svg>
             </div>
 
-            <div ref={topLine3Ref} className="w-[325px] absolute right-[83px]">
+            <div className="w-[304px] absolute right-[83px] opacity-100">
               <svg
                 viewBox="0 0 325 80"
                 xmlns="http://www.w3.org/2000/svg"
                 preserveAspectRatio="xMidYMid meet"
-                style={{ width: "100%", height: "auto", display: "block" }}
+                style={{
+                  width: "100%",
+                  height: "auto",
+                  display: "block",
+                  overflow: "visible",
+                }}
               >
                 <path
                   ref={topPath3Ref}
@@ -347,17 +454,32 @@ export default function SolutionsRow() {
                   strokeWidth="2"
                   strokeLinecap="round"
                   vectorEffect="non-scaling-stroke"
-                  strokeDasharray="0 99999"
+                />
+                <path
+                  ref={topGlow3Ref}
+                  d="M 323 78 L 323 55 Q 323 40 308 40 L 17 40 Q 2 40 2 25 L 2 2"
+                  fill="none"
+                  stroke="#00ffff"
+                  strokeWidth="8"
+                  strokeLinecap="round"
+                  vectorEffect="non-scaling-stroke"
+                  style={{ filter: "blur(4px)" }}
+                  opacity="0"
                 />
               </svg>
             </div>
 
-            <div ref={topLine4Ref} className="w-[111px] absolute right-[297px]">
+            <div className="w-[111px] absolute right-[276px] -bottom-[5px]">
               <svg
                 viewBox="0 0 111 80"
                 xmlns="http://www.w3.org/2000/svg"
                 preserveAspectRatio="xMidYMid meet"
-                style={{ width: "100%", height: "auto", display: "block" }}
+                style={{
+                  width: "100%",
+                  height: "auto",
+                  display: "block",
+                  overflow: "visible",
+                }}
               >
                 <path
                   ref={topPath4Ref}
@@ -367,7 +489,17 @@ export default function SolutionsRow() {
                   strokeWidth="2"
                   strokeLinecap="round"
                   vectorEffect="non-scaling-stroke"
-                  strokeDasharray="0 99999"
+                />
+                <path
+                  ref={topGlow4Ref}
+                  d="M 109 78 L 109 55 Q 109 40 94 40 L 17 40 Q 2 40 2 25 L 2 2"
+                  fill="none"
+                  stroke="#00ffff"
+                  strokeWidth="8"
+                  strokeLinecap="round"
+                  vectorEffect="non-scaling-stroke"
+                  style={{ filter: "blur(4px)" }}
+                  opacity="0"
                 />
               </svg>
             </div>
@@ -375,18 +507,27 @@ export default function SolutionsRow() {
         </div>
 
         {/* COLUMN 3 */}
-        <div className="bg-green-500/0 col-span-1 flex flex-col items-center gap-y-3">
+        <div className="col-span-1 flex flex-col items-center gap-y-3">
           <div ref={iconText3Ref}>
-            <IconText icon="/icons/white/blockchain.svg" text="Blockchain" />
+            <IconText
+              icon="https://api.iconify.design/lucide:link.svg?color=white"
+              text="Blockchain"
+            />
           </div>
-          <div ref={connector3Ref} className="h-[72px] w-[2px] mx-auto">
+          <div className="h-[72px] w-[2px] mx-auto">
             <svg
               viewBox="0 0 2 72"
               xmlns="http://www.w3.org/2000/svg"
               preserveAspectRatio="xMidYMid meet"
-              style={{ width: "100%", height: "100%", display: "block" }}
+              style={{
+                width: "100%",
+                height: "100%",
+                display: "block",
+                overflow: "visible",
+              }}
             >
               <path
+                ref={connector3PathRef}
                 d="M 1 0 L 1 72"
                 fill="none"
                 stroke="#90abb3"
@@ -394,16 +535,27 @@ export default function SolutionsRow() {
                 strokeLinecap="round"
                 vectorEffect="non-scaling-stroke"
               />
+              <path
+                ref={connector3GlowRef}
+                d="M 1 0 L 1 72"
+                fill="none"
+                stroke="#00ffff"
+                strokeWidth="8"
+                strokeLinecap="round"
+                vectorEffect="non-scaling-stroke"
+                style={{ filter: "blur(4px)" }}
+                opacity="0"
+              />
             </svg>
           </div>
         </div>
       </div>
 
       {/* Row 2: 1 col / 1 col / 1 col / 1 col / 1 col / 1 col */}
-      <div className="grid grid-cols-6 gap-4 relative z-1">
+      <div className="grid grid-cols-6 gap-4 relative z-10">
         <div ref={row2Box1Ref} className="col-span-1 relative">
           <IconBox
-            src="/icons/white/document-check.svg"
+            src="https://api.iconify.design/lucide:file-check.svg?color=white"
             imageSize="small"
             title="Rule first architecture"
             description={
@@ -417,7 +569,7 @@ export default function SolutionsRow() {
         </div>
         <div ref={row2Box2Ref} className="col-span-1 relative">
           <IconBox
-            src="/icons/white/puzzle-piece.svg"
+            src="https://api.iconify.design/lucide:puzzle.svg?color=white"
             imageSize="small"
             title="Composable logic blocks"
             description="Adapts to any loan type or complexity without developer involvement"
@@ -426,7 +578,7 @@ export default function SolutionsRow() {
         </div>
         <div ref={row2Box3Ref} className="col-span-1 relative">
           <IconBox
-            src="/icons/white/target-arrow.svg"
+            src="https://api.iconify.design/lucide:target.svg?color=white"
             imageSize="small"
             title="Goal-driven reasoning"
             description="Adjusts underwriting strategies in real time, delivering the most efficient route to a viable loan"
@@ -435,7 +587,7 @@ export default function SolutionsRow() {
         </div>
         <div ref={row2Box4Ref} className="col-span-1 relative">
           <IconBox
-            src="/icons/white/shield-check-white.svg"
+            src="https://api.iconify.design/lucide:shield-check.svg?color=white"
             imageSize="small"
             title="Automated policy enforcement"
             description="Credit rules are reliably automatically enforced, ensuring every loan complies"
@@ -444,7 +596,7 @@ export default function SolutionsRow() {
         </div>
         <div ref={row2Box5Ref} className="col-span-1 relative">
           <IconBox
-            src="/icons/white/users-group.svg"
+            src="https://api.iconify.design/lucide:users.svg?color=white"
             imageSize="small"
             title="Unified workspace"
             description="All stakeholders collaborate in real time with live loan status visible to all"
@@ -453,7 +605,7 @@ export default function SolutionsRow() {
         </div>
         <div ref={row2Box6Ref} className="col-span-1 relative">
           <IconBox
-            src="/icons/white/dolcument-search.svg"
+            src="https://api.iconify.design/lucide:file-search.svg?color=white"
             imageSize="small"
             title="Blockchain audit layer"
             description="Immutable record of every decision for trust-less verification"
@@ -464,15 +616,20 @@ export default function SolutionsRow() {
 
       {/* Row 3: 4 cols / 1 col / 1 col */}
       <div className="grid grid-cols-6 gap-4">
-        <div className="bg-cyan-500/0 col-span-4 flex flex-col items-center">
-          <div className="w-full min-h-[72px] bg-red-500/0 relative">
+        <div className="col-span-4 flex flex-col items-center">
+          <div className="w-full min-h-[72px] relative">
             {/* Bottom arrow 1 - flipped from topPath1 */}
-            <div className="w-[325px] absolute left-[83px] bottom-0">
+            <div className="w-[304px] absolute left-[83px] bottom-0">
               <svg
                 viewBox="0 0 325 80"
                 xmlns="http://www.w3.org/2000/svg"
                 preserveAspectRatio="xMidYMid meet"
-                style={{ width: "100%", height: "auto", display: "block" }}
+                style={{
+                  width: "100%",
+                  height: "auto",
+                  display: "block",
+                  overflow: "visible",
+                }}
               >
                 <path
                   ref={bottomPath1Ref}
@@ -482,18 +639,33 @@ export default function SolutionsRow() {
                   strokeWidth="2"
                   strokeLinecap="round"
                   vectorEffect="non-scaling-stroke"
-                  strokeDasharray="0 99999"
+                />
+                <path
+                  ref={bottomGlow1Ref}
+                  d="M 2 2 L 2 25 Q 2 40 17 40 L 308 40 Q 323 40 323 55 L 323 78"
+                  fill="none"
+                  stroke="#00ffff"
+                  strokeWidth="8"
+                  strokeLinecap="round"
+                  vectorEffect="non-scaling-stroke"
+                  style={{ filter: "blur(4px)" }}
+                  opacity="0"
                 />
               </svg>
             </div>
 
             {/* Bottom arrow 2 - flipped from topPath2 */}
-            <div className="w-[111px] absolute left-[297px] bottom-0">
+            <div className="w-[111px] absolute left-[276px] -bottom-[3px] opacity-100">
               <svg
                 viewBox="0 0 111 80"
                 xmlns="http://www.w3.org/2000/svg"
                 preserveAspectRatio="xMidYMid meet"
-                style={{ width: "100%", height: "auto", display: "block" }}
+                style={{
+                  width: "100%",
+                  height: "auto",
+                  display: "block",
+                  overflow: "visible",
+                }}
               >
                 <path
                   ref={bottomPath2Ref}
@@ -503,18 +675,33 @@ export default function SolutionsRow() {
                   strokeWidth="2"
                   strokeLinecap="round"
                   vectorEffect="non-scaling-stroke"
-                  strokeDasharray="0 99999"
+                />
+                <path
+                  ref={bottomGlow2Ref}
+                  d="M 2 2 L 2 25 Q 2 40 17 40 L 94 40 Q 109 40 109 55 L 109 78"
+                  fill="none"
+                  stroke="#00ffff"
+                  strokeWidth="8"
+                  strokeLinecap="round"
+                  vectorEffect="non-scaling-stroke"
+                  style={{ filter: "blur(4px)" }}
+                  opacity="0"
                 />
               </svg>
             </div>
 
             {/* Bottom arrow 4 - flipped from topPath3 (right side) */}
-            <div className="w-[325px] absolute right-[84px] bottom-0">
+            <div className="w-[304px] absolute right-[83px] bottom-0">
               <svg
                 viewBox="0 0 325 80"
                 xmlns="http://www.w3.org/2000/svg"
                 preserveAspectRatio="xMidYMid meet"
-                style={{ width: "100%", height: "auto", display: "block" }}
+                style={{
+                  width: "100%",
+                  height: "auto",
+                  display: "block",
+                  overflow: "visible",
+                }}
               >
                 <path
                   ref={bottomPath3Ref}
@@ -524,18 +711,33 @@ export default function SolutionsRow() {
                   strokeWidth="2"
                   strokeLinecap="round"
                   vectorEffect="non-scaling-stroke"
-                  strokeDasharray="0 99999"
+                />
+                <path
+                  ref={bottomGlow3Ref}
+                  d="M 323 2 L 323 25 Q 323 40 308 40 L 17 40 Q 2 40 2 55 L 2 78"
+                  fill="none"
+                  stroke="#00ffff"
+                  strokeWidth="8"
+                  strokeLinecap="round"
+                  vectorEffect="non-scaling-stroke"
+                  style={{ filter: "blur(4px)" }}
+                  opacity="0"
                 />
               </svg>
             </div>
 
             {/* Bottom arrow 3 - flipped from topPath4 (right side) */}
-            <div className="w-[111px] absolute right-[298px] bottom-0">
+            <div className="w-[111px] absolute right-[276px] -bottom-[3px]">
               <svg
                 viewBox="0 0 111 80"
                 xmlns="http://www.w3.org/2000/svg"
                 preserveAspectRatio="xMidYMid meet"
-                style={{ width: "100%", height: "auto", display: "block" }}
+                style={{
+                  width: "100%",
+                  height: "auto",
+                  display: "block",
+                  overflow: "visible",
+                }}
               >
                 <path
                   ref={bottomPath4Ref}
@@ -545,7 +747,17 @@ export default function SolutionsRow() {
                   strokeWidth="2"
                   strokeLinecap="round"
                   vectorEffect="non-scaling-stroke"
-                  strokeDasharray="0 99999"
+                />
+                <path
+                  ref={bottomGlow4Ref}
+                  d="M 109 2 L 109 25 Q 109 40 94 40 L 17 40 Q 2 40 2 55 L 2 78"
+                  fill="none"
+                  stroke="#00ffff"
+                  strokeWidth="8"
+                  strokeLinecap="round"
+                  vectorEffect="non-scaling-stroke"
+                  style={{ filter: "blur(4px)" }}
+                  opacity="0"
                 />
               </svg>
             </div>
@@ -555,15 +767,21 @@ export default function SolutionsRow() {
             <SquareBadge text="Full automation end-to-end" />
           </div>
         </div>
-        <div className="bg-violet-500/0 col-span-1 flex flex-col items-center">
-          <div ref={row3Connector2Ref} className="h-[72px] w-[2px] mx-auto">
+        <div className="col-span-1 flex flex-col items-center">
+          <div className="h-[72px] w-[2px] mx-auto">
             <svg
               viewBox="0 0 2 72"
               xmlns="http://www.w3.org/2000/svg"
               preserveAspectRatio="xMidYMid meet"
-              style={{ width: "100%", height: "100%", display: "block" }}
+              style={{
+                width: "100%",
+                height: "100%",
+                display: "block",
+                overflow: "visible",
+              }}
             >
               <path
+                ref={row3Connector2PathRef}
                 d="M 1 0 L 1 72"
                 fill="none"
                 stroke="#90abb3"
@@ -571,21 +789,38 @@ export default function SolutionsRow() {
                 strokeLinecap="round"
                 vectorEffect="non-scaling-stroke"
               />
+              <path
+                ref={row3Connector2GlowRef}
+                d="M 1 0 L 1 72"
+                fill="none"
+                stroke="#00ffff"
+                strokeWidth="8"
+                strokeLinecap="round"
+                vectorEffect="non-scaling-stroke"
+                style={{ filter: "blur(4px)" }}
+                opacity="0"
+              />
             </svg>
           </div>
-          <div ref={row3Badge2Ref}>
+          <div ref={row3Badge2Ref} className="w-full">
             <SquareBadge text="Collaboration" />
           </div>
         </div>
-        <div className="bg-emerald-500/0 col-span-1 flex flex-col items-center">
-          <div ref={row3Connector3Ref} className="h-[72px] w-[2px] mx-auto">
+        <div className="col-span-1 flex flex-col items-center">
+          <div className="h-[72px] w-[2px] mx-auto">
             <svg
               viewBox="0 0 2 72"
               xmlns="http://www.w3.org/2000/svg"
               preserveAspectRatio="xMidYMid meet"
-              style={{ width: "100%", height: "100%", display: "block" }}
+              style={{
+                width: "100%",
+                height: "100%",
+                display: "block",
+                overflow: "visible",
+              }}
             >
               <path
+                ref={row3Connector3PathRef}
                 d="M 1 0 L 1 72"
                 fill="none"
                 stroke="#90abb3"
@@ -593,9 +828,20 @@ export default function SolutionsRow() {
                 strokeLinecap="round"
                 vectorEffect="non-scaling-stroke"
               />
+              <path
+                ref={row3Connector3GlowRef}
+                d="M 1 0 L 1 72"
+                fill="none"
+                stroke="#00ffff"
+                strokeWidth="8"
+                strokeLinecap="round"
+                vectorEffect="non-scaling-stroke"
+                style={{ filter: "blur(4px)" }}
+                opacity="0"
+              />
             </svg>
           </div>
-          <div ref={row3Badge3Ref}>
+          <div ref={row3Badge3Ref} className="w-full">
             <SquareBadge text="Trust" />
           </div>
         </div>
