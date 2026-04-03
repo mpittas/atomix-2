@@ -23,8 +23,8 @@ export function CapitalProvidersContent() {
         {
           scale: 1,
           opacity: 1,
-          duration: 0.9,
-          ease: "back.out(1.7)",
+          duration: 1.6,
+          ease: "back.out(1.5)",
           stagger: 0.2,
         },
       );
@@ -78,8 +78,8 @@ export function LendersContent() {
         {
           scale: 1,
           opacity: 1,
-          duration: 0.9,
-          ease: "back.out(1.7)",
+          duration: 1.6,
+          ease: "back.out(1.5)",
           stagger: 0.2,
         },
       );
