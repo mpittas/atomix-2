@@ -6,6 +6,25 @@ import IconBox from "@/components/IconBox";
 
 gsap.registerPlugin(ScrollTrigger);
 
+const GLOW_CONFIG = {
+  // Visual appearance
+  color: "#ddf7ff",
+  maxLength: 100,
+  strokeWidth: 4,
+  blur: 10,
+  maxOpacity: 1,
+
+  // Animation timing
+  travelDuration: 3,
+  fadeInDuration: 0.4,
+  fadeOutDuration: 0.4,
+  repeatDelay: 1.5,
+  startDelay: 0.2,
+
+  // Position (offset from main path animation)
+  staggerDelay: 0.2,
+};
+
 function IconText({ icon, text }: { icon: string; text: string }) {
   return (
     <div className="flex flex-col items-center gap-2">
@@ -135,12 +154,15 @@ export default function SolutionsRow() {
       }
 
       if (glow) {
-        const glowLen = Math.min(100, len / 2);
+        const glowLen = Math.min(GLOW_CONFIG.maxLength, len / 2);
         const startOffset = drawFromStart ? `${glowLen}` : `${-len}`;
         const endOffset = drawFromStart ? `${-len}` : `${glowLen}`;
 
         tl.add(() => {
-          const glowTl = gsap.timeline({ repeat: -1, repeatDelay: 1.5 });
+          const glowTl = gsap.timeline({
+            repeat: -1,
+            repeatDelay: GLOW_CONFIG.repeatDelay,
+          });
           glowTimelines.current.push(glowTl);
 
           glowTl
@@ -153,14 +175,14 @@ export default function SolutionsRow() {
             })
             .to(glow, {
               attr: { "stroke-dashoffset": endOffset },
-              duration: 3,
+              duration: GLOW_CONFIG.travelDuration,
               ease: "power1.inOut",
             })
             .to(
               glow,
               {
-                opacity: 0.8,
-                duration: 0.4,
+                opacity: GLOW_CONFIG.maxOpacity,
+                duration: GLOW_CONFIG.fadeInDuration,
                 ease: "power2.out",
               },
               "<",
@@ -169,12 +191,12 @@ export default function SolutionsRow() {
               glow,
               {
                 opacity: 0,
-                duration: 0.4,
+                duration: GLOW_CONFIG.fadeOutDuration,
                 ease: "power2.in",
               },
-              "-=0.4",
+              `-=${GLOW_CONFIG.fadeOutDuration}`,
             );
-        }, "<+=0.2");
+        }, `<+=${GLOW_CONFIG.startDelay}`);
       }
 
       return tl;
@@ -343,11 +365,11 @@ export default function SolutionsRow() {
                 ref={connector1GlowRef}
                 d="M 1 0 L 1 72"
                 fill="none"
-                stroke="#00ffff"
-                strokeWidth="8"
+                stroke={GLOW_CONFIG.color}
+                strokeWidth={GLOW_CONFIG.strokeWidth}
                 strokeLinecap="round"
                 vectorEffect="non-scaling-stroke"
-                style={{ filter: "blur(4px)" }}
+                style={{ filter: `blur(${GLOW_CONFIG.blur}px)` }}
                 opacity="0"
               />
             </svg>
@@ -389,11 +411,11 @@ export default function SolutionsRow() {
                   ref={topGlow1Ref}
                   d="M 2 78 L 2 55 Q 2 40 17 40 L 308 40 Q 323 40 323 25 L 323 2"
                   fill="none"
-                  stroke="#00ffff"
-                  strokeWidth="8"
+                  stroke={GLOW_CONFIG.color}
+                  strokeWidth={GLOW_CONFIG.strokeWidth}
                   strokeLinecap="round"
                   vectorEffect="non-scaling-stroke"
-                  style={{ filter: "blur(4px)" }}
+                  style={{ filter: `blur(${GLOW_CONFIG.blur}px)` }}
                   opacity="0"
                 />
               </svg>
@@ -424,11 +446,11 @@ export default function SolutionsRow() {
                   ref={topGlow2Ref}
                   d="M 2 78 L 2 55 Q 2 40 17 40 L 94 40 Q 109 40 109 25 L 109 2"
                   fill="none"
-                  stroke="#00ffff"
-                  strokeWidth="8"
+                  stroke={GLOW_CONFIG.color}
+                  strokeWidth={GLOW_CONFIG.strokeWidth}
                   strokeLinecap="round"
                   vectorEffect="non-scaling-stroke"
-                  style={{ filter: "blur(4px)" }}
+                  style={{ filter: `blur(${GLOW_CONFIG.blur}px)` }}
                   opacity="0"
                 />
               </svg>
@@ -459,11 +481,11 @@ export default function SolutionsRow() {
                   ref={topGlow3Ref}
                   d="M 323 78 L 323 55 Q 323 40 308 40 L 17 40 Q 2 40 2 25 L 2 2"
                   fill="none"
-                  stroke="#00ffff"
-                  strokeWidth="8"
+                  stroke={GLOW_CONFIG.color}
+                  strokeWidth={GLOW_CONFIG.strokeWidth}
                   strokeLinecap="round"
                   vectorEffect="non-scaling-stroke"
-                  style={{ filter: "blur(4px)" }}
+                  style={{ filter: `blur(${GLOW_CONFIG.blur}px)` }}
                   opacity="0"
                 />
               </svg>
@@ -494,11 +516,11 @@ export default function SolutionsRow() {
                   ref={topGlow4Ref}
                   d="M 109 78 L 109 55 Q 109 40 94 40 L 17 40 Q 2 40 2 25 L 2 2"
                   fill="none"
-                  stroke="#00ffff"
-                  strokeWidth="8"
+                  stroke={GLOW_CONFIG.color}
+                  strokeWidth={GLOW_CONFIG.strokeWidth}
                   strokeLinecap="round"
                   vectorEffect="non-scaling-stroke"
-                  style={{ filter: "blur(4px)" }}
+                  style={{ filter: `blur(${GLOW_CONFIG.blur}px)` }}
                   opacity="0"
                 />
               </svg>
@@ -539,11 +561,11 @@ export default function SolutionsRow() {
                 ref={connector3GlowRef}
                 d="M 1 0 L 1 72"
                 fill="none"
-                stroke="#00ffff"
-                strokeWidth="8"
+                stroke={GLOW_CONFIG.color}
+                strokeWidth={GLOW_CONFIG.strokeWidth}
                 strokeLinecap="round"
                 vectorEffect="non-scaling-stroke"
-                style={{ filter: "blur(4px)" }}
+                style={{ filter: `blur(${GLOW_CONFIG.blur}px)` }}
                 opacity="0"
               />
             </svg>
@@ -644,11 +666,11 @@ export default function SolutionsRow() {
                   ref={bottomGlow1Ref}
                   d="M 2 2 L 2 25 Q 2 40 17 40 L 308 40 Q 323 40 323 55 L 323 78"
                   fill="none"
-                  stroke="#00ffff"
-                  strokeWidth="8"
+                  stroke={GLOW_CONFIG.color}
+                  strokeWidth={GLOW_CONFIG.strokeWidth}
                   strokeLinecap="round"
                   vectorEffect="non-scaling-stroke"
-                  style={{ filter: "blur(4px)" }}
+                  style={{ filter: `blur(${GLOW_CONFIG.blur}px)` }}
                   opacity="0"
                 />
               </svg>
@@ -680,11 +702,11 @@ export default function SolutionsRow() {
                   ref={bottomGlow2Ref}
                   d="M 2 2 L 2 25 Q 2 40 17 40 L 94 40 Q 109 40 109 55 L 109 78"
                   fill="none"
-                  stroke="#00ffff"
-                  strokeWidth="8"
+                  stroke={GLOW_CONFIG.color}
+                  strokeWidth={GLOW_CONFIG.strokeWidth}
                   strokeLinecap="round"
                   vectorEffect="non-scaling-stroke"
-                  style={{ filter: "blur(4px)" }}
+                  style={{ filter: `blur(${GLOW_CONFIG.blur}px)` }}
                   opacity="0"
                 />
               </svg>
@@ -716,11 +738,11 @@ export default function SolutionsRow() {
                   ref={bottomGlow3Ref}
                   d="M 323 2 L 323 25 Q 323 40 308 40 L 17 40 Q 2 40 2 55 L 2 78"
                   fill="none"
-                  stroke="#00ffff"
-                  strokeWidth="8"
+                  stroke={GLOW_CONFIG.color}
+                  strokeWidth={GLOW_CONFIG.strokeWidth}
                   strokeLinecap="round"
                   vectorEffect="non-scaling-stroke"
-                  style={{ filter: "blur(4px)" }}
+                  style={{ filter: `blur(${GLOW_CONFIG.blur}px)` }}
                   opacity="0"
                 />
               </svg>
@@ -752,11 +774,11 @@ export default function SolutionsRow() {
                   ref={bottomGlow4Ref}
                   d="M 109 2 L 109 25 Q 109 40 94 40 L 17 40 Q 2 40 2 55 L 2 78"
                   fill="none"
-                  stroke="#00ffff"
-                  strokeWidth="8"
+                  stroke={GLOW_CONFIG.color}
+                  strokeWidth={GLOW_CONFIG.strokeWidth}
                   strokeLinecap="round"
                   vectorEffect="non-scaling-stroke"
-                  style={{ filter: "blur(4px)" }}
+                  style={{ filter: `blur(${GLOW_CONFIG.blur}px)` }}
                   opacity="0"
                 />
               </svg>
@@ -793,11 +815,11 @@ export default function SolutionsRow() {
                 ref={row3Connector2GlowRef}
                 d="M 1 0 L 1 72"
                 fill="none"
-                stroke="#00ffff"
-                strokeWidth="8"
+                stroke={GLOW_CONFIG.color}
+                strokeWidth={GLOW_CONFIG.strokeWidth}
                 strokeLinecap="round"
                 vectorEffect="non-scaling-stroke"
-                style={{ filter: "blur(4px)" }}
+                style={{ filter: `blur(${GLOW_CONFIG.blur}px)` }}
                 opacity="0"
               />
             </svg>
@@ -832,11 +854,11 @@ export default function SolutionsRow() {
                 ref={row3Connector3GlowRef}
                 d="M 1 0 L 1 72"
                 fill="none"
-                stroke="#00ffff"
-                strokeWidth="8"
+                stroke={GLOW_CONFIG.color}
+                strokeWidth={GLOW_CONFIG.strokeWidth}
                 strokeLinecap="round"
                 vectorEffect="non-scaling-stroke"
-                style={{ filter: "blur(4px)" }}
+                style={{ filter: `blur(${GLOW_CONFIG.blur}px)` }}
                 opacity="0"
               />
             </svg>
