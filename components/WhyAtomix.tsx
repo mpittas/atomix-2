@@ -45,14 +45,14 @@ export default function WhyAtomix() {
     () => {
       gsap.set(itemsRef.current?.children || [], {
         opacity: 0,
-        y: 40,
-        scale: 0.95,
+        y: 0,
+        scale: 0.75,
       });
 
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: sectionRef.current,
-          start: "top 10%",
+          start: "top 40%",
           toggleActions: "play none none none",
         },
       });

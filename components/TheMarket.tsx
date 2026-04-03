@@ -43,14 +43,14 @@ export default function TheMarket() {
     () => {
       gsap.set(statsRef.current?.children || [], {
         opacity: 0,
-        y: 40,
-        scale: 0.95,
+        y: 0,
+        scale: 0.75,
       });
 
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: sectionRef.current,
-          start: "top 70%",
+          start: "top 40%",
           toggleActions: "play none none none",
         },
       });
@@ -59,7 +59,7 @@ export default function TheMarket() {
         opacity: 1,
         y: 0,
         scale: 1,
-        duration: 0.9,
+        duration: 2,
         ease: "power3.out",
         stagger: 0.15,
       });

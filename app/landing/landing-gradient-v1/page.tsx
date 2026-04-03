@@ -24,6 +24,7 @@ import TechLimitations from "@/components/TechLimitations";
 import ScrollableHeading from "@/components/ScrollableHeading";
 import WhyAtomix from "@/components/WhyAtomix";
 import TheMarket from "@/components/TheMarket";
+import WhyWorkWithUs from "@/components/WhyWorkWithUs";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -68,7 +69,7 @@ export default function LandingGradientV1Page() {
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: careersContainerRef.current,
-        start: "top 80%",
+        start: "top 10%",
         toggleActions: "play none none none",
       },
     });
@@ -76,18 +77,18 @@ export default function LandingGradientV1Page() {
     tl.fromTo(
       careersBox1Ref.current,
       { opacity: 0, scale: 0.8 },
-      { opacity: 1, scale: 1, duration: 0.6, ease: "back.out(1.7)" },
+      { opacity: 1, scale: 1, duration: 1.8, ease: "back.out(1.7)" },
     )
       .fromTo(
         careersBox2Ref.current,
         { opacity: 0, scale: 0.8 },
-        { opacity: 1, scale: 1, duration: 0.6, ease: "back.out(1.7)" },
+        { opacity: 1, scale: 1, duration: 1.8, ease: "power3.out" },
         "-=0.35",
       )
       .fromTo(
         careersBox3Ref.current,
         { opacity: 0, scale: 0.8 },
-        { opacity: 1, scale: 1, duration: 0.6, ease: "back.out(1.7)" },
+        { opacity: 1, scale: 1, duration: 1.8, ease: "back.out(1.7)" },
         "-=0.35",
       );
 
@@ -213,7 +214,7 @@ export default function LandingGradientV1Page() {
           </div>
 
           <div className="px-18 py-36 rounded-b-3xl bg-linear-to-t from-[#0B4858] to-[#81A6AF]">
-            <div className="max-w-[126 0px] mx-auto px-4">
+            <div className="max-w-[1260px] mx-auto px-4">
               <div className="max-w-[1060px] mx-auto">
                 <DefHeading
                   theme="light"
@@ -291,50 +292,7 @@ export default function LandingGradientV1Page() {
             </div>
 
             <div className="max-w-[1200px] px-8 mx-auto bg-red-500/0">
-              <div className="max-w-[1060px] mx-auto">
-                <DefHeading
-                  theme="light"
-                  badgeText="Careers"
-                  title="Why Work With Us"
-                  description="We are building a platform that automates and modernises the global lending ecosystem. Our team combines expertise in finance, AI, engineering and blockchain to create infrastructure for the future of asset-backed credit."
-                />
-              </div>
-
-              <div className="mt-16 flex flex-col items-center">
-                <div className="bg-red-500/0 flex flex-col items-stretch gap-6">
-                  <div className="flex items-stretch gap-6">
-                    <div ref={careersBox1Ref} className="flex-1 relative">
-                      <IconBox
-                        src="/icons/white/globe.svg"
-                        title="Real-World Financial Infrastructure"
-                        titleClassName="text-md font-semibold"
-                        description="Build technology that powers real lending markets and impacts billions in asset-backed finance."
-                      />
-                    </div>
-
-                    <div ref={careersBox2Ref} className="flex-1 relative">
-                      <IconBox
-                        src="/icons/white/users-group.svg"
-                        title="Small Team, Big Impact"
-                        titleClassName="text-md font-semibold"
-                        description="Join a focused team where every contribution directly shapes the product, technology, and company."
-                      />
-                    </div>
-
-                    <div ref={careersBox3Ref} className="flex-1 relative">
-                      <IconBox
-                        src="/icons/white/ai-chip.svg"
-                        title="Cutting-Edge Technology"
-                        titleClassName="text-md font-semibold"
-                        description="Work across AI, automation, data systems, and blockchain-backed infrastructure."
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div className="mt-14">
-                  <DefButton size="large">Learn more</DefButton>
-                </div>
-              </div>
+              <WhyWorkWithUs />
             </div>
           </div>
         </div>
