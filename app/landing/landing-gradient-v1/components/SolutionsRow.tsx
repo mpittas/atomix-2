@@ -177,7 +177,7 @@ export default function SolutionsRow() {
       )
 
       // Fourth animate: topPath3, row2Box4Ref, bottomArrow4Ref
-      .add(drawPath(topPath3Ref, 2))
+      .add(drawPath(topPath4Ref, 2))
       .fromTo(
         row2Box4Ref.current,
         { opacity: 0, scale: 0.8 },
@@ -191,7 +191,7 @@ export default function SolutionsRow() {
       )
 
       // Fifth animate: topPath4, row2Box5Ref, row3Connector2Ref, row3Badge2Ref
-      .add(drawPath(topPath4Ref, 2))
+      .add(drawPath(topPath3Ref, 2))
       .fromTo(
         row2Box5Ref.current,
         { opacity: 0, scale: 0.8 },
