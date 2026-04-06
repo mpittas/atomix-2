@@ -9,25 +9,30 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import SoftAurora from "@/components/backgrounds/SoftAurora";
 import { BadgeHeadingPill } from "@/components/ui/BadgeHeadingPill";
+import IconBox from "@/components/IconBox";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const aboutAtomixItems = [
   {
+    icon: "/icons/white/document-check.svg",
     title: "Rules-first core",
     subtitle: "Credit policies enforced deterministically at every step.",
   },
   {
+    icon: "/icons/white/brain-links.svg",
     title: "Adaptive intelligence",
     subtitle:
       "AI-assisted orchestration that adjusts to each case in real time.",
   },
   {
+    icon: "/icons/white/path-arrows.svg",
     title: "Operational speed",
     subtitle:
       "Automated workflows that reduce manual underwriting bottlenecks.",
   },
   {
+    icon: "/icons/white/eye-white.svg",
     title: "Audit-ready trust",
     subtitle: "Decision trails remain transparent, immutable, and reviewable.",
   },
@@ -66,7 +71,7 @@ export default function MainHero() {
     gsap.set("#def-hero-title-2", { autoAlpha: 0, scale: 0 });
     gsap.set("#def-hero-title-2-list .hero-list-item", {
       autoAlpha: 0,
-      y: 20,
+      y: 40,
     });
     gsap.set("#def-hero-btn", { autoAlpha: 0 });
 
@@ -114,11 +119,11 @@ export default function MainHero() {
         {
           autoAlpha: 1,
           y: 0,
-          duration: 0.8,
-          ease: "power2.out",
-          stagger: 0.25,
+          duration: 1.25,
+          ease: "power3.out",
+          stagger: 0.38,
         },
-        "title2Visible+=0.35",
+        "title2Visible+=0.45",
       )
       .addLabel("listVisible")
       .to(
@@ -216,13 +221,15 @@ export default function MainHero() {
           className="w-full max-w-[860px] grid grid-cols-1 md:grid-cols-2 gap-4 mt-2"
         >
           {aboutAtomixItems.map((item) => (
-            <div
+            <IconBox
               key={item.title}
-              className="hero-list-item rounded-xl bg-white/5 backdrop-blur-sm p-3 text-left"
-            >
-              <h4 className="text-md font-semibold text-white">{item.title}</h4>
-              <p className="text-sm text-white/75 mt-1">{item.subtitle}</p>
-            </div>
+              src={item.icon}
+              title={item.title}
+              description={item.subtitle}
+              imageSize="small"
+              titleClassName="text-md"
+              className="hero-list-item !p-4"
+            />
           ))}
         </div>
 
