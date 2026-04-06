@@ -15,24 +15,24 @@ gsap.registerPlugin(ScrollTrigger);
 
 const aboutAtomixItems = [
   {
-    icon: "/icons/white/document-check.svg",
+    icon: "/icons/white/users-group.svg",
     title: "What we are",
     subtitle:
       "A Platform-as-a-Service automating the full lifecycle of property loans, end to-end",
   },
   {
-    icon: "/icons/white/brain-links.svg",
+    icon: "/icons/white/rocket-launch-white.svg",
     title: "Who we serve",
     subtitle: "Lenders, capital providers, brokers and borrowers",
   },
   {
-    icon: "/icons/white/path-arrows.svg",
+    icon: "/icons/white/atomix-icon.svg",
     title: "What sets us apart",
     subtitle:
       "Rules-first compliance enforcement, AI-assisted workflow construction and immutable on-chain audit in a single platform",
   },
   {
-    icon: "/icons/white/eye-white.svg",
+    icon: "/icons/white/globe.svg",
     title: "Where we operate",
     subtitle: "UK-based, with global expansion built into the model",
   },
