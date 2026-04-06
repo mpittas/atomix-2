@@ -16,7 +16,7 @@ gsap.registerPlugin(ScrollTrigger, GSAPSplitText, useGSAP);
 
 const ACCENT_COLOR = "#00BBFF";
 const ACCENT_TOKEN_REGEX = /\[\[accent:(.*?)\]\]/g;
-const SHINE_COLOR = "#87fafd";
+const SHINE_COLOR = "rgb(176, 252, 255)";
 
 const renderTextWithAccent = (text: string) => {
   const nodes: React.ReactNode[] = [];
@@ -150,7 +150,7 @@ const SplitText = forwardRef<SplitTextHandle, SplitTextProps>(
       // Create shine timeline
       const shineTl = gsap.timeline({
         repeat: -1,
-        repeatDelay: 0.3,
+        repeatDelay: 3,
       });
 
       // Animate each character to shine color and back
@@ -165,7 +165,7 @@ const SplitText = forwardRef<SplitTextHandle, SplitTextProps>(
               color: SHINE_COLOR,
               duration: 0.6,
               ease: "sine.inOut",
-              filter: "drop-shadow(0 0 4px " + SHINE_COLOR + ")",
+              filter: "drop-shadow(0 0 4px rgba(176, 252, 255, 0.6))",
             },
             index * 0.015,
           )
