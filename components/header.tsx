@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Menu, X, ChevronDown } from "lucide-react";
+import Image from "next/image";
 import { Button as DefButton } from "@/components/ui";
 
 export default function Header() {
@@ -45,10 +46,19 @@ export default function Header() {
             {/* Logo */}
             <div className="flex-shrink-0">
               <a href="/" className="flex items-center">
-                <img
+                <Image
                   src="/logo/atomix-logo-symbol-dark.svg"
                   alt="Atomix"
-                  className="h-10 w-auto"
+                  width={40}
+                  height={40}
+                  className="h-10 w-auto hidden lg:block"
+                />
+                <Image
+                  src="/logo/atomix-logo-symbol-simple-dark.svg"
+                  alt="Atomix"
+                  width={40}
+                  height={40}
+                  className="h-10 w-auto visible lg:hidden"
                 />
               </a>
             </div>
