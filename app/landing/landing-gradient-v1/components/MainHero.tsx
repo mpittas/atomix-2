@@ -50,6 +50,7 @@ export default function MainHero() {
       .set("#def-hero-images", { opacity: 1, visibility: "visible" })
       .set("#def-hero-title-2", { autoAlpha: 0, scale: 0 })
       .set("#def-hero-title-2-list .hero-list-item", { autoAlpha: 0, y: 20 })
+      .set("#def-hero-btn", { autoAlpha: 0 })
       .to(
         "#def-hero-title-1",
         {
@@ -103,13 +104,22 @@ export default function MainHero() {
         {
           autoAlpha: 1,
           y: 0,
-          duration: 0.45,
+          duration: 0.8,
           ease: "power2.out",
-          stagger: 0.12,
+          stagger: 0.25,
         },
         "title2Visible+=0.35",
       )
-      .addLabel("listVisible");
+      .addLabel("listVisible")
+      .to(
+        "#def-hero-btn",
+        {
+          autoAlpha: 1,
+          duration: 0.4,
+          ease: "power2.out",
+        },
+        "listVisible+=0.1",
+      );
   }, []);
 
   return (
@@ -181,20 +191,22 @@ export default function MainHero() {
 
         <div
           id="def-hero-title-2-list"
-          className="w-full max-w-[860px] grid grid-cols-1 md:grid-cols-2 gap-3"
+          className="w-full max-w-[860px] grid grid-cols-1 md:grid-cols-2 gap-4 mt-2"
         >
           {aboutAtomixItems.map((item) => (
             <div
               key={item.title}
-              className="hero-list-item rounded-xl border border-white/20 bg-white/5 backdrop-blur-sm px-4 py-3 text-left"
+              className="hero-list-item rounded-xl bg-white/5 backdrop-blur-sm p-3 text-left"
             >
-              <h4 className="text-sm font-semibold text-white">{item.title}</h4>
-              <p className="text-xs text-white/75 mt-1">{item.subtitle}</p>
+              <h4 className="text-md font-semibold text-white">{item.title}</h4>
+              <p className="text-sm text-white/75 mt-1">{item.subtitle}</p>
             </div>
           ))}
         </div>
 
-        <DefButton size="large">Learn More</DefButton>
+        <div id="def-hero-btn">
+          <DefButton size="large">Learn More</DefButton>
+        </div>
       </div>
     </section>
   );
