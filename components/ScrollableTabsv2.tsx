@@ -277,7 +277,8 @@ export default function ScrollableTabsv2() {
           theme="light"
           badgeText="The Market Reality"
           title="Market Problems in Bridging Loans"
-          description="Opaque systems limit control, visibility and trust across capital providers, lenders and borrowers."
+          description="Property lending is manual, slow and opaque — at every level."
+          showBadge={false}
         />
 
         {/* Bottom Section - Tabs and IconBoxes */}

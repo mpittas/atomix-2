@@ -15,6 +15,7 @@ export interface DefHeadingProps {
   className?: string;
   badgeClassName?: string;
   theme?: "dark" | "light";
+  showBadge?: boolean;
   onAnimationComplete?: () => void;
 }
 
@@ -26,6 +27,7 @@ const DefHeading: React.FC<DefHeadingProps> = ({
   className = "",
   badgeClassName = "",
   theme = "dark",
+  showBadge = true,
   onAnimationComplete,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -41,11 +43,13 @@ const DefHeading: React.FC<DefHeadingProps> = ({
       ref={containerRef}
       className={`flex flex-col gap-y-6 items-center text-center max-w-6xl mx-auto ${className}`}
     >
-      <div ref={badgeRef}>
-        <BadgeHeadingPill color={badgeColor} className={badgeClassName}>
-          {badgeText}
-        </BadgeHeadingPill>
-      </div>
+      {showBadge && (
+        <div ref={badgeRef}>
+          <BadgeHeadingPill color={badgeColor} className={badgeClassName}>
+            {badgeText}
+          </BadgeHeadingPill>
+        </div>
+      )}
 
       <SplitText
         text={title}
