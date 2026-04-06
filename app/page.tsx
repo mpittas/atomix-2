@@ -1,5 +1,3 @@
-import LandingGradientV1Page from "./landing/landing-gradient-v1/page";
+"use client";
 
-export default function Home() {
-  return <LandingGradientV1Page />;
-}
+export { default } from "./landing/landing-gradient-v1/page";
