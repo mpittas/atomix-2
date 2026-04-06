@@ -1,7 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { ReactNode } from "react";
+import gsap from "gsap";
+import { MouseEvent, ReactNode } from "react";
 
 interface IconBoxProps {
   src?: string;
@@ -22,6 +23,22 @@ export default function IconBox({
   className = "",
   imageSize = "medium",
 }: IconBoxProps) {
+  const handleMouseEnter = (event: MouseEvent<HTMLDivElement>) => {
+    gsap.to(event.currentTarget, {
+      scale: 1.07,
+      duration: 0.25,
+      ease: "power2.out",
+    });
+  };
+
+  const handleMouseLeave = (event: MouseEvent<HTMLDivElement>) => {
+    gsap.to(event.currentTarget, {
+      scale: 1,
+      duration: 0.3,
+      ease: "power2.out",
+    });
+  };
+
   const sizeMap = {
     small: 32,
     medium: 48,
@@ -32,7 +49,9 @@ export default function IconBox({
 
   return (
     <div
-      className={`relative flex flex-col items-center gap-1 p-7 rounded-2xl text-center h-full border border-dashed bg-[#124652] border-[#82b0ba] overflow-hidden ${className}`}
+      className={`relative flex flex-col items-center gap-1 p-7 rounded-2xl text-center h-full border border-dashed bg-[#124652] border-[#82b0ba] overflow-hidden will-change-transform ${className}`}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     >
       <div className="pointer-events-none absolute inset-0 rounded-2xl overflow-hidden">
         <div className="absolute -top-8 -right-4 w-32 h-32 bg-white/25 rounded-full blur-2xl" />
