@@ -14,7 +14,7 @@ export default function BenefitsLayout() {
   const [activeIndex, setActiveIndex] = useState(0);
   const sectionRef = useRef<HTMLDivElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
-  const panelRef = useRef<HTMLDivElement>(null);
+  const panelRefs = useRef<(HTMLDivElement | null)[]>([]);
   const scrollTriggerRef = useRef<ScrollTrigger | null>(null);
   const tabs = ["Capital Providers", "Lenders", "Borrowers"];
 
@@ -42,57 +42,96 @@ export default function BenefitsLayout() {
 
       const maxStep = Math.max(tabs.length - 1, 1);
 
-      const st = ScrollTrigger.create({
-        trigger: wrapperRef.current,
-        start: "center center",
-        end: () => `+=${window.innerHeight * maxStep * 0.9}`,
-        pin: true,
-        pinSpacing: true,
-        scrub: 0.5,
-        onUpdate: (self) => {
-          const nextIndex = Math.min(
-            tabs.length - 1,
-            Math.round(self.progress * maxStep),
-          );
-          setActiveIndex((prev) => (prev === nextIndex ? prev : nextIndex));
+      // Set initial states for all panels
+      panelRefs.current.forEach((panel) => {
+        if (!panel) return;
+        gsap.set(panel, { autoAlpha: 0, y: 36 });
+        const items = panel.querySelectorAll(".benefit-animate-item");
+        gsap.set(items, { autoAlpha: 0, y: 28 });
+      });
+
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: wrapperRef.current,
+          start: "center center",
+          end: () => `+=${window.innerHeight * maxStep * 1.8}`,
+          pin: true,
+          pinSpacing: true,
+          scrub: 0.5,
+          onUpdate: (self) => {
+            const p = self.progress;
+            let nextIndex = 0;
+            if (p >= 2 / 3) nextIndex = 2;
+            else if (p >= 1 / 3) nextIndex = 1;
+            setActiveIndex((prev) => (prev === nextIndex ? prev : nextIndex));
+          },
         },
       });
 
-      scrollTriggerRef.current = st;
+      scrollTriggerRef.current = tl.scrollTrigger!;
+
+      // Normalize timeline to exactly 1.0 so positions = scroll progress
+      tl.set({}, {}, 1);
+
+      // Animate each panel's content based on scroll progress segments
+      tabs.forEach((_, tabIdx) => {
+        const panel = panelRefs.current[tabIdx];
+        if (!panel) return;
+
+        const items = panel.querySelectorAll(".benefit-animate-item");
+        const segStart = tabIdx / tabs.length;
+        const segEnd = (tabIdx + 1) / tabs.length;
+        const inStart = tabIdx === 0 ? 0.02 : segStart + 0.01;
+        const isLastTab = tabIdx === tabs.length - 1;
+
+        // Panel fade in
+        tl.to(
+          panel,
+          { autoAlpha: 1, y: 0, duration: 0.05, ease: "power3.out" },
+          inStart,
+        );
+
+        // Items stagger in
+        tl.to(
+          items,
+          {
+            autoAlpha: 1,
+            y: 0,
+            stagger: 0.012,
+            duration: 0.06,
+            ease: "power3.out",
+          },
+          inStart + 0.01,
+        );
+
+        // Animate out (skip for last tab)
+        if (!isLastTab) {
+          const outStart = segEnd - 0.02;
+          tl.to(
+            items,
+            {
+              autoAlpha: 0,
+              y: -20,
+              stagger: -0.006,
+              duration: 0.02,
+              ease: "power2.in",
+            },
+            outStart,
+          );
+          tl.to(
+            panel,
+            { autoAlpha: 0, y: -36, duration: 0.02, ease: "power2.in" },
+            outStart + 0.01,
+          );
+        }
+      });
 
       return () => {
         scrollTriggerRef.current = null;
-        st.kill();
+        tl.kill();
       };
     },
     { scope: sectionRef },
-  );
-
-  useGSAP(
-    () => {
-      if (!panelRef.current) return;
-
-      const items = panelRef.current.querySelectorAll(".benefit-animate-item");
-      gsap.fromTo(
-        panelRef.current,
-        { autoAlpha: 0, y: 36 },
-        { autoAlpha: 1, y: 0, duration: 0.9, ease: "power3.out" },
-      );
-
-      gsap.fromTo(
-        items,
-        { autoAlpha: 0, y: 28 },
-        {
-          autoAlpha: 1,
-          y: 0,
-          duration: 0.85,
-          stagger: 0.13,
-          delay: 0.1,
-          ease: "power3.out",
-        },
-      );
-    },
-    { scope: panelRef, dependencies: [activeIndex], revertOnUpdate: true },
   );
 
   return (
@@ -121,8 +160,14 @@ export default function BenefitsLayout() {
           ))}
         </div>
 
-        <div ref={panelRef} className="mt-8 md:mt-10">
-          {activeIndex === 0 && (
+        <div className="relative mt-8 md:mt-10">
+          {/* Panel 0: Capital Providers */}
+          <div
+            ref={(el) => {
+              panelRefs.current[0] = el;
+            }}
+            style={{ visibility: "hidden" }}
+          >
             <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
               <div className="bg-green-500/0 benefit-animate-item">
                 <div className="relative w-full pr-8 pb-8 bg-red-500/0">
@@ -208,9 +253,16 @@ export default function BenefitsLayout() {
                 </div>
               </div>
             </div>
-          )}
+          </div>
 
-          {activeIndex === 1 && (
+          {/* Panel 1: Lenders */}
+          <div
+            ref={(el) => {
+              panelRefs.current[1] = el;
+            }}
+            className="absolute top-0 left-0 right-0"
+            style={{ visibility: "hidden" }}
+          >
             <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
               <div className="bg-green-500/0 order-1 benefit-animate-item">
                 <div className="relative w-full pr-8 pb-8 bg-red-500/0">
@@ -281,9 +333,16 @@ export default function BenefitsLayout() {
                 </div>
               </div>
             </div>
-          )}
+          </div>
 
-          {activeIndex === 2 && (
+          {/* Panel 2: Borrowers */}
+          <div
+            ref={(el) => {
+              panelRefs.current[2] = el;
+            }}
+            className="absolute top-0 left-0 right-0"
+            style={{ visibility: "hidden" }}
+          >
             <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
               <div className="bg-green-500/0 benefit-animate-item">
                 <div className="relative w-full pr-8 pb-8 bg-red-500/0">
@@ -353,7 +412,7 @@ export default function BenefitsLayout() {
                 </div>
               </div>
             </div>
-          )}
+          </div>
         </div>
       </div>
     </div>

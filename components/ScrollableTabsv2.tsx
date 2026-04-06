@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
@@ -129,35 +129,9 @@ export default function ScrollableTabsv2() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const scrollTriggerRef = useRef<ScrollTrigger | null>(null);
-  const iconBoxesRef = useRef<HTMLDivElement>(null);
+  const iconBoxRefs = useRef<(HTMLDivElement | null)[]>([]);
   const tabsSectionRef = useRef<HTMLDivElement>(null);
-  const hasAnimatedIn = useRef(false);
   const [activeIndex, setActiveIndex] = useState(0);
-
-  const handleHeadingComplete = useCallback(() => {
-    if (!tabsSectionRef.current) return;
-    gsap.fromTo(
-      tabsSectionRef.current,
-      { opacity: 0, y: 40 },
-      { opacity: 1, y: 0, duration: 1, ease: "power3.out" },
-    );
-
-    hasAnimatedIn.current = true;
-    if (iconBoxesRef.current) {
-      gsap.fromTo(
-        iconBoxesRef.current.children,
-        { scale: 0, opacity: 0 },
-        {
-          scale: 1,
-          opacity: 1,
-          duration: 2,
-          stagger: 0.2,
-          delay: 0.3,
-          ease: "back.out(1.5)",
-        },
-      );
-    }
-  }, []);
 
   const handleTabClick = (index: number) => {
     const st = scrollTriggerRef.current;
@@ -175,12 +149,20 @@ export default function ScrollableTabsv2() {
     () => {
       if (!sectionRef.current || !wrapperRef.current) return;
 
+      // Set initial states
+      gsap.set(tabsSectionRef.current, { opacity: 0, y: 40 });
+
+      // Set all icon box groups hidden initially
+      iconBoxRefs.current.forEach((group) => {
+        if (group) gsap.set(group.children, { scale: 0, opacity: 0 });
+      });
+
       // Create pinned scroll animation
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: sectionRef.current,
           start: "top top+=10px",
-          end: `bottom top+=10px`,
+          end: "+=600%",
           pin: true,
           pinSpacing: true,
           scrub: 0.5,
@@ -199,6 +181,61 @@ export default function ScrollableTabsv2() {
         },
       });
 
+      // Tabs section fade in (0-0.1)
+      tl.to(
+        tabsSectionRef.current,
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.1,
+          ease: "none",
+        },
+        0,
+      );
+
+      // Normalize timeline to exactly 1.0 so positions = scroll progress
+      tl.set({}, {}, 1);
+
+      // Animate each tab's IconBox group independently
+      tabsData.forEach((_, tabIdx) => {
+        const group = iconBoxRefs.current[tabIdx];
+        if (!group) return;
+
+        const segStart = tabIdx / 3; // 0, 0.333, 0.666
+        const segEnd = (tabIdx + 1) / 3;
+        const inStart = tabIdx === 0 ? 0.04 : segStart + 0.01;
+        const outStart = segEnd - 0.02;
+        const isLastTab = tabIdx === tabsData.length - 1;
+
+        // Animate in: staggered scale + opacity
+        tl.to(
+          group.children,
+          {
+            scale: 1,
+            opacity: 1,
+            stagger: 0.02,
+            duration: 0.08,
+            ease: "back.out(1.5)",
+          },
+          inStart,
+        );
+
+        // Animate out (skip for last tab)
+        if (!isLastTab) {
+          tl.to(
+            group.children,
+            {
+              scale: 0,
+              opacity: 0,
+              stagger: -0.008,
+              duration: 0.02,
+              ease: "back.in(1.5)",
+            },
+            outStart,
+          );
+        }
+      });
+
       scrollTriggerRef.current = tl.scrollTrigger!;
 
       return () => {
@@ -207,31 +244,6 @@ export default function ScrollableTabsv2() {
     },
     { scope: sectionRef },
   );
-
-  const currentTab = tabsData[activeIndex];
-
-  useEffect(() => {
-    if (!iconBoxesRef.current) return;
-    if (activeIndex === 0 && !hasAnimatedIn.current) return;
-
-    const boxes = iconBoxesRef.current.children;
-    gsap.fromTo(
-      boxes,
-      { scale: 0, opacity: 0 },
-      {
-        scale: 1,
-        opacity: 1,
-        duration: 1.6,
-        stagger: 0.15,
-        ease: "back.out(1.5)",
-      },
-    );
-  }, [activeIndex]);
-
-  useEffect(() => {
-    if (!iconBoxesRef.current) return;
-    gsap.set(iconBoxesRef.current.children, { scale: 0, opacity: 0 });
-  }, []);
 
   return (
     <div
@@ -266,7 +278,6 @@ export default function ScrollableTabsv2() {
           badgeText="The Market Reality"
           title="Market Problems in Bridging Loans"
           description="Opaque systems limit control, visibility and trust across capital providers, lenders and borrowers."
-          onAnimationComplete={handleHeadingComplete}
         />
 
         {/* Bottom Section - Tabs and IconBoxes */}
@@ -299,15 +310,32 @@ export default function ScrollableTabsv2() {
             ))}
           </div>
 
-          {/* Bottom Section - 4 IconBoxes */}
-          <div ref={iconBoxesRef} className="grid grid-cols-4 gap-3 w-full">
-            {currentTab.iconBoxes.map((iconBox, index) => (
-              <IconBox
-                key={`${activeIndex}-${index}`}
-                src={iconBox.src}
-                title={iconBox.title}
-                description={iconBox.description}
-              />
+          {/* Bottom Section - Stacked IconBox groups for each tab */}
+          <div className="relative w-full" style={{ minHeight: 200 }}>
+            {tabsData.map((tab, tabIdx) => (
+              <div
+                key={tab.title}
+                ref={(el) => {
+                  iconBoxRefs.current[tabIdx] = el;
+                }}
+                className="grid grid-cols-4 gap-3 w-full"
+                style={{
+                  position: tabIdx === 0 ? "relative" : "absolute",
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  pointerEvents: tabIdx === activeIndex ? "auto" : "none",
+                }}
+              >
+                {tab.iconBoxes.map((iconBox, index) => (
+                  <IconBox
+                    key={`${tabIdx}-${index}`}
+                    src={iconBox.src}
+                    title={iconBox.title}
+                    description={iconBox.description}
+                  />
+                ))}
+              </div>
             ))}
           </div>
         </div>
