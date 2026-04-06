@@ -16,25 +16,25 @@ gsap.registerPlugin(ScrollTrigger);
 const aboutAtomixItems = [
   {
     icon: "/icons/white/document-check.svg",
-    title: "Rules-first core",
-    subtitle: "Credit policies enforced deterministically at every step.",
+    title: "What we are",
+    subtitle:
+      "A Platform-as-a-Service automating the full lifecycle of property loans, end to-end",
   },
   {
     icon: "/icons/white/brain-links.svg",
-    title: "Adaptive intelligence",
-    subtitle:
-      "AI-assisted orchestration that adjusts to each case in real time.",
+    title: "Who we serve",
+    subtitle: "Lenders, capital providers, brokers and borrowers",
   },
   {
     icon: "/icons/white/path-arrows.svg",
-    title: "Operational speed",
+    title: "What sets us apart",
     subtitle:
-      "Automated workflows that reduce manual underwriting bottlenecks.",
+      "Rules-first compliance enforcement, AI-assisted workflow construction and immutable on-chain audit in a single platform",
   },
   {
     icon: "/icons/white/eye-white.svg",
-    title: "Audit-ready trust",
-    subtitle: "Decision trails remain transparent, immutable, and reviewable.",
+    title: "Where we operate",
+    subtitle: "UK-based, with global expansion built into the model",
   },
 ];
 
