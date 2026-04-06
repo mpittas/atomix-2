@@ -81,8 +81,8 @@ export default function MainHero() {
       scrollTrigger: {
         trigger: "#def-hero-main",
         start: "top top",
-        end: "+=2300",
-        scrub: 1,
+        end: "+=6500",
+        scrub: 2.5,
         pin: true,
       },
     });
@@ -120,11 +120,11 @@ export default function MainHero() {
         {
           autoAlpha: 1,
           y: 0,
-          duration: 1.25,
+          duration: 2,
           ease: "power3.out",
-          stagger: 0.38,
+          stagger: 0.72,
         },
-        "title2Visible+=0.45",
+        "title2Visible+=0.9",
       )
       .addLabel("listVisible")
       .to(
