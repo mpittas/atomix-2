@@ -84,7 +84,7 @@ const SplitText = forwardRef<SplitTextHandle, SplitTextProps>(
   (
     {
       text,
-      className = "text-5xl leading-[1.2em] font-semibold",
+      className = "text-3xl md:text-4xl lg:text-5xl leading-[1.2em] font-semibold",
       delay = 20,
       duration = 0.6,
       ease = "power3.out",
@@ -284,7 +284,7 @@ const SplitText = forwardRef<SplitTextHandle, SplitTextProps>(
 SplitText.displayName = "SplitText";
 
 export function HeroSplitTextLoop({
-  textClassName = "max-w-[1000px] text-6xl leading-[1.2] font-semibold tracking-[-0.04em] text-white",
+  textClassName = "max-w-[1000px] text-4xl md:text-5xl lg:text-6xl leading-[1.2] font-semibold tracking-[-0.04em] text-white",
   rotateTitles = true,
   fixedText,
 }: HeroSplitTextLoopProps) {

@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import Image from "next/image";
 import { Button as DefButton } from "@/components/ui";
 import SplitText from "@/components/typo/SplitText";
 import type { SplitTextHandle } from "@/components/typo/SplitText";
@@ -157,13 +158,15 @@ export default function MainHero() {
 
       {/* FIRST TITLE - page load animation */}
       <div
-        className="text-white flex flex-col gap-y-8 justify-center items-center text-center absolute left-1/2 -translate-x-1/2 top-[10%] w-[1000px]"
+        className="text-white px-6 flex flex-col gap-y-8 justify-center items-center text-center absolute left-1/2 -translate-x-1/2 top-[10%] max-w-[1000px] w-full"
         id="def-hero-title-1"
       >
-        <img
+        <Image
           src="/logo/atomix-logo-big-white.svg"
           alt="Atomix Logo"
-          className="w-[200px]"
+          width={200}
+          height={60}
+          className="w-[150px] md:w-[200px] h-auto"
           id="def-hero-logo"
           style={{ visibility: "hidden" }}
         />

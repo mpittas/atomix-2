@@ -176,9 +176,7 @@ export default function LandingGradientV1Page() {
     <div className="overflow-x-hidden">
       <div className="bg-white px-6 lg:px-12 mb-6" id="def-hero-main">
         <Header />
-        {/* <MainHero /> */}
-
-        <div className="min-h-[50vh] bg-slate-950"></div>
+        <MainHero />
       </div>
 
       {/* <DefCta
