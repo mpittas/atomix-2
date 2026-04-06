@@ -1,7 +1,9 @@
 "use client";
 
+import { useRef } from "react";
 import { Button as DefButton } from "@/components/ui";
 import SplitText from "@/components/typo/SplitText";
+import type { SplitTextHandle } from "@/components/typo/SplitText";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -32,73 +34,81 @@ const aboutAtomixItems = [
 ];
 
 export default function MainHero() {
-  useGSAP(() => {
-    const snapPoints = [0, 1 / 3, 2 / 3, 1];
+  const title1SplitRef = useRef<SplitTextHandle>(null);
+  const title2SplitRef = useRef<SplitTextHandle>(null);
 
+  useGSAP(() => {
+    // --- PAGE LOAD ANIMATION ---
+    const loadTl = gsap.timeline({ delay: 0.15 });
+
+    loadTl
+      .fromTo(
+        "#def-hero-logo",
+        { autoAlpha: 0, y: 30 },
+        { autoAlpha: 1, y: 0, duration: 0.8, ease: "power3.out" },
+      )
+      .set("#def-hero-split-text", { autoAlpha: 1 }, 0.3)
+      .add(() => title1SplitRef.current?.play(), 0.3)
+      .fromTo(
+        "#def-hero-load-btn",
+        { autoAlpha: 0, y: 20 },
+        { autoAlpha: 1, y: 0, duration: 0.6, ease: "power3.out" },
+        0.8,
+      )
+      .fromTo(
+        "#def-hero-images",
+        { autoAlpha: 0, y: 40 },
+        { autoAlpha: 1, y: 0, duration: 0.8, ease: "power3.out" },
+        0.6,
+      );
+
+    // --- Set initial hidden states for scroll-animated elements ---
+    gsap.set("#def-hero-title-2", { autoAlpha: 0, scale: 0 });
+    gsap.set("#def-hero-title-2-list .hero-list-item", {
+      autoAlpha: 0,
+      y: 20,
+    });
+    gsap.set("#def-hero-btn", { autoAlpha: 0 });
+
+    // --- SCROLL TIMELINE (scrub, no snap) ---
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: "#def-hero-main",
         start: "top top",
         end: "+=2300",
         scrub: 1,
-        snap: { snapTo: snapPoints, duration: 0.25, delay: 0.05 },
         pin: true,
       },
     });
 
-    tl.set("#def-hero-title-1", { opacity: 1, visibility: "visible" })
-      .set("#def-hero-images", { opacity: 1, visibility: "visible" })
-      .set("#def-hero-title-2", { autoAlpha: 0, scale: 0 })
-      .set("#def-hero-title-2-list .hero-list-item", { autoAlpha: 0, y: 20 })
-      .set("#def-hero-btn", { autoAlpha: 0 })
-      .to(
-        "#def-hero-title-1",
-        {
-          top: "-20%",
-          opacity: 0,
-          duration: 1,
-        },
-        0,
-      )
-      .to(
-        "#def-hero-images",
-        {
-          top: "50%",
-          y: "-50%",
-          duration: 1,
-        },
-        0,
-      )
-      .addLabel("centerReached", 1)
+    // Stage 1: Title 1 exits upward, images rise to center
+    tl.to("#def-hero-title-1", { top: "-20%", opacity: 0, duration: 1 }, 0).to(
+      "#def-hero-images",
+      { top: "50%", y: "-50%", duration: 1 },
+      0,
+    );
+
+    // Stage 2: Images split, title 2 scales in
+    tl.addLabel("centerReached", 1)
       .to(
         "#def-hero-image-mobile",
-        {
-          xPercent: -300,
-          duration: 1.35,
-          ease: "power2.inOut",
-        },
+        { xPercent: -300, duration: 1.35, ease: "power2.inOut" },
         "centerReached",
       )
       .to(
         "#def-hero-image-desktop",
-        {
-          xPercent: 170,
-          duration: 1.35,
-          ease: "power2.inOut",
-        },
+        { xPercent: 170, duration: 1.35, ease: "power2.inOut" },
         "centerReached",
       )
       .to(
         "#def-hero-title-2",
-        {
-          autoAlpha: 1,
-          scale: 1,
-          duration: 1.35,
-          ease: "power1.out",
-        },
+        { autoAlpha: 1, scale: 1, duration: 1.35, ease: "power1.out" },
         "centerReached",
       )
-      .addLabel("title2Visible")
+      .call(() => title2SplitRef.current?.play(), [], "centerReached+=0.6");
+
+    // Stage 3: List items and button
+    tl.addLabel("title2Visible")
       .to(
         "#def-hero-title-2-list .hero-list-item",
         {
@@ -113,11 +123,7 @@ export default function MainHero() {
       .addLabel("listVisible")
       .to(
         "#def-hero-btn",
-        {
-          autoAlpha: 1,
-          duration: 0.4,
-          ease: "power2.out",
-        },
+        { autoAlpha: 1, duration: 0.4, ease: "power2.out" },
         "listVisible+=0.1",
       );
   }, []);
@@ -144,24 +150,35 @@ export default function MainHero() {
         mouseInfluence={0.2}
       />
 
-      {/* HEADING */}
+      {/* FIRST TITLE - page load animation */}
       <div
-        className="text-white flex flex-col gap-y-8 justify-center items-center text-center absolute left-1/2 -translate-x-1/2 top-[10%] w-[1000px] opacity-0 visibility-hidden"
+        className="text-white flex flex-col gap-y-8 justify-center items-center text-center absolute left-1/2 -translate-x-1/2 top-[10%] w-[1000px]"
         id="def-hero-title-1"
       >
         <img
           src="/logo/atomix-logo-big-white.svg"
           alt="Atomix Logo"
           className="w-[200px]"
+          id="def-hero-logo"
+          style={{ visibility: "hidden" }}
         />
-        <SplitText text="Atomix offers a toolkit to structure loan and investment products which are fast, flexible, and secure." />
-        <DefButton size="large">Contact Us</DefButton>
+        <div id="def-hero-split-text" style={{ visibility: "hidden" }}>
+          <SplitText
+            ref={title1SplitRef}
+            startPaused
+            text="Atomix offers a toolkit to structure loan and investment products which are fast, flexible, and secure."
+          />
+        </div>
+        <div id="def-hero-load-btn" style={{ visibility: "hidden" }}>
+          <DefButton size="large">Contact Us</DefButton>
+        </div>
       </div>
 
-      {/* IMAGES */}
+      {/* IMAGES - page load animation */}
       <div
-        className="absolute top-[70%] left-1/2 -translate-x-1/2 w-[65%] opacity-0 visibility-hidden"
+        className="absolute top-[70%] left-1/2 -translate-x-1/2 w-[65%]"
         id="def-hero-images"
+        style={{ visibility: "hidden" }}
       >
         <div className="relative w-full" id="def-hero-image-desktop">
           <img
@@ -180,14 +197,19 @@ export default function MainHero() {
         </div>
       </div>
 
-      {/* TITLE 1 */}
+      {/* SECOND TITLE - scroll-driven animation */}
       <div
-        className="text-white max-w-[1000px] mx-auto flex flex-col gap-y-8 justify-center items-center text-center absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0 visibility-hidden"
+        className="text-white max-w-[1000px] mx-auto flex flex-col gap-y-8 justify-center items-center text-center absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
         id="def-hero-title-2"
+        style={{ visibility: "hidden" }}
       >
         <BadgeHeadingPill>About Atomix</BadgeHeadingPill>
 
-        <SplitText text="Property lending is overdue for a rebuild. Atomix is it." />
+        <SplitText
+          ref={title2SplitRef}
+          startPaused
+          text="Property lending is overdue for a rebuild. Atomix is it."
+        />
 
         <div
           id="def-hero-title-2-list"
