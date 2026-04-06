@@ -16,6 +16,7 @@ gsap.registerPlugin(ScrollTrigger, GSAPSplitText, useGSAP);
 
 const ACCENT_COLOR = "#00BBFF";
 const ACCENT_TOKEN_REGEX = /\[\[accent:(.*?)\]\]/g;
+const SHINE_COLOR = "#87fafd";
 
 const renderTextWithAccent = (text: string) => {
   const nodes: React.ReactNode[] = [];
@@ -72,6 +73,7 @@ export interface SplitTextProps {
   textAlign?: React.CSSProperties["textAlign"];
   onLetterAnimationComplete?: () => void;
   startPaused?: boolean;
+  enableShine?: boolean;
 }
 
 export interface HeroSplitTextLoopProps {
@@ -97,6 +99,7 @@ const SplitText = forwardRef<SplitTextHandle, SplitTextProps>(
       tag = "p",
       onLetterAnimationComplete,
       startPaused = false,
+      enableShine = true,
     },
     forwardedRef,
   ) => {
@@ -107,6 +110,9 @@ const SplitText = forwardRef<SplitTextHandle, SplitTextProps>(
     const renderedText = useMemo(() => renderTextWithAccent(text), [text]);
     const tweenRef = useRef<gsap.core.Tween | null>(null);
     const shouldPlayRef = useRef(false);
+    const shineTimelineRef = useRef<gsap.core.Timeline | null>(null);
+    const splitInstanceRef = useRef<GSAPSplitText | null>(null);
+    const styleRef = useRef<HTMLStyleElement | null>(null);
 
     useImperativeHandle(forwardedRef, () => ({
       play: () => {
@@ -115,8 +121,68 @@ const SplitText = forwardRef<SplitTextHandle, SplitTextProps>(
         } else if (!tweenRef.current) {
           shouldPlayRef.current = true;
         }
+        // If animation is already complete but shine hasn't started, start it
+        if (
+          animationCompletedRef.current &&
+          enableShine &&
+          !shineTimelineRef.current
+        ) {
+          startShineEffect();
+        }
       },
     }));
+
+    const startShineEffect = useCallback(() => {
+      if (
+        !enableShine ||
+        !splitInstanceRef.current ||
+        !splitInstanceRef.current.chars.length
+      )
+        return;
+
+      const chars = splitInstanceRef.current.chars;
+
+      // Clean up existing shine animation
+      if (shineTimelineRef.current) {
+        shineTimelineRef.current.kill();
+      }
+
+      // Create shine timeline
+      const shineTl = gsap.timeline({
+        repeat: -1,
+        repeatDelay: 0.3,
+      });
+
+      // Animate each character to shine color and back
+      chars.forEach((char, index) => {
+        // Skip accent spans
+        if (char.querySelector('span[style*="color"]')) return;
+
+        shineTl
+          .to(
+            char,
+            {
+              color: SHINE_COLOR,
+              duration: 0.6,
+              ease: "sine.inOut",
+              filter: "drop-shadow(0 0 4px " + SHINE_COLOR + ")",
+            },
+            index * 0.015,
+          )
+          .to(
+            char,
+            {
+              color: "",
+              duration: 0.4,
+              ease: "sine.inOut",
+              filter: "none",
+            },
+            index * 0.015 + 0.5,
+          );
+      });
+
+      shineTimelineRef.current = shineTl;
+    }, [enableShine]);
 
     // Keep callback ref updated
     useEffect(() => {
@@ -142,6 +208,17 @@ const SplitText = forwardRef<SplitTextHandle, SplitTextProps>(
         const el = ref.current as HTMLElement & {
           _rbsplitInstance?: GSAPSplitText;
         };
+
+        // Add CSS to prevent character breaks within words
+        const style = document.createElement("style");
+        style.textContent = `
+          .split-char {
+            white-space: nowrap !important;
+            display: inline-block !important;
+          }
+        `;
+        document.head.appendChild(style);
+        styleRef.current = style;
 
         if (el._rbsplitInstance) {
           try {
@@ -190,6 +267,9 @@ const SplitText = forwardRef<SplitTextHandle, SplitTextProps>(
           charsClass: "split-char",
           reduceWhiteSpace: false,
           onSplit: (self: GSAPSplitText) => {
+            // Store the split instance for shine effect
+            splitInstanceRef.current = self;
+
             assignTargets(self);
 
             const tweenVars: gsap.TweenVars = {
@@ -200,6 +280,8 @@ const SplitText = forwardRef<SplitTextHandle, SplitTextProps>(
               onComplete: () => {
                 animationCompletedRef.current = true;
                 onCompleteRef.current?.();
+                // Start shine effect after initial animation
+                startShineEffect();
               },
               willChange: "transform, opacity",
               force3D: true,
@@ -235,10 +317,21 @@ const SplitText = forwardRef<SplitTextHandle, SplitTextProps>(
           ScrollTrigger.getAll().forEach((st) => {
             if (st.trigger === el) st.kill();
           });
+          // Clean up shine animation
+          if (shineTimelineRef.current) {
+            shineTimelineRef.current.kill();
+            shineTimelineRef.current = null;
+          }
+          // Clean up style element
+          if (styleRef.current) {
+            document.head.removeChild(styleRef.current);
+            styleRef.current = null;
+          }
           try {
             splitInstance.revert();
           } catch (_) {}
           el._rbsplitInstance = undefined;
+          splitInstanceRef.current = null;
         };
       },
       {
@@ -254,6 +347,7 @@ const SplitText = forwardRef<SplitTextHandle, SplitTextProps>(
           rootMargin,
           fontsLoaded,
           startPaused,
+          startShineEffect,
         ],
         scope: ref,
       },
@@ -322,6 +416,7 @@ export function HeroSplitTextLoop({
       onLetterAnimationComplete={
         rotateTitles ? handleAnimationComplete : undefined
       }
+      enableShine={true}
     />
   );
 }

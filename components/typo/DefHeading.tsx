@@ -2,10 +2,10 @@ import React, { useRef } from "react";
 import { BadgeHeadingPill } from "../ui/BadgeHeadingPill";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { SplitText as GSAPSplitText } from "gsap/SplitText";
 import { useGSAP } from "@gsap/react";
+import SplitText from "./SplitText";
 
-gsap.registerPlugin(ScrollTrigger, GSAPSplitText, useGSAP);
+gsap.registerPlugin(ScrollTrigger);
 
 export interface DefHeadingProps {
   badgeText: string;
@@ -30,71 +30,12 @@ const DefHeading: React.FC<DefHeadingProps> = ({
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const badgeRef = useRef<HTMLDivElement>(null);
-  const titleRef = useRef<HTMLHeadingElement>(null);
   const descRef = useRef<HTMLDivElement>(null);
 
   const titleColor = theme === "dark" ? "text-[#212329]" : "text-white";
   const descriptionColor =
     theme === "dark" ? "text-[#474D5D]" : "text-white/80";
 
-  useGSAP(
-    () => {
-      if (!containerRef.current || !titleRef.current) return;
-
-      const splitInstance = new GSAPSplitText(titleRef.current, {
-        type: "chars",
-        smartWrap: true,
-        charsClass: "split-char",
-        reduceWhiteSpace: false,
-      });
-
-      gsap.set(splitInstance.chars, { opacity: 0, y: 30 });
-      gsap.set(descRef.current, { opacity: 0, y: 30 });
-      gsap.set(badgeRef.current, { opacity: 0, y: 30 });
-
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: containerRef.current,
-          start: "top 70%",
-          toggleActions: "play none none none",
-        },
-      });
-
-      tl.to(badgeRef.current, {
-        opacity: 1,
-        y: 0,
-        duration: 1,
-        ease: "power3.out",
-      })
-        .to(
-          splitInstance.chars,
-          {
-            opacity: 1,
-            y: 0,
-            duration: 1,
-            ease: "power3.out",
-            stagger: 0.02,
-            onComplete: onAnimationComplete,
-          },
-          "-=0.4",
-        )
-        .to(
-          descRef.current,
-          {
-            opacity: 1,
-            y: 0,
-            duration: 1,
-            ease: "power3.out",
-          },
-          "-=0.3",
-        );
-
-      return () => {
-        splitInstance.revert();
-      };
-    },
-    { scope: containerRef },
-  );
   return (
     <div
       ref={containerRef}
@@ -106,12 +47,13 @@ const DefHeading: React.FC<DefHeadingProps> = ({
         </BadgeHeadingPill>
       </div>
 
-      <h2
-        ref={titleRef}
+      <SplitText
+        text={title}
+        tag="h2"
         className={`text-5xl leading-[1.2em] font-semibold ${titleColor}`}
-      >
-        {title}
-      </h2>
+        onLetterAnimationComplete={onAnimationComplete}
+        enableShine={true}
+      />
 
       <div ref={descRef} className={`${descriptionColor} text-lg`}>
         {description}

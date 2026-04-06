@@ -3,12 +3,12 @@
 import { useRef, useCallback } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { SplitText as GSAPSplitText } from "gsap/SplitText";
 import { useGSAP } from "@gsap/react";
 import { BadgeHeadingPill } from "@/components/ui/BadgeHeadingPill";
 import { Button as DefButton } from "@/components/ui";
+import SplitText from "@/components/typo/SplitText";
 
-gsap.registerPlugin(ScrollTrigger, GSAPSplitText);
+gsap.registerPlugin(ScrollTrigger);
 
 interface SlideData {
   badge: string;
@@ -26,53 +26,27 @@ const slides: SlideData[] = [
   },
 ];
 
-function animateSplitText(
-  container: HTMLElement,
-  onComplete?: () => void,
-): GSAPSplitText {
-  const split = new GSAPSplitText(container, {
-    type: "chars",
-    charsClass: "split-char",
-    reduceWhiteSpace: false,
-  });
-
-  gsap.set(split.chars, { opacity: 0, y: 30 });
-
-  gsap.to(split.chars, {
-    opacity: 1,
-    y: 0,
-    duration: 0.6,
-    ease: "power3.out",
-    stagger: 0.02,
-    onComplete,
-  });
-
-  return split;
-}
-
 export default function ScrollableHeading() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const slide1Ref = useRef<HTMLDivElement>(null);
   const slide2Ref = useRef<HTMLDivElement>(null);
-  const text1Ref = useRef<HTMLParagraphElement>(null);
-  const text2Ref = useRef<HTMLParagraphElement>(null);
-  const split1Ref = useRef<GSAPSplitText | null>(null);
-  const split2Ref = useRef<GSAPSplitText | null>(null);
+  const splitText1Ref = useRef<any>(null);
+  const splitText2Ref = useRef<any>(null);
   const hasAnimated1Ref = useRef(false);
   const hasAnimated2Ref = useRef(false);
 
   const animateSlide1 = useCallback(() => {
-    if (!text1Ref.current || hasAnimated1Ref.current) return;
-    hasAnimated1Ref.current = true;
-    if (split1Ref.current) split1Ref.current.revert();
-    split1Ref.current = animateSplitText(text1Ref.current);
+    if (!hasAnimated1Ref.current) {
+      hasAnimated1Ref.current = true;
+      splitText1Ref.current?.play();
+    }
   }, []);
 
   const animateSlide2 = useCallback(() => {
-    if (!text2Ref.current || hasAnimated2Ref.current) return;
-    hasAnimated2Ref.current = true;
-    if (split2Ref.current) split2Ref.current.revert();
-    split2Ref.current = animateSplitText(text2Ref.current);
+    if (!hasAnimated2Ref.current) {
+      hasAnimated2Ref.current = true;
+      splitText2Ref.current?.play();
+    }
   }, []);
 
   useGSAP(
@@ -153,8 +127,6 @@ export default function ScrollableHeading() {
 
       return () => {
         tl.kill();
-        split1Ref.current?.revert();
-        split2Ref.current?.revert();
       };
     },
     { scope: sectionRef },
@@ -172,12 +144,13 @@ export default function ScrollableHeading() {
           className="text-white max-w-[1000px] mx-auto flex flex-col gap-y-8 justify-center items-center text-center absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
         >
           <BadgeHeadingPill>{slides[0].badge}</BadgeHeadingPill>
-          <div
-            ref={text1Ref}
+          <SplitText
+            ref={splitText1Ref}
+            text={slides[0].text}
             className="text-5xl leading-[1.2em] font-semibold text-white"
-          >
-            {slides[0].text}
-          </div>
+            startPaused={true}
+            enableShine={true}
+          />
 
           <DefButton size="large">Contact Us</DefButton>
         </div>
@@ -188,12 +161,13 @@ export default function ScrollableHeading() {
           className="text-white max-w-[1000px] mx-auto flex flex-col gap-y-8 justify-center items-center text-center absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
         >
           <BadgeHeadingPill>{slides[1].badge}</BadgeHeadingPill>
-          <div
-            ref={text2Ref}
+          <SplitText
+            ref={splitText2Ref}
+            text={slides[1].text}
             className="text-5xl leading-[1.2em] font-semibold text-white"
-          >
-            {slides[1].text}
-          </div>
+            startPaused={true}
+            enableShine={true}
+          />
 
           <DefButton size="large">Contact Us</DefButton>
         </div>
