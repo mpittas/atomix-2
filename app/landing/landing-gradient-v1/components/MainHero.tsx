@@ -10,75 +10,46 @@ import { BadgeHeadingPill } from "@/components/ui/BadgeHeadingPill";
 
 gsap.registerPlugin(ScrollTrigger);
 
+const aboutAtomixItems = [
+  {
+    title: "Rules-first core",
+    subtitle: "Credit policies enforced deterministically at every step.",
+  },
+  {
+    title: "Adaptive intelligence",
+    subtitle:
+      "AI-assisted orchestration that adjusts to each case in real time.",
+  },
+  {
+    title: "Operational speed",
+    subtitle:
+      "Automated workflows that reduce manual underwriting bottlenecks.",
+  },
+  {
+    title: "Audit-ready trust",
+    subtitle: "Decision trails remain transparent, immutable, and reviewable.",
+  },
+];
+
 export default function MainHero() {
   useGSAP(() => {
-    const heroPinTriggerId = "def-hero-main-pin";
-    let lastSnapProgress = 0;
-    const centerProgress = 1 / 6;
-    const title2Progress = 2 / 6;
-    const title3Progress = 3 / 6;
-    const title4Progress = 4 / 6;
-    const title5Progress = 5 / 6;
-    const title6Progress = 1;
+    const snapPoints = [0, 1 / 3, 2 / 3, 1];
 
     const tl = gsap.timeline({
       scrollTrigger: {
-        id: heroPinTriggerId,
         trigger: "#def-hero-main",
         start: "top top",
-        end: "+=2800",
+        end: "+=2300",
         scrub: 1,
-        snap: {
-          snapTo: (value) => {
-            if (value <= centerProgress) {
-              lastSnapProgress = value;
-
-              return value;
-            }
-
-            const snapPoints = [
-              centerProgress,
-              title2Progress,
-              title3Progress,
-              title4Progress,
-              title5Progress,
-              title6Progress,
-            ];
-            const isForward = value >= lastSnapProgress;
-
-            if (isForward) {
-              const nextPoint =
-                snapPoints.find((point) => point >= value) ?? title3Progress;
-
-              lastSnapProgress = nextPoint;
-
-              return nextPoint;
-            }
-
-            const prevPoint =
-              [...snapPoints].reverse().find((point) => point <= value) ??
-              centerProgress;
-
-            lastSnapProgress = prevPoint;
-
-            return prevPoint;
-          },
-          duration: 0.25,
-          delay: 0.05,
-        },
+        snap: { snapTo: snapPoints, duration: 0.25, delay: 0.05 },
         pin: true,
-        pinSpacing: true,
-        markers: false,
       },
     });
 
     tl.set("#def-hero-title-1", { opacity: 1, visibility: "visible" })
       .set("#def-hero-images", { opacity: 1, visibility: "visible" })
       .set("#def-hero-title-2", { autoAlpha: 0, scale: 0 })
-      .set("#def-hero-title-3", { autoAlpha: 0 })
-      .set("#def-hero-title-4", { autoAlpha: 0, scale: 0 })
-      .set("#def-hero-title-5", { autoAlpha: 0, scale: 0 })
-      .set("#def-hero-title-6", { autoAlpha: 0, scale: 0 })
+      .set("#def-hero-title-2-list .hero-list-item", { autoAlpha: 0, y: 20 })
       .to(
         "#def-hero-title-1",
         {
@@ -128,98 +99,22 @@ export default function MainHero() {
       )
       .addLabel("title2Visible")
       .to(
-        "#def-hero-title-2",
-        {
-          autoAlpha: 0,
-          scale: 0,
-          duration: 0.5,
-          ease: "power1.in",
-        },
-        "title2Visible",
-      )
-      .set("#def-hero-title-3", { scale: 0 })
-      .to(
-        "#def-hero-title-3",
+        "#def-hero-title-2-list .hero-list-item",
         {
           autoAlpha: 1,
-          scale: 1,
-          duration: 0.5,
-          ease: "power1.out",
+          y: 0,
+          duration: 0.45,
+          ease: "power2.out",
+          stagger: 0.12,
         },
-        "title2Visible+=0.5",
+        "title2Visible+=0.35",
       )
-      .addLabel("title3Visible")
-      .to(
-        "#def-hero-title-3",
-        {
-          autoAlpha: 0,
-          scale: 0,
-          duration: 0.5,
-          ease: "power1.in",
-        },
-        "title3Visible",
-      )
-      .set("#def-hero-title-4", { scale: 0 })
-      .to(
-        "#def-hero-title-4",
-        {
-          autoAlpha: 1,
-          scale: 1,
-          duration: 0.5,
-          ease: "power1.out",
-        },
-        "title3Visible+=0.5",
-      )
-      .addLabel("title4Visible")
-      .to(
-        "#def-hero-title-4",
-        {
-          autoAlpha: 0,
-          scale: 0,
-          duration: 0.5,
-          ease: "power1.in",
-        },
-        "title4Visible",
-      )
-      .set("#def-hero-title-5", { scale: 0 })
-      .to(
-        "#def-hero-title-5",
-        {
-          autoAlpha: 1,
-          scale: 1,
-          duration: 0.5,
-          ease: "power1.out",
-        },
-        "title4Visible+=0.5",
-      )
-      .addLabel("title5Visible")
-      .to(
-        "#def-hero-title-5",
-        {
-          autoAlpha: 0,
-          scale: 0,
-          duration: 0.5,
-          ease: "power1.in",
-        },
-        "title5Visible",
-      )
-      .set("#def-hero-title-6", { scale: 0 })
-      .to(
-        "#def-hero-title-6",
-        {
-          autoAlpha: 1,
-          scale: 1,
-          duration: 0.5,
-          ease: "power1.out",
-        },
-        "title5Visible+=0.5",
-      )
-      .addLabel("title6Visible");
+      .addLabel("listVisible");
   }, []);
 
   return (
     <section
-      className="flex h-[calc(100vh-116px)] bg-[#004054] rounded-3xl overflow-hidden relative flex flex-col"
+      className="flex flex-col h-[calc(100vh-116px)] bg-[#004054] rounded-3xl overflow-hidden relative"
       id="atomix-playground-v1"
     >
       <SoftAurora
@@ -241,7 +136,7 @@ export default function MainHero() {
 
       {/* HEADING */}
       <div
-        className="text-white flex flex-col gap-y-8 justify-center items-center text-center bg-red-500/0 absolute left-1/2 -translate-x-1/2 top-[10%] w-[1000px] opacity-0 visibility-hidden"
+        className="text-white flex flex-col gap-y-8 justify-center items-center text-center absolute left-1/2 -translate-x-1/2 top-[10%] w-[1000px] opacity-0 visibility-hidden"
         id="def-hero-title-1"
       >
         <img
@@ -255,18 +150,14 @@ export default function MainHero() {
 
       {/* IMAGES */}
       <div
-        className="absolute top-[70%] left-1/2 -translate-x-1/2  w-[65%] opacity-0 visibility-hidden"
+        className="absolute top-[70%] left-1/2 -translate-x-1/2 w-[65%] opacity-0 visibility-hidden"
         id="def-hero-images"
       >
         <div className="relative w-full" id="def-hero-image-desktop">
           <img
             src="/dashboard/hero-desktop-img.svg"
             alt="Atomix desktop dashboard preview"
-            className="w-full select-none"
-            style={{
-              objectFit: "contain",
-              paddingLeft: "12%",
-            }}
+            className="w-full select-none object-contain pl-[12%]"
           />
         </div>
 
@@ -274,71 +165,35 @@ export default function MainHero() {
           <img
             src="/dashboard/hero-mobile-img.svg"
             alt="Atomix mobile form preview"
-            className="absolute left-0 bottom-0 w-[22%] select-none"
-            style={{
-              objectFit: "contain",
-            }}
+            className="absolute left-0 bottom-0 w-[22%] select-none object-contain"
           />
         </div>
       </div>
 
       {/* TITLE 1 */}
       <div
-        className="text-white max-w-[1000px] mx-auto flex flex-col gap-y-8 justify-center items-center text-center bg-green-500/0 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0 visibility-hidden"
+        className="text-white max-w-[1000px] mx-auto flex flex-col gap-y-8 justify-center items-center text-center absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0 visibility-hidden"
         id="def-hero-title-2"
       >
         <BadgeHeadingPill>About Atomix</BadgeHeadingPill>
 
         <SplitText text="Property lending is overdue for a rebuild. Atomix is it." />
-        <DefButton size="large">Learn More</DefButton>
-      </div>
 
-      {/* TITLE 2 */}
-      <div
-        className="text-white max-w-[1000px] mx-auto flex flex-col gap-y-8 justify-center items-center text-center bg-yellow-500/0 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0 visibility-hidden"
-        id="def-hero-title-3"
-      >
-        <BadgeHeadingPill>Rules-first architecture</BadgeHeadingPill>
-        <SplitText
-          text="Credit policies enforced with mathematical certainty; zero
-tolerance for non-compliant loans"
-        />
-        <DefButton size="large">Learn More</DefButton>
-      </div>
+        <div
+          id="def-hero-title-2-list"
+          className="w-full max-w-[860px] grid grid-cols-1 md:grid-cols-2 gap-3"
+        >
+          {aboutAtomixItems.map((item) => (
+            <div
+              key={item.title}
+              className="hero-list-item rounded-xl border border-white/20 bg-white/5 backdrop-blur-sm px-4 py-3 text-left"
+            >
+              <h4 className="text-sm font-semibold text-white">{item.title}</h4>
+              <p className="text-xs text-white/75 mt-1">{item.subtitle}</p>
+            </div>
+          ))}
+        </div>
 
-      {/* TITLE 3 */}
-      <div
-        className="text-white max-w-[1000px] mx-auto flex flex-col gap-y-8 justify-center items-center text-center bg-blue-500/0 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0 visibility-hidden"
-        id="def-hero-title-4"
-      >
-        <BadgeHeadingPill>AI layer</BadgeHeadingPill>
-        <SplitText
-          text="Optimal workflow construction, real-time underwriting adaptation and natural
-language interaction"
-        />
-        <DefButton size="large">Learn More</DefButton>
-      </div>
-
-      {/* TITLE 4 */}
-      <div
-        className="text-white max-w-[1000px] mx-auto flex flex-col gap-y-8 justify-center items-center text-center bg-purple-500/0 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0 visibility-hidden"
-        id="def-hero-title-5"
-      >
-        <BadgeHeadingPill>Complex reasoning engine</BadgeHeadingPill>
-        <SplitText text="Dynamic orchestration across any loan type or complexity" />
-        <DefButton size="large">Learn More</DefButton>
-      </div>
-
-      {/* TITLE 5 */}
-      <div
-        className="text-white max-w-[1000px] mx-auto flex flex-col gap-y-8 justify-center items-center text-center bg-pink-500/0 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0 visibility-hidden"
-        id="def-hero-title-6"
-      >
-        <BadgeHeadingPill>Blockchain audit layer</BadgeHeadingPill>
-        <SplitText
-          text="Every decision immutably recorded; fraud and misrepresentation
-eliminated at source"
-        />
         <DefButton size="large">Learn More</DefButton>
       </div>
     </section>
