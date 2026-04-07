@@ -179,15 +179,19 @@ export default function BenefitsLayout() {
             <button
               key={tab}
               onClick={() => handleTabClick(index)}
-              className={`flex-1 flex flex-col gap-4 rounded-xl transition-all duration-500 cursor-pointer p-5 ${
+              className={`relative flex-1 flex flex-col gap-4 rounded-xl transition-all duration-500 cursor-pointer p-5 overflow-hidden ${
                 index === activeIndex
                   ? "bg-[#eaeff1] text-black"
                   : "bg-[#124652]"
               }`}
               type="button"
             >
+              <div className="pointer-events-none absolute inset-0 rounded-xl overflow-hidden">
+                <div className="absolute -top-8 -right-4 w-32 h-32 bg-white/15 rounded-full blur-2xl" />
+                <div className="absolute -bottom-8 -left-4 w-32 h-32 bg-white/15 rounded-full blur-2xl" />
+              </div>
               <h3
-                className={`text-xl font-semibold text-center ${
+                className={`text-xl font-semibold text-center relative z-10 ${
                   index === activeIndex ? "text-[#0f1b1e]" : "text-white"
                 }`}
               >
