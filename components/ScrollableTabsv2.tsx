@@ -137,10 +137,17 @@ export default function ScrollableTabsv2() {
     if (!st) return;
     const targetProgress = index / 3 + 1 / 6;
     const scrollToY = st.start + (st.end - st.start) * targetProgress;
+    const progressDelta = Math.abs(st.progress - targetProgress);
+    const scrollDuration = gsap.utils.clamp(
+      1.1,
+      2.1,
+      1.1 + progressDelta * 1.2,
+    );
     gsap.to(window, {
       scrollTo: { y: scrollToY },
-      duration: 0.4,
-      ease: "power2.inOut",
+      duration: scrollDuration,
+      ease: "power1.inOut",
+      overwrite: "auto",
     });
   };
 

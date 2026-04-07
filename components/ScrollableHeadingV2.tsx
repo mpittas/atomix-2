@@ -166,7 +166,7 @@ export default function ScrollableHeadingV2() {
           </div>
 
           <div ref={buttonRef} className="mt-8">
-            <DefButton size="large">About us</DefButton>
+            <DefButton size="large">Learn more</DefButton>
           </div>
         </div>
       </div>

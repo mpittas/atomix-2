@@ -29,11 +29,18 @@ export default function BenefitsLayout() {
     const maxStep = Math.max(tabs.length - 1, 1);
     const targetProgress = index / maxStep;
     const scrollToY = st.start + (st.end - st.start) * targetProgress;
+    const progressDelta = Math.abs(st.progress - targetProgress);
+    const scrollDuration = gsap.utils.clamp(
+      1.1,
+      2.2,
+      1.1 + progressDelta * 1.4,
+    );
 
     gsap.to(window, {
       scrollTo: { y: scrollToY },
-      duration: 0.45,
-      ease: "power2.inOut",
+      duration: scrollDuration,
+      ease: "power1.inOut",
+      overwrite: "auto",
     });
   };
 
