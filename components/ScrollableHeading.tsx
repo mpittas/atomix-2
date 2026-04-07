@@ -154,7 +154,7 @@ export default function ScrollableHeading() {
             enableShine={true}
           />
 
-          <DefButton size="large">Contact Us</DefButton>
+          <DefButton size="large">About Us</DefButton>
         </div>
       </div>
     </div>
