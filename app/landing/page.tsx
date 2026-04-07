@@ -246,7 +246,8 @@ export default function LandingGradientV1Page() {
               <div className="max-w-[1060px] mx-auto">
                 <DefHeading
                   theme="light"
-                  badgeText="Solutions"
+                  badgeText=""
+                  showBadge={false}
                   title="The Tech Stack Solution"
                   description="AI-powered rule enforcement, full end-to-end automation, and blockchain-backed auditability
 — delivering visibility, collaboration, and trust across the lending ecosystem."
@@ -285,16 +286,7 @@ export default function LandingGradientV1Page() {
               />
             </div>
             <div className="max-w-[1200px] px-8 mx-auto bg-red-500/0">
-              <div className="max-w-[1060px] mx-auto">
-                <DefHeading
-                  theme="light"
-                  badgeText="Platform Advantages"
-                  title="Benefits"
-                  description="Purpose-built lending infrastructure that reduces friction, accelerates decisions, and creates measurable advantages for capital providers, lenders, and borrowers alike."
-                />
-              </div>
-
-              <div className="mt-16 flex flex-col items-center">
+              <div className="mt-0 flex flex-col items-center">
                 <div className="w-full flex flex-col gap-32" id="info-rows">
                   <BenefitsLayout />
                 </div>
@@ -318,7 +310,11 @@ export default function LandingGradientV1Page() {
             <div className="max-w-[1200px] px-8 mx-auto bg-red-500/0">
               <TheMarket />
             </div>
+          </div>
+        </div>
 
+        <div className="h-full mb-12">
+          <div className="px-18 py-36 rounded-3xl bg-linear-to-b from-[#0B4858] to-[#81A6AF]">
             <div className="max-w-[1200px] px-8 mx-auto bg-red-500/0">
               <WhyWorkWithUs />
             </div>

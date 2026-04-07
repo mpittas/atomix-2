@@ -136,8 +136,6 @@ export default function ScrollableHeading() {
             startPaused={true}
             enableShine={true}
           />
-
-          <DefButton size="large">Contact Us</DefButton>
         </div>
 
         {/* Slide 2 - Vision */}

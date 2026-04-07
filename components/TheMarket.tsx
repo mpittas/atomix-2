@@ -74,6 +74,7 @@ export default function TheMarket() {
       <DefHeading
         theme="light"
         badgeText="Opportunity"
+        showBadge={false}
         title="The Market"
         description="UK property lending is large, active and chronically under-automated."
         onAnimationComplete={handleHeadingAnimationComplete}

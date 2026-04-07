@@ -35,6 +35,11 @@ const features = [
     title: "Marketplace Infrastructure",
     text: "Ready to scale across lenders, brokers and capital providers",
   },
+  {
+    icon: "/icons/white/ai-chip.svg",
+    title: "Lorem Ipsum Dolor",
+    text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+  },
 ];
 
 export default function WhyAtomix() {
@@ -76,6 +81,7 @@ export default function WhyAtomix() {
       <DefHeading
         theme="light"
         badgeText="Platform"
+        showBadge={false}
         title="Why Atomix"
         description="No other platform delivers this combination."
         onAnimationComplete={handleHeadingAnimationComplete}
@@ -86,7 +92,7 @@ export default function WhyAtomix() {
         className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-4 max-w-[1100px] mx-auto"
       >
         {/* Row 1: 2 cards - first spans 2 columns, second takes 1 */}
-        <div className="md:col-span-2">
+        <div className="md:col-span-1">
           <IconBox
             src={features[0].icon}
             title={features[0].title}
@@ -125,6 +131,16 @@ export default function WhyAtomix() {
             src={features[4].icon}
             title={features[4].title}
             description={features[4].text}
+            imageSize="large"
+          />
+        </div>
+
+        {/* Row 3: sixth card spanning 2 columns */}
+        <div className="md:col-span-1">
+          <IconBox
+            src={features[5].icon}
+            title={features[5].title}
+            description={features[5].text}
             imageSize="large"
           />
         </div>

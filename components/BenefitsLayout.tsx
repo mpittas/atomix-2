@@ -7,6 +7,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import { useGSAP } from "@gsap/react";
 import IconBoxHorizontal from "./IconBoxHorizontal";
+import DefHeading from "./typo/DefHeading";
 
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
@@ -155,6 +156,16 @@ export default function BenefitsLayout() {
   return (
     <div ref={sectionRef} className="relative w-full">
       <div ref={wrapperRef} className="bg-red-500/0 flex flex-col gap-y-8">
+        <div className="max-w-[1060px] mx-auto">
+          <DefHeading
+            theme="light"
+            badgeText=""
+            showBadge={false}
+            title="Benefits"
+            description="Purpose-built lending infrastructure that reduces friction, accelerates decisions, and creates measurable advantages for capital providers, lenders, and borrowers alike."
+          />
+        </div>
+
         <div className="flex gap-4 w-full">
           {tabs.map((tab, index) => (
             <button

@@ -246,7 +246,8 @@ export default function LandingGradientV1Page() {
               <div className="max-w-[1060px] mx-auto">
                 <DefHeading
                   theme="light"
-                  badgeText="Solutions"
+                  badgeText=""
+                  showBadge={false}
                   title="The Tech Stack Solution"
                   description="AI-powered rule enforcement, full end-to-end automation, and blockchain-backed auditability
 — delivering visibility, collaboration, and trust across the lending ecosystem."
@@ -288,7 +289,8 @@ export default function LandingGradientV1Page() {
               <div className="max-w-[1060px] mx-auto">
                 <DefHeading
                   theme="light"
-                  badgeText="Platform Advantages"
+                  badgeText=""
+                  showBadge={false}
                   title="Benefits"
                   description="Purpose-built lending infrastructure that reduces friction, accelerates decisions, and creates measurable advantages for capital providers, lenders, and borrowers alike."
                 />
