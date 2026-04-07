@@ -162,7 +162,7 @@ export default function ScrollableTabsv2() {
         scrollTrigger: {
           trigger: sectionRef.current,
           start: "top top+=10px",
-          end: "+=1000%",
+          end: "+=600%",
           pin: true,
           pinSpacing: true,
           scrub: 0.5,
@@ -203,8 +203,8 @@ export default function ScrollableTabsv2() {
 
         const segStart = tabIdx / 3; // 0, 0.333, 0.666
         const segEnd = (tabIdx + 1) / 3;
-        const inStart = tabIdx === 0 ? 0.04 : segStart + 0.01;
-        const outStart = segEnd - 0.02;
+        const inStart = tabIdx === 0 ? 0.04 : segStart + 0.02;
+        const outStart = segEnd - 0.08;
         const isLastTab = tabIdx === tabsData.length - 1;
 
         // Animate in: staggered scale + opacity
@@ -213,8 +213,8 @@ export default function ScrollableTabsv2() {
           {
             scale: 1,
             opacity: 1,
-            stagger: 0.02,
-            duration: 0.08,
+            stagger: 0.035,
+            duration: 0.12,
             ease: "back.out(1.5)",
           },
           inStart,
@@ -227,8 +227,8 @@ export default function ScrollableTabsv2() {
             {
               scale: 0,
               opacity: 0,
-              stagger: -0.008,
-              duration: 0.02,
+              stagger: -0.012,
+              duration: 0.04,
               ease: "back.in(1.5)",
             },
             outStart,
@@ -270,7 +270,7 @@ export default function ScrollableTabsv2() {
       </div>
       <div
         ref={wrapperRef}
-        className=" flex flex-col items-center py-16 px-4 gap-y-24"
+        className=" flex flex-col items-center py-16 px-4 gap-y-16"
       >
         {/* Top - DefHeading */}
         <DefHeading
