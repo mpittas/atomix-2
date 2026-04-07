@@ -135,13 +135,17 @@ export default function ScrollableTabsv2() {
   const handleTabClick = (index: number) => {
     const st = scrollTriggerRef.current;
     if (!st) return;
-    const targetProgress = index / 3 + 1 / 6;
+    const segSize = 1 / tabsData.length;
+    const segStart = index * segSize;
+    const inStart = index === 0 ? 0.04 : segStart + 0.02;
+    const animationComplete = inStart + 0.12 + 0.035 * 3;
+    const targetProgress = animationComplete;
     const scrollToY = st.start + (st.end - st.start) * targetProgress;
     const progressDelta = Math.abs(st.progress - targetProgress);
     const scrollDuration = gsap.utils.clamp(
-      1.1,
-      2.1,
-      1.1 + progressDelta * 1.2,
+      1.8,
+      3.2,
+      1.8 + progressDelta * 2.0,
     );
     gsap.to(window, {
       scrollTo: { y: scrollToY },
