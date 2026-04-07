@@ -180,7 +180,7 @@ export default function LandingGradientV1Page() {
       </div>
 
       <div className="px-12 mt-2 flex flex-col gap-2">
-        <div className="h-full mb-6 ">
+        <div className="h-full mb-6">
           <div
             // ref={sectionRef}
             className="relative px-18 py-36 rounded-t-3xl bg-linear-to-b from-[#0B4858] to-[#81A6AF] relative z-[50] overflow-hidden"
