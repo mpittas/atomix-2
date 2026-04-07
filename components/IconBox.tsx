@@ -25,7 +25,7 @@ export default function IconBox({
 }: IconBoxProps) {
   const handleMouseEnter = (event: MouseEvent<HTMLDivElement>) => {
     gsap.to(event.currentTarget, {
-      scale: 1.07,
+      scale: 1.1,
       duration: 0.25,
       ease: "power2.out",
     });
