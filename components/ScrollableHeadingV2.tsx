@@ -25,6 +25,9 @@ export default function ScrollableHeadingV2() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const slideRef = useRef<HTMLDivElement>(null);
   const splitTextRef = useRef<any>(null);
+  const iconBox1Ref = useRef<HTMLDivElement>(null);
+  const iconBox2Ref = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLDivElement>(null);
   const hasAnimatedRef = useRef(false);
 
   const animateSlide = useCallback(() => {
@@ -42,31 +45,74 @@ export default function ScrollableHeadingV2() {
         scrollTrigger: {
           trigger: sectionRef.current,
           start: "top top",
-          end: "+=2000",
+          end: "+=4000",
           scrub: 0.5,
           pin: true,
           pinSpacing: true,
         },
       });
 
-      // Initial state
+      // Initial states
       gsap.set(slideRef.current, { autoAlpha: 0, scale: 0.9 });
+      gsap.set(iconBox1Ref.current, { autoAlpha: 0, x: -100 });
+      gsap.set(iconBox2Ref.current, { autoAlpha: 0, x: 100 });
+      gsap.set(buttonRef.current, { autoAlpha: 0, y: 30 });
 
-      // Slide: fade in gradually from start to 0.5
+      // Slide: fade in gradually from start to 0.15
       tl.fromTo(
         slideRef.current,
         { autoAlpha: 0, scale: 0.9 },
         {
           autoAlpha: 1,
           scale: 1,
-          duration: 0.5,
+          duration: 0.15,
           ease: "power2.out",
           onStart: animateSlide,
         },
         0,
       )
-        // Hold slide from 0.5 to 1.0
-        .to(slideRef.current, { duration: 0.5 }, 0.5);
+        // Hold slide briefly
+        .to(slideRef.current, { duration: 0.1 }, 0.15)
+        // IconBox 1: slide in from left from 0.25 to 0.5
+        .fromTo(
+          iconBox1Ref.current,
+          { autoAlpha: 0, x: -100 },
+          {
+            autoAlpha: 1,
+            x: 0,
+            duration: 0.25,
+            ease: "power2.out",
+          },
+          0.25,
+        )
+        // IconBox 2: slide in from right from 0.3 to 0.55
+        .fromTo(
+          iconBox2Ref.current,
+          { autoAlpha: 0, x: 100 },
+          {
+            autoAlpha: 1,
+            x: 0,
+            duration: 0.25,
+            ease: "power2.out",
+          },
+          0.3,
+        )
+        // Hold after icon boxes
+        .to(slideRef.current, { duration: 0.2 }, 0.55)
+        // Button: fade in from 0.75 to 0.9
+        .fromTo(
+          buttonRef.current,
+          { autoAlpha: 0, y: 30 },
+          {
+            autoAlpha: 1,
+            y: 0,
+            duration: 0.15,
+            ease: "power2.out",
+          },
+          0.75,
+        )
+        // Hold from 0.9 to end
+        .to(slideRef.current, { duration: 0.1 }, 0.9);
 
       return () => {
         tl.kill();
@@ -88,7 +134,7 @@ export default function ScrollableHeadingV2() {
         >
           {/* Two Columns with IconBox */}
           <div className="flex flex-col md:flex-row gap-8 w-full max-w-4xl">
-            <div className="flex-1">
+            <div ref={iconBox1Ref} className="flex-1">
               <IconBox
                 src="/icons/white/brain-links.svg"
                 width={64}
@@ -98,7 +144,7 @@ export default function ScrollableHeadingV2() {
                 imageSize="large"
               />
             </div>
-            <div className="flex-1">
+            <div ref={iconBox2Ref} className="flex-1">
               <IconBox
                 src="/icons/white/shield-check-white.svg"
                 width={64}
@@ -110,9 +156,9 @@ export default function ScrollableHeadingV2() {
             </div>
           </div>
 
-          <DefButton size="large" className="mt-8">
-            About us
-          </DefButton>
+          <div ref={buttonRef} className="mt-8">
+            <DefButton size="large">About us</DefButton>
+          </div>
         </div>
       </div>
     </div>

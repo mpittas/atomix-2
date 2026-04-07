@@ -54,7 +54,7 @@ export default function BenefitsLayout() {
         scrollTrigger: {
           trigger: wrapperRef.current,
           start: "center center",
-          end: () => `+=${window.innerHeight * maxStep * 1.8}`,
+          end: () => `+=${window.innerHeight * maxStep * 4}`,
           pin: true,
           pinSpacing: true,
           scrub: 0.5,
@@ -73,55 +73,73 @@ export default function BenefitsLayout() {
       // Normalize timeline to exactly 1.0 so positions = scroll progress
       tl.set({}, {}, 1);
 
-      // Animate each panel's content based on scroll progress segments
+      // Each tab gets ~0.333 of the timeline.
+      // Within each segment:
+      //   0%–50%  → content reveals (items stagger in)
+      //   50%–85% → hold (fully visible)
+      //   85%–100% → quick fade out & switch
       tabs.forEach((_, tabIdx) => {
         const panel = panelRefs.current[tabIdx];
         if (!panel) return;
 
         const items = panel.querySelectorAll(".benefit-animate-item");
-        const segStart = tabIdx / tabs.length;
-        const segEnd = (tabIdx + 1) / tabs.length;
-        const inStart = tabIdx === 0 ? 0.02 : segStart + 0.01;
+        const segSize = 1 / tabs.length;
+        const segStart = tabIdx * segSize;
+        const segEnd = (tabIdx + 1) * segSize;
         const isLastTab = tabIdx === tabs.length - 1;
+
+        // Content reveal occupies first 50% of segment
+        const revealStart = tabIdx === 0 ? 0.01 : segStart + 0.005;
+        const revealDur = segSize * 0.5;
 
         // Panel fade in
         tl.to(
           panel,
-          { autoAlpha: 1, y: 0, duration: 0.05, ease: "power3.out" },
-          inStart,
+          {
+            autoAlpha: 1,
+            y: 0,
+            duration: revealDur * 0.15,
+            ease: "power3.out",
+          },
+          revealStart,
         );
 
-        // Items stagger in
+        // Items stagger in across the reveal zone
         tl.to(
           items,
           {
             autoAlpha: 1,
             y: 0,
-            stagger: 0.012,
-            duration: 0.06,
+            stagger: revealDur * 0.08,
+            duration: revealDur * 0.12,
             ease: "power3.out",
           },
-          inStart + 0.01,
+          revealStart + revealDur * 0.1,
         );
 
-        // Animate out (skip for last tab)
+        // Quick transition out (skip for last tab)
         if (!isLastTab) {
-          const outStart = segEnd - 0.02;
+          const outStart = segEnd - segSize * 0.05;
           tl.to(
             items,
             {
               autoAlpha: 0,
               y: -20,
-              stagger: -0.006,
-              duration: 0.02,
+              stagger: -0.004,
+              duration: segSize * 0.03,
               ease: "power2.in",
             },
             outStart,
           );
           tl.to(
             panel,
-            { autoAlpha: 0, y: -36, duration: 0.02, ease: "power2.in" },
-            outStart + 0.01,
+            {
+              autoAlpha: 0,
+              y: -36,
+              duration: segSize * 0.03,
+              ease: "power2.in",
+            },
+            outStart + 0.005,
           );
         }
       });
