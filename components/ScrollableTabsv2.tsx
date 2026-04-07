@@ -162,7 +162,7 @@ export default function ScrollableTabsv2() {
         scrollTrigger: {
           trigger: sectionRef.current,
           start: "top top+=10px",
-          end: "+=600%",
+          end: "+=1000%",
           pin: true,
           pinSpacing: true,
           scrub: 0.5,
