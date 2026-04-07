@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import Image from "next/image";
 import gsap from "gsap";
@@ -11,6 +11,7 @@ gsap.registerPlugin(ScrollToPlugin);
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
 
   const navLinks = [
     { name: "About Atomix", href: "#def-hero-main" },
@@ -19,6 +20,15 @@ export default function Header() {
     { name: "Careers", href: "#why-work-with-us" },
     { name: "Contact Us", href: "#use-cases" },
   ];
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 10);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const handleSmoothScroll = (
     e: React.MouseEvent<HTMLAnchorElement>,
@@ -33,7 +43,7 @@ export default function Header() {
         duration: 1.5,
         scrollTo: {
           y: targetElement,
-          offsetY: 80,
+          offsetY: 100,
           autoKill: false,
         },
         ease: "power3.inOut",
@@ -44,8 +54,10 @@ export default function Header() {
   };
 
   return (
-    <header className="bg-white">
-      <div>
+    <header
+      className={`fixed z-999 top-0 left-0 right-0 z-50 bg-white transition-all duration-300 ${isScrolled ? "" : ""}`}
+    >
+      <div className="px-12">
         <nav>
           <div className="flex py-6 items-center justify-between">
             {/* Logo */}
