@@ -81,7 +81,7 @@ export default function MainHero() {
       scrollTrigger: {
         trigger: "#def-hero-main",
         start: "top top",
-        end: "+=6500",
+        end: "+=10000",
         scrub: 2.5,
         pin: true,
       },
