@@ -3,18 +3,45 @@
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import Image from "next/image";
+import gsap from "gsap";
+import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import { Button as DefButton } from "@/components/ui";
+
+gsap.registerPlugin(ScrollToPlugin);
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const navLinks = [
-    { name: "About Atomix", href: "/about" },
-    { name: "The Platform", href: "/platform" },
-    { name: "Resources", href: "/resources" },
-    { name: "Careers", href: "/careers" },
-    { name: "Contact Us", href: "/contact" },
+    { name: "About Atomix", href: "#def-hero-main" },
+    { name: "The Platform", href: "#tech-limitations" },
+    { name: "Resources", href: "#info-rows" },
+    { name: "Careers", href: "#why-work-with-us" },
+    { name: "Contact Us", href: "#use-cases" },
   ];
+
+  const handleSmoothScroll = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    href: string,
+  ) => {
+    e.preventDefault();
+    const targetId = href.replace("#", "");
+    const targetElement = document.getElementById(targetId);
+
+    if (targetElement) {
+      gsap.to(window, {
+        duration: 1.5,
+        scrollTo: {
+          y: targetElement,
+          offsetY: 80,
+          autoKill: false,
+        },
+        ease: "power3.inOut",
+      });
+    }
+
+    setMobileMenuOpen(false);
+  };
 
   return (
     <header className="bg-white">
@@ -48,6 +75,7 @@ export default function Header() {
                   <a
                     key={link.name}
                     href={link.href}
+                    onClick={(e) => handleSmoothScroll(e, link.href)}
                     className="text-md font-normal text-gray-900 hover:text-gray-700 transition-colors py-2"
                   >
                     {link.name}
@@ -83,8 +111,8 @@ export default function Header() {
                   <a
                     key={link.name}
                     href={link.href}
+                    onClick={(e) => handleSmoothScroll(e, link.href)}
                     className="text-base font-medium text-gray-700 hover:text-gray-900 transition-colors"
-                    onClick={() => setMobileMenuOpen(false)}
                   >
                     {link.name}
                   </a>

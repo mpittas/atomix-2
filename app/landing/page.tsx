@@ -320,13 +320,19 @@ export default function LandingGradientV1Page() {
               />
             </div>
 
-            <div className="max-w-[1200px] px-8 mx-auto bg-red-500/0">
+            <div
+              className="max-w-[1200px] px-8 mx-auto bg-red-500/0"
+              id="why-atomix"
+            >
               <WhyAtomix />
             </div>
           </div>
 
           <div className="px-18 py-36 rounded-b-3xl bg-linear-to-t from-[#0B4858] to-[#81A6AF]">
-            <div className="max-w-[1200px] px-8 mx-auto bg-red-500/0">
+            <div
+              className="max-w-[1200px] px-8 mx-auto bg-red-500/0"
+              id="the-market"
+            >
               <TheMarket />
             </div>
           </div>
@@ -353,13 +359,20 @@ export default function LandingGradientV1Page() {
               />
             </div>
 
-            <div className="max-w-[1200px] px-8 mx-auto bg-red-500/0">
+            <div
+              className="max-w-[1200px] px-8 mx-auto bg-red-500/0"
+              id="why-work-with-us"
+            >
               <WhyWorkWithUs />
             </div>
           </div>
         </div>
 
-        <div ref={useCasesRef} className="mb-64 bg-red-500/0 min-h-[50vh]">
+        <div
+          ref={useCasesRef}
+          className="mb-64 bg-red-500/0 min-h-[50vh]"
+          id="use-cases"
+        >
           <div className="max-w-[1200px] mx-auto px-4">
             <div className="max-w-[1060px] mx-auto">
               <DefHeading
