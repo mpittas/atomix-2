@@ -7,7 +7,6 @@ import { useGSAP } from "@gsap/react";
 import { BadgeHeadingPill } from "@/components/ui/BadgeHeadingPill";
 import { Button as DefButton } from "@/components/ui";
 import SplitText from "@/components/typo/SplitText";
-import IconBox from "@/components/IconBox";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -135,24 +134,34 @@ export default function ScrollableHeadingV2() {
           {/* Two Columns with IconBox */}
           <div className="flex flex-col md:flex-row gap-8 w-full max-w-4xl">
             <div ref={iconBox1Ref} className="flex-1">
-              <IconBox
-                src="/icons/white/brain-links.svg"
-                width={64}
-                title="To rebuild property lending from the ground up with intelligent automation and unwavering compliance."
-                titleClassName="!text-2xl"
-                description=""
-                imageSize="large"
-              />
+              <div className="relative flex flex-col items-center gap-3 p-7 rounded-2xl text-center h-full border border-dashed bg-[#124652] border-[#82b0ba] overflow-hidden will-change-transform">
+                <div className="pointer-events-none absolute inset-0 rounded-2xl overflow-hidden">
+                  <div className="absolute -top-8 -right-4 w-32 h-32 bg-white/25 rounded-full blur-2xl" />
+                  <div className="absolute -bottom-8 -left-4 w-32 h-32 bg-white/25 rounded-full blur-2xl" />
+                </div>
+                <div className="relative z-10 flex flex-col items-center gap-3">
+                  <BadgeHeadingPill color="blue">Mission</BadgeHeadingPill>
+                  <div className="text-2xl font-semibold leading-[1.3em] text-white">
+                    To rebuild property lending from the ground up with
+                    intelligent automation and unwavering compliance.
+                  </div>
+                </div>
+              </div>
             </div>
             <div ref={iconBox2Ref} className="flex-1">
-              <IconBox
-                src="/icons/white/shield-check-white.svg"
-                width={64}
-                title="A future where every property loan is processed with speed, transparency, and zero compromise on integrity"
-                titleClassName="!text-2xl"
-                description=""
-                imageSize="large"
-              />
+              <div className="relative flex flex-col items-center gap-3 p-7 rounded-2xl text-center h-full border border-dashed bg-[#124652] border-[#82b0ba] overflow-hidden will-change-transform">
+                <div className="pointer-events-none absolute inset-0 rounded-2xl overflow-hidden">
+                  <div className="absolute -top-8 -right-4 w-32 h-32 bg-white/25 rounded-full blur-2xl" />
+                  <div className="absolute -bottom-8 -left-4 w-32 h-32 bg-white/25 rounded-full blur-2xl" />
+                </div>
+                <div className="relative z-10 flex flex-col items-center gap-3">
+                  <BadgeHeadingPill color="blue">Vision</BadgeHeadingPill>
+                  <div className="text-2xl font-semibold leading-[1.3em] text-white">
+                    A future where every property loan is processed with speed,
+                    transparency, and zero compromise on integrity
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
