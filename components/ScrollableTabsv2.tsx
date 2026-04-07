@@ -150,7 +150,7 @@ export default function ScrollableTabsv2() {
     gsap.to(window, {
       scrollTo: { y: scrollToY },
       duration: scrollDuration,
-      ease: "power1.inOut",
+      ease: "power2.out",
       overwrite: "auto",
     });
   };

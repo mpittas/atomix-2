@@ -26,20 +26,21 @@ export default function BenefitsLayout() {
       return;
     }
 
-    const maxStep = Math.max(tabs.length - 1, 1);
-    const targetProgress = index / maxStep;
+    const segSize = 1 / tabs.length;
+    const segEnd = (index + 1) * segSize;
+    const targetProgress = segEnd - segSize * 0.1;
     const scrollToY = st.start + (st.end - st.start) * targetProgress;
     const progressDelta = Math.abs(st.progress - targetProgress);
     const scrollDuration = gsap.utils.clamp(
-      1.1,
-      2.2,
-      1.1 + progressDelta * 1.4,
+      2.4,
+      4.0,
+      2.4 + progressDelta * 2.5,
     );
 
     gsap.to(window, {
       scrollTo: { y: scrollToY },
       duration: scrollDuration,
-      ease: "power1.inOut",
+      ease: "power2.out",
       overwrite: "auto",
     });
   };
@@ -65,7 +66,7 @@ export default function BenefitsLayout() {
           end: () => `+=${window.innerHeight * maxStep * 4}`,
           pin: true,
           pinSpacing: true,
-          scrub: 0.5,
+          scrub: 1.2,
           onUpdate: (self) => {
             const p = self.progress;
             let nextIndex = 0;
@@ -96,9 +97,9 @@ export default function BenefitsLayout() {
         const segEnd = (tabIdx + 1) * segSize;
         const isLastTab = tabIdx === tabs.length - 1;
 
-        // Content reveal occupies first 50% of segment
+        // Content reveal occupies first 70% of segment
         const revealStart = tabIdx === 0 ? 0.01 : segStart + 0.005;
-        const revealDur = segSize * 0.5;
+        const revealDur = segSize * 0.7;
 
         // Panel fade in
         tl.to(
@@ -106,8 +107,8 @@ export default function BenefitsLayout() {
           {
             autoAlpha: 1,
             y: 0,
-            duration: revealDur * 0.15,
-            ease: "power3.out",
+            duration: revealDur * 0.25,
+            ease: "power2.out",
           },
           revealStart,
         );
@@ -118,11 +119,11 @@ export default function BenefitsLayout() {
           {
             autoAlpha: 1,
             y: 0,
-            stagger: revealDur * 0.08,
-            duration: revealDur * 0.12,
-            ease: "power3.out",
+            stagger: revealDur * 0.12,
+            duration: revealDur * 0.18,
+            ease: "power2.out",
           },
-          revealStart + revealDur * 0.1,
+          revealStart + revealDur * 0.08,
         );
 
         // Quick transition out (skip for last tab)
