@@ -309,7 +309,7 @@ export default function LandingGradientV1Page() {
           </div> */}
         </div>
 
-        <div className="h-full mb-12">
+        <div className="h-full mb-6">
           <div className="px-18 py-36 rounded-t-3xl bg-linear-to-b from-[#0B4858] to-[#81A6AF]">
             <div className="max-w-[1200px] px-8 mx-auto bg-red-500/0">
               <WhyAtomix />
@@ -320,7 +320,11 @@ export default function LandingGradientV1Page() {
             <div className="max-w-[1200px] px-8 mx-auto bg-red-500/0">
               <TheMarket />
             </div>
+          </div>
+        </div>
 
+        <div className="h-full mb-12">
+          <div className="px-18 py-36 rounded-3xl bg-linear-to-b from-[#0B4858] to-[#81A6AF]">
             <div className="max-w-[1200px] px-8 mx-auto bg-red-500/0">
               <WhyWorkWithUs />
             </div>

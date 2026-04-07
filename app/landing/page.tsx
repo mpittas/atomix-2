@@ -21,10 +21,10 @@ import SoftAurora from "@/components/backgrounds/SoftAurora";
 import BenefitsLayout from "@/components/BenefitsLayout";
 import ScrollableTabsv2 from "@/components/ScrollableTabsv2";
 import TechLimitations from "@/components/TechLimitations";
-import ScrollableHeading from "@/components/ScrollableHeading";
 import WhyAtomix from "@/components/WhyAtomix";
 import TheMarket from "@/components/TheMarket";
 import WhyWorkWithUs from "@/components/WhyWorkWithUs";
+import ScrollableHeadingV2 from "@/components/ScrollableHeadingV2";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -204,11 +204,11 @@ export default function LandingGradientV1Page() {
               />
             </div>
 
-            <ScrollableTabsv2 />
+            <ScrollableHeadingV2 />
           </div>
 
           <div className="relative px-18 py-8 rounded-b-3xl bg-linear-to-t from-[#0B4858] to-[#81A6AF] relative overflow-hidden">
-            <ScrollableHeading />
+            <ScrollableTabsv2 />
           </div>
         </div>
 

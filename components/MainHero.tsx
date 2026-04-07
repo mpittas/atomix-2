@@ -74,7 +74,6 @@ export default function MainHero() {
       autoAlpha: 0,
       y: 40,
     });
-    gsap.set("#def-hero-btn", { autoAlpha: 0 });
 
     // --- SCROLL TIMELINE (scrub, no snap) ---
     const tl = gsap.timeline({
@@ -126,12 +125,7 @@ export default function MainHero() {
         },
         "title2Visible+=0.9",
       )
-      .addLabel("listVisible")
-      .to(
-        "#def-hero-btn",
-        { autoAlpha: 1, duration: 0.4, ease: "power2.out" },
-        "listVisible+=0.1",
-      );
+      .addLabel("listVisible");
   }, []);
 
   return (
@@ -234,10 +228,6 @@ export default function MainHero() {
               className="hero-list-item !p-4"
             />
           ))}
-        </div>
-
-        <div id="def-hero-btn">
-          <DefButton size="large">Learn More</DefButton>
         </div>
       </div>
     </section>

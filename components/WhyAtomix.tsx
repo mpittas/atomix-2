@@ -6,6 +6,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import DefHeading from "@/components/typo/DefHeading";
 import IconBox from "./IconBox";
+import { Button as DefButton } from "@/components/ui";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -144,6 +145,10 @@ export default function WhyAtomix() {
             imageSize="large"
           />
         </div>
+      </div>
+
+      <div className="mt-12 flex justify-center">
+        <DefButton size="large">About Us</DefButton>
       </div>
     </div>
   );

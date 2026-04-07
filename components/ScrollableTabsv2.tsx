@@ -151,14 +151,10 @@ export default function ScrollableTabsv2() {
       // Set initial states - make tabs visible initially
       gsap.set(tabsSectionRef.current, { opacity: 1, y: 0 });
 
-      // Set all icon box groups hidden initially except the first one
-      iconBoxRefs.current.forEach((group, index) => {
+      // Set all icon box groups hidden initially — all animate in via scroll timeline
+      iconBoxRefs.current.forEach((group) => {
         if (group) {
-          if (index === 0) {
-            gsap.set(group.children, { scale: 1, opacity: 1 });
-          } else {
-            gsap.set(group.children, { scale: 0, opacity: 0 });
-          }
+          gsap.set(group.children, { scale: 0, opacity: 0 });
         }
       });
 
