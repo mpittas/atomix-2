@@ -44,7 +44,7 @@ const DefHeading: React.FC<DefHeadingProps> = ({
       className={`flex flex-col gap-y-6 items-center text-center max-w-6xl mx-auto ${className}`}
     >
       {showBadge && (
-        <div ref={badgeRef}>
+        <div ref={badgeRef} data-badge>
           <BadgeHeadingPill color={badgeColor} className={badgeClassName}>
             {badgeText}
           </BadgeHeadingPill>
@@ -59,7 +59,11 @@ const DefHeading: React.FC<DefHeadingProps> = ({
         enableShine={true}
       />
 
-      <div ref={descRef} className={`${descriptionColor} text-lg`}>
+      <div
+        ref={descRef}
+        data-description
+        className={`${descriptionColor} text-lg`}
+      >
         {description}
       </div>
     </div>

@@ -32,32 +32,110 @@ export default function WhyWorkWithUs() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const itemsRef = useRef<HTMLDivElement>(null);
   const itemsTlRef = useRef<gsap.core.Timeline | null>(null);
+  const buttonRef = useRef<HTMLDivElement>(null);
 
   useGSAP(
     () => {
+      // Find badge and description elements within the section
+      const badgeEl = sectionRef.current?.querySelector("[data-badge]");
+      const descEl = sectionRef.current?.querySelector("[data-description]");
+
+      // Set initial states
       gsap.set(itemsRef.current?.children || [], {
         opacity: 0,
         y: 50,
         scale: 0.9,
       });
 
-      itemsTlRef.current = gsap.timeline({
+      if (badgeEl) {
+        gsap.set(badgeEl, {
+          opacity: 0,
+          y: -30,
+        });
+      }
+
+      if (descEl) {
+        gsap.set(descEl, {
+          opacity: 0,
+          y: 30,
+        });
+      }
+
+      if (buttonRef.current) {
+        gsap.set(buttonRef.current, {
+          opacity: 0,
+          y: 20,
+          scale: 0.95,
+        });
+      }
+
+      const mainTl = gsap.timeline({
         scrollTrigger: {
           trigger: sectionRef.current,
-          start: "top 80%",
+          start: "top 85%",
           end: "bottom 40%",
           scrub: 2,
         },
       });
 
-      itemsTlRef.current.to(itemsRef.current?.children || [], {
-        opacity: 1,
-        y: 0,
-        scale: 1,
-        duration: 1,
-        ease: "power2.out",
-        stagger: 0.1,
-      });
+      // Animate badge
+      if (badgeEl) {
+        mainTl.to(
+          badgeEl,
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            ease: "power2.out",
+          },
+          "0",
+        );
+      }
+
+      // Animate description
+      if (descEl) {
+        mainTl.to(
+          descEl,
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            ease: "power2.out",
+          },
+          "0.2",
+        );
+      }
+
+      // Animate items
+      mainTl.to(
+        itemsRef.current?.children || [],
+        {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          duration: 1,
+          ease: "power2.out",
+          stagger: 0.1,
+        },
+        "0.4",
+      );
+
+      // Animate button
+      if (buttonRef.current) {
+        mainTl.to(
+          buttonRef.current,
+          {
+            opacity: 1,
+            y: 0,
+            scale: 1,
+            duration: 0.8,
+            ease: "power2.out",
+          },
+          "0.8",
+        );
+      }
+
+      itemsTlRef.current = mainTl;
 
       return () => {
         itemsTlRef.current?.kill();
@@ -123,7 +201,7 @@ export default function WhyWorkWithUs() {
         </div>
       </div>
 
-      <div className="mt-14 text-center">
+      <div ref={buttonRef} className="mt-14 text-center">
         <DefButton size="large">Learn more</DefButton>
       </div>
     </div>
