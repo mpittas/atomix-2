@@ -49,7 +49,8 @@ export default function TechLimitations() {
     <div ref={sectionRef} className="py-36">
       <DefHeading
         theme="light"
-        badgeText="Lorem ipsum"
+        badgeText=""
+        showBadge={false}
         title="Why Existing Technology Falls Short"
         description="The problem is structural — and so is the Atomix solution."
         onAnimationComplete={handleHeadingAnimationComplete}
