@@ -180,10 +180,10 @@ export default function LandingGradientV1Page() {
       </div>
 
       <div className="px-12 mt-2 flex flex-col gap-2">
-        <div className="h-full">
+        <div className="h-full mb-6 ">
           <div
             // ref={sectionRef}
-            className="relative px-18 py-36 rounded-t-3xl bg-linear-to-b from-[#0B4858] to-[#81A6AF] relative z-[50]"
+            className="relative px-18 py-36 rounded-t-3xl bg-linear-to-b from-[#0B4858] to-[#81A6AF] relative z-[50] overflow-hidden"
           >
             <div className="absolute -top-0 left-0 w-full h-[500px]">
               <SoftAurora
@@ -212,7 +212,7 @@ export default function LandingGradientV1Page() {
           </div>
         </div>
 
-        <div className="h-full">
+        <div className="h-full mb-6">
           <div className="px-18 py-36 rounded-t-3xl bg-linear-to-b from-[#0B4858] to-[#81A6AF] relative overflow-hidden">
             <div className="absolute -top-10 left-0 w-full h-[500px]">
               <SoftAurora
@@ -265,8 +265,8 @@ export default function LandingGradientV1Page() {
           </div>
         </div>
 
-        <div className="h-full mb-12">
-          <div className="px-18 py-36 rounded-t-3xl bg-linear-to-b from-[#0B4858] to-[#81A6AF] relative overflow-hidden">
+        <div className="h-full mb-6">
+          <div className="px-18 py-36 rounded-3xl bg-linear-to-b from-[#0B4858] to-[#81A6AF] relative overflow-hidden">
             <div className="absolute -top-10 left-0 w-full h-[500px]">
               <SoftAurora
                 speed={1.3}
@@ -299,7 +299,7 @@ export default function LandingGradientV1Page() {
           </div> */}
         </div>
 
-        <div className="h-full mb-12">
+        <div className="h-full mb-6">
           <div className="px-18 py-36 rounded-t-3xl bg-linear-to-b from-[#0B4858] to-[#81A6AF]">
             <div className="max-w-[1200px] px-8 mx-auto bg-red-500/0">
               <WhyAtomix />
