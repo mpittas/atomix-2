@@ -164,7 +164,7 @@ const SplitText = forwardRef<SplitTextHandle, SplitTextProps>(
             {
               color: SHINE_COLOR,
               duration: 0.6,
-              ease: "sine.inOut",
+              ease: "none",
               filter: "drop-shadow(0 0 4px rgba(176, 252, 255, 0.6))",
             },
             index * 0.015,
@@ -174,7 +174,7 @@ const SplitText = forwardRef<SplitTextHandle, SplitTextProps>(
             {
               color: "",
               duration: 0.4,
-              ease: "sine.inOut",
+              ease: "none",
               filter: "none",
             },
             index * 0.015 + 0.5,
