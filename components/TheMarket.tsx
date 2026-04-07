@@ -44,30 +44,37 @@ export default function TheMarket() {
     () => {
       gsap.set(statsRef.current?.children || [], {
         opacity: 0,
-        y: 0,
-        scale: 0.75,
+        y: 50,
+        scale: 0.9,
       });
 
-      statsTlRef.current = gsap.timeline({ paused: true });
+      statsTlRef.current = gsap.timeline({
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top 80%",
+          end: "bottom 40%",
+          scrub: 2,
+        },
+      });
+
       statsTlRef.current.to(statsRef.current?.children || [], {
         opacity: 1,
         y: 0,
         scale: 1,
-        duration: 2,
-        ease: "power3.out",
-        stagger: 0.15,
+        duration: 1,
+        ease: "power2.out",
+        stagger: 0.1,
       });
 
       return () => {
         statsTlRef.current?.kill();
+        ScrollTrigger.getAll().forEach((st) => {
+          if (st.trigger === sectionRef.current) st.kill();
+        });
       };
     },
     { scope: sectionRef },
   );
-
-  const handleHeadingAnimationComplete = () => {
-    statsTlRef.current?.play();
-  };
 
   return (
     <div ref={sectionRef} className="py-36">
@@ -77,7 +84,6 @@ export default function TheMarket() {
         showBadge={false}
         title="The Market"
         description="UK property lending is large, active and chronically under-automated."
-        onAnimationComplete={handleHeadingAnimationComplete}
       />
 
       <div

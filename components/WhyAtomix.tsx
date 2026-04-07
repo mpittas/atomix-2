@@ -52,30 +52,37 @@ export default function WhyAtomix() {
     () => {
       gsap.set(itemsRef.current?.children || [], {
         opacity: 0,
-        y: 0,
-        scale: 0.75,
+        y: 50,
+        scale: 0.9,
       });
 
-      itemsTlRef.current = gsap.timeline({ paused: true });
+      itemsTlRef.current = gsap.timeline({
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top 80%",
+          end: "bottom 40%",
+          scrub: 2,
+        },
+      });
+
       itemsTlRef.current.to(itemsRef.current?.children || [], {
         opacity: 1,
         y: 0,
         scale: 1,
-        duration: 2,
-        ease: "power3.out",
-        stagger: 0.12,
+        duration: 1,
+        ease: "power2.out",
+        stagger: 0.1,
       });
 
       return () => {
         itemsTlRef.current?.kill();
+        ScrollTrigger.getAll().forEach((st) => {
+          if (st.trigger === sectionRef.current) st.kill();
+        });
       };
     },
     { scope: sectionRef },
   );
-
-  const handleHeadingAnimationComplete = () => {
-    itemsTlRef.current?.play();
-  };
 
   return (
     <div ref={sectionRef} className="py-36">
@@ -85,7 +92,6 @@ export default function WhyAtomix() {
         showBadge={false}
         title="Why Atomix"
         description="No other platform delivers this combination."
-        onAnimationComplete={handleHeadingAnimationComplete}
       />
 
       <div
