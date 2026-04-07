@@ -4,6 +4,7 @@ import React, { useRef, useEffect } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import SplitText from "@/components/typo/SplitText";
+import { Button as DefButton } from "@/components/ui";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -43,7 +44,7 @@ const DefCta: React.FC<DefCtaProps> = ({ title }) => {
       className="flex items-center gap-2 bg-gradient-to-r from-[#004151] to-[#06677E] py-30 relative overflow-hidden"
     >
       <div className="max-w-[1260px] w-full mx-auto px-4">
-        <div className="max-w-xl">
+        <div className="max-w-xl flex flex-col items-start gap-y-10">
           <SplitText
             text={title}
             tag="h2"
@@ -53,6 +54,8 @@ const DefCta: React.FC<DefCtaProps> = ({ title }) => {
             duration={0.6}
             textAlign="left"
           />
+
+          <DefButton size="large">Book a Demo</DefButton>
         </div>
       </div>
 
