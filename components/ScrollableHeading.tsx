@@ -53,22 +53,12 @@ export default function ScrollableHeading() {
     () => {
       if (!sectionRef.current) return;
 
-      const slide1Progress = 1 / 3;
-      const slide2Progress = 2 / 3;
-      const endProgress = 1;
-
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: sectionRef.current,
           start: "top top",
-          end: "+=800",
-          scrub: 1,
-          snap: {
-            snapTo: [0, slide1Progress, slide2Progress, endProgress],
-            duration: 0.25,
-            delay: 0,
-            ease: "power2.out",
-          },
+          end: "+=4000",
+          scrub: 0.5,
           pin: true,
           pinSpacing: true,
         },
@@ -78,19 +68,22 @@ export default function ScrollableHeading() {
       gsap.set(slide1Ref.current, { autoAlpha: 0, scale: 0.9 });
       gsap.set(slide2Ref.current, { autoAlpha: 0, scale: 0.9 });
 
-      // Slide 1: fade in at start, hold, fade out at slide2Progress
-      tl.to(
+      // Slide 1: fade in gradually from start to 0.35
+      tl.fromTo(
         slide1Ref.current,
+        { autoAlpha: 0, scale: 0.9 },
         {
           autoAlpha: 1,
           scale: 1,
-          duration: 0.2,
+          duration: 0.35,
           ease: "power2.out",
           onStart: animateSlide1,
         },
         0,
       )
-        .addLabel("slide1Visible", 0.2)
+        // Hold slide1 from 0.35 to 0.45
+        .to(slide1Ref.current, { duration: 0.1 }, 0.35)
+        // Slide 1: fade out gradually from 0.45 to 0.65
         .to(
           slide1Ref.current,
           {
@@ -99,31 +92,23 @@ export default function ScrollableHeading() {
             duration: 0.2,
             ease: "power2.in",
           },
-          slide1Progress - 0.2,
+          0.45,
         )
-        // Slide 2: fade in at slide1Progress, hold, fade out at end
-        .to(
+        // Slide 2: fade in gradually from 0.55 to 0.85
+        .fromTo(
           slide2Ref.current,
+          { autoAlpha: 0, scale: 0.9 },
           {
             autoAlpha: 1,
             scale: 1,
-            duration: 0.2,
+            duration: 0.3,
             ease: "power2.out",
             onStart: animateSlide2,
           },
-          slide1Progress,
+          0.55,
         )
-        .addLabel("slide2Visible", slide1Progress + 0.2)
-        .to(
-          slide2Ref.current,
-          {
-            autoAlpha: 0,
-            scale: 0.9,
-            duration: 0.2,
-            ease: "power2.in",
-          },
-          slide2Progress - 0.2,
-        );
+        // Hold slide2 from 0.85 to 1.0
+        .to(slide2Ref.current, { duration: 0.15 }, 0.85);
 
       return () => {
         tl.kill();
@@ -135,7 +120,7 @@ export default function ScrollableHeading() {
   return (
     <div
       ref={sectionRef}
-      className="relative overflow-hidden h-[calc(100vh-20px)]"
+      className="relative overflow-hidden h-[calc(100vh-20px)] z-[60]"
     >
       <div className="flex flex-col items-center justify-center h-full py-16 px-4">
         {/* Slide 1 - Mission */}

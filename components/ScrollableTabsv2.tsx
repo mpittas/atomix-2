@@ -127,7 +127,6 @@ const tabsData: TabData[] = [
 
 export default function ScrollableTabsv2() {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const wrapperRef = useRef<HTMLDivElement>(null);
   const scrollTriggerRef = useRef<ScrollTrigger | null>(null);
   const iconBoxRefs = useRef<(HTMLDivElement | null)[]>([]);
   const tabsSectionRef = useRef<HTMLDivElement>(null);
@@ -147,14 +146,20 @@ export default function ScrollableTabsv2() {
 
   useGSAP(
     () => {
-      if (!sectionRef.current || !wrapperRef.current) return;
+      if (!sectionRef.current) return;
 
-      // Set initial states
-      gsap.set(tabsSectionRef.current, { opacity: 0, y: 40 });
+      // Set initial states - make tabs visible initially
+      gsap.set(tabsSectionRef.current, { opacity: 1, y: 0 });
 
-      // Set all icon box groups hidden initially
-      iconBoxRefs.current.forEach((group) => {
-        if (group) gsap.set(group.children, { scale: 0, opacity: 0 });
+      // Set all icon box groups hidden initially except the first one
+      iconBoxRefs.current.forEach((group, index) => {
+        if (group) {
+          if (index === 0) {
+            gsap.set(group.children, { scale: 1, opacity: 1 });
+          } else {
+            gsap.set(group.children, { scale: 0, opacity: 0 });
+          }
+        }
       });
 
       // Create pinned scroll animation
@@ -162,7 +167,7 @@ export default function ScrollableTabsv2() {
         scrollTrigger: {
           trigger: sectionRef.current,
           start: "top top+=10px",
-          end: "+=600%",
+          end: () => `+=${window.innerHeight * 3 * 1.8}`, // Calculate based on window height
           pin: true,
           pinSpacing: true,
           scrub: 0.5,
@@ -180,18 +185,6 @@ export default function ScrollableTabsv2() {
           },
         },
       });
-
-      // Tabs section fade in (0-0.1)
-      tl.to(
-        tabsSectionRef.current,
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.1,
-          ease: "none",
-        },
-        0,
-      );
 
       // Normalize timeline to exactly 1.0 so positions = scroll progress
       tl.set({}, {}, 1);
@@ -238,6 +231,9 @@ export default function ScrollableTabsv2() {
 
       scrollTriggerRef.current = tl.scrollTrigger!;
 
+      // Refresh ScrollTrigger to ensure proper calculations with multiple pinned sections
+      ScrollTrigger.refresh();
+
       return () => {
         tl.kill();
       };
@@ -248,97 +244,73 @@ export default function ScrollableTabsv2() {
   return (
     <div
       ref={sectionRef}
-      className="relative px-18 py-36 rounded-3xl bg-linear-to-b from-[#0B4858] to-[#81A6AF] relative overflow-hidden h-[calc(100vh-20px)]"
+      className="flex flex-col items-center py-16 px-4 gap-y-16 relative z-[120]"
     >
-      <div className="absolute -top-0 left-0 w-full h-[500px]">
-        <SoftAurora
-          speed={1.3}
-          scale={1.2}
-          brightness={0.65}
-          color1="#78cfe3"
-          color2="#87b9d4"
-          noiseFrequency={1}
-          noiseAmplitude={3.5}
-          bandHeight={0.85}
-          bandSpread={1}
-          octaveDecay={0.12}
-          layerOffset={0.5}
-          colorSpeed={1}
-          enableMouseInteraction={false}
-          mouseInfluence={0.2}
-        />
-      </div>
-      <div
-        ref={wrapperRef}
-        className=" flex flex-col items-center py-16 px-4 gap-y-16"
-      >
-        {/* Top - DefHeading */}
-        <DefHeading
-          theme="light"
-          badgeText="The Market Reality"
-          title="Market Problems in Bridging Loans"
-          description="Property lending is manual, slow and opaque — at every level."
-          showBadge={false}
-        />
+      {/* Top - DefHeading */}
+      <DefHeading
+        theme="light"
+        badgeText="The Market Reality"
+        title="Market Problems in Bridging Loans"
+        description="Property lending is manual, slow and opaque — at every level."
+        showBadge={false}
+      />
 
-        {/* Bottom Section - Tabs and IconBoxes */}
-        <div
-          ref={tabsSectionRef}
-          className="flex flex-col items-center w-full max-w-[1200px] px-8 bg-red-500/0"
-          id="main-scoll-tabs"
-          style={{ opacity: 0 }}
-        >
-          {/* Tab Buttons */}
-          <div className="flex gap-4 mb-6 w-full">
-            {tabsData.map((tab, index) => (
-              <div
-                key={tab.title}
-                onClick={() => handleTabClick(index)}
-                className={`flex-1 flex flex-col gap-4 rounded-xl transition-all duration-500 cursor-pointer p-5 ${
-                  index === activeIndex
-                    ? "bg-[#eaeff1] text-black"
-                    : "bg-[#124652]"
+      {/* Bottom Section - Tabs and IconBoxes */}
+      <div
+        ref={tabsSectionRef}
+        className="flex flex-col items-center w-full max-w-[1200px] px-8 bg-red-500/0"
+        id="main-scoll-tabs"
+      >
+        {/* Tab Buttons */}
+        <div className="flex gap-4 mb-6 w-full">
+          {tabsData.map((tab, index) => (
+            <div
+              key={tab.title}
+              onClick={() => handleTabClick(index)}
+              className={`flex-1 flex flex-col gap-4 rounded-xl transition-all duration-500 cursor-pointer p-5 ${
+                index === activeIndex
+                  ? "bg-[#eaeff1] text-black"
+                  : "bg-[#124652]"
+              }`}
+            >
+              <h3
+                className={`text-xl font-semibold text-center ${
+                  index === activeIndex ? "text-[#0f1b1e]" : "text-white"
                 }`}
               >
-                <h3
-                  className={`text-xl font-semibold text-center ${
-                    index === activeIndex ? "text-[#0f1b1e]" : "text-white"
-                  }`}
-                >
-                  {tab.title}
-                </h3>
-              </div>
-            ))}
-          </div>
+                {tab.title}
+              </h3>
+            </div>
+          ))}
+        </div>
 
-          {/* Bottom Section - Stacked IconBox groups for each tab */}
-          <div className="relative w-full" style={{ minHeight: 200 }}>
-            {tabsData.map((tab, tabIdx) => (
-              <div
-                key={tab.title}
-                ref={(el) => {
-                  iconBoxRefs.current[tabIdx] = el;
-                }}
-                className="grid grid-cols-4 gap-3 w-full"
-                style={{
-                  position: tabIdx === 0 ? "relative" : "absolute",
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  pointerEvents: tabIdx === activeIndex ? "auto" : "none",
-                }}
-              >
-                {tab.iconBoxes.map((iconBox, index) => (
-                  <IconBox
-                    key={`${tabIdx}-${index}`}
-                    src={iconBox.src}
-                    title={iconBox.title}
-                    description={iconBox.description}
-                  />
-                ))}
-              </div>
-            ))}
-          </div>
+        {/* Bottom Section - Stacked IconBox groups for each tab */}
+        <div className="relative w-full" style={{ minHeight: 200 }}>
+          {tabsData.map((tab, tabIdx) => (
+            <div
+              key={tab.title}
+              ref={(el) => {
+                iconBoxRefs.current[tabIdx] = el;
+              }}
+              className="grid grid-cols-4 gap-3 w-full"
+              style={{
+                position: tabIdx === 0 ? "relative" : "absolute",
+                top: 0,
+                left: 0,
+                right: 0,
+                pointerEvents: tabIdx === activeIndex ? "auto" : "none",
+              }}
+            >
+              {tab.iconBoxes.map((iconBox, index) => (
+                <IconBox
+                  key={`${tabIdx}-${index}`}
+                  src={iconBox.src}
+                  title={iconBox.title}
+                  description={iconBox.description}
+                />
+              ))}
+            </div>
+          ))}
         </div>
       </div>
     </div>

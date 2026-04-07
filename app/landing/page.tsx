@@ -180,7 +180,37 @@ export default function LandingGradientV1Page() {
       </div>
 
       <div className="px-12 mt-2 flex flex-col gap-2">
-        <ScrollableTabsv2 />
+        <div className="h-full">
+          <div
+            // ref={sectionRef}
+            className="relative px-18 py-36 rounded-t-3xl bg-linear-to-b from-[#0B4858] to-[#81A6AF] relative z-[50]"
+          >
+            <div className="absolute -top-0 left-0 w-full h-[500px]">
+              <SoftAurora
+                speed={1.3}
+                scale={1.2}
+                brightness={0.65}
+                color1="#78cfe3"
+                color2="#87b9d4"
+                noiseFrequency={1}
+                noiseAmplitude={3.5}
+                bandHeight={0.85}
+                bandSpread={1}
+                octaveDecay={0.12}
+                layerOffset={0.5}
+                colorSpeed={1}
+                enableMouseInteraction={false}
+                mouseInfluence={0.2}
+              />
+            </div>
+
+            <ScrollableTabsv2 />
+          </div>
+
+          <div className="relative px-18 py-8 rounded-b-3xl bg-linear-to-t from-[#0B4858] to-[#81A6AF] relative overflow-hidden">
+            <ScrollableHeading />
+          </div>
+        </div>
 
         <div className="h-full">
           <div className="px-18 py-36 rounded-t-3xl bg-linear-to-b from-[#0B4858] to-[#81A6AF] relative overflow-hidden">
@@ -202,8 +232,6 @@ export default function LandingGradientV1Page() {
                 mouseInfluence={0.2}
               />
             </div>
-
-            <ScrollableHeading />
 
             <div
               className="max-w-[1160px] px-8 mx-auto bg-red-500/0"
