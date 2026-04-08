@@ -176,7 +176,7 @@ export default function ScrollableTabsMission() {
         scrollTrigger: {
           trigger: "#section-2-wrapper", // Use parent's trigger
           start: "bottom bottom",
-          end: "+=2000", // Match parent's scroll distance
+          end: "+=10000", // Match parent's scroll distance
           pin: false, // Remove pinning - parent handles it
           pinSpacing: false, // Remove pin spacing - parent handles it
           scrub: 1,

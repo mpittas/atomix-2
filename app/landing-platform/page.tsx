@@ -15,7 +15,7 @@ export default function LandingPlatformPage() {
     ScrollTrigger.create({
       trigger: "#section-2-wrapper",
       start: "bottom bottom",
-      end: "+=3000",
+      end: "+=10000",
       pin: true,
       scrub: true,
     });
@@ -32,7 +32,7 @@ export default function LandingPlatformPage() {
         scrollTrigger: {
           trigger: "#section-2-wrapper",
           start: "bottom bottom",
-          end: "+=1000",
+          end: "+=1500",
           scrub: 1,
         },
       },
