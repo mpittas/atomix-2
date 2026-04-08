@@ -360,17 +360,17 @@ export default function LandingGradientV1Page() {
               />
             </div>
 
+            <div className="max-w-[1260px] mx-auto px-4">
+              <CurrentStatus />
+            </div>
+          </div>
+
+          <div className="px-18 py-36 rounded-b-3xl bg-linear-to-t from-[#0B4858] to-[#81A6AF]">
             <div
               className="max-w-[1200px] px-8 mx-auto bg-red-500/0"
               id="why-work-with-us"
             >
               <WhyWorkWithUs />
-            </div>
-          </div>
-
-          <div className="px-18 py-36 rounded-b-3xl bg-linear-to-t from-[#0B4858] to-[#81A6AF]">
-            <div className="max-w-[1260px] mx-auto px-4">
-              <CurrentStatus />
             </div>
           </div>
         </div>
