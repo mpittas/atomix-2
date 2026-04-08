@@ -127,7 +127,17 @@ const tabsData: TabData[] = [
   },
 ];
 
-export default function ScrollableTabsMission() {
+interface ScrollableTabsSectionProps {
+  title?: string;
+  sectionId?: string;
+}
+
+export function ScrollableTabsSection({
+  title = "Mission",
+  sectionId = "mission",
+}: ScrollableTabsSectionProps) {
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
   const sectionRef = useRef<HTMLDivElement>(null);
   const scrollTriggerRef = useRef<ScrollTrigger | null>(null);
   const iconBoxRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -159,27 +169,51 @@ export default function ScrollableTabsMission() {
 
   useGSAP(
     () => {
-      if (!sectionRef.current) return;
+      if (!wrapperRef.current || !contentRef.current || !sectionRef.current)
+        return;
 
-      // Set initial states - make tabs visible initially
+      gsap.set(contentRef.current, { autoAlpha: 0, y: 80 });
       gsap.set(tabsSectionRef.current, { opacity: 1, y: 0 });
+      setActiveIndex(0);
 
-      // Set all icon box groups hidden initially — all animate in via scroll timeline
       iconBoxRefs.current.forEach((group) => {
         if (group) {
           gsap.set(group.children, { scale: 0.8, opacity: 0, y: 30 });
         }
       });
 
-      // Create scroll animation that responds to parent's pinning
+      const pinTrigger = ScrollTrigger.create({
+        trigger: wrapperRef.current,
+        start: "bottom bottom",
+        end: "+=10000",
+        pin: true,
+        scrub: true,
+        invalidateOnRefresh: true,
+      });
+
+      const contentTween = gsap.to(contentRef.current, {
+        autoAlpha: 1,
+        y: 0,
+        duration: 1,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: wrapperRef.current,
+          start: "bottom bottom",
+          end: "+=1500",
+          scrub: 1,
+          invalidateOnRefresh: true,
+        },
+      });
+
       const tl = gsap.timeline({
         scrollTrigger: {
-          trigger: "#section-2-wrapper", // Use parent's trigger
+          trigger: wrapperRef.current,
           start: "bottom bottom",
-          end: "+=10000", // Match parent's scroll distance
-          pin: false, // Remove pinning - parent handles it
-          pinSpacing: false, // Remove pin spacing - parent handles it
+          end: "+=10000",
+          pin: false,
+          pinSpacing: false,
           scrub: 1,
+          invalidateOnRefresh: true,
           onUpdate: (self) => {
             const progress = self.progress;
             let newIndex = 0;
@@ -203,8 +237,9 @@ export default function ScrollableTabsMission() {
         const group = iconBoxRefs.current[tabIdx];
         if (!group) return;
 
-        const segStart = tabIdx / 3; // 0, 0.333, 0.666
-        const segEnd = (tabIdx + 1) / 3;
+        const segSize = 1 / tabsData.length;
+        const segStart = tabIdx * segSize;
+        const segEnd = (tabIdx + 1) * segSize;
         const inStart = tabIdx === 0 ? 0.04 : segStart + 0.02;
         const outStart = segEnd - 0.08;
         const isLastTab = tabIdx === tabsData.length - 1;
@@ -246,94 +281,112 @@ export default function ScrollableTabsMission() {
 
       scrollTriggerRef.current = tl.scrollTrigger!;
 
-      // Refresh ScrollTrigger to ensure proper calculations with multiple pinned sections
-      ScrollTrigger.refresh();
-
       return () => {
+        contentTween.scrollTrigger?.kill();
+        contentTween.kill();
+        pinTrigger.kill();
         tl.kill();
       };
     },
-    { scope: sectionRef },
+    { scope: wrapperRef, dependencies: [sectionId] },
   );
 
   return (
     <div
-      ref={sectionRef}
-      className="flex flex-col items-center py-16 px-4 gap-y-16 relative z-[120]"
+      ref={wrapperRef}
+      className="bg-white px-3 mb-6 py-3"
+      id={`${sectionId}-wrapper`}
     >
-      {/* Top - DefHeading */}
-      <DefHeading
-        theme="light"
-        badgeText="The Market Reality"
-        title="Mission"
-        description="Fix UK property lending. Start with bridging. Extend into SME CRE term loans — same
-infrastructure, no rebuild."
-        showBadge={false}
-      />
+      <div className="flex flex-col h-[calc(100vh-120px)] bg-[#004054]/100 rounded-3xl overflow-hidden relative items-center justify-center">
+        <div
+          ref={contentRef}
+          id={`${sectionId}-content`}
+          style={{ visibility: "hidden" }}
+        >
+          <div
+            ref={sectionRef}
+            className="flex flex-col items-center py-16 px-4 gap-y-16 relative z-[120]"
+          >
+            {/* Top - DefHeading */}
+            <DefHeading
+              theme="light"
+              badgeText="The Market Reality"
+              title={title}
+              description="Fix UK property lending. Start with bridging. Extend into SME CRE term loans — same
+ infrastructure, no rebuild."
+              showBadge={false}
+            />
 
-      {/* Bottom Section - Tabs and IconBoxes */}
-      <div
-        ref={tabsSectionRef}
-        className="flex flex-col items-center w-full max-w-[1200px] px-8 bg-red-500/0 gap-8"
-        id="main-scoll-tabs"
-      >
-        {/* Tab Buttons - Horizontal */}
-        <div className="flex flex-row gap-3 w-full justify-center">
-          {tabsData.map((tab, index) => (
+            {/* Bottom Section - Tabs and IconBoxes */}
             <div
-              key={tab.title}
-              onClick={() => handleTabClick(index)}
-              className={`relative flex flex-col gap-4 rounded-xl transition-all duration-500 cursor-pointer p-5 overflow-hidden flex-1  ${
-                index === activeIndex
-                  ? "bg-[#eaeff1] text-black"
-                  : "bg-[#124652]"
-              }`}
+              ref={tabsSectionRef}
+              className="flex flex-col items-center w-full max-w-[1200px] px-8 bg-red-500/0 gap-8"
+              id={`${sectionId}-main-scoll-tabs`}
             >
-              <div className="pointer-events-none absolute inset-0 rounded-xl overflow-hidden">
-                <div className="absolute -top-8 -right-4 w-32 h-32 bg-white/15 rounded-full blur-2xl" />
-                <div className="absolute -bottom-8 -left-4 w-32 h-32 bg-white/15 rounded-full blur-2xl" />
+              {/* Tab Buttons - Horizontal */}
+              <div className="flex flex-row gap-3 w-full justify-center">
+                {tabsData.map((tab, index) => (
+                  <div
+                    key={tab.title}
+                    onClick={() => handleTabClick(index)}
+                    className={`relative flex flex-col gap-4 rounded-xl transition-all duration-500 cursor-pointer p-5 overflow-hidden flex-1  ${
+                      index === activeIndex
+                        ? "bg-[#eaeff1] text-black"
+                        : "bg-[#124652]"
+                    }`}
+                  >
+                    <div className="pointer-events-none absolute inset-0 rounded-xl overflow-hidden">
+                      <div className="absolute -top-8 -right-4 w-32 h-32 bg-white/15 rounded-full blur-2xl" />
+                      <div className="absolute -bottom-8 -left-4 w-32 h-32 bg-white/15 rounded-full blur-2xl" />
+                    </div>
+                    <h3
+                      className={`text-lg font-semibold text-center relative z-10 ${
+                        index === activeIndex ? "text-[#0f1b1e]" : "text-white"
+                      }`}
+                    >
+                      {tab.title}
+                    </h3>
+                  </div>
+                ))}
               </div>
-              <h3
-                className={`text-lg font-semibold text-center relative z-10 ${
-                  index === activeIndex ? "text-[#0f1b1e]" : "text-white"
-                }`}
-              >
-                {tab.title}
-              </h3>
-            </div>
-          ))}
-        </div>
 
-        {/* Bottom Section - Stacked IconBox groups for each tab */}
-        <div className="relative w-full" style={{ minHeight: 200 }}>
-          {tabsData.map((tab, tabIdx) => (
-            <div
-              key={tab.title}
-              ref={(el) => {
-                iconBoxRefs.current[tabIdx] = el;
-              }}
-              className="grid grid-cols-4 gap-3 w-full "
-              style={{
-                position: tabIdx === 0 ? "relative" : "absolute",
-                top: 0,
-                left: 0,
-                right: 0,
-                pointerEvents: tabIdx === activeIndex ? "auto" : "none",
-              }}
-            >
-              {tab.iconBoxes.map((iconBox, index) => (
-                <div key={`${tabIdx}-${index}`} className="relative">
-                  <IconBox
-                    src={iconBox.src}
-                    title={iconBox.title}
-                    description={iconBox.description}
-                  />
-                </div>
-              ))}
+              {/* Bottom Section - Stacked IconBox groups for each tab */}
+              <div className="relative w-full" style={{ minHeight: 200 }}>
+                {tabsData.map((tab, tabIdx) => (
+                  <div
+                    key={tab.title}
+                    ref={(el) => {
+                      iconBoxRefs.current[tabIdx] = el;
+                    }}
+                    className="grid grid-cols-4 gap-3 w-full "
+                    style={{
+                      position: tabIdx === 0 ? "relative" : "absolute",
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      pointerEvents: tabIdx === activeIndex ? "auto" : "none",
+                    }}
+                  >
+                    {tab.iconBoxes.map((iconBox, index) => (
+                      <div key={`${tabIdx}-${index}`} className="relative">
+                        <IconBox
+                          src={iconBox.src}
+                          title={iconBox.title}
+                          description={iconBox.description}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                ))}
+              </div>
             </div>
-          ))}
+          </div>
         </div>
       </div>
     </div>
   );
+}
+
+export default function ScrollableTabsMission() {
+  return <ScrollableTabsSection />;
 }
