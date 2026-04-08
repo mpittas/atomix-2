@@ -7,6 +7,8 @@ import Footer from "@/components/Footer";
 import ScrollableTabsPlatform from "@/components/ScrollableTabsPlatform";
 import { SliderAnimationPage } from "@/slider-animation/SliderAnimationPage";
 import { useIsDesktop } from "@/hooks/useIsDesktop";
+import DefHeading from "@/components/typo/DefHeading";
+import Image from "next/image";
 
 export default function LandingPlatformPage() {
   const isDesktop = useIsDesktop();
@@ -16,6 +18,33 @@ export default function LandingPlatformPage() {
       <MainHeroV3 />
 
       <ScrollableTabsPlatform />
+
+      <div className="mb-30 mt-30 bg-red-500/0 min-h-[50vh]" id="use-cases">
+        <div className="max-w-[1200px] mx-auto px-4">
+          <div className="max-w-[1060px] mx-auto">
+            <DefHeading
+              theme="dark"
+              badgeText=""
+              showBadge={false}
+              title="The Atomix Journey"
+              description="Real-time data captured at every stage — powering faster decisions, structured
+collaboration, and continuous loan management beyond completion."
+            />
+          </div>
+
+          <div className="w-full mt-16">
+            <Image
+              src="/dashboard/atomix-journey.svg"
+              alt="The Atomix Journey"
+              width={0}
+              height={0}
+              sizes="100vw"
+              className="w-full h-auto"
+              style={{ width: "100%", height: "auto" }}
+            />
+          </div>
+        </div>
+      </div>
 
       <SliderAnimationPage isDesktop={isDesktop} />
 
