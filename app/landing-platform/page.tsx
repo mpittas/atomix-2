@@ -1,13 +1,11 @@
 "use client";
 
-import MainHero from "@/components/MainHero";
 import MainHeroV3 from "@/components/MainHeroV3";
-// import ScrollableTabsMission from "@/components/ScrollableTabsMission";
-import SoftAurora from "@/components/backgrounds/SoftAurora";
 import HeaderRounded from "@/components/headerRounded";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import ScrollableTabsMission from "@/components/ScrollableTabsMission";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -50,10 +48,7 @@ export default function LandingPlatformPage() {
       <div className="bg-white px-3 mb-6 py-3" id="section-2-wrapper">
         <section className="flex flex-col h-[calc(100vh-120px)] bg-[#004054]/100 rounded-3xl overflow-hidden relative items-center justify-center">
           <div id="section-2-content" style={{ visibility: "hidden" }}>
-            <h2 className="text-white text-4xl font-bold">Section Two</h2>
-            <p className="text-white/70 text-lg mt-4 max-w-md text-center">
-              Scroll-triggered content goes here.
-            </p>
+            <ScrollableTabsMission />
           </div>
         </section>
       </div>
