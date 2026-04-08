@@ -25,6 +25,7 @@ import WhyAtomix from "@/components/WhyAtomix";
 import TheMarket from "@/components/TheMarket";
 import WhyWorkWithUs from "@/components/WhyWorkWithUs";
 import ScrollableHeadingV2 from "@/components/ScrollableHeadingV2";
+import CurrentStatus from "@/components/CurrentStatus";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -300,7 +301,7 @@ export default function LandingGradientV1Page() {
         </div>
 
         <div className="h-full mb-6">
-          <div className="px-18 py-36 rounded-t-3xl bg-linear-to-b from-[#0B4858] to-[#81A6AF] relative">
+          <div className="px-18 py-36 rounded-t-3xl bg-linear-to-b from-[#0B4858] to-[#81A6AF] relative overflow-hidden">
             <div className="absolute -top-10 left-0 w-full h-[500px]">
               <SoftAurora
                 speed={1.3}
@@ -339,7 +340,7 @@ export default function LandingGradientV1Page() {
         </div>
 
         <div className="h-full mb-12">
-          <div className="px-18 py-36 rounded-3xl bg-linear-to-b from-[#0B4858] to-[#81A6AF] relative overflow-hidden">
+          <div className="px-18 py-36 rounded-t-3xl bg-linear-to-b from-[#0B4858] to-[#81A6AF] relative overflow-hidden">
             <div className="absolute -top-10 left-0 w-full h-[500px]">
               <SoftAurora
                 speed={1.3}
@@ -364,6 +365,12 @@ export default function LandingGradientV1Page() {
               id="why-work-with-us"
             >
               <WhyWorkWithUs />
+            </div>
+          </div>
+
+          <div className="px-18 py-36 rounded-b-3xl bg-linear-to-t from-[#0B4858] to-[#81A6AF]">
+            <div className="max-w-[1260px] mx-auto px-4">
+              <CurrentStatus />
             </div>
           </div>
         </div>
@@ -413,10 +420,12 @@ export default function LandingGradientV1Page() {
         </div>
       </div>
 
-      <DefCta
-        title="Build the Future of
+      <div id="def-cta">
+        <DefCta
+          title="Build the Future of
 Asset-Backed Lending"
-      />
+        />
+      </div>
 
       <Footer />
     </div>

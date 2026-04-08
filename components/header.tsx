@@ -31,7 +31,7 @@ export default function Header() {
   }, []);
 
   const handleSmoothScroll = (
-    e: React.MouseEvent<HTMLAnchorElement>,
+    e: React.MouseEvent<HTMLAnchorElement | HTMLButtonElement>,
     href: string,
   ) => {
     e.preventDefault();
@@ -94,12 +94,16 @@ export default function Header() {
                   </a>
                 ))}
               </div>
-              <DefButton>Book a demo</DefButton>
+              <DefButton onClick={(e) => handleSmoothScroll(e, "#def-cta")}>
+                Book a demo
+              </DefButton>
             </div>
 
             {/* Mobile Menu Button + CTA */}
             <div className="flex md:hidden items-center gap-3">
-              <DefButton>Book a demo</DefButton>
+              <DefButton onClick={(e) => handleSmoothScroll(e, "#def-cta")}>
+                Book a demo
+              </DefButton>
 
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
