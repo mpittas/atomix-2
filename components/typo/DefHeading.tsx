@@ -56,7 +56,6 @@ const DefHeading: React.FC<DefHeadingProps> = ({
         tag="h2"
         className={`text-5xl leading-[1.2em] font-semibold ${titleColor}`}
         onLetterAnimationComplete={onAnimationComplete}
-        enableShine={true}
       />
 
       <div
