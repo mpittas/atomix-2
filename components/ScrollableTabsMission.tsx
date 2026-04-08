@@ -10,7 +10,7 @@ import IconBox from "@/components/IconBox";
 
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
-interface TabData {
+export interface ScrollableTabsSectionTabData {
   title: string;
   items: string[];
   iconBoxes: {
@@ -20,7 +20,7 @@ interface TabData {
   }[];
 }
 
-const tabsData: TabData[] = [
+const missionTabsData: ScrollableTabsSectionTabData[] = [
   {
     title: "Capital Providers",
     items: [
@@ -130,11 +130,17 @@ const tabsData: TabData[] = [
 interface ScrollableTabsSectionProps {
   title?: string;
   sectionId?: string;
+  description?: string;
+  badgeText?: string;
+  tabsData?: ScrollableTabsSectionTabData[];
 }
 
 export function ScrollableTabsSection({
   title = "Mission",
   sectionId = "mission",
+  description = "Fix UK property lending. Start with bridging. Extend into SME CRE term loans — same infrastructure, no rebuild.",
+  badgeText = "The Market Reality",
+  tabsData = missionTabsData,
 }: ScrollableTabsSectionProps) {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -215,15 +221,10 @@ export function ScrollableTabsSection({
           scrub: 1,
           invalidateOnRefresh: true,
           onUpdate: (self) => {
-            const progress = self.progress;
-            let newIndex = 0;
-            if (progress < 0.33) {
-              newIndex = 0;
-            } else if (progress < 0.66) {
-              newIndex = 1;
-            } else {
-              newIndex = 2;
-            }
+            const newIndex = Math.min(
+              tabsData.length - 1,
+              Math.floor(self.progress * tabsData.length),
+            );
             setActiveIndex(newIndex);
           },
         },
@@ -288,7 +289,7 @@ export function ScrollableTabsSection({
         tl.kill();
       };
     },
-    { scope: wrapperRef, dependencies: [sectionId] },
+    { scope: wrapperRef, dependencies: [sectionId, tabsData] },
   );
 
   return (
@@ -310,10 +311,9 @@ export function ScrollableTabsSection({
             {/* Top - DefHeading */}
             <DefHeading
               theme="light"
-              badgeText="The Market Reality"
+              badgeText={badgeText}
               title={title}
-              description="Fix UK property lending. Start with bridging. Extend into SME CRE term loans — same
- infrastructure, no rebuild."
+              description={description}
               showBadge={false}
             />
 
