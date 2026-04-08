@@ -267,7 +267,7 @@ export default function LandingGradientV1Page() {
         </div>
 
         <div className="h-full mb-6">
-          <div className="px-18 py-36 rounded-3xl bg-linear-to-b from-[#0B4858] to-[#81A6AF] relative overflow-hidden">
+          <div className="px-18 py-36 rounded-3xl bg-linear-to-b from-[#0B4858] via-[#81A6AF] to-[#0B4858] relative overflow-hidden">
             <div className="absolute -top-10 left-0 w-full h-[500px]">
               <SoftAurora
                 speed={1.3}
