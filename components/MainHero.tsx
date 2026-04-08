@@ -218,15 +218,16 @@ export default function MainHero() {
           className="w-full max-w-[860px] grid grid-cols-1 md:grid-cols-2 gap-4 mt-2"
         >
           {aboutAtomixItems.map((item) => (
-            <IconBox
-              key={item.title}
-              src={item.icon}
-              title={item.title}
-              description={item.subtitle}
-              imageSize="small"
-              titleClassName="text-md"
-              className="hero-list-item"
-            />
+            <div key={item.title} className="relative">
+              <IconBox
+                src={item.icon}
+                title={item.title}
+                description={item.subtitle}
+                imageSize="small"
+                titleClassName="text-md"
+                className="hero-list-item"
+              />
+            </div>
           ))}
         </div>
       </div>
