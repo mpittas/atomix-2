@@ -32,27 +32,27 @@ const tabsData: TabData[] = [
     iconBoxes: [
       {
         src: "/icons/white/money-coins-white.svg",
-        title: "Lorem ipsum dolor",
+        title: "Replace blind trust with real-time visibility",
         description:
-          "Sit amet consectetur adipiscing elit sed do eiusmod tempor",
+          "Live loan status, policy adherence and portfolio analytics on demand",
       },
       {
         src: "/icons/white/clock-white.svg",
-        title: "Lorem ipsum dolor",
+        title: "Every rule enforced automatically",
         description:
-          "Sit amet consectetur adipiscing elit sed do eiusmod tempor",
+          "Capital deployed exactly as intended, no self-certification required",
       },
       {
         src: "/icons/white/arrows-white.svg",
-        title: "Lorem ipsum dolor",
+        title: "Every loan auditable",
         description:
-          "Sit amet consectetur adipiscing elit sed do eiusmod tempor",
+          "Decisions immutably recorded on-chain; compliance instant and continuous",
       },
       {
         src: "/icons/white/eye-white-crossed.svg",
-        title: "Lorem ipsum dolor",
+        title: "Single integration, multiple lenders",
         description:
-          "Sit amet consectetur adipiscing elit sed do eiusmod tempor",
+          "Institutional and private capital connected with  lower barriers and lower due diligence costs",
       },
     ],
   },
@@ -67,23 +67,26 @@ const tabsData: TabData[] = [
     iconBoxes: [
       {
         src: "/icons/white/money-coins-white.svg",
-        title: "Handle 100+ <br>touchpoints per loan",
-        description: "Sit amet consectetur adipiscing elit",
+        title: "Significantly reduce manual touchpoints",
+        description:
+          "End-to-end workflow automation; underwriter intervention only by lender choice",
       },
       {
         src: "/icons/white/clock-white.svg",
-        title: "Smaller loans are uneconomic",
-        description: "Sit amet consectetur adipiscing elit",
+        title: "Access funding at any scale",
+        description:
+          "Platform handles compliance, auditing and capital provider access, attracting both institutional and private investors",
       },
       {
         src: "/icons/white/arrows-white.svg",
-        title: "Growth requires<br>hiring",
-        description: "Sit amet consectetur adipiscing elit",
+        title: "Smaller loans become economical",
+        description:
+          "Fees scale with loan size, making sub-£300k bridging viable to originate",
       },
       {
         src: "/icons/white/eye-white-crossed.svg",
-        title: "Fraud and misrepresentation are systemic risks",
-        description: "Sit amet consectetur adipiscing elit",
+        title: "Scale volume without scaling headcount",
+        description: "Pay-as-you-go, no fixed technology overhead",
       },
     ],
   },
@@ -98,27 +101,27 @@ const tabsData: TabData[] = [
     iconBoxes: [
       {
         src: "/icons/white/money-coins-white.svg",
-        title: "Lorem ipsum dolor",
+        title: "Enter data once",
         description:
-          "Sit amet consectetur adipiscing elit sed do eiusmod tempor",
+          "Shared across all lenders and parties for the full loan journey",
       },
       {
         src: "/icons/white/clock-white.svg",
-        title: "Lorem ipsum dolor",
+        title: "Track progress in real time",
         description:
-          "Sit amet consectetur adipiscing elit sed do eiusmod tempor",
+          "Live loan status, transparent next steps, no chasing required",
       },
       {
         src: "/icons/white/arrows-white.svg",
-        title: "Lorem ipsum dolor",
+        title: "Instant, consistent underwriting process",
         description:
-          "Sit amet consectetur adipiscing elit sed do eiusmod tempor",
+          "All parties connected in a unified workspace, no handoff delays",
       },
       {
         src: "/icons/white/eye-white-crossed.svg",
-        title: "Lorem ipsum dolor",
+        title: "Always know your status and next steps",
         description:
-          "Sit amet consectetur adipiscing elit sed do eiusmod tempor",
+          "Donsistent outcomes, no dependence on underwriter discretion",
       },
     ],
   },
@@ -164,19 +167,19 @@ export default function ScrollableTabsMission() {
       // Set all icon box groups hidden initially — all animate in via scroll timeline
       iconBoxRefs.current.forEach((group) => {
         if (group) {
-          gsap.set(group.children, { scale: 0, opacity: 0 });
+          gsap.set(group.children, { scale: 0.8, opacity: 0, y: 30 });
         }
       });
 
-      // Create pinned scroll animation
+      // Create scroll animation that responds to parent's pinning
       const tl = gsap.timeline({
         scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top top+=10px",
-          end: () => `+=${window.innerHeight * 3 * 1.8}`, // Calculate based on window height
-          pin: true,
-          pinSpacing: true,
-          scrub: 0.5,
+          trigger: "#section-2-wrapper", // Use parent's trigger
+          start: "bottom bottom",
+          end: "+=2000", // Match parent's scroll distance
+          pin: false, // Remove pinning - parent handles it
+          pinSpacing: false, // Remove pin spacing - parent handles it
+          scrub: 1,
           onUpdate: (self) => {
             const progress = self.progress;
             let newIndex = 0;
@@ -206,29 +209,35 @@ export default function ScrollableTabsMission() {
         const outStart = segEnd - 0.08;
         const isLastTab = tabIdx === tabsData.length - 1;
 
-        // Animate in: staggered scale + opacity
-        tl.to(
-          group.children,
-          {
-            scale: 1,
-            opacity: 1,
-            stagger: 0.035,
-            duration: 0.12,
-            ease: "back.out(1.5)",
-          },
-          inStart,
-        );
+        // Animate in: individually placed cards spread across the segment
+        const cardCount = group.children.length;
+        const availableRange = outStart - inStart - 0.02;
+        const cardSpacing = availableRange / cardCount;
+        Array.from(group.children).forEach((child, i) => {
+          tl.to(
+            child,
+            {
+              scale: 1,
+              opacity: 1,
+              y: 0,
+              duration: cardSpacing * 1.2,
+              ease: "power2.out",
+            },
+            inStart + i * cardSpacing,
+          );
+        });
 
         // Animate out (skip for last tab)
         if (!isLastTab) {
           tl.to(
             group.children,
             {
-              scale: 0,
+              scale: 0.8,
               opacity: 0,
+              y: -20,
               stagger: -0.012,
-              duration: 0.04,
-              ease: "back.in(1.5)",
+              duration: 0.06,
+              ease: "power2.in",
             },
             outStart,
           );
@@ -256,24 +265,25 @@ export default function ScrollableTabsMission() {
       <DefHeading
         theme="light"
         badgeText="The Market Reality"
-        title="Market Problems in Bridging Loans"
-        description="Property lending is manual, slow and opaque — at every level."
+        title="Mission"
+        description="Fix UK property lending. Start with bridging. Extend into SME CRE term loans — same
+infrastructure, no rebuild."
         showBadge={false}
       />
 
       {/* Bottom Section - Tabs and IconBoxes */}
       <div
         ref={tabsSectionRef}
-        className="flex flex-row items-start w-full max-w-[1200px] px-8 bg-red-500/0 gap-6"
+        className="flex flex-col items-center w-full max-w-[1200px] px-8 bg-red-500/0 gap-8"
         id="main-scoll-tabs"
       >
-        {/* Tab Buttons - Vertical */}
-        <div className="flex flex-col gap-3 w-[200px] shrink-0">
+        {/* Tab Buttons - Horizontal */}
+        <div className="flex flex-row gap-3 w-full justify-center">
           {tabsData.map((tab, index) => (
             <div
               key={tab.title}
               onClick={() => handleTabClick(index)}
-              className={`relative flex flex-col gap-4 rounded-xl transition-all duration-500 cursor-pointer p-5 overflow-hidden ${
+              className={`relative flex flex-col gap-4 rounded-xl transition-all duration-500 cursor-pointer p-5 overflow-hidden flex-1  ${
                 index === activeIndex
                   ? "bg-[#eaeff1] text-black"
                   : "bg-[#124652]"
@@ -295,7 +305,7 @@ export default function ScrollableTabsMission() {
         </div>
 
         {/* Bottom Section - Stacked IconBox groups for each tab */}
-        <div className="relative flex-1" style={{ minHeight: 200 }}>
+        <div className="relative w-full" style={{ minHeight: 200 }}>
           {tabsData.map((tab, tabIdx) => (
             <div
               key={tab.title}
