@@ -32,10 +32,10 @@ interface SliderAnimationPageProps {
 
 export function SliderAnimationPage({ isDesktop }: SliderAnimationPageProps) {
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center pt-12 pb-32">
+    <div className="min-h-screen bg-white flex flex-col items-center justify-center pt-12 pb-32">
       <div className="w-full max-w-[1000px] mx-auto px-4 text-center mb-0">
         <h1 className="text-4xl font-semibold text-black tracking-tight mb-4">
-          Borrower Journey
+          Get Started
         </h1>
       </div>
 

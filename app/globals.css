@@ -22,3 +22,54 @@ body {
   background: #fff;
   color: var(--foreground);
 }
+
+.tab-pill {
+  border-style: var(--tw-border-style);
+  padding-inline: calc(var(--spacing) * 6);
+  padding-block: calc(var(--spacing) * 2);
+  font-size: var(--text-sm);
+  line-height: var(--tw-leading, var(--text-sm--line-height));
+  --tw-font-weight: var(--font-weight-medium);
+  font-weight: var(--font-weight-medium);
+  transition-property: all;
+  transition-timing-function: var(
+    --tw-ease,
+    var(--default-transition-timing-function)
+  );
+  transition-duration: var(--tw-duration, var(--default-transition-duration));
+  --tw-duration: 0.2s;
+  border-width: 1px;
+  border-radius: 3.40282e38px;
+  font-size: 14px;
+  transition-duration: 0.2s;
+}
+
+.tab-pill-default {
+  --tw-border-style: dashed;
+  border-style: dashed;
+  border-color: var(--color-grey-neutral);
+  color: var(--color-grey-dark);
+  background-color: #0000;
+}
+
+.tab-pill-active {
+  background:
+    linear-gradient(var(--color-very-light-blue), var(--color-very-light-blue))
+      padding-box,
+    linear-gradient(to right, var(--color-primary), var(--color-secondary))
+      border-box;
+  border: 2px solid #0000;
+  border-radius: 3.40282e38px;
+}
+
+.text-gradient {
+  background: linear-gradient(
+    to right,
+    var(--color-primary),
+    var(--color-secondary)
+  );
+  -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  display: inline-block;
+}
