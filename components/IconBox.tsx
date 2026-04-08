@@ -5,6 +5,7 @@ import gsap from "gsap";
 import { MouseEvent, ReactNode } from "react";
 
 interface IconBoxProps {
+  icon?: ReactNode;
   src?: string;
   width?: number;
   title?: string;
@@ -15,6 +16,7 @@ interface IconBoxProps {
 }
 
 export default function IconBox({
+  icon,
   src = "/icons/gradient/arrows-gradient.svg",
   width = 48,
   title = "Lenders deal with 100+ manual touchpoints per loan",
@@ -83,13 +85,22 @@ export default function IconBox({
       </div>
 
       <div className="relative flex flex-col items-center gap-1">
-        <Image
-          src={src}
-          alt={title}
-          width={finalWidth}
-          height={finalWidth}
-          className="mb-2"
-        />
+        {icon ? (
+          <div
+            className="mb-2 flex items-center justify-center text-white"
+            style={{ width: finalWidth, height: finalWidth }}
+          >
+            {icon}
+          </div>
+        ) : (
+          <Image
+            src={src}
+            alt={title}
+            width={finalWidth}
+            height={finalWidth}
+            className="mb-2"
+          />
+        )}
         <div
           className={`text-lg font-semibold leading-[1.3em] text-white ${titleClassName}`}
           dangerouslySetInnerHTML={{ __html: title }}

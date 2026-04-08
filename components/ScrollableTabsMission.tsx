@@ -1,10 +1,24 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { type ReactNode, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import { useGSAP } from "@gsap/react";
+import {
+  FaArrowRightArrowLeft,
+  FaBinoculars,
+  FaChartLine,
+  FaClockRotateLeft,
+  FaFileContract,
+  FaGaugeHigh,
+  FaMagnifyingGlassChart,
+  FaMoneyBillTrendUp,
+  FaRobot,
+  FaShieldHalved,
+  FaUserCheck,
+  FaUsers,
+} from "react-icons/fa6";
 import DefHeading from "@/components/typo/DefHeading";
 import IconBox from "@/components/IconBox";
 
@@ -14,11 +28,27 @@ export interface ScrollableTabsSectionTabData {
   title: string;
   items: string[];
   iconBoxes: {
-    src: string;
+    src?: string;
+    icon?: ReactNode;
     title: string;
     description: string;
   }[];
 }
+
+const missionIcons = {
+  visibility: <FaBinoculars className="h-10 w-10" />,
+  policy: <FaShieldHalved className="h-10 w-10" />,
+  audit: <FaFileContract className="h-10 w-10" />,
+  network: <FaUsers className="h-10 w-10" />,
+  automation: <FaRobot className="h-10 w-10" />,
+  capital: <FaMoneyBillTrendUp className="h-10 w-10" />,
+  scale: <FaChartLine className="h-10 w-10" />,
+  growth: <FaGaugeHigh className="h-10 w-10" />,
+  speed: <FaClockRotateLeft className="h-10 w-10" />,
+  comparison: <FaMagnifyingGlassChart className="h-10 w-10" />,
+  workflow: <FaArrowRightArrowLeft className="h-10 w-10" />,
+  certainty: <FaUserCheck className="h-10 w-10" />,
+};
 
 const missionTabsData: ScrollableTabsSectionTabData[] = [
   {
@@ -31,25 +61,25 @@ const missionTabsData: ScrollableTabsSectionTabData[] = [
     ],
     iconBoxes: [
       {
-        src: "/icons/white/money-coins-white.svg",
+        icon: missionIcons.visibility,
         title: "Replace blind trust with real-time visibility",
         description:
           "Live loan status, policy adherence and portfolio analytics on demand",
       },
       {
-        src: "/icons/white/clock-white.svg",
+        icon: missionIcons.policy,
         title: "Every rule enforced automatically",
         description:
           "Capital deployed exactly as intended, no self-certification required",
       },
       {
-        src: "/icons/white/arrows-white.svg",
+        icon: missionIcons.audit,
         title: "Every loan auditable",
         description:
           "Decisions immutably recorded on-chain; compliance instant and continuous",
       },
       {
-        src: "/icons/white/eye-white-crossed.svg",
+        icon: missionIcons.network,
         title: "Single integration, multiple lenders",
         description:
           "Institutional and private capital connected with  lower barriers and lower due diligence costs",
@@ -66,25 +96,25 @@ const missionTabsData: ScrollableTabsSectionTabData[] = [
     ],
     iconBoxes: [
       {
-        src: "/icons/white/money-coins-white.svg",
+        icon: missionIcons.automation,
         title: "Significantly reduce manual touchpoints",
         description:
           "End-to-end workflow automation; underwriter intervention only by lender choice",
       },
       {
-        src: "/icons/white/clock-white.svg",
+        icon: missionIcons.capital,
         title: "Access funding at any scale",
         description:
           "Platform handles compliance, auditing and capital provider access, attracting both institutional and private investors",
       },
       {
-        src: "/icons/white/arrows-white.svg",
+        icon: missionIcons.scale,
         title: "Smaller loans become economical",
         description:
           "Fees scale with loan size, making sub-£300k bridging viable to originate",
       },
       {
-        src: "/icons/white/eye-white-crossed.svg",
+        icon: missionIcons.growth,
         title: "Scale volume without scaling headcount",
         description: "Pay-as-you-go, no fixed technology overhead",
       },
@@ -100,25 +130,25 @@ const missionTabsData: ScrollableTabsSectionTabData[] = [
     ],
     iconBoxes: [
       {
-        src: "/icons/white/money-coins-white.svg",
+        icon: missionIcons.workflow,
         title: "Enter data once",
         description:
           "Shared across all lenders and parties for the full loan journey",
       },
       {
-        src: "/icons/white/clock-white.svg",
+        icon: missionIcons.speed,
         title: "Track progress in real time",
         description:
           "Live loan status, transparent next steps, no chasing required",
       },
       {
-        src: "/icons/white/arrows-white.svg",
+        icon: missionIcons.comparison,
         title: "Instant, consistent underwriting process",
         description:
           "All parties connected in a unified workspace, no handoff delays",
       },
       {
-        src: "/icons/white/eye-white-crossed.svg",
+        icon: missionIcons.certainty,
         title: "Always know your status and next steps",
         description:
           "Donsistent outcomes, no dependence on underwriter discretion",
@@ -370,6 +400,7 @@ export function ScrollableTabsSection({
                     {tab.iconBoxes.map((iconBox, index) => (
                       <div key={`${tabIdx}-${index}`} className="relative">
                         <IconBox
+                          icon={iconBox.icon}
                           src={iconBox.src}
                           title={iconBox.title}
                           description={iconBox.description}
