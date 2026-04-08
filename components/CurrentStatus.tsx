@@ -5,20 +5,22 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import DefHeading from "@/components/typo/DefHeading";
-import IconBox from "@/components/IconBox";
+import ImageBox from "@/components/ImageBox";
 import { Button as DefButton } from "@/components/ui";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 const products = [
   {
-    icon: "/icons/white/globe.svg",
-    title: "Product Alpha",
+    icon: "/images/dashboard-lenders-main.svg",
+    title: "Cash home-buyer MVP",
+    subtitle: "Launching Q2 2026",
     text: "Our first major product launch coming in Q2 2026, designed to revolutionize digital asset management.",
   },
   {
-    icon: "/icons/white/ai-chip.svg",
-    title: "Product Beta",
+    icon: "/images/dashboard-cp-main.svg",
+    title: "Auction finance MVP",
+    subtitle: "Launching Q3 2026",
     text: "The second product scheduled for Q4 2026, focusing on AI-powered financial analytics.",
   },
 ];
@@ -167,11 +169,12 @@ export default function CurrentStatus() {
           }}
           className="flex-1 relative"
         >
-          <IconBox
+          <ImageBox
             src={products[0].icon}
             title={products[0].title}
+            subtitle={products[0].subtitle}
             titleClassName="text-md font-semibold"
-            description={products[0].text}
+            subtitleClassName="text-sm text-white/80"
           />
         </div>
         <div
@@ -180,11 +183,12 @@ export default function CurrentStatus() {
           }}
           className="flex-1 relative"
         >
-          <IconBox
+          <ImageBox
             src={products[1].icon}
             title={products[1].title}
+            subtitle={products[1].subtitle}
             titleClassName="text-md font-semibold"
-            description={products[1].text}
+            subtitleClassName="text-sm text-white/80"
           />
         </div>
       </div>
