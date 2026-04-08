@@ -225,7 +225,7 @@ export default function MainHero() {
               description={item.subtitle}
               imageSize="small"
               titleClassName="text-md"
-              className="hero-list-item !p-4"
+              className="hero-list-item"
             />
           ))}
         </div>

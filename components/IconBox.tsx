@@ -25,7 +25,8 @@ export default function IconBox({
 }: IconBoxProps) {
   const handleMouseEnter = (event: MouseEvent<HTMLDivElement>) => {
     gsap.to(event.currentTarget, {
-      scale: 1.1,
+      scale: 1.2,
+      zIndex: 10,
       duration: 0.25,
       ease: "power2.out",
     });
@@ -58,7 +59,7 @@ export default function IconBox({
         <div className="absolute -bottom-8 -left-4 w-32 h-32 bg-white/25 rounded-full blur-2xl" />
       </div>
 
-      <div className="relative z-10 flex flex-col items-center gap-1">
+      <div className="relative flex flex-col items-center gap-1">
         <Image
           src={src}
           alt={title}

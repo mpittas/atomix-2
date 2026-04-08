@@ -303,7 +303,7 @@ export default function ScrollableTabsv2() {
               ref={(el) => {
                 iconBoxRefs.current[tabIdx] = el;
               }}
-              className="grid grid-cols-4 gap-3 w-full"
+              className="grid grid-cols-4 gap-3 w-full "
               style={{
                 position: tabIdx === 0 ? "relative" : "absolute",
                 top: 0,
