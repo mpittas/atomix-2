@@ -24,20 +24,43 @@ export default function IconBox({
   imageSize = "medium",
 }: IconBoxProps) {
   const handleMouseEnter = (event: MouseEvent<HTMLDivElement>) => {
-    gsap.to(event.currentTarget, {
+    const target = event.currentTarget;
+    const parent = target.parentElement;
+
+    gsap.to(target, {
       scale: 1.2,
-      zIndex: 10,
       duration: 0.25,
       ease: "power2.out",
     });
+
+    // Apply z-index to parent if it exists (handles both direct grid cells and wrapper divs)
+    if (parent) {
+      gsap.to(parent, {
+        zIndex: 10,
+        duration: 0.25,
+        ease: "power2.out",
+      });
+    }
   };
 
   const handleMouseLeave = (event: MouseEvent<HTMLDivElement>) => {
-    gsap.to(event.currentTarget, {
+    const target = event.currentTarget;
+    const parent = target.parentElement;
+
+    gsap.to(target, {
       scale: 1,
       duration: 0.3,
       ease: "power2.out",
     });
+
+    // Reset parent z-index
+    if (parent) {
+      gsap.to(parent, {
+        zIndex: 1,
+        duration: 0.3,
+        ease: "power2.out",
+      });
+    }
   };
 
   const sizeMap = {

@@ -313,12 +313,13 @@ export default function ScrollableTabsv2() {
               }}
             >
               {tab.iconBoxes.map((iconBox, index) => (
-                <IconBox
-                  key={`${tabIdx}-${index}`}
-                  src={iconBox.src}
-                  title={iconBox.title}
-                  description={iconBox.description}
-                />
+                <div key={`${tabIdx}-${index}`} className="relative">
+                  <IconBox
+                    src={iconBox.src}
+                    title={iconBox.title}
+                    description={iconBox.description}
+                  />
+                </div>
               ))}
             </div>
           ))}
