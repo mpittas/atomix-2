@@ -134,7 +134,6 @@ export default function ScrollableHeading() {
             text={slides[0].text}
             className="text-5xl leading-[1.2em] font-semibold text-white"
             startPaused={true}
-            enableShine={true}
           />
         </div>
 
@@ -149,7 +148,6 @@ export default function ScrollableHeading() {
             text={slides[1].text}
             className="text-5xl leading-[1.2em] font-semibold text-white"
             startPaused={true}
-            enableShine={true}
           />
 
           <DefButton size="large">About Us</DefButton>
