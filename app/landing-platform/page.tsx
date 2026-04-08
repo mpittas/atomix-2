@@ -5,14 +5,19 @@ import HeaderRounded from "@/components/headerRounded";
 import DefCta from "@/components/DefCta";
 import Footer from "@/components/Footer";
 import ScrollableTabsPlatform from "@/components/ScrollableTabsPlatform";
+import { SliderAnimationPage } from "@/slider-animation/SliderAnimationPage";
+import { useIsDesktop } from "@/hooks/useIsDesktop";
 
 export default function LandingPlatformPage() {
+  const isDesktop = useIsDesktop();
   return (
     <div className="overflow-x-hidden">
       <HeaderRounded />
       <MainHeroV3 />
 
       <ScrollableTabsPlatform />
+
+      <SliderAnimationPage isDesktop={isDesktop} />
 
       <div id="def-cta" className="pt-30">
         <DefCta
