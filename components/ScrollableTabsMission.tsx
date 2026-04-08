@@ -7,7 +7,6 @@ import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import { useGSAP } from "@gsap/react";
 import DefHeading from "@/components/typo/DefHeading";
 import IconBox from "@/components/IconBox";
-import SoftAurora from "@/components/backgrounds/SoftAurora";
 
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
@@ -125,7 +124,7 @@ const tabsData: TabData[] = [
   },
 ];
 
-export default function ScrollableTabsv2() {
+export default function ScrollableTabsMission() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const scrollTriggerRef = useRef<ScrollTrigger | null>(null);
   const iconBoxRefs = useRef<(HTMLDivElement | null)[]>([]);
