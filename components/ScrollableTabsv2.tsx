@@ -240,7 +240,7 @@ export default function ScrollableTabsv2() {
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: sectionRef.current,
-          start: "top top+=10px",
+          start: "center center",
           end: "+=10000",
           pin: true,
           pinSpacing: true,
@@ -321,7 +321,7 @@ export default function ScrollableTabsv2() {
   return (
     <div
       ref={sectionRef}
-      className="flex flex-col items-center py-16 px-4 gap-y-16 relative z-[120]"
+      className="flex flex-col items-center px-4 gap-y-16 relative z-[120]"
     >
       {/* Top - DefHeading */}
       <DefHeading
