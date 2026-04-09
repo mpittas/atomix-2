@@ -307,7 +307,7 @@ export default function ScrollableTabsCurrentStatus() {
       {/* Bottom Section - Tabs and IconBoxes */}
       <div
         ref={tabsSectionRef}
-        className="flex flex-col w-full max-w-[1200px] px-8 bg-red-500/0"
+        className="flex flex-col max-w-[1260px] px-8 bg-red-500/0 mx-auto w-full"
         id="current-status-scroll-tabs"
       >
         {/* Tab Buttons - Horizontal */}
@@ -316,7 +316,7 @@ export default function ScrollableTabsCurrentStatus() {
             <div
               key={tab.title}
               onClick={() => handleTabClick(index)}
-              className={`relative flex-1 flex flex-col gap-4 rounded-xl transition-all duration-500 cursor-pointer p-5 overflow-hidden ${
+              className={`relative flex-1 flex flex-col justify-center gap-4 rounded-xl transition-all duration-500 cursor-pointer p-5 overflow-hidden ${
                 index === activeIndex
                   ? "bg-[#eaeff1] text-black"
                   : "bg-[#124652]"
@@ -338,14 +338,14 @@ export default function ScrollableTabsCurrentStatus() {
         </div>
 
         {/* Bottom Section - Stacked IconBox groups for each tab */}
-        <div className="relative mt-8" style={{ minHeight: 200 }}>
+        <div className="relative mt-8 w-full" style={{ minHeight: 200 }}>
           {tabsData.map((tab, tabIdx) => (
             <div
               key={tab.title}
               ref={(el) => {
                 iconBoxRefs.current[tabIdx] = el;
               }}
-              className="grid grid-cols-3 gap-3 w-full "
+              className={`grid ${tabIdx === 2 || tabIdx === 3 ? "grid-cols-4" : "grid-cols-3"} gap-3 w-full `}
               style={{
                 position: tabIdx === 0 ? "relative" : "absolute",
                 top: 0,
@@ -355,7 +355,10 @@ export default function ScrollableTabsCurrentStatus() {
               }}
             >
               {tab.iconBoxes.map((iconBox, index) => (
-                <div key={`${tabIdx}-${index}`} className="relative">
+                <div
+                  key={`${tabIdx}-${index}`}
+                  className={`relative ${tabIdx === 3 ? "col-span-4" : ""}`}
+                >
                   <IconBox
                     icon={iconBox.icon}
                     src={iconBox.src}

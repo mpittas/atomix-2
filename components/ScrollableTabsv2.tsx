@@ -344,7 +344,7 @@ export default function ScrollableTabsv2() {
             <div
               key={tab.title}
               onClick={() => handleTabClick(index)}
-              className={`relative flex-1 flex flex-col gap-4 rounded-xl transition-all duration-500 cursor-pointer p-5 overflow-hidden ${
+              className={`relative flex-1 flex flex-col justify-center gap-4 rounded-xl transition-all duration-500 cursor-pointer p-5 overflow-hidden ${
                 index === activeIndex
                   ? "bg-[#eaeff1] text-black"
                   : "bg-[#124652]"
@@ -373,7 +373,7 @@ export default function ScrollableTabsv2() {
               ref={(el) => {
                 iconBoxRefs.current[tabIdx] = el;
               }}
-              className="grid grid-cols-3 gap-3 w-full "
+              className={`grid ${tabIdx === 2 ? "grid-cols-4" : "grid-cols-3"} gap-3 w-full `}
               style={{
                 position: tabIdx === 0 ? "relative" : "absolute",
                 top: 0,

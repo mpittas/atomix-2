@@ -14,7 +14,7 @@ import SolutionsRow from "@/components/SolutionsRow";
 import InfoRow from "@/components/InfoRow";
 import IconBoxHorizontal from "@/components/IconBoxHorizontal";
 import IconBox from "@/components/IconBox";
-import CustomerStoryCard from "@/components/CustomerStoryCard";
+import { FaGlobe, FaUsers, FaMicrochip } from "react-icons/fa6";
 import DefCta from "@/components/DefCta";
 import Footer from "@/components/Footer";
 import SoftAurora from "@/components/backgrounds/SoftAurora";
@@ -345,7 +345,7 @@ export default function LandingGradientV1Page() {
         </div>
 
         <div className="h-full mb-12">
-          <div className="px-18 py-36 rounded-t-3xl bg-linear-to-b from-[#0B4858] to-[#81A6AF] relative overflow-hidden">
+          <div className="px-18 py-36 rounded-3xl bg-linear-to-b from-[#0B4858] via-[#81A6AF] to-[#0B4858] relative overflow-hidden">
             <div className="absolute -top-10 left-0 w-full h-[500px]">
               <SoftAurora
                 speed={1.3}
@@ -365,18 +365,9 @@ export default function LandingGradientV1Page() {
               />
             </div>
 
-            <div className="max-w-[1260px] mx-auto px-4">
+            <div className="mx-auto px-4">
               {/* <CurrentStatus /> */}
               <ScrollableTabsCurrentStatus />
-            </div>
-          </div>
-
-          <div className="px-18 py-36 rounded-b-3xl bg-linear-to-t from-[#0B4858] to-[#81A6AF]">
-            <div
-              className="max-w-[1200px] px-8 mx-auto bg-red-500/0"
-              id="why-work-with-us"
-            >
-              <WhyWorkWithUs />
             </div>
           </div>
         </div>
@@ -390,37 +381,40 @@ export default function LandingGradientV1Page() {
             <div className="max-w-[1060px] mx-auto">
               <DefHeading
                 theme="dark"
-                badgeText="Use Cases"
-                title="Delivering Real Results"
-                description="Lorem ipsum"
+                badgeText="Careers"
+                title="Why Work With Us"
+                description="Join us in building the future of lending technology."
               />
             </div>
 
             <div className="w-full mt-16 flex items-center gap-6 bg-red-500/0">
               <div ref={card1Ref} className="flex-1">
-                <CustomerStoryCard
-                  title="Customer Story 1"
-                  description="Lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit."
+                <IconBox
+                  icon={<FaGlobe className="h-10 w-10" />}
+                  title="Real-World Financial Infrastructure"
+                  description="Build technology that powers real lending markets and impacts billions in asset-backed finance."
                 />
               </div>
 
               <div ref={card2Ref} className="flex-1">
-                <CustomerStoryCard
-                  title="Customer Story 2"
-                  description="Lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit."
+                <IconBox
+                  icon={<FaUsers className="h-10 w-10" />}
+                  title="Small Team, Big Impact"
+                  description="Join a focused team where every contribution directly shapes the product, technology, and company."
                 />
               </div>
 
               <div ref={card3Ref} className="flex-1">
-                <CustomerStoryCard
-                  title="Customer Story 3"
-                  description="Lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit."
+                <IconBox
+                  icon={<FaMicrochip className="h-10 w-10" />}
+                  title="Cutting-Edge Technology"
+                  description="Work across AI, automation, data systems, and blockchain-backed infrastructure."
                 />
               </div>
             </div>
 
             <div className="flex justify-center mt-12">
-              <DefButton size="large">Read more</DefButton>
+              <DefButton size="large">Learn more</DefButton>
             </div>
           </div>
         </div>
