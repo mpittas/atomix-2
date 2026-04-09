@@ -5,9 +5,13 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
   variant?: "primary";
   gradient?: boolean | string;
   children: React.ReactNode;
+  href?: string;
 }
 
-const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+const Button = React.forwardRef<
+  HTMLButtonElement | HTMLAnchorElement,
+  ButtonProps
+>(
   (
     {
       size = "medium",
@@ -15,6 +19,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       gradient = true,
       className = "",
       children,
+      href,
       ...props
     },
     ref,
@@ -40,9 +45,22 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     const baseClasses =
       "font-semibold text-white rounded-full transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 active:scale-95 cursor-pointer";
 
+    if (href) {
+      return (
+        <a
+          ref={ref as React.Ref<HTMLAnchorElement>}
+          href={href}
+          className={`${baseClasses} ${sizeClasses[size]} ${getBackgroundClass()} ${className}`}
+          {...(props as React.AnchorHTMLAttributes<HTMLAnchorElement>)}
+        >
+          {children}
+        </a>
+      );
+    }
+
     return (
       <button
-        ref={ref}
+        ref={ref as React.Ref<HTMLButtonElement>}
         className={`${baseClasses} ${sizeClasses[size]} ${getBackgroundClass()} ${className}`}
         {...props}
       >

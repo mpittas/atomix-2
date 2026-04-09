@@ -258,7 +258,9 @@ export default function LandingGradientV1Page() {
                 <SolutionsRow />
 
                 <div className="mt-14">
-                  <DefButton size="large">Learn more</DefButton>
+                  <DefButton size="large" href="/landing-platform-benefits">
+                    Learn more
+                  </DefButton>
                 </div>
               </div>
             </div>
