@@ -22,6 +22,7 @@ import BenefitsLayout from "@/components/BenefitsLayout";
 import ScrollableTabsv2 from "@/components/ScrollableTabsv2";
 import TechLimitations from "@/components/TechLimitations";
 import WhyAtomix from "@/components/WhyAtomix";
+import WhyAtomixLayout from "@/components/WhyAtomixLayout";
 import TheMarket from "@/components/TheMarket";
 import WhyWorkWithUs from "@/components/WhyWorkWithUs";
 import ScrollableHeadingV2 from "@/components/ScrollableHeadingV2";
@@ -327,8 +328,9 @@ export default function LandingGradientV1Page() {
               className="max-w-[1200px] px-8 mx-auto bg-red-500/0"
               id="why-atomix"
             >
+              <WhyAtomixLayout />
               {/* <WhyAtomix /> */}
-              <ScrollableTabsWhyAtomix />
+              {/* <ScrollableTabsWhyAtomix /> */}
             </div>
           </div>
 
