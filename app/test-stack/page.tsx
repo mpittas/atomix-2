@@ -1,8 +1,6 @@
 "use client";
 
 import React, { useRef } from "react";
-import gsap from "gsap";
-import { useGSAP } from "@gsap/react";
 import DefHeading from "@/components/typo/DefHeading";
 import {
   FaRobot,
@@ -74,29 +72,6 @@ const stackItems = [
 
 export default function TestStackPage() {
   const sectionRef = useRef<HTMLDivElement | null>(null);
-  const stackRefs = useRef<(HTMLDivElement | null)[]>([]);
-
-  useGSAP(
-    () => {
-      // Set initial states
-      stackRefs.current.forEach((ref) => {
-        if (ref) {
-          gsap.set(ref, { autoAlpha: 0, y: 30 });
-        }
-      });
-
-      // Animate in with stagger
-      gsap.to(stackRefs.current, {
-        autoAlpha: 1,
-        y: 0,
-        duration: 0.8,
-        ease: "power3.out",
-        stagger: 0.1,
-        delay: 0.3,
-      });
-    },
-    { scope: sectionRef },
-  );
 
   return (
     <>
@@ -119,18 +94,15 @@ export default function TestStackPage() {
             {stackItems.map((item, index) => (
               <div
                 key={item.title}
-                className={index === 0 ? "sticky" : "-mt-24 sticky md:-mt-20"}
+                className={
+                  index === 0 ? "sticky" : "sticky mt-64 md:mt-80 lg:mt-[50vh]"
+                }
                 style={{
-                  top: `${96 + index * 20}px`,
+                  top: `${96 + index * 32}px`,
                   zIndex: index + 1,
                 }}
               >
-                <div
-                  ref={(element) => {
-                    stackRefs.current[index] = element;
-                  }}
-                  className="relative flex min-h-[220px] flex-col items-center gap-1 overflow-hidden rounded-2xl border border-dashed border-[#82b0ba] bg-[#124652] p-7 text-center will-change-transform"
-                >
+                <div className="relative flex min-h-[220px] flex-col items-center gap-1 overflow-hidden rounded-2xl border border-dashed border-[#82b0ba] bg-[#124652] p-7 text-center will-change-transform">
                   <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-2xl">
                     <div className="absolute -right-4 -top-8 h-32 w-32 rounded-full bg-white/25 blur-2xl" />
                     <div className="absolute -bottom-8 -left-4 h-32 w-32 rounded-full bg-white/25 blur-2xl" />
