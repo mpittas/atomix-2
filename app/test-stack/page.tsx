@@ -99,62 +99,65 @@ export default function TestStackPage() {
   );
 
   return (
-    <div
-      ref={sectionRef}
-      className="min-h-screen bg-[#004054] px-6 py-24 md:px-10 lg:px-12"
-    >
-      <div className="mx-auto grid max-w-7xl gap-14 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-20">
-        <div className="lg:sticky lg:top-24 lg:self-start">
-          <DefHeading
-            theme="light"
-            badgeText=""
-            showBadge={false}
-            title="Why Existing Technology Falls Short"
-            description="The problem is structural — and so is the Atomix solution."
-            className="mx-0 max-w-xl items-start text-left"
-          />
-        </div>
+    <>
+      <div
+        ref={sectionRef}
+        className="min-h-screen bg-[#004054] px-6 py-24 md:px-10 lg:px-12"
+      >
+        <div className="mx-auto grid max-w-7xl gap-14 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-20">
+          <div className="lg:sticky lg:top-24 pt-6 lg:self-start">
+            <DefHeading
+              theme="light"
+              badgeText=""
+              showBadge={false}
+              title="Why Existing Technology Falls Short"
+              description="The problem is structural — and so is the Atomix solution."
+            />
+          </div>
 
-        <div className="relative pb-32">
-          {stackItems.map((item, index) => (
-            <div
-              key={item.title}
-              className={index === 0 ? "sticky" : "-mt-24 sticky md:-mt-20"}
-              style={{
-                top: `${96 + index * 20}px`,
-                zIndex: index + 1,
-              }}
-            >
+          <div className="relative pb-32">
+            {stackItems.map((item, index) => (
               <div
-                ref={(element) => {
-                  stackRefs.current[index] = element;
+                key={item.title}
+                className={index === 0 ? "sticky" : "-mt-24 sticky md:-mt-20"}
+                style={{
+                  top: `${96 + index * 20}px`,
+                  zIndex: index + 1,
                 }}
-                className="relative flex min-h-[220px] flex-col items-center gap-1 overflow-hidden rounded-2xl border border-dashed border-[#82b0ba] bg-[#124652] p-7 text-center will-change-transform"
               >
-                <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-2xl">
-                  <div className="absolute -right-4 -top-8 h-32 w-32 rounded-full bg-white/25 blur-2xl" />
-                  <div className="absolute -bottom-8 -left-4 h-32 w-32 rounded-full bg-white/25 blur-2xl" />
-                </div>
-
-                <div className="relative flex flex-col items-center gap-1">
-                  <div className="mb-2 flex h-12 w-12 items-center justify-center text-white">
-                    {item.icon}
+                <div
+                  ref={(element) => {
+                    stackRefs.current[index] = element;
+                  }}
+                  className="relative flex min-h-[220px] flex-col items-center gap-1 overflow-hidden rounded-2xl border border-dashed border-[#82b0ba] bg-[#124652] p-7 text-center will-change-transform"
+                >
+                  <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-2xl">
+                    <div className="absolute -right-4 -top-8 h-32 w-32 rounded-full bg-white/25 blur-2xl" />
+                    <div className="absolute -bottom-8 -left-4 h-32 w-32 rounded-full bg-white/25 blur-2xl" />
                   </div>
-                  <div
-                    className="text-lg font-semibold leading-[1.3em] text-white"
-                    dangerouslySetInnerHTML={{ __html: item.title }}
-                  />
-                  {item.description && (
-                    <div className="mt-2 text-md text-white/80">
-                      {item.description}
+
+                  <div className="relative flex flex-col items-center gap-1">
+                    <div className="mb-2 flex h-12 w-12 items-center justify-center text-white">
+                      {item.icon}
                     </div>
-                  )}
+                    <div
+                      className="text-lg font-semibold leading-[1.3em] text-white"
+                      dangerouslySetInnerHTML={{ __html: item.title }}
+                    />
+                    {item.description && (
+                      <div className="mt-2 text-md text-white/80">
+                        {item.description}
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
-    </div>
+
+      <div className="h-[100vh] bg-gray-200"></div>
+    </>
   );
 }
