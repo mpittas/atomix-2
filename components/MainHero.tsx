@@ -19,7 +19,7 @@ const aboutAtomixItems = [
     icon: "/icons/white/users-group.svg",
     title: "What we are",
     subtitle:
-      "A Platform-as-a-Service automating the full lifecycle of property loans, end to-end",
+      "A white-label, fully configurable Platform-as-a-Service automating the full lifecycle of property loans, end-to-end",
   },
   {
     icon: "/icons/white/rocket-launch-white.svg",

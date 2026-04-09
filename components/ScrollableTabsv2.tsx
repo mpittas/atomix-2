@@ -265,16 +265,16 @@ export default function ScrollableTabsv2() {
       {/* Bottom Section - Tabs and IconBoxes */}
       <div
         ref={tabsSectionRef}
-        className="flex flex-row items-start w-full max-w-[1200px] px-8 bg-red-500/0 gap-6"
+        className="flex flex-col w-full max-w-[1200px] px-8 bg-red-500/0"
         id="main-scoll-tabs"
       >
-        {/* Tab Buttons - Vertical */}
-        <div className="flex flex-col gap-3 w-[200px] shrink-0">
+        {/* Tab Buttons - Horizontal */}
+        <div className="flex gap-4 w-full">
           {tabsData.map((tab, index) => (
             <div
               key={tab.title}
               onClick={() => handleTabClick(index)}
-              className={`relative flex flex-col gap-4 rounded-xl transition-all duration-500 cursor-pointer p-5 overflow-hidden ${
+              className={`relative flex-1 flex flex-col gap-4 rounded-xl transition-all duration-500 cursor-pointer p-5 overflow-hidden ${
                 index === activeIndex
                   ? "bg-[#eaeff1] text-black"
                   : "bg-[#124652]"
@@ -296,7 +296,7 @@ export default function ScrollableTabsv2() {
         </div>
 
         {/* Bottom Section - Stacked IconBox groups for each tab */}
-        <div className="relative flex-1" style={{ minHeight: 200 }}>
+        <div className="relative mt-8" style={{ minHeight: 200 }}>
           {tabsData.map((tab, tabIdx) => (
             <div
               key={tab.title}

@@ -142,8 +142,8 @@ export default function ScrollableHeadingV2() {
                 <div className="relative z-10 flex flex-col items-center gap-3">
                   <BadgeHeadingPill color="blue">Mission</BadgeHeadingPill>
                   <div className="text-2xl font-semibold leading-[1.3em] text-white">
-                    To rebuild property lending from the ground up with
-                    intelligent automation and unwavering compliance.
+                    Fix UK property lending. Start with bridging. Extend into
+                    SME CRE term loans — same infrastructure, no rebuild
                   </div>
                 </div>
               </div>
@@ -157,8 +157,9 @@ export default function ScrollableHeadingV2() {
                 <div className="relative z-10 flex flex-col items-center gap-3">
                   <BadgeHeadingPill color="blue">Vision</BadgeHeadingPill>
                   <div className="text-2xl font-semibold leading-[1.3em] text-white">
-                    A future where every property loan is processed with speed,
-                    transparency, and zero compromise on integrity
+                    Four interconnected marketplaces. Every stakeholder
+                    connected. Property lending reimagined — starting in the UK,
+                    built for global scale.
                   </div>
                 </div>
               </div>
