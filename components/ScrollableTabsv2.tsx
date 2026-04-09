@@ -232,7 +232,7 @@ export default function ScrollableTabsv2() {
       // Set all icon box groups hidden initially — all animate in via scroll timeline
       iconBoxRefs.current.forEach((group) => {
         if (group) {
-          gsap.set(group.children, { scale: 0, opacity: 0 });
+          gsap.set(group.children, { scale: 0.8, opacity: 0, y: 30 });
         }
       });
 
@@ -241,20 +241,16 @@ export default function ScrollableTabsv2() {
         scrollTrigger: {
           trigger: sectionRef.current,
           start: "top top+=10px",
-          end: () => `+=${window.innerHeight * 3 * 1.8}`, // Calculate based on window height
+          end: "+=10000",
           pin: true,
           pinSpacing: true,
-          scrub: 0.5,
+          scrub: 1,
+          invalidateOnRefresh: true,
           onUpdate: (self) => {
-            const progress = self.progress;
-            let newIndex = 0;
-            if (progress < 0.33) {
-              newIndex = 0;
-            } else if (progress < 0.66) {
-              newIndex = 1;
-            } else {
-              newIndex = 2;
-            }
+            const newIndex = Math.min(
+              tabsData.length - 1,
+              Math.floor(self.progress * tabsData.length),
+            );
             setActiveIndex(newIndex);
           },
         },
@@ -268,8 +264,9 @@ export default function ScrollableTabsv2() {
         const group = iconBoxRefs.current[tabIdx];
         if (!group) return;
 
-        const segStart = tabIdx / 3; // 0, 0.333, 0.666
-        const segEnd = (tabIdx + 1) / 3;
+        const segSize = 1 / tabsData.length;
+        const segStart = tabIdx * segSize;
+        const segEnd = (tabIdx + 1) * segSize;
         const inStart = tabIdx === 0 ? 0.04 : segStart + 0.02;
         const outStart = segEnd - 0.08;
         const isLastTab = tabIdx === tabsData.length - 1;
@@ -284,8 +281,9 @@ export default function ScrollableTabsv2() {
             {
               scale: 1,
               opacity: 1,
+              y: 0,
               duration: cardSpacing * 1.2,
-              ease: "back.out(1.5)",
+              ease: "power2.out",
             },
             inStart + i * cardSpacing,
           );
@@ -296,11 +294,12 @@ export default function ScrollableTabsv2() {
           tl.to(
             group.children,
             {
-              scale: 0,
+              scale: 0.8,
               opacity: 0,
-              stagger: -0.008,
-              duration: 0.04,
-              ease: "back.in(1.5)",
+              y: -20,
+              stagger: -0.012,
+              duration: 0.06,
+              ease: "power2.in",
             },
             outStart,
           );
