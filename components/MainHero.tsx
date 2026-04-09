@@ -42,6 +42,9 @@ const aboutAtomixItems = [
 export default function MainHero() {
   const title1SplitRef = useRef<SplitTextHandle>(null);
   const title2SplitRef = useRef<SplitTextHandle>(null);
+  const iconBox1Ref = useRef<HTMLDivElement>(null);
+  const iconBox2Ref = useRef<HTMLDivElement>(null);
+  const iconBoxButtonRef = useRef<HTMLDivElement>(null);
 
   useGSAP(() => {
     // --- PAGE LOAD ANIMATION ---
@@ -74,6 +77,10 @@ export default function MainHero() {
       autoAlpha: 0,
       y: 40,
     });
+    gsap.set("#def-hero-icon-boxes", { autoAlpha: 0 });
+    gsap.set(iconBox1Ref.current, { autoAlpha: 0, x: -100 });
+    gsap.set(iconBox2Ref.current, { autoAlpha: 0, x: 100 });
+    gsap.set(iconBoxButtonRef.current, { autoAlpha: 0, y: 30 });
 
     // --- SCROLL TIMELINE (scrub, no snap) ---
     const tl = gsap.timeline({
@@ -125,7 +132,39 @@ export default function MainHero() {
         },
         "title2Visible+=0.9",
       )
-      .addLabel("listVisible");
+      .addLabel("listVisible")
+
+      // Stage 4: Fade out title 2, bring in icon boxes
+      .to(
+        "#def-hero-title-2",
+        { autoAlpha: 0, scale: 0.9, duration: 1, ease: "power2.in" },
+        "listVisible+=1.5",
+      )
+      .to(
+        "#def-hero-icon-boxes",
+        { autoAlpha: 1, duration: 0.01 },
+        "listVisible+=2",
+      )
+      .addLabel("iconBoxesStart", "listVisible+=2")
+      .fromTo(
+        iconBox1Ref.current,
+        { autoAlpha: 0, x: -100 },
+        { autoAlpha: 1, x: 0, duration: 1.5, ease: "power2.out" },
+        "iconBoxesStart",
+      )
+      .fromTo(
+        iconBox2Ref.current,
+        { autoAlpha: 0, x: 100 },
+        { autoAlpha: 1, x: 0, duration: 1.5, ease: "power2.out" },
+        "iconBoxesStart+=0.3",
+      )
+      .fromTo(
+        iconBoxButtonRef.current,
+        { autoAlpha: 0, y: 30 },
+        { autoAlpha: 1, y: 0, duration: 1, ease: "power2.out" },
+        "iconBoxesStart+=1.5",
+      )
+      .addLabel("iconBoxesVisible");
   }, []);
 
   return (
@@ -229,6 +268,51 @@ export default function MainHero() {
               />
             </div>
           ))}
+        </div>
+      </div>
+
+      {/* ICON BOXES - Mission & Vision, scroll-driven */}
+      <div
+        className="text-white max-w-[1200px] mx-auto flex flex-col gap-y-12 justify-center items-center text-center absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+        id="def-hero-icon-boxes"
+        style={{ visibility: "hidden" }}
+      >
+        <div className="flex flex-col md:flex-row gap-8 w-full max-w-4xl">
+          <div ref={iconBox1Ref} className="flex-1">
+            <div className="relative flex flex-col items-center gap-3 p-7 rounded-2xl text-center h-full border border-dashed bg-[#124652] border-[#82b0ba] overflow-hidden will-change-transform">
+              <div className="pointer-events-none absolute inset-0 rounded-2xl overflow-hidden">
+                <div className="absolute -top-8 -right-4 w-32 h-32 bg-white/25 rounded-full blur-2xl" />
+                <div className="absolute -bottom-8 -left-4 w-32 h-32 bg-white/25 rounded-full blur-2xl" />
+              </div>
+              <div className="relative z-10 flex flex-col items-center gap-3">
+                <BadgeHeadingPill color="blue">Mission</BadgeHeadingPill>
+                <div className="text-2xl font-semibold leading-[1.3em] text-white">
+                  Fix UK property lending. Start with bridging. Extend into SME
+                  CRE term loans — same infrastructure, no rebuild
+                </div>
+              </div>
+            </div>
+          </div>
+          <div ref={iconBox2Ref} className="flex-1">
+            <div className="relative flex flex-col items-center gap-3 p-7 rounded-2xl text-center h-full border border-dashed bg-[#124652] border-[#82b0ba] overflow-hidden will-change-transform">
+              <div className="pointer-events-none absolute inset-0 rounded-2xl overflow-hidden">
+                <div className="absolute -top-8 -right-4 w-32 h-32 bg-white/25 rounded-full blur-2xl" />
+                <div className="absolute -bottom-8 -left-4 w-32 h-32 bg-white/25 rounded-full blur-2xl" />
+              </div>
+              <div className="relative z-10 flex flex-col items-center gap-3">
+                <BadgeHeadingPill color="blue">Vision</BadgeHeadingPill>
+                <div className="text-2xl font-semibold leading-[1.3em] text-white">
+                  Four interconnected marketplaces. Every stakeholder connected.
+                  Property lending reimagined — starting in the UK, built for
+                  global scale.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div ref={iconBoxButtonRef} className="mt-8">
+          <DefButton size="large">Learn more</DefButton>
         </div>
       </div>
     </section>

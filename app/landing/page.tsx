@@ -187,7 +187,7 @@ export default function LandingGradientV1Page() {
         <div className="h-full mb-6">
           <div
             // ref={sectionRef}
-            className="relative px-18 py-36 rounded-t-3xl bg-linear-to-b from-[#0B4858] to-[#81A6AF] relative z-[50] overflow-hidden"
+            className="relative px-18 py-36 rounded-3xl bg-linear-to-b from-[#0B4858] via-[#81A6AF] to-[#0B4858] relative z-[50] overflow-hidden"
           >
             <div className="absolute -top-0 left-0 w-full h-[500px]">
               <SoftAurora
@@ -208,10 +208,6 @@ export default function LandingGradientV1Page() {
               />
             </div>
 
-            <ScrollableHeadingV2 />
-          </div>
-
-          <div className="relative px-18 py-8 rounded-b-3xl bg-linear-to-t from-[#0B4858] to-[#81A6AF] relative overflow-hidden">
             <ScrollableTabsv2 />
           </div>
         </div>
