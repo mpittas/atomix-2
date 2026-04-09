@@ -26,6 +26,7 @@ import TheMarket from "@/components/TheMarket";
 import WhyWorkWithUs from "@/components/WhyWorkWithUs";
 import ScrollableHeadingV2 from "@/components/ScrollableHeadingV2";
 import CurrentStatus from "@/components/CurrentStatus";
+import ScrollableTabsWhyAtomix from "@/components/ScrollableTabsWhyAtomix";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -325,7 +326,8 @@ export default function LandingGradientV1Page() {
               className="max-w-[1200px] px-8 mx-auto bg-red-500/0"
               id="why-atomix"
             >
-              <WhyAtomix />
+              {/* <WhyAtomix /> */}
+              <ScrollableTabsWhyAtomix />
             </div>
           </div>
 
