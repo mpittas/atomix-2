@@ -1,13 +1,32 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { type ReactNode, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import { useGSAP } from "@gsap/react";
+import {
+  FaBan,
+  FaBinoculars,
+  FaClockRotateLeft,
+  FaFileCircleXmark,
+  FaHandHoldingDollar,
+  FaHourglassHalf,
+  FaLink,
+  FaMoneyBillTransfer,
+  FaPeopleGroup,
+  FaPersonCircleQuestion,
+  FaScaleUnbalanced,
+  FaShieldHalved,
+  FaShuffle,
+  FaTriangleExclamation,
+  FaUserLock,
+  FaUserSlash,
+  FaUsersSlash,
+  FaXmark,
+} from "react-icons/fa6";
 import DefHeading from "@/components/typo/DefHeading";
 import IconBox from "@/components/IconBox";
-import SoftAurora from "@/components/backgrounds/SoftAurora";
 
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
@@ -15,11 +34,33 @@ interface TabData {
   title: string;
   items: string[];
   iconBoxes: {
-    src: string;
+    src?: string;
+    icon?: ReactNode;
     title: string;
     description: string;
   }[];
 }
+
+const icons = {
+  noVisibility: <FaBinoculars className="h-10 w-10" />,
+  noCompliance: <FaShieldHalved className="h-10 w-10" />,
+  noAudit: <FaFileCircleXmark className="h-10 w-10" />,
+  noAccess: <FaUserLock className="h-10 w-10" />,
+  fragmented: <FaLink className="h-10 w-10" />,
+  noWarning: <FaTriangleExclamation className="h-10 w-10" />,
+  touchpoints: <FaPeopleGroup className="h-10 w-10" />,
+  uneconomic: <FaScaleUnbalanced className="h-10 w-10" />,
+  hiring: <FaUsersSlash className="h-10 w-10" />,
+  fraud: <FaBan className="h-10 w-10" />,
+  slow: <FaHourglassHalf className="h-10 w-10" />,
+  noData: <FaXmark className="h-10 w-10" />,
+  opaque: <FaPersonCircleQuestion className="h-10 w-10" />,
+  delays: <FaClockRotateLeft className="h-10 w-10" />,
+  chasing: <FaShuffle className="h-10 w-10" />,
+  noMatch: <FaUserSlash className="h-10 w-10" />,
+  costly: <FaMoneyBillTransfer className="h-10 w-10" />,
+  scattered: <FaHandHoldingDollar className="h-10 w-10" />,
+};
 
 const tabsData: TabData[] = [
   {
@@ -32,28 +73,39 @@ const tabsData: TabData[] = [
     ],
     iconBoxes: [
       {
-        src: "/icons/white/money-coins-white.svg",
-        title: "Lorem ipsum dolor",
-        description:
-          "Sit amet consectetur adipiscing elit sed do eiusmod tempor",
+        icon: icons.noVisibility,
+        title:
+          "No real-time visibility into loan performance, policy adherence or portfolio analytics",
+        description: "",
       },
       {
-        src: "/icons/white/clock-white.svg",
-        title: "Lorem ipsum dolor",
-        description:
-          "Sit amet consectetur adipiscing elit sed do eiusmod tempor",
+        icon: icons.noCompliance,
+        title: "Must trust lenders to follow stated policies",
+        description: "With checks only after the fact",
       },
       {
-        src: "/icons/white/arrows-white.svg",
-        title: "Lorem ipsum dolor",
+        icon: icons.fraud,
+        title: "Fraud and misrepresentation risks",
         description:
-          "Sit amet consectetur adipiscing elit sed do eiusmod tempor",
+          "Lending rules can be broken with no mechanism for detection",
       },
       {
-        src: "/icons/white/eye-white-crossed.svg",
-        title: "Lorem ipsum dolor",
+        icon: icons.scattered,
+        title: "Capital locked for the full term",
+        description: "No secondary liquidity, no exit mechanism",
+      },
+      {
+        icon: icons.fragmented,
+        title:
+          "Diversiﬁed small-loan portfolios are administratively punishing",
         description:
-          "Sit amet consectetur adipiscing elit sed do eiusmod tempor",
+          "Pushing capital toward larger, more concentrated positions",
+      },
+      {
+        icon: icons.costly,
+        title: "Bolt-on compliance controls have become a permanent overhead",
+        description:
+          "Costs that exist because the underlying infrastructure cannot be trusted",
       },
     ],
   },
@@ -67,24 +119,40 @@ const tabsData: TabData[] = [
     ],
     iconBoxes: [
       {
-        src: "/icons/white/money-coins-white.svg",
-        title: "Handle 100+ <br>touchpoints per loan",
-        description: "Sit amet consectetur adipiscing elit",
+        icon: icons.touchpoints,
+        title: "100+ manual touchpoints per loan",
+        description:
+          "Growth requires hiring, scaling requires heavy investment",
       },
       {
-        src: "/icons/white/clock-white.svg",
-        title: "Smaller loans are uneconomic",
-        description: "Sit amet consectetur adipiscing elit",
+        icon: icons.noAccess,
+        title: "Smaller originators shut out of institutional capital",
+        description:
+          "Too small for dedicated facilities, unable to achieve securitisation scale individually",
       },
       {
-        src: "/icons/white/arrows-white.svg",
-        title: "Growth requires<br>hiring",
-        description: "Sit amet consectetur adipiscing elit",
+        icon: icons.uneconomic,
+        title:
+          "High ﬁxed processing costs make smaller, most in-demand loans uneconomic to originate",
+        description: "",
       },
       {
-        src: "/icons/white/eye-white-crossed.svg",
-        title: "Fraud and misrepresentation are systemic risks",
-        description: "Sit amet consectetur adipiscing elit",
+        icon: icons.noAudit,
+        title: "Existing systems are rigid and expensive to adapt",
+        description:
+          "New products, rule changes and workﬂow modiﬁcations require developers, long lead times and signiﬁcant cost",
+      },
+      {
+        icon: icons.slow,
+        title: "40-60% of applications never complete",
+        description:
+          "But their full processing costs are absorbed by completed loans, further eroding margins",
+      },
+      {
+        icon: icons.costly,
+        title: "Due diligence costs are prohibitive for smaller lenders",
+        description:
+          "Institutional capital remains out of reach regardless of loan book quality",
       },
     ],
   },
@@ -98,28 +166,27 @@ const tabsData: TabData[] = [
     ],
     iconBoxes: [
       {
-        src: "/icons/white/money-coins-white.svg",
-        title: "Lorem ipsum dolor",
-        description:
-          "Sit amet consectetur adipiscing elit sed do eiusmod tempor",
+        icon: icons.chasing,
+        title:
+          "Re-enter the same data for every lender and every service provider",
+        description: "",
       },
       {
-        src: "/icons/white/clock-white.svg",
-        title: "Lorem ipsum dolor",
-        description:
-          "Sit amet consectetur adipiscing elit sed do eiusmod tempor",
+        icon: icons.opaque,
+        title: "No certainty of outcome until the ﬁnal moment",
+        description: "Process lacks transparency, consistency and certainty",
       },
       {
-        src: "/icons/white/arrows-white.svg",
-        title: "Lorem ipsum dolor",
+        icon: icons.delays,
+        title: "Opaque, slow process",
         description:
-          "Sit amet consectetur adipiscing elit sed do eiusmod tempor",
+          "Completions exceed 35 days, initial underwriting alone takes up to a week",
       },
       {
-        src: "/icons/white/eye-white-crossed.svg",
-        title: "Lorem ipsum dolor",
+        icon: icons.noVisibility,
+        title: "No visibility into status or next steps",
         description:
-          "Sit amet consectetur adipiscing elit sed do eiusmod tempor",
+          "Entirely dependent on manual updates and underwriter discretion",
       },
     ],
   },
@@ -207,18 +274,22 @@ export default function ScrollableTabsv2() {
         const outStart = segEnd - 0.08;
         const isLastTab = tabIdx === tabsData.length - 1;
 
-        // Animate in: staggered scale + opacity
-        tl.to(
-          group.children,
-          {
-            scale: 1,
-            opacity: 1,
-            stagger: 0.035,
-            duration: 0.12,
-            ease: "back.out(1.5)",
-          },
-          inStart,
-        );
+        // Animate in: individually placed cards spread across the segment
+        const cardCount = group.children.length;
+        const availableRange = outStart - inStart - 0.02;
+        const cardSpacing = availableRange / cardCount;
+        Array.from(group.children).forEach((child, i) => {
+          tl.to(
+            child,
+            {
+              scale: 1,
+              opacity: 1,
+              duration: cardSpacing * 1.2,
+              ease: "back.out(1.5)",
+            },
+            inStart + i * cardSpacing,
+          );
+        });
 
         // Animate out (skip for last tab)
         if (!isLastTab) {
@@ -227,7 +298,7 @@ export default function ScrollableTabsv2() {
             {
               scale: 0,
               opacity: 0,
-              stagger: -0.012,
+              stagger: -0.008,
               duration: 0.04,
               ease: "back.in(1.5)",
             },
@@ -303,7 +374,7 @@ export default function ScrollableTabsv2() {
               ref={(el) => {
                 iconBoxRefs.current[tabIdx] = el;
               }}
-              className="grid grid-cols-4 gap-3 w-full "
+              className="grid grid-cols-3 gap-3 w-full "
               style={{
                 position: tabIdx === 0 ? "relative" : "absolute",
                 top: 0,
@@ -315,6 +386,7 @@ export default function ScrollableTabsv2() {
               {tab.iconBoxes.map((iconBox, index) => (
                 <div key={`${tabIdx}-${index}`} className="relative">
                   <IconBox
+                    icon={iconBox.icon}
                     src={iconBox.src}
                     title={iconBox.title}
                     description={iconBox.description}
