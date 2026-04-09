@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import gsap from "gsap";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import { Button as DefButton } from "@/components/ui";
@@ -10,12 +11,14 @@ import { Button as DefButton } from "@/components/ui";
 gsap.registerPlugin(ScrollToPlugin);
 
 export default function Header() {
+  const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
 
   const navLinks = [
     { name: "About Atomix", href: "#def-hero-main" },
     { name: "The Platform", href: "#tech-limitations" },
+    { name: "Platform Benefits", href: "/landing-platform-benefits" },
     { name: "Resources", href: "#info-rows" },
     { name: "Careers", href: "#why-work-with-us" },
     { name: "Contact Us", href: "#use-cases" },
@@ -34,6 +37,15 @@ export default function Header() {
     e: React.MouseEvent<HTMLAnchorElement | HTMLButtonElement>,
     href: string,
   ) => {
+    // If it's a page navigation (starts with /), use router
+    if (href.startsWith("/")) {
+      e.preventDefault();
+      router.push(href);
+      setMobileMenuOpen(false);
+      return;
+    }
+
+    // Otherwise, handle anchor scrolling
     e.preventDefault();
     const targetId = href.replace("#", "");
     const targetElement = document.getElementById(targetId);
