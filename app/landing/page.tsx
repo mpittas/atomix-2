@@ -27,6 +27,7 @@ import WhyWorkWithUs from "@/components/WhyWorkWithUs";
 import ScrollableHeadingV2 from "@/components/ScrollableHeadingV2";
 import CurrentStatus from "@/components/CurrentStatus";
 import ScrollableTabsWhyAtomix from "@/components/ScrollableTabsWhyAtomix";
+import ScrollableTabsBenefits from "@/components/ScrollableTabsBenefits";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -290,7 +291,8 @@ export default function LandingGradientV1Page() {
             <div className="max-w-[1200px] px-8 mx-auto bg-red-500/0">
               <div className="mt-0 flex flex-col items-center">
                 <div className="w-full flex flex-col gap-32" id="info-rows">
-                  <BenefitsLayout />
+                  {/* <BenefitsLayout /> */}
+                  <ScrollableTabsBenefits />
                 </div>
               </div>
             </div>

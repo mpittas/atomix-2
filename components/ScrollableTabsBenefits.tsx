@@ -6,31 +6,35 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import { useGSAP } from "@gsap/react";
 import {
-  FaArrowRightArrowLeft,
-  FaBinoculars,
-  FaBuildingColumns,
-  FaChartLine,
-  FaClockRotateLeft,
-  FaCode,
+  FaArrowTrendUp,
+  FaChartColumn,
+  FaChartPie,
+  FaCircleCheck,
+  FaCoins,
+  FaCopy,
+  FaDoorOpen,
+  FaEye,
   FaFileContract,
-  FaGaugeHigh,
-  FaGlobe,
-  FaMagnifyingGlassChart,
-  FaMoneyBillTrendUp,
+  FaGauge,
+  FaKey,
+  FaMoneyBill,
   FaNetworkWired,
+  FaPaintbrush,
+  FaPuzzlePiece,
   FaRobot,
   FaScaleBalanced,
   FaShieldHalved,
-  FaSitemap,
-  FaUserCheck,
-  FaUsers,
+  FaSliders,
+  FaTag,
+  FaUnlock,
+  FaWandMagicSparkles,
 } from "react-icons/fa6";
 import DefHeading from "@/components/typo/DefHeading";
 import IconBox from "@/components/IconBox";
 
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
-export interface ScrollableTabsSectionTabData {
+interface TabData {
   title: string;
   items: string[];
   iconBoxes: {
@@ -41,28 +45,30 @@ export interface ScrollableTabsSectionTabData {
   }[];
 }
 
-const missionIcons = {
-  visibility: <FaBinoculars className="h-10 w-10" />,
+const icons = {
+  visibility: <FaEye className="h-10 w-10" />,
   policy: <FaShieldHalved className="h-10 w-10" />,
   audit: <FaFileContract className="h-10 w-10" />,
-  network: <FaUsers className="h-10 w-10" />,
+  gateway: <FaDoorOpen className="h-10 w-10" />,
+  granularity: <FaChartPie className="h-10 w-10" />,
+  tokenisation: <FaUnlock className="h-10 w-10" />,
   automation: <FaRobot className="h-10 w-10" />,
-  capital: <FaMoneyBillTrendUp className="h-10 w-10" />,
-  scale: <FaChartLine className="h-10 w-10" />,
-  growth: <FaGaugeHigh className="h-10 w-10" />,
-  speed: <FaClockRotateLeft className="h-10 w-10" />,
-  comparison: <FaMagnifyingGlassChart className="h-10 w-10" />,
-  workflow: <FaArrowRightArrowLeft className="h-10 w-10" />,
-  certainty: <FaUserCheck className="h-10 w-10" />,
-  building: <FaBuildingColumns className="h-10 w-10" />,
-  code: <FaCode className="h-10 w-10" />,
-  globe: <FaGlobe className="h-10 w-10" />,
-  networkWired: <FaNetworkWired className="h-10 w-10" />,
-  scaleBalanced: <FaScaleBalanced className="h-10 w-10" />,
-  sitemap: <FaSitemap className="h-10 w-10" />,
+  growth: <FaArrowTrendUp className="h-10 w-10" />,
+  whitelabel: <FaPaintbrush className="h-10 w-10" />,
+  nocode: <FaWandMagicSparkles className="h-10 w-10" />,
+  api: <FaPuzzlePiece className="h-10 w-10" />,
+  fees: <FaCoins className="h-10 w-10" />,
+  access: <FaKey className="h-10 w-10" />,
+  pricing: <FaTag className="h-10 w-10" />,
+  dataOnce: <FaCopy className="h-10 w-10" />,
+  decision: <FaCircleCheck className="h-10 w-10" />,
+  status: <FaGauge className="h-10 w-10" />,
+  workspace: <FaNetworkWired className="h-10 w-10" />,
+  optimiser: <FaSliders className="h-10 w-10" />,
+  analytics: <FaChartColumn className="h-10 w-10" />,
 };
 
-const missionTabsData: ScrollableTabsSectionTabData[] = [
+const tabsData: TabData[] = [
   {
     title: "Capital Providers",
     items: [
@@ -73,37 +79,37 @@ const missionTabsData: ScrollableTabsSectionTabData[] = [
     ],
     iconBoxes: [
       {
-        icon: missionIcons.visibility,
+        icon: icons.visibility,
         title: "Live visibility into every loan",
         description:
           "Status, policy adherence and portfolio analytics on demand",
       },
       {
-        icon: missionIcons.policy,
+        icon: icons.policy,
         title:
           "Rules enforced automatically and every decision immutably on-chain",
         description: "Compliance instant, continuous and tamper-proof",
       },
       {
-        icon: missionIcons.audit,
+        icon: icons.audit,
         title:
           "Regulatory and third-party policy requirements enforced at every stage, including title insurance",
         description: "",
       },
       {
-        icon: missionIcons.scaleBalanced,
+        icon: icons.gateway,
         title: "Aggregated lender gateway",
         description:
           "One integration connects institutional and private capital to multiple lenders, collapsing per-lender due diligence costs",
       },
       {
-        icon: missionIcons.networkWired,
+        icon: icons.granularity,
         title: "Granularity no longer penalised",
         description:
           "Automated reporting makes a diversified small-loan portfolio no more demanding than a concentrated one",
       },
       {
-        icon: missionIcons.scale,
+        icon: icons.tokenisation,
         title: "RWA tokenisation and tokenised liquidity pools",
         description:
           "Loans become tradeable digital assets, unlocking secondary markets and continuous capital flow",
@@ -120,48 +126,48 @@ const missionTabsData: ScrollableTabsSectionTabData[] = [
     ],
     iconBoxes: [
       {
-        icon: missionIcons.automation,
+        icon: icons.automation,
         title: "Full workflow automation ",
         description:
           "Goal-driven reasoning finds the fastest compliant route; manual touchpoints by lender choice only",
       },
       {
-        icon: missionIcons.growth,
+        icon: icons.growth,
         title: "Scale volume without scaling headcount",
         description: "Pay-as-you-go, no fixed overhead",
       },
       {
-        icon: missionIcons.code,
+        icon: icons.whitelabel,
         title: "White-label ready",
         description:
           "Fully configurable branding, workflows and lending rules adapted to any product or market without rebuilding the platform",
       },
       {
-        icon: missionIcons.sitemap,
+        icon: icons.nocode,
         title: "No-code, AI-assisted configuration",
         description:
           "Build, modify and deploy credit rules and products in natural language",
       },
       {
-        icon: missionIcons.scaleBalanced,
+        icon: icons.api,
         title: "Modular, open API architecture",
         description:
           "AI where it adds value; connects to data providers,valuers and third-party systems",
       },
       {
-        icon: missionIcons.comparison,
+        icon: icons.fees,
         title: "Fees scale with loan size",
         description:
           "Smaller, high-demand loans become profitable to originate",
       },
       {
-        icon: missionIcons.comparison,
+        icon: icons.access,
         title:
           "Platform compliance and audit infrastructure unlocks access to institutional and private capital",
         description: "Replacing slow, costly due diligence",
       },
       {
-        icon: missionIcons.comparison,
+        icon: icons.pricing,
         title: "Live competitive positioning and risk-adjusted pricing",
         description: "Driven by real market data",
       },
@@ -177,33 +183,33 @@ const missionTabsData: ScrollableTabsSectionTabData[] = [
     ],
     iconBoxes: [
       {
-        icon: missionIcons.workflow,
+        icon: icons.dataOnce,
         title: "Enter data once",
         description: "Shared across all lenders and parties throughout",
       },
       {
-        icon: missionIcons.certainty,
+        icon: icons.decision,
         title: "Instant, consistent decisions",
         description: "Automated policy enforcement, no underwriter discretion",
       },
       {
-        icon: missionIcons.speed,
+        icon: icons.status,
         title: "Live loan status and next steps",
         description: "Transparent throughout, no chasing",
       },
       {
-        icon: missionIcons.networkWired,
+        icon: icons.workspace,
         title: "Unified workspace",
         description: "All parties connected in real time, no handoff delays",
       },
       {
-        icon: missionIcons.comparison,
+        icon: icons.optimiser,
         title: "Loan optimiser",
         description:
           "Matched lenders, predicted rates and approval likelihood at a glance",
       },
       {
-        icon: missionIcons.visibility,
+        icon: icons.analytics,
         title: "Portfolio analytics",
         description:
           "Track and optimise financing across an entire property portfolio",
@@ -212,23 +218,7 @@ const missionTabsData: ScrollableTabsSectionTabData[] = [
   },
 ];
 
-interface ScrollableTabsSectionProps {
-  title?: string;
-  sectionId?: string;
-  description?: string;
-  badgeText?: string;
-  tabsData?: ScrollableTabsSectionTabData[];
-}
-
-export function ScrollableTabsSection({
-  title = "The Platform",
-  sectionId = "mission",
-  description = "Built on three distinct layers — rules, intelligence and trust — working as one.",
-  badgeText = "The Market Reality",
-  tabsData = missionTabsData,
-}: ScrollableTabsSectionProps) {
-  const wrapperRef = useRef<HTMLDivElement>(null);
-  const contentRef = useRef<HTMLDivElement>(null);
+export default function ScrollableTabsBenefits() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const scrollTriggerRef = useRef<ScrollTrigger | null>(null);
   const iconBoxRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -260,49 +250,26 @@ export function ScrollableTabsSection({
 
   useGSAP(
     () => {
-      if (!wrapperRef.current || !contentRef.current || !sectionRef.current)
-        return;
+      if (!sectionRef.current) return;
 
-      gsap.set(contentRef.current, { autoAlpha: 0, y: 80 });
+      // Set initial states - make tabs visible initially
       gsap.set(tabsSectionRef.current, { opacity: 1, y: 0 });
-      setActiveIndex(0);
 
+      // Set all icon box groups hidden initially — all animate in via scroll timeline
       iconBoxRefs.current.forEach((group) => {
         if (group) {
           gsap.set(group.children, { scale: 0.8, opacity: 0, y: 30 });
         }
       });
 
-      const pinTrigger = ScrollTrigger.create({
-        trigger: wrapperRef.current,
-        start: "bottom bottom",
-        end: "+=10000",
-        pin: true,
-        scrub: true,
-        invalidateOnRefresh: true,
-      });
-
-      const contentTween = gsap.to(contentRef.current, {
-        autoAlpha: 1,
-        y: 0,
-        duration: 1,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: wrapperRef.current,
-          start: "bottom bottom",
-          end: "+=1500",
-          scrub: 1,
-          invalidateOnRefresh: true,
-        },
-      });
-
+      // Create pinned scroll animation
       const tl = gsap.timeline({
         scrollTrigger: {
-          trigger: wrapperRef.current,
-          start: "bottom bottom",
+          trigger: sectionRef.current,
+          start: "center center",
           end: "+=10000",
-          pin: false,
-          pinSpacing: false,
+          pin: true,
+          pinSpacing: true,
           scrub: 1,
           invalidateOnRefresh: true,
           onUpdate: (self) => {
@@ -367,112 +334,94 @@ export function ScrollableTabsSection({
 
       scrollTriggerRef.current = tl.scrollTrigger!;
 
+      // Refresh ScrollTrigger to ensure proper calculations with multiple pinned sections
+      ScrollTrigger.refresh();
+
       return () => {
-        contentTween.scrollTrigger?.kill();
-        contentTween.kill();
-        pinTrigger.kill();
         tl.kill();
       };
     },
-    { scope: wrapperRef, dependencies: [sectionId, tabsData] },
+    { scope: sectionRef },
   );
 
   return (
     <div
-      ref={wrapperRef}
-      className="bg-white px-3 mb-6 py-3"
-      id={`${sectionId}-wrapper`}
+      ref={sectionRef}
+      className="flex flex-col items-center px-4 gap-y-16 relative z-[120]"
     >
-      <div className="flex flex-col h-[calc(100vh-120px)] bg-[#004054]/100 rounded-3xl overflow-hidden relative items-center justify-center">
-        <div
-          ref={contentRef}
-          id={`${sectionId}-content`}
-          style={{ visibility: "hidden" }}
-        >
-          <div
-            ref={sectionRef}
-            className="flex flex-col items-center py-16 px-4 gap-y-16 relative z-[120]"
-          >
-            {/* Top - DefHeading */}
-            <DefHeading
-              theme="light"
-              badgeText={badgeText}
-              title={title}
-              description={description}
-              showBadge={false}
-            />
+      {/* Top - DefHeading */}
+      <DefHeading
+        theme="light"
+        badgeText=""
+        title="Benefits"
+        description="Purpose-built lending infrastructure that reduces friction, accelerates decisions, and creates measurable advantages for capital providers, lenders, and borrowers alike."
+        showBadge={false}
+      />
 
-            {/* Bottom Section - Tabs and IconBoxes */}
+      {/* Bottom Section - Tabs and IconBoxes */}
+      <div
+        ref={tabsSectionRef}
+        className="flex flex-col w-full max-w-[1200px] px-8 bg-red-500/0"
+        id="benefits-scroll-tabs"
+      >
+        {/* Tab Buttons - Horizontal */}
+        <div className="flex gap-4 w-full">
+          {tabsData.map((tab, index) => (
             <div
-              ref={tabsSectionRef}
-              className="flex flex-col items-center w-full max-w-[1200px] px-8 bg-red-500/0 gap-8"
-              id={`${sectionId}-main-scoll-tabs`}
+              key={tab.title}
+              onClick={() => handleTabClick(index)}
+              className={`relative flex-1 flex flex-col gap-4 rounded-xl transition-all duration-500 cursor-pointer p-5 overflow-hidden ${
+                index === activeIndex
+                  ? "bg-[#eaeff1] text-black"
+                  : "bg-[#124652]"
+              }`}
             >
-              {/* Tab Buttons - Horizontal */}
-              <div className="flex flex-row gap-3 w-full justify-center">
-                {tabsData.map((tab, index) => (
-                  <div
-                    key={tab.title}
-                    onClick={() => handleTabClick(index)}
-                    className={`relative flex flex-col gap-4 rounded-xl transition-all duration-500 cursor-pointer p-5 overflow-hidden flex-1  ${
-                      index === activeIndex
-                        ? "bg-[#eaeff1] text-black"
-                        : "bg-[#124652]"
-                    }`}
-                  >
-                    <div className="pointer-events-none absolute inset-0 rounded-xl overflow-hidden">
-                      <div className="absolute -top-8 -right-4 w-32 h-32 bg-white/15 rounded-full blur-2xl" />
-                      <div className="absolute -bottom-8 -left-4 w-32 h-32 bg-white/15 rounded-full blur-2xl" />
-                    </div>
-                    <h3
-                      className={`text-lg font-semibold text-center relative z-10 ${
-                        index === activeIndex ? "text-[#0f1b1e]" : "text-white"
-                      }`}
-                    >
-                      {tab.title}
-                    </h3>
-                  </div>
-                ))}
+              <div className="pointer-events-none absolute inset-0 rounded-xl overflow-hidden">
+                <div className="absolute -top-8 -right-4 w-32 h-32 bg-white/15 rounded-full blur-2xl" />
+                <div className="absolute -bottom-8 -left-4 w-32 h-32 bg-white/15 rounded-full blur-2xl" />
               </div>
-
-              {/* Bottom Section - Stacked IconBox groups for each tab */}
-              <div className="relative w-full" style={{ minHeight: 200 }}>
-                {tabsData.map((tab, tabIdx) => (
-                  <div
-                    key={tab.title}
-                    ref={(el) => {
-                      iconBoxRefs.current[tabIdx] = el;
-                    }}
-                    className={`grid ${tabIdx === 1 ? "grid-cols-4" : "grid-cols-3"} gap-3 w-full`}
-                    style={{
-                      position: tabIdx === 0 ? "relative" : "absolute",
-                      top: 0,
-                      left: 0,
-                      right: 0,
-                      pointerEvents: tabIdx === activeIndex ? "auto" : "none",
-                    }}
-                  >
-                    {tab.iconBoxes.map((iconBox, index) => (
-                      <div key={`${tabIdx}-${index}`} className="relative">
-                        <IconBox
-                          icon={iconBox.icon}
-                          src={iconBox.src}
-                          title={iconBox.title}
-                          description={iconBox.description}
-                        />
-                      </div>
-                    ))}
-                  </div>
-                ))}
-              </div>
+              <h3
+                className={`text-lg font-semibold text-center relative z-10 ${
+                  index === activeIndex ? "text-[#0f1b1e]" : "text-white"
+                }`}
+              >
+                {tab.title}
+              </h3>
             </div>
-          </div>
+          ))}
+        </div>
+
+        {/* Bottom Section - Stacked IconBox groups for each tab */}
+        <div className="relative mt-8" style={{ minHeight: 200 }}>
+          {tabsData.map((tab, tabIdx) => (
+            <div
+              key={tab.title}
+              ref={(el) => {
+                iconBoxRefs.current[tabIdx] = el;
+              }}
+              className={`grid ${tabIdx === 1 ? "grid-cols-4" : "grid-cols-3"} gap-3 w-full`}
+              style={{
+                position: tabIdx === 0 ? "relative" : "absolute",
+                top: 0,
+                left: 0,
+                right: 0,
+                pointerEvents: tabIdx === activeIndex ? "auto" : "none",
+              }}
+            >
+              {tab.iconBoxes.map((iconBox, index) => (
+                <div key={`${tabIdx}-${index}`} className="relative">
+                  <IconBox
+                    icon={iconBox.icon}
+                    src={iconBox.src}
+                    title={iconBox.title}
+                    description={iconBox.description}
+                  />
+                </div>
+              ))}
+            </div>
+          ))}
         </div>
       </div>
     </div>
   );
-}
-
-export default function ScrollableTabsPlatform() {
-  return <ScrollableTabsSection />;
 }
