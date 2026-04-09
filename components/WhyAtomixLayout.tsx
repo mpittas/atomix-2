@@ -1,16 +1,103 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Image from "next/image";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
 import IconBoxHorizontal from "./IconBoxHorizontal";
 import DefHeading from "./typo/DefHeading";
 
+gsap.registerPlugin(ScrollTrigger);
+
 export default function BenefitsLayout() {
   const [activeIndex, setActiveIndex] = useState(0);
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const initialAnimationPlayedRef = useRef(false);
   const tabs = ["Capital Providers", "Lenders", "Borrowers"];
 
+  const animateActivePanel = () => {
+    const panel = contentRef.current?.firstElementChild as HTMLElement | null;
+    if (!panel) return;
+    const speed = 3;
+
+    const imageItems = panel.querySelectorAll(".wa-image-item");
+    const textItems = panel.querySelectorAll("[data-wa-item]");
+    const listItems = panel.querySelectorAll("[data-wa-items] > div");
+
+    gsap.killTweensOf([imageItems, textItems, listItems]);
+
+    gsap.set(imageItems, { autoAlpha: 0, y: 24, scale: 0.96 });
+    gsap.set(textItems, { autoAlpha: 0, y: 18 });
+    gsap.set(listItems, { autoAlpha: 0, y: 16 });
+
+    const tl = gsap.timeline({ defaults: { overwrite: "auto" } });
+
+    tl.to(imageItems, {
+      autoAlpha: 1,
+      y: 0,
+      scale: 1,
+      duration: 0.45 * speed,
+      stagger: 0.08 * speed,
+      ease: "power2.out",
+    })
+      .to(
+        textItems,
+        {
+          autoAlpha: 1,
+          y: 0,
+          duration: 0.4 * speed,
+          stagger: 0.06 * speed,
+          ease: "power2.out",
+        },
+        `-=${0.2 * speed}`,
+      )
+      .to(
+        listItems,
+        {
+          autoAlpha: 1,
+          y: 0,
+          duration: 0.4 * speed,
+          stagger: 0.08 * speed,
+          ease: "power2.out",
+        },
+        `-=${0.12 * speed}`,
+      );
+  };
+
+  useGSAP(
+    () => {
+      if (!sectionRef.current) return;
+
+      const trigger = ScrollTrigger.create({
+        trigger: sectionRef.current,
+        start: "top 75%",
+        once: true,
+        onEnter: () => {
+          if (initialAnimationPlayedRef.current) return;
+          initialAnimationPlayedRef.current = true;
+          animateActivePanel();
+        },
+      });
+
+      return () => {
+        trigger.kill();
+      };
+    },
+    { scope: sectionRef },
+  );
+
+  useGSAP(
+    () => {
+      if (activeIndex === 0 && !initialAnimationPlayedRef.current) return;
+      animateActivePanel();
+    },
+    { dependencies: [activeIndex], scope: sectionRef },
+  );
+
   return (
-    <div className="relative w-full">
+    <div ref={sectionRef} className="relative w-full">
       <div className="bg-red-500/0 flex flex-col gap-y-8">
         <div className="max-w-[1060px] mx-auto">
           <DefHeading
@@ -49,7 +136,7 @@ export default function BenefitsLayout() {
           ))}
         </div>
 
-        <div className="relative mt-8 md:mt-10">
+        <div ref={contentRef} className="relative mt-8 md:mt-10">
           {/* Panel 0: Capital Providers */}
           {activeIndex === 0 && (
             <div>
@@ -62,7 +149,7 @@ export default function BenefitsLayout() {
                         alt=""
                         width={600}
                         height={400}
-                        className="object-contain rounded-lg w-full h-auto"
+                        className="wa-image-item object-contain rounded-lg w-full h-auto"
                       />
                     </div>
 
@@ -72,7 +159,7 @@ export default function BenefitsLayout() {
                         alt=""
                         width={200}
                         height={100}
-                        className="object-contain rounded-lg w-full h-auto"
+                        className="wa-image-item object-contain rounded-lg w-full h-auto"
                       />
 
                       <Image
@@ -80,7 +167,7 @@ export default function BenefitsLayout() {
                         alt=""
                         width={200}
                         height={100}
-                        className="object-contain rounded-lg w-full h-auto"
+                        className="wa-image-item object-contain rounded-lg w-full h-auto"
                       />
 
                       <Image
@@ -88,21 +175,24 @@ export default function BenefitsLayout() {
                         alt=""
                         width={200}
                         height={100}
-                        className="object-contain rounded-lg w-full h-auto"
+                        className="wa-image-item object-contain rounded-lg w-full h-auto"
                       />
                     </div>
                   </div>
                 </div>
 
                 <div className="bg-yellow-500/0">
-                  <h2 className="text-3xl font-bold mb-4 text-white">
+                  <h2
+                    data-wa-item
+                    className="text-3xl font-bold mb-4 text-white"
+                  >
                     Capital Providers
                   </h2>
-                  <div className="text-lg text-white/80 mb-8">
+                  <div data-wa-item className="text-lg text-white/80 mb-8">
                     Invest with full transparency, automated compliance, and
                     access to diversified lending opportunities.
                   </div>
-                  <div className="grid grid-cols-1 gap-6">
+                  <div data-wa-items className="grid grid-cols-1 gap-6">
                     <div>
                       <IconBoxHorizontal src="/icons/white/shield-check-white.svg">
                         <div className="">
@@ -194,7 +284,7 @@ export default function BenefitsLayout() {
                           alt=""
                           width={600}
                           height={400}
-                          className="object-contain rounded-lg w-full h-auto"
+                          className="wa-image-item object-contain rounded-lg w-full h-auto"
                         />
                       </div>
 
@@ -203,21 +293,24 @@ export default function BenefitsLayout() {
                         alt=""
                         width={360}
                         height={200}
-                        className="object-cover rounded-lg absolute -bottom-4 left-1/2 -translate-x-1/2"
+                        className="wa-image-item object-cover rounded-lg absolute -bottom-4 left-1/2 -translate-x-1/2"
                       />
                     </div>
                   </div>
                 </div>
 
                 <div className="bg-yellow-500/0">
-                  <h2 className="text-3xl font-bold mb-4 text-white">
+                  <h2
+                    data-wa-item
+                    className="text-3xl font-bold mb-4 text-white"
+                  >
                     Lenders
                   </h2>
-                  <div className="text-lg text-white/80 mb-8">
+                  <div data-wa-item className="text-lg text-white/80 mb-8">
                     Automate lending workflows, access capital faster, and scale
                     operations without increasing headcount.
                   </div>
-                  <div className="flex flex-col gap-y-6">
+                  <div data-wa-items className="flex flex-col gap-y-6">
                     <div>
                       <IconBoxHorizontal src="/icons/white/shield-check-white.svg">
                         <div className="max-w-[500px]">
@@ -314,7 +407,7 @@ export default function BenefitsLayout() {
                           alt=""
                           width={600}
                           height={400}
-                          className="object-contain rounded-lg w-full h-auto"
+                          className="wa-image-item object-contain rounded-lg w-full h-auto"
                         />
                       </div>
 
@@ -323,21 +416,24 @@ export default function BenefitsLayout() {
                         alt=""
                         width={200}
                         height={100}
-                        className="object-contain absolute bottom-0 right-0 h-auto"
+                        className="wa-image-item object-contain absolute bottom-0 right-0 h-auto"
                       />
                     </div>
                   </div>
                 </div>
 
                 <div className="bg-yellow-500/0">
-                  <h2 className="text-3xl font-bold mb-4 text-white">
+                  <h2
+                    data-wa-item
+                    className="text-3xl font-bold mb-4 text-white"
+                  >
                     Borrowers
                   </h2>
-                  <div className="text-lg text-white/80 mb-8">
+                  <div data-wa-item className="text-lg text-white/80 mb-8">
                     Borrowers move from enquiry to drawdown in a structured,
                     transparent journey.
                   </div>
-                  <div className="flex flex-col gap-y-6">
+                  <div data-wa-items className="flex flex-col gap-y-6">
                     <div>
                       <IconBoxHorizontal src="/icons/white/electricity-simple.svg">
                         <div className="max-w-[500px]">
