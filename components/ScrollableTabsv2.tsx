@@ -327,7 +327,7 @@ export default function ScrollableTabsv2() {
       <DefHeading
         theme="light"
         badgeText="The Market Reality"
-        title="Market Problems in Bridging Loans"
+        title="Market Problems"
         description="Property lending is manual, slow and opaque — at every level."
         showBadge={false}
       />

@@ -200,7 +200,7 @@ export default function ScrollableTabs() {
         <DefHeading
           theme="light"
           badgeText="The Market Reality"
-          title="Market Problems in Bridging Loans"
+          title="Market Problems"
           description="Opaque systems limit control, visibility and trust across capital providers, lenders and borrowers."
         />
 
