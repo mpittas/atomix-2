@@ -1,11 +1,12 @@
 "use client";
 
 import React, { useRef } from "react";
+import Link from "next/link";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import DefHeading from "@/components/typo/DefHeading";
-import ImageBox from "@/components/ImageBox";
+import IconBox from "@/components/IconBox";
 import { Button as DefButton } from "@/components/ui";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
@@ -15,13 +16,13 @@ const products = [
     icon: "/images/dashboard-lenders-main.svg",
     title: "Cash home-buyer MVP",
     subtitle: "Launching Q2 2026",
-    text: "Our first major product launch coming in Q2 2026, designed to revolutionize digital asset management.",
+    text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
   },
   {
     icon: "/images/dashboard-cp-main.svg",
     title: "Auction finance MVP",
     subtitle: "Launching Q3 2026",
-    text: "The second product scheduled for Q4 2026, focusing on AI-powered financial analytics.",
+    text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
   },
 ];
 
@@ -169,12 +170,20 @@ export default function CurrentStatus() {
           }}
           className="flex-1 relative"
         >
-          <ImageBox
+          <IconBox
             src={products[0].icon}
             title={products[0].title}
-            subtitle={products[0].subtitle}
             titleClassName="text-md font-semibold"
-            subtitleClassName="text-sm text-white/80"
+            fullWidthImage
+            description={
+              <>
+                <div className="text-sm text-white/80">
+                  {products[0].subtitle}
+                </div>
+                <div className="mt-2">{products[0].text}</div>
+              </>
+            }
+            imageSize="large"
           />
         </div>
         <div
@@ -183,14 +192,28 @@ export default function CurrentStatus() {
           }}
           className="flex-1 relative"
         >
-          <ImageBox
+          <IconBox
             src={products[1].icon}
             title={products[1].title}
-            subtitle={products[1].subtitle}
             titleClassName="text-md font-semibold"
-            subtitleClassName="text-sm text-white/80"
+            fullWidthImage
+            description={
+              <>
+                <div className="text-sm text-white/80">
+                  {products[1].subtitle}
+                </div>
+                <div className="mt-2">{products[1].text}</div>
+              </>
+            }
+            imageSize="large"
           />
         </div>
+      </div>
+
+      <div ref={buttonRef} className="mt-14 text-center">
+        <Link href="/current-status-v1">
+          <DefButton size="large">Learn more</DefButton>
+        </Link>
       </div>
     </div>
   );

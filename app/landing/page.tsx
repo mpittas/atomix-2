@@ -366,8 +366,8 @@ export default function LandingGradientV1Page() {
             </div>
 
             <div className="mx-auto px-4">
-              {/* <CurrentStatus /> */}
-              <ScrollableTabsCurrentStatus />
+              <CurrentStatus />
+              {/* <ScrollableTabsCurrentStatus /> */}
             </div>
           </div>
         </div>

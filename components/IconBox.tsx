@@ -13,6 +13,7 @@ interface IconBoxProps {
   description?: ReactNode;
   className?: string;
   imageSize?: "small" | "medium" | "large";
+  fullWidthImage?: boolean;
 }
 
 export default function IconBox({
@@ -24,6 +25,7 @@ export default function IconBox({
   description,
   className = "",
   imageSize = "medium",
+  fullWidthImage = false,
 }: IconBoxProps) {
   const handleMouseEnter = (event: MouseEvent<HTMLDivElement>) => {
     const target = event.currentTarget;
@@ -84,7 +86,11 @@ export default function IconBox({
         <div className="absolute -bottom-8 -left-4 w-32 h-32 bg-white/25 rounded-full blur-2xl" />
       </div>
 
-      <div className="relative flex flex-col items-center gap-1">
+      <div
+        className={`relative flex flex-col gap-1 ${
+          fullWidthImage ? "w-full items-stretch" : "items-center"
+        }`}
+      >
         {icon ? (
           <div
             className="mb-2 flex items-center justify-center text-white"
@@ -96,9 +102,11 @@ export default function IconBox({
           <Image
             src={src}
             alt={title}
-            width={finalWidth}
-            height={finalWidth}
-            className="mb-2"
+            width={fullWidthImage ? 1200 : finalWidth}
+            height={fullWidthImage ? 720 : finalWidth}
+            className={
+              fullWidthImage ? "mb-3 w-full h-auto rounded-lg" : "mb-2"
+            }
           />
         )}
         <div
