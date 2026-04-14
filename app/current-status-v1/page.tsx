@@ -1,11 +1,15 @@
 "use client";
 
+import { useRef } from "react";
 import Header from "@/components/header";
 import DefCta from "@/components/DefCta";
 import Footer from "@/components/Footer";
 import Image from "next/image";
 import IconBoxHorizontal from "@/components/IconBoxHorizontal";
 import DefHeading from "@/components/typo/DefHeading";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
 import {
   FaBuilding,
   FaFileSignature,
@@ -23,13 +27,91 @@ import {
   FaArrowUpRightFromSquare,
 } from "react-icons/fa6";
 
+gsap.registerPlugin(ScrollTrigger);
+
 export default function CurrentStatusV1Page() {
+  const sectionRef = useRef<HTMLElement>(null);
+
+  const animatePanel = (panel: HTMLElement) => {
+    const speed = 3;
+    const imageItems = panel.querySelectorAll(".cs-image-item");
+    const textItems = panel.querySelectorAll("[data-cs-item]");
+    const listItems = panel.querySelectorAll("[data-cs-items] > div");
+
+    gsap.killTweensOf([imageItems, textItems, listItems]);
+
+    gsap.set(imageItems, { autoAlpha: 0, y: 24, scale: 0.96 });
+    gsap.set(textItems, { autoAlpha: 0, y: 18 });
+    gsap.set(listItems, { autoAlpha: 0, y: 16 });
+
+    const tl = gsap.timeline({ defaults: { overwrite: "auto" } });
+
+    tl.to(imageItems, {
+      autoAlpha: 1,
+      y: 0,
+      scale: 1,
+      duration: 0.45 * speed,
+      stagger: 0.08 * speed,
+      ease: "power2.out",
+    })
+      .to(
+        textItems,
+        {
+          autoAlpha: 1,
+          y: 0,
+          duration: 0.4 * speed,
+          stagger: 0.06 * speed,
+          ease: "power2.out",
+        },
+        `-=${0.2 * speed}`,
+      )
+      .to(
+        listItems,
+        {
+          autoAlpha: 1,
+          y: 0,
+          duration: 0.4 * speed,
+          stagger: 0.08 * speed,
+          ease: "power2.out",
+        },
+        `-=${0.12 * speed}`,
+      );
+  };
+
+  useGSAP(
+    () => {
+      if (!sectionRef.current) return;
+
+      const panels = gsap.utils.toArray<HTMLElement>(
+        "[data-cs-panel]",
+        sectionRef.current,
+      );
+
+      const triggers = panels.map((panel) =>
+        ScrollTrigger.create({
+          trigger: panel,
+          start: "top 75%",
+          once: true,
+          onEnter: () => animatePanel(panel),
+        }),
+      );
+
+      return () => {
+        triggers.forEach((trigger) => trigger.kill());
+      };
+    },
+    { scope: sectionRef },
+  );
+
   return (
     <div className="overflow-x-hidden">
       <Header />
 
       <div className="px-12 pt-21 pb-12 mt-2 flex flex-col gap-2">
-        <section className="px-18 py-36 rounded-3xl bg-linear-to-b from-[#0B4858] via-[#81A6AF] to-[#0B4858] relative overflow-hidden py-20">
+        <section
+          ref={sectionRef}
+          className="px-18 py-36 rounded-3xl bg-linear-to-b from-[#0B4858] via-[#81A6AF] to-[#0B4858] relative overflow-hidden py-20"
+        >
           <div className="mx-auto max-w-[1200px] flex flex-col gap-y-24 px-6">
             <DefHeading
               theme="light"
@@ -39,7 +121,10 @@ export default function CurrentStatusV1Page() {
               description="Atomix is live and building — two product launches confirmed for 2026: cash home-buyer MVP (Q2) and auction finance MVP (Q3)."
             />
 
-            <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+            <div
+              data-cs-panel
+              className="w-full grid grid-cols-1 md:grid-cols-2 gap-16 items-center"
+            >
               <div>
                 <div className="relative w-full pr-8 pb-8">
                   <div>
@@ -48,7 +133,7 @@ export default function CurrentStatusV1Page() {
                       alt=""
                       width={600}
                       height={400}
-                      className="object-contain rounded-lg w-full h-auto"
+                      className="cs-image-item object-contain rounded-lg w-full h-auto"
                     />
                   </div>
 
@@ -58,7 +143,7 @@ export default function CurrentStatusV1Page() {
                       alt=""
                       width={200}
                       height={100}
-                      className="object-contain rounded-lg w-full h-auto"
+                      className="cs-image-item object-contain rounded-lg w-full h-auto"
                     />
 
                     <Image
@@ -66,7 +151,7 @@ export default function CurrentStatusV1Page() {
                       alt=""
                       width={200}
                       height={100}
-                      className="object-contain rounded-lg w-full h-auto"
+                      className="cs-image-item object-contain rounded-lg w-full h-auto"
                     />
 
                     <Image
@@ -74,17 +159,20 @@ export default function CurrentStatusV1Page() {
                       alt=""
                       width={200}
                       height={100}
-                      className="object-contain rounded-lg w-full h-auto"
+                      className="cs-image-item object-contain rounded-lg w-full h-auto"
                     />
                   </div>
                 </div>
               </div>
 
               <div>
-                <h2 className="text-3xl font-bold mb-4 text-white pb-8">
+                <h2
+                  data-cs-item
+                  className="text-3xl font-bold mb-4 text-white pb-8"
+                >
                   Cash Home Buyer MVP — Q2 2026
                 </h2>
-                <div className="grid grid-cols-1 gap-6">
+                <div data-cs-items className="grid grid-cols-1 gap-6">
                   <div>
                     <IconBoxHorizontal
                       icon={<FaBuilding className="w-6 h-6" />}
@@ -178,13 +266,19 @@ export default function CurrentStatusV1Page() {
               </div>
             </div>
 
-            <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+            <div
+              data-cs-panel
+              className="w-full grid grid-cols-1 md:grid-cols-2 gap-16 items-center"
+            >
               <div>
-                <h2 className="text-3xl font-bold mb-4 text-white pb-8">
+                <h2
+                  data-cs-item
+                  className="text-3xl font-bold mb-4 text-white pb-8"
+                >
                   Auction Finance MVP — Q3 2026
                 </h2>
 
-                <div className="flex flex-col gap-y-6">
+                <div data-cs-items className="flex flex-col gap-y-6">
                   <div>
                     <IconBoxHorizontal icon={<FaGavel className="w-6 h-6" />}>
                       <div className="max-w-[500px]">
@@ -308,7 +402,7 @@ export default function CurrentStatusV1Page() {
                       alt=""
                       width={600}
                       height={400}
-                      className="object-contain rounded-lg w-full h-auto"
+                      className="cs-image-item object-contain rounded-lg w-full h-auto"
                     />
                   </div>
 
@@ -317,7 +411,7 @@ export default function CurrentStatusV1Page() {
                     alt=""
                     width={360}
                     height={200}
-                    className="object-cover rounded-lg absolute -bottom-4 left-1/2 -translate-x-1/2"
+                    className="cs-image-item object-cover rounded-lg absolute -bottom-4 left-1/2 -translate-x-1/2"
                   />
                 </div>
               </div>
