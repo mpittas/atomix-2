@@ -30,6 +30,7 @@ import CurrentStatus from "@/components/CurrentStatus";
 import ScrollableTabsWhyAtomix from "@/components/ScrollableTabsWhyAtomix";
 import ScrollableTabsBenefits from "@/components/ScrollableTabsBenefits";
 import ScrollableTabsCurrentStatus from "@/components/ScrollableTabsCurrentStatus";
+import CurrentStatusDiagram from "@/components/CurrentStatusDiagram";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -366,7 +367,8 @@ export default function LandingGradientV1Page() {
             </div>
 
             <div className="mx-auto px-4">
-              <CurrentStatus />
+              {/* <CurrentStatus /> */}
+              <CurrentStatusDiagram />
               {/* <ScrollableTabsCurrentStatus /> */}
             </div>
           </div>
