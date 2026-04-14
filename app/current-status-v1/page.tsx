@@ -6,6 +6,7 @@ import DefCta from "@/components/DefCta";
 import Footer from "@/components/Footer";
 import Image from "next/image";
 import IconBoxHorizontal from "@/components/IconBoxHorizontal";
+import IconBox from "@/components/IconBox";
 import DefHeading from "@/components/typo/DefHeading";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -25,6 +26,26 @@ import {
   FaBolt,
   FaUserCheck,
   FaArrowUpRightFromSquare,
+  FaLaptopCode,
+  FaUsers,
+  FaUserGroup,
+  FaListCheck,
+  FaMagnifyingGlass,
+  FaPenToSquare,
+  FaShieldHalved,
+  FaShareFromSquare,
+  FaTriangleExclamation,
+  FaMoneyBillTransfer,
+  FaFileInvoiceDollar,
+  FaDatabase,
+  FaGaugeHigh,
+  FaRotate,
+  FaBinoculars,
+  FaSackDollar,
+  FaEye,
+  FaChartPie,
+  FaFileShield,
+  FaFileLines,
 } from "react-icons/fa6";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -419,6 +440,229 @@ export default function CurrentStatusV1Page() {
           </div>
         </section>
       </div>
+
+      {/* Section 1 */}
+      <div className="px-12 pt-21 pb-12 mt-2 flex flex-col gap-2">
+        <section
+          ref={sectionRef}
+          className="px-18 py-36 rounded-3xl bg-linear-to-b from-[#0B4858] via-[#81A6AF] to-[#0B4858] relative overflow-hidden py-20"
+        >
+          <div className="mx-auto max-w-[1200px] flex flex-col gap-y-24 px-6">
+            <div className="flex flex-col gap-y-12">
+              <DefHeading
+                theme="light"
+                badgeText="Section 1"
+                showBadge={false}
+                title="Loan origination"
+                description=""
+              />
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <IconBox
+                  icon={<FaBuilding size={38} />}
+                  title="Borrower journey entirely self-served"
+                  description="Data entered once, structured workflow from application to drawdown"
+                />
+                <IconBox
+                  icon={<FaCircleCheck size={38} />}
+                  title="Real-time eligibility checking"
+                  description="Underwriting rules assessed instantly, pre-approved offer calculated without manual intervention"
+                />
+                <IconBox
+                  icon={<FaCalculator size={38} />}
+                  title="Indicative offer as a min/max range"
+                  description="Updates dynamically as information is submitted"
+                />
+                <IconBox
+                  icon={<FaLink size={38} />}
+                  title="Automated third-party data fetch"
+                  description="Application pre-populated with verified property and applicant data; discrepancies flagged and routed automatically"
+                />
+                <IconBox
+                  icon={<FaScaleBalanced size={38} />}
+                  title="Conflict resolution by lender rules"
+                  description="Where borrower data conflicts with third-party sources, next steps determined and executed by the platform"
+                />
+                <IconBox
+                  icon={<FaSliders size={38} />}
+                  title="No-code rules library"
+                  description="Lenders define or select eligibility criteria; changes live immediately, no developer involvement"
+                />
+                <IconBox
+                  icon={<FaArrowUpRightFromSquare size={38} />}
+                  title="Referral flow"
+                  description="Platform triggers lender review where required; decisions reflected instantly across all documents and parties"
+                />
+                <IconBox
+                  icon={<FaFileSignature size={38} />}
+                  title="Credit paper available on demand prior to drawdown"
+                  description=""
+                />
+                <IconBox
+                  icon={<FaCubes size={38} />}
+                  title="Fully configurable by stakeholders"
+                  description="Branding, lending rules, eligibility criteria and workflows defined without developer involvement"
+                />
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-y-12">
+              <DefHeading
+                theme="light"
+                badgeText="Section 1"
+                showBadge={false}
+                title="Lawyer workflow"
+                description=""
+              />
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <IconBox
+                  icon={<FaLaptopCode size={38} />}
+                  title="Fully managed on-platform"
+                  description="Instructions, checklists, document signing and pre-drawdown conditions coordinated automatically, no manual chasing"
+                />
+                <IconBox
+                  icon={<FaUsers size={38} />}
+                  title="Panel selection"
+                  description="Borrower selects from lender-approved panel; external solicitor subject to lender acceptance"
+                />
+                <IconBox
+                  icon={<FaUserGroup size={38} />}
+                  title="Dual or single representation"
+                  description="Configured per lender policy; instruction letters issued automatically at journey start"
+                />
+                <IconBox
+                  icon={<FaListCheck size={38} />}
+                  title="Task sequencing"
+                  description="Legal opinion, confirmations, undertakings and signing completed in any order; all tracked on-platform"
+                />
+                <IconBox
+                  icon={<FaMagnifyingGlass size={38} />}
+                  title="Information verification"
+                  description="Solicitor verifies or supplements borrower data; multiple verification methods assignable per data point including automated checks"
+                />
+                <IconBox
+                  icon={<FaGavel size={38} />}
+                  title="Conflict resolution"
+                  description="Discrepancies flagged; lender rules determine next step; all changes logged and visible to lender"
+                />
+                <IconBox
+                  icon={<FaPenToSquare size={38} />}
+                  title="Borrower modifications"
+                  description="Amended answers post-verification routed to borrower or solicitor for re-verification per lender rules"
+                />
+                <IconBox
+                  icon={<FaFileSignature size={38} />}
+                  title="Document execution"
+                  description="All documents signed via DocuSign; witnesses assigned within the platform; signatures time-stamped, recorded and auditable, no printing required"
+                />
+                <IconBox
+                  icon={<FaShieldHalved size={38} />}
+                  title="Insurance and title requirements governed by the platform"
+                  description="Unnecessary searches minimised, due diligence time reduced"
+                />
+                <IconBox
+                  icon={<FaShareFromSquare size={38} />}
+                  title="Lender referral"
+                  description="Lender approves, adjusts or rejects flagged cases; documents regenerated automatically, solicitor notified to reissue"
+                />
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-y-12">
+              <DefHeading
+                theme="light"
+                badgeText="Section 1"
+                showBadge={false}
+                title="Loan management"
+                description=""
+              />
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <IconBox
+                  icon={<FaTriangleExclamation size={38} />}
+                  title="Breach and default detection automated"
+                  description="Missed payments flagged instantly, all stakeholders notified in real time"
+                />
+                <IconBox
+                  icon={<FaMoneyBillTransfer size={38} />}
+                  title="Payment distributions defined once by lender and executed automatically"
+                  description="Capital providers see exactly what they are owed, when calculated and when paid"
+                />
+                <IconBox
+                  icon={<FaFileInvoiceDollar size={38} />}
+                  title="Borrower self-serve redemption quotes"
+                  description="Full breakdown of principal, interest and charges, configurable to lender terms"
+                />
+                <IconBox
+                  icon={<FaDatabase size={38} />}
+                  title="Full blockchain record"
+                  description="Every payment, charge, distribution and action immutably recorded and independently verifiable from drawdown to closure"
+                />
+                <IconBox
+                  icon={<FaGaugeHigh size={38} />}
+                  title="Borrower dashboard"
+                  description="Balance, next payment, end date and upcoming charges visible in real time"
+                />
+                <IconBox
+                  icon={<FaRotate size={38} />}
+                  title="Loan extensions, renewals and partial repayments"
+                  description="Handled automatically or referred to lender per lender rules"
+                />
+                <IconBox
+                  icon={<FaBinoculars size={38} />}
+                  title="Lender loan book oversight"
+                  description="Borrower activity, payment histories, milestones and documentation in a single dashboard"
+                />
+                <IconBox
+                  icon={<FaGavel size={38} />}
+                  title="Default and enforcement"
+                  description="Lender reports breaches, places loans into default and refers to insolvency practitioner, insurer or solicitor within the platform"
+                />
+                <IconBox
+                  icon={<FaSackDollar size={38} />}
+                  title="Capital provider management"
+                  description="Investor allocations managed on-platform; distributions calculated and executed automatically"
+                />
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-y-12">
+              <DefHeading
+                theme="light"
+                badgeText="Section 1"
+                showBadge={false}
+                title="Capital provider dashboards"
+                description=""
+              />
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <IconBox
+                  icon={<FaEye size={38} />}
+                  title="Real-time visibility across all funded loans"
+                  description="Every activity on blockchain, accessible to private and institutional investors"
+                />
+                <IconBox
+                  icon={<FaChartPie size={38} />}
+                  title="Dedicated dashboard"
+                  description="Investments, performance metrics, interest earned and maturity dates in a single view"
+                />
+                <IconBox
+                  icon={<FaFileShield size={38} />}
+                  title="Automated policy enforcement"
+                  description="Capital provider criteria enforced continuously by the platform, no manual monitoring required"
+                />
+                <IconBox
+                  icon={<FaFileLines size={38} />}
+                  title="Customised reporting"
+                  description="Portfolio-level analysis with per-loan blockchain token reference for independent verification"
+                />
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
       {/* Capital Providers Section */}
 
       <div id="def-cta">
