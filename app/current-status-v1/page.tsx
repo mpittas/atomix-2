@@ -51,19 +51,21 @@ import {
 gsap.registerPlugin(ScrollTrigger);
 
 export default function CurrentStatusV1Page() {
-  const sectionRef = useRef<HTMLElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const animatePanel = (panel: HTMLElement) => {
-    const speed = 3;
+    const speed = 4;
     const imageItems = panel.querySelectorAll(".cs-image-item");
     const textItems = panel.querySelectorAll("[data-cs-item]");
     const listItems = panel.querySelectorAll("[data-cs-items] > div");
+    const iconBoxes = panel.querySelectorAll(".cs-iconbox-item");
 
-    gsap.killTweensOf([imageItems, textItems, listItems]);
+    gsap.killTweensOf([imageItems, textItems, listItems, iconBoxes]);
 
     gsap.set(imageItems, { autoAlpha: 0, y: 24, scale: 0.96 });
     gsap.set(textItems, { autoAlpha: 0, y: 18 });
     gsap.set(listItems, { autoAlpha: 0, y: 16 });
+    gsap.set(iconBoxes, { autoAlpha: 0, y: 40 });
 
     const tl = gsap.timeline({ defaults: { overwrite: "auto" } });
 
@@ -96,22 +98,33 @@ export default function CurrentStatusV1Page() {
           ease: "power2.out",
         },
         `-=${0.12 * speed}`,
+      )
+      .to(
+        iconBoxes,
+        {
+          autoAlpha: 1,
+          y: 0,
+          duration: 0.5 * speed,
+          stagger: 0.08 * speed,
+          ease: "power3.out",
+        },
+        `-=${0.3 * speed}`,
       );
   };
 
   useGSAP(
     () => {
-      if (!sectionRef.current) return;
+      if (!containerRef.current) return;
 
       const panels = gsap.utils.toArray<HTMLElement>(
         "[data-cs-panel]",
-        sectionRef.current,
+        containerRef.current,
       );
 
       const triggers = panels.map((panel) =>
         ScrollTrigger.create({
           trigger: panel,
-          start: "top 75%",
+          start: "top 85%",
           once: true,
           onEnter: () => animatePanel(panel),
         }),
@@ -121,26 +134,26 @@ export default function CurrentStatusV1Page() {
         triggers.forEach((trigger) => trigger.kill());
       };
     },
-    { scope: sectionRef },
+    { scope: containerRef },
   );
 
   return (
-    <div className="overflow-x-hidden">
+    <div className="overflow-x-hidden" ref={containerRef}>
       <Header />
 
       <div className="px-12 pt-21 pb-12 mt-2 flex flex-col gap-2">
-        <section
-          ref={sectionRef}
-          className="px-18 py-36 rounded-3xl bg-linear-to-b from-[#0B4858] via-[#81A6AF] to-[#0B4858] relative overflow-hidden py-20"
-        >
+        <section className="px-18 py-36 rounded-3xl bg-linear-to-b from-[#0B4858] via-[#81A6AF] to-[#0B4858] relative overflow-hidden py-20">
           <div className="mx-auto max-w-[1200px] flex flex-col gap-y-24 px-6">
-            <DefHeading
-              theme="light"
-              badgeText="Careers"
-              showBadge={false}
-              title="Current Status"
-              description="Atomix is live and building — two product launches confirmed for 2026: cash home-buyer MVP (Q2) and auction finance MVP (Q3)."
-            />
+            <div data-cs-panel>
+              <DefHeading
+                data-cs-item
+                theme="light"
+                badgeText="Careers"
+                showBadge={false}
+                title="Current Status"
+                description="Atomix is live and building — two product launches confirmed for 2026: cash home-buyer MVP (Q2) and auction finance MVP (Q3)."
+              />
+            </div>
 
             <div
               data-cs-panel
@@ -443,62 +456,70 @@ export default function CurrentStatusV1Page() {
 
       {/* Section 1 */}
       <div className="px-12 pt-21 pb-12 mt-2 flex flex-col gap-2">
-        <section
-          ref={sectionRef}
-          className="px-18 py-36 rounded-3xl bg-linear-to-b from-[#0B4858] via-[#81A6AF] to-[#0B4858] relative overflow-hidden py-20"
-        >
-          <div className="mx-auto max-w-[1200px] flex flex-col gap-y-24 px-6">
-            <div className="flex flex-col gap-y-12">
-              <DefHeading
-                theme="light"
-                badgeText="Section 1"
-                showBadge={false}
-                title="Loan origination"
-                description=""
-              />
+        <section className="px-18 py-36 rounded-3xl bg-linear-to-b from-[#0B4858] via-[#81A6AF] to-[#0B4858] relative overflow-hidden py-20">
+          <div className="mx-auto max-w-[1200px] flex flex-col gap-y-36 px-6">
+            <div data-cs-panel className="flex flex-col gap-y-12">
+              <div data-cs-item>
+                <DefHeading
+                  theme="light"
+                  badgeText="Section 1"
+                  showBadge={false}
+                  title="Loan origination"
+                  description=""
+                />
+              </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <IconBox
+                  className="cs-iconbox-item"
                   icon={<FaBuilding size={38} />}
                   title="Borrower journey entirely self-served"
                   description="Data entered once, structured workflow from application to drawdown"
                 />
                 <IconBox
+                  className="cs-iconbox-item"
                   icon={<FaCircleCheck size={38} />}
                   title="Real-time eligibility checking"
                   description="Underwriting rules assessed instantly, pre-approved offer calculated without manual intervention"
                 />
                 <IconBox
+                  className="cs-iconbox-item"
                   icon={<FaCalculator size={38} />}
                   title="Indicative offer as a min/max range"
                   description="Updates dynamically as information is submitted"
                 />
                 <IconBox
+                  className="cs-iconbox-item"
                   icon={<FaLink size={38} />}
                   title="Automated third-party data fetch"
                   description="Application pre-populated with verified property and applicant data; discrepancies flagged and routed automatically"
                 />
                 <IconBox
+                  className="cs-iconbox-item"
                   icon={<FaScaleBalanced size={38} />}
                   title="Conflict resolution by lender rules"
                   description="Where borrower data conflicts with third-party sources, next steps determined and executed by the platform"
                 />
                 <IconBox
+                  className="cs-iconbox-item"
                   icon={<FaSliders size={38} />}
                   title="No-code rules library"
                   description="Lenders define or select eligibility criteria; changes live immediately, no developer involvement"
                 />
                 <IconBox
+                  className="cs-iconbox-item"
                   icon={<FaArrowUpRightFromSquare size={38} />}
                   title="Referral flow"
                   description="Platform triggers lender review where required; decisions reflected instantly across all documents and parties"
                 />
                 <IconBox
+                  className="cs-iconbox-item"
                   icon={<FaFileSignature size={38} />}
                   title="Credit paper available on demand prior to drawdown"
                   description=""
                 />
                 <IconBox
+                  className="cs-iconbox-item"
                   icon={<FaCubes size={38} />}
                   title="Fully configurable by stakeholders"
                   description="Branding, lending rules, eligibility criteria and workflows defined without developer involvement"
@@ -506,62 +527,74 @@ export default function CurrentStatusV1Page() {
               </div>
             </div>
 
-            <div className="flex flex-col gap-y-12">
-              <DefHeading
-                theme="light"
-                badgeText="Section 1"
-                showBadge={false}
-                title="Lawyer workflow"
-                description=""
-              />
+            <div data-cs-panel className="flex flex-col gap-y-12">
+              <div data-cs-item>
+                <DefHeading
+                  theme="light"
+                  badgeText="Section 1"
+                  showBadge={false}
+                  title="Lawyer workflow"
+                  description=""
+                />
+              </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <IconBox
+                  className="cs-iconbox-item"
                   icon={<FaLaptopCode size={38} />}
                   title="Fully managed on-platform"
                   description="Instructions, checklists, document signing and pre-drawdown conditions coordinated automatically, no manual chasing"
                 />
                 <IconBox
+                  className="cs-iconbox-item"
                   icon={<FaUsers size={38} />}
                   title="Panel selection"
                   description="Borrower selects from lender-approved panel; external solicitor subject to lender acceptance"
                 />
                 <IconBox
+                  className="cs-iconbox-item"
                   icon={<FaUserGroup size={38} />}
                   title="Dual or single representation"
                   description="Configured per lender policy; instruction letters issued automatically at journey start"
                 />
                 <IconBox
+                  className="cs-iconbox-item"
                   icon={<FaListCheck size={38} />}
                   title="Task sequencing"
                   description="Legal opinion, confirmations, undertakings and signing completed in any order; all tracked on-platform"
                 />
                 <IconBox
+                  className="cs-iconbox-item"
                   icon={<FaMagnifyingGlass size={38} />}
                   title="Information verification"
                   description="Solicitor verifies or supplements borrower data; multiple verification methods assignable per data point including automated checks"
                 />
                 <IconBox
+                  className="cs-iconbox-item"
                   icon={<FaGavel size={38} />}
                   title="Conflict resolution"
                   description="Discrepancies flagged; lender rules determine next step; all changes logged and visible to lender"
                 />
                 <IconBox
+                  className="cs-iconbox-item"
                   icon={<FaPenToSquare size={38} />}
                   title="Borrower modifications"
                   description="Amended answers post-verification routed to borrower or solicitor for re-verification per lender rules"
                 />
                 <IconBox
+                  className="cs-iconbox-item"
                   icon={<FaFileSignature size={38} />}
                   title="Document execution"
                   description="All documents signed via DocuSign; witnesses assigned within the platform; signatures time-stamped, recorded and auditable, no printing required"
                 />
                 <IconBox
+                  className="cs-iconbox-item"
                   icon={<FaShieldHalved size={38} />}
                   title="Insurance and title requirements governed by the platform"
                   description="Unnecessary searches minimised, due diligence time reduced"
                 />
                 <IconBox
+                  className="cs-iconbox-item"
                   icon={<FaShareFromSquare size={38} />}
                   title="Lender referral"
                   description="Lender approves, adjusts or rejects flagged cases; documents regenerated automatically, solicitor notified to reissue"
@@ -569,57 +602,68 @@ export default function CurrentStatusV1Page() {
               </div>
             </div>
 
-            <div className="flex flex-col gap-y-12">
-              <DefHeading
-                theme="light"
-                badgeText="Section 1"
-                showBadge={false}
-                title="Loan management"
-                description=""
-              />
+            <div data-cs-panel className="flex flex-col gap-y-12">
+              <div data-cs-item>
+                <DefHeading
+                  theme="light"
+                  badgeText="Section 1"
+                  showBadge={false}
+                  title="Loan management"
+                  description=""
+                />
+              </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <IconBox
+                  className="cs-iconbox-item"
                   icon={<FaTriangleExclamation size={38} />}
                   title="Breach and default detection automated"
                   description="Missed payments flagged instantly, all stakeholders notified in real time"
                 />
                 <IconBox
+                  className="cs-iconbox-item"
                   icon={<FaMoneyBillTransfer size={38} />}
                   title="Payment distributions defined once by lender and executed automatically"
                   description="Capital providers see exactly what they are owed, when calculated and when paid"
                 />
                 <IconBox
+                  className="cs-iconbox-item"
                   icon={<FaFileInvoiceDollar size={38} />}
                   title="Borrower self-serve redemption quotes"
                   description="Full breakdown of principal, interest and charges, configurable to lender terms"
                 />
                 <IconBox
+                  className="cs-iconbox-item"
                   icon={<FaDatabase size={38} />}
                   title="Full blockchain record"
                   description="Every payment, charge, distribution and action immutably recorded and independently verifiable from drawdown to closure"
                 />
                 <IconBox
+                  className="cs-iconbox-item"
                   icon={<FaGaugeHigh size={38} />}
                   title="Borrower dashboard"
                   description="Balance, next payment, end date and upcoming charges visible in real time"
                 />
                 <IconBox
+                  className="cs-iconbox-item"
                   icon={<FaRotate size={38} />}
                   title="Loan extensions, renewals and partial repayments"
                   description="Handled automatically or referred to lender per lender rules"
                 />
                 <IconBox
+                  className="cs-iconbox-item"
                   icon={<FaBinoculars size={38} />}
                   title="Lender loan book oversight"
                   description="Borrower activity, payment histories, milestones and documentation in a single dashboard"
                 />
                 <IconBox
+                  className="cs-iconbox-item"
                   icon={<FaGavel size={38} />}
                   title="Default and enforcement"
                   description="Lender reports breaches, places loans into default and refers to insolvency practitioner, insurer or solicitor within the platform"
                 />
                 <IconBox
+                  className="cs-iconbox-item"
                   icon={<FaSackDollar size={38} />}
                   title="Capital provider management"
                   description="Investor allocations managed on-platform; distributions calculated and executed automatically"
@@ -627,32 +671,38 @@ export default function CurrentStatusV1Page() {
               </div>
             </div>
 
-            <div className="flex flex-col gap-y-12">
-              <DefHeading
-                theme="light"
-                badgeText="Section 1"
-                showBadge={false}
-                title="Capital provider dashboards"
-                description=""
-              />
+            <div data-cs-panel className="flex flex-col gap-y-12">
+              <div data-cs-item>
+                <DefHeading
+                  theme="light"
+                  badgeText="Section 1"
+                  showBadge={false}
+                  title="Capital provider dashboards"
+                  description=""
+                />
+              </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <IconBox
+                  className="cs-iconbox-item"
                   icon={<FaEye size={38} />}
                   title="Real-time visibility across all funded loans"
                   description="Every activity on blockchain, accessible to private and institutional investors"
                 />
                 <IconBox
+                  className="cs-iconbox-item"
                   icon={<FaChartPie size={38} />}
                   title="Dedicated dashboard"
                   description="Investments, performance metrics, interest earned and maturity dates in a single view"
                 />
                 <IconBox
+                  className="cs-iconbox-item"
                   icon={<FaFileShield size={38} />}
                   title="Automated policy enforcement"
                   description="Capital provider criteria enforced continuously by the platform, no manual monitoring required"
                 />
                 <IconBox
+                  className="cs-iconbox-item"
                   icon={<FaFileLines size={38} />}
                   title="Customised reporting"
                   description="Portfolio-level analysis with per-loan blockchain token reference for independent verification"
