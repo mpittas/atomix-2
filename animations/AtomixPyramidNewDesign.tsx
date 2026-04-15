@@ -87,9 +87,9 @@ const DEFAULTS = {
   callouts: {
     fadeRange: 0.15,
     offsets: {
-      b1: { dx: -280, dy: 80 },
-      b2: { dx: 200, dy: 80 },
-      b3: { dx: -40, dy: 200 },
+      b1: { dx: 0, dy: 0 },
+      b2: { dx: 0, dy: 0 },
+      b3: { dx: 0, dy: 0 },
     },
     b1: {
       title: "Bespoke build",
@@ -562,15 +562,9 @@ const AtomixPyramidNewDesign: React.FC<AtomixPyramidNewDesignProps> = ({
           off = cOff[key];
         co.style.opacity = String(cAlpha);
         const cr = co.getBoundingClientRect();
-        const c = clamp(
-          p.x + off.dx,
-          p.y + off.dy,
-          cr.width,
-          cr.height,
-          ww,
-          wh,
-          cfg.padding,
-        );
+        const cx = p.x - cr.width / 2 + off.dx;
+        const cy = p.y - cr.height / 2 + off.dy;
+        const c = clamp(cx, cy, cr.width, cr.height, ww, wh, cfg.padding);
         co.style.transform = `translate(${c.x}px,${c.y}px)`;
       });
 
@@ -667,7 +661,7 @@ const AtomixPyramidNewDesign: React.FC<AtomixPyramidNewDesignProps> = ({
                   padding: "10px 14px",
                   minWidth: cs.minWidth,
                   maxWidth: cs.maxWidth,
-                  zIndex: -1,
+                  zIndex: 1,
                 }}
               >
                 <div
