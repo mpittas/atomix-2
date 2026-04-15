@@ -1,142 +1,13 @@
-import React, { CSSProperties, useEffect, useRef } from "react";
+import React, { CSSProperties, useEffect, useRef, useMemo } from "react";
 import * as THREE from "three";
 
-type VertexKey = "b1" | "b2" | "b3";
-
+type VK = "b1" | "b2" | "b3";
 type DeepPartial<T> = {
   [K in keyof T]?: T[K] extends object ? DeepPartial<T[K]> : T[K];
 };
+const KEYS: VK[] = ["b1", "b2", "b3"];
 
-interface AtomixConfig {
-  dragMode: boolean;
-  canvasHeight: number;
-  maxWidth: number;
-  padding: number;
-  colors: {
-    background: number;
-    sideFace: number;
-    sideSpecular: number;
-    baseFace: number;
-    baseSpecular: number;
-    apexEdge: number;
-    baseEdge: number;
-    bar: number;
-    barSpecular: number;
-    leaderStroke: string;
-    edgeLabelText: string;
-    sliderThumbA: string;
-    sliderThumbB: string;
-    sliderTrack: string;
-    sliderLabel: string;
-  };
-  pyramidScale: number;
-  heightRatio: number;
-  baseRatio: number;
-  baseCentreY: number;
-  barCylRadius: number;
-  barSphereRadius: number;
-  lighting: {
-    ambientIntensity: number;
-    keyIntensity: number;
-    keyPosition: [number, number, number];
-    fillIntensity: number;
-    fillPosition: [number, number, number];
-    rimIntensity: number;
-    rimPosition: [number, number, number];
-    sideShininess: number;
-    baseShininess: number;
-    barShininess: number;
-  };
-  camera: {
-    fov: number;
-    distance: number;
-  };
-  rotation: {
-    startX: number;
-    endX: number;
-    startY: number;
-    endY: number;
-    sliderSmoothing: number;
-    spinSpeed: number;
-    spinThreshold: number;
-    decayHalfLife: number;
-  };
-  edgeLabels: {
-    texts: [string, string, string];
-    fontSize: number;
-    fontWeight: number;
-    worldHeight: number;
-    edgeOffset: number;
-  };
-  logo: {
-    svgBase64: string | null;
-    worldHeight: number;
-    verticalOffset: number;
-    canvasWidth: number;
-    canvasHeight: number;
-  };
-  dashedEdges: {
-    dashSize: number;
-    gapSize: number;
-    fadeStart: number;
-    fadeEnd: number;
-    maxOpacity: number;
-  };
-  slider: {
-    leftLabel: string;
-    rightLabel: string;
-  };
-  callouts: {
-    fadeRange: number;
-    offsets: Record<VertexKey, { dx: number; dy: number }>;
-    b1: { title: string; lines: Array<{ positive: boolean; text: string }> };
-    b2: { title: string; lines: Array<{ positive: boolean; text: string }> };
-    b3: { title: string; lines: Array<{ positive: boolean; text: string }> };
-    style: {
-      background: string;
-      border: string;
-      borderRadius: string;
-      titleColor: string;
-      titleSize: string;
-      lineColor: string;
-      lineSize: string;
-      yesColor: string;
-      noColor: string;
-      minWidth: string;
-      maxWidth: string;
-      leaderWidth: number;
-      leaderDash: string;
-    };
-  };
-  apexCallout: {
-    fadeStart: number;
-    fadeEnd: number;
-    offset: { dx: number; dy: number };
-    text: string;
-    style: {
-      background: string;
-      border: string;
-      borderRadius: string;
-      textColor: string;
-      fontSize: string;
-      lineHeight: string;
-      maxWidth: string;
-    };
-  };
-}
-
-export interface AtomixPyramidExplorerProps {
-  config?: DeepPartial<AtomixConfig>;
-  className?: string;
-  style?: CSSProperties;
-  initialSliderValue?: number;
-  onReady?: (api: { setSlider: (value: number) => void }) => void;
-}
-
-const LOGO_SVG_B64 = "";
-
-const DEFAULTS: AtomixConfig = {
-  dragMode: false,
+const DEFAULTS = {
   canvasHeight: 480,
   maxWidth: 800,
   padding: 20,
@@ -166,19 +37,16 @@ const DEFAULTS: AtomixConfig = {
   lighting: {
     ambientIntensity: 0.35,
     keyIntensity: 0.85,
-    keyPosition: [4, 5, 6],
+    keyPosition: [4, 5, 6] as [number, number, number],
     fillIntensity: 0.3,
-    fillPosition: [-5, 2, 4],
+    fillPosition: [-5, 2, 4] as [number, number, number],
     rimIntensity: 0.15,
-    rimPosition: [0, -3, -5],
+    rimPosition: [0, -3, -5] as [number, number, number],
     sideShininess: 50,
     baseShininess: 25,
     barShininess: 60,
   },
-  camera: {
-    fov: 45,
-    distance: 10.5,
-  },
+  camera: { fov: 45, distance: 10.5 },
   rotation: {
     startX: -Math.PI * 0.5,
     endX: 0.15,
@@ -190,14 +58,18 @@ const DEFAULTS: AtomixConfig = {
     decayHalfLife: 0.3,
   },
   edgeLabels: {
-    texts: ["Fully automated", "Cheap to build", "Complex loan logic"],
+    texts: ["Fully automated", "Cheap to build", "Complex loan logic"] as [
+      string,
+      string,
+      string,
+    ],
     fontSize: 14,
     fontWeight: 600,
     worldHeight: 0.4,
     edgeOffset: 0.3,
   },
   logo: {
-    svgBase64: null,
+    svgBase64: null as string | null,
     worldHeight: 0.55,
     verticalOffset: 0.5,
     canvasWidth: 880,
@@ -210,10 +82,7 @@ const DEFAULTS: AtomixConfig = {
     fadeEnd: 0.6,
     maxOpacity: 0.4,
   },
-  slider: {
-    leftLabel: "Legacy technology",
-    rightLabel: "Atomix",
-  },
+  slider: { leftLabel: "Legacy technology", rightLabel: "Atomix" },
   callouts: {
     fadeRange: 0.15,
     offsets: {
@@ -278,168 +147,100 @@ const DEFAULTS: AtomixConfig = {
   },
 };
 
-function isObject(value: unknown): value is Record<string, unknown> {
-  return typeof value === "object" && value !== null && !Array.isArray(value);
-}
+type Cfg = typeof DEFAULTS;
 
-function deepMerge<T>(target: T, source?: DeepPartial<T>): T {
-  if (!source) return target;
-  const result: Record<string, unknown> = {
-    ...(target as Record<string, unknown>),
-  };
-
-  Object.keys(source).forEach((key) => {
-    const sourceValue = (source as Record<string, unknown>)[key];
-    const targetValue = (target as Record<string, unknown>)[key];
-
-    if (isObject(sourceValue) && isObject(targetValue)) {
-      result[key] = deepMerge(targetValue, sourceValue);
-    } else if (sourceValue !== undefined) {
-      result[key] = sourceValue;
-    }
+function deepMerge<T>(t: T, s?: DeepPartial<T>): T {
+  if (!s) return t;
+  const r: Record<string, unknown> = { ...(t as Record<string, unknown>) };
+  Object.keys(s).forEach((k) => {
+    const sv = (s as Record<string, unknown>)[k];
+    const tv = (t as Record<string, unknown>)[k];
+    if (
+      sv &&
+      typeof sv === "object" &&
+      !Array.isArray(sv) &&
+      tv &&
+      typeof tv === "object" &&
+      !Array.isArray(tv)
+    )
+      r[k] = deepMerge(
+        tv as Record<string, unknown>,
+        sv as Record<string, unknown>,
+      );
+    else if (sv !== undefined) r[k] = sv;
   });
-
-  return result as T;
+  return r as T;
 }
 
-const AtomixPyramidExplorer: React.FC<AtomixPyramidExplorerProps> = ({
+export interface AtomixPyramidNewDesignProps {
+  config?: DeepPartial<Cfg>;
+  className?: string;
+  style?: CSSProperties;
+  initialSliderValue?: number;
+  onReady?: (api: { setSlider: (v: number) => void }) => void;
+}
+
+const ABS_FILL: CSSProperties = {
+  position: "absolute",
+  top: 0,
+  left: 0,
+  width: "100%",
+  height: "100%",
+  pointerEvents: "none",
+};
+const LABEL_S: CSSProperties = {
+  fontSize: "12px",
+  fontWeight: 500,
+  flexShrink: 0,
+  letterSpacing: "0.02em",
+  textTransform: "uppercase",
+};
+
+const clamp = (
+  x: number,
+  y: number,
+  w: number,
+  h: number,
+  ww: number,
+  wh: number,
+  p: number,
+) => ({
+  x: Math.max(p, Math.min(x, ww - w - p)),
+  y: Math.max(p, Math.min(y, wh - h - p)),
+});
+
+type V3 = THREE.Vector3;
+const Vec3 = THREE.Vector3;
+const v3 = (...a: [number, number, number]) => new Vec3(...a);
+
+const AtomixPyramidNewDesign: React.FC<AtomixPyramidNewDesignProps> = ({
   config,
-  className,
+  className = "",
   style,
   initialSliderValue = 0,
   onReady,
 }) => {
-  const rootRef = useRef<HTMLDivElement | null>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const sliderRef = useRef<HTMLInputElement>(null);
+  const calloutRefs = useRef<Record<VK, HTMLDivElement | null>>({
+    b1: null,
+    b2: null,
+    b3: null,
+  });
+  const leaderRefs = useRef<Record<VK, SVGLineElement | null>>({
+    b1: null,
+    b2: null,
+    b3: null,
+  });
+  const apexRef = useRef<HTMLDivElement>(null);
+  const cfg = useMemo(() => deepMerge(DEFAULTS, config), [config]);
 
   useEffect(() => {
-    const root = rootRef.current;
-    if (!root) return;
-
-    const cfg = deepMerge(DEFAULTS, config);
-    if (!cfg.logo.svgBase64) cfg.logo.svgBase64 = LOGO_SVG_B64 || null;
-
-    root.innerHTML = "";
-    root.style.position = "relative";
-    root.style.width = "100%";
-    root.style.maxWidth = `${cfg.maxWidth}px`;
-    root.style.fontFamily =
-      "-apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif";
-
-    const wrapper = document.createElement("div");
-    wrapper.style.cssText = `position:relative;width:100%;height:${cfg.canvasHeight}px;overflow:hidden;`;
-    root.appendChild(wrapper);
-
-    const canvas = document.createElement("canvas");
-    canvas.style.cssText = "display:block;width:100%;height:100%;";
-    wrapper.appendChild(canvas);
-
-    const overlay = document.createElement("div");
-    overlay.style.cssText =
-      "position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;overflow:visible;";
-    wrapper.appendChild(overlay);
-
-    const leaderSvg = document.createElementNS(
-      "http://www.w3.org/2000/svg",
-      "svg",
-    );
-    leaderSvg.style.cssText =
-      "position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;";
-    overlay.appendChild(leaderSvg);
-
-    const leaderLines = {} as Record<VertexKey, SVGLineElement>;
-    (["b1", "b2", "b3"] as VertexKey[]).forEach((key) => {
-      const line = document.createElementNS(
-        "http://www.w3.org/2000/svg",
-        "line",
-      );
-      line.setAttribute("stroke", cfg.colors.leaderStroke);
-      line.setAttribute("stroke-width", String(cfg.callouts.style.leaderWidth));
-      line.setAttribute("stroke-dasharray", cfg.callouts.style.leaderDash);
-      leaderSvg.appendChild(line);
-      leaderLines[key] = line;
-    });
-
-    const buildCalloutEl = (
-      data: {
-        title: string;
-        lines: Array<{ positive: boolean; text: string }>;
-      },
-      styleConfig: AtomixConfig["callouts"]["style"],
-    ) => {
-      const outer = document.createElement("div");
-      outer.style.cssText = "position:absolute;transition:opacity 0.15s ease;";
-      const box = document.createElement("div");
-      box.style.cssText = `background:${styleConfig.background};border:${styleConfig.border};border-radius:${styleConfig.borderRadius};padding:10px 14px;min-width:${styleConfig.minWidth};max-width:${styleConfig.maxWidth};`;
-      const title = document.createElement("div");
-      title.style.cssText = `color:${styleConfig.titleColor};font-size:${styleConfig.titleSize};font-weight:700;margin-bottom:6px;letter-spacing:0.02em;`;
-      title.textContent = data.title;
-      box.appendChild(title);
-      data.lines.forEach((lineData) => {
-        const div = document.createElement("div");
-        div.style.cssText = `font-size:${styleConfig.lineSize};line-height:1.5;color:${styleConfig.lineColor};`;
-        const prefix = document.createElement("span");
-        prefix.style.color = lineData.positive
-          ? styleConfig.yesColor
-          : styleConfig.noColor;
-        prefix.textContent = lineData.positive ? "✓ " : "✗ ";
-        div.appendChild(prefix);
-        div.appendChild(document.createTextNode(lineData.text));
-        box.appendChild(div);
-      });
-      outer.appendChild(box);
-      return outer;
-    };
-
-    const calloutEls = {} as Record<VertexKey, HTMLDivElement>;
-    (["b1", "b2", "b3"] as VertexKey[]).forEach((key) => {
-      const el = buildCalloutEl(cfg.callouts[key], cfg.callouts.style);
-      overlay.appendChild(el);
-      calloutEls[key] = el;
-    });
-
-    const apexEl = document.createElement("div");
-    apexEl.style.cssText =
-      "position:absolute;transition:opacity 0.15s ease;opacity:0;";
-    const apexBox = document.createElement("div");
-    const apexStyle = cfg.apexCallout.style;
-    apexBox.style.cssText = `background:${apexStyle.background};border:${apexStyle.border};border-radius:${apexStyle.borderRadius};padding:10px 14px;max-width:${apexStyle.maxWidth};`;
-    const apexText = document.createElement("div");
-    apexText.style.cssText = `color:${apexStyle.textColor};font-size:${apexStyle.fontSize};line-height:${apexStyle.lineHeight};`;
-    apexText.textContent = cfg.apexCallout.text;
-    apexBox.appendChild(apexText);
-    apexEl.appendChild(apexBox);
-    overlay.appendChild(apexEl);
-
-    const sliderRow = document.createElement("div");
-    sliderRow.style.cssText =
-      "display:flex;align-items:center;gap:16px;padding:24px 20px 12px;";
-    const labelStyle = `font-size:12px;font-weight:500;color:${cfg.colors.sliderLabel};flex-shrink:0;letter-spacing:0.02em;text-transform:uppercase;`;
-
-    const leftLabel = document.createElement("span");
-    leftLabel.style.cssText = labelStyle;
-    leftLabel.textContent = cfg.slider.leftLabel;
-
-    const rightLabel = document.createElement("span");
-    rightLabel.style.cssText = labelStyle;
-    rightLabel.textContent = cfg.slider.rightLabel;
-
-    const slider = document.createElement("input");
-    slider.type = "range";
-    slider.min = "0";
-    slider.max = "100";
-    slider.value = String(Math.max(0, Math.min(100, initialSliderValue)));
-    slider.style.cssText = `flex:1;-webkit-appearance:none;appearance:none;height:6px;border-radius:3px;background:${cfg.colors.sliderTrack};outline:none;cursor:pointer;`;
-
-    const thumbCSS = document.createElement("style");
-    thumbCSS.textContent =
-      `input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:linear-gradient(135deg,${cfg.colors.sliderThumbA},${cfg.colors.sliderThumbB});cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,0.2);}` +
-      `input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:linear-gradient(135deg,${cfg.colors.sliderThumbA},${cfg.colors.sliderThumbB});cursor:pointer;border:none;box-shadow:0 2px 6px rgba(0,0,0,0.2);}`;
-    document.head.appendChild(thumbCSS);
-
-    sliderRow.appendChild(leftLabel);
-    sliderRow.appendChild(slider);
-    sliderRow.appendChild(rightLabel);
-    root.appendChild(sliderRow);
+    const canvas = canvasRef.current,
+      wrapper = wrapperRef.current,
+      slider = sliderRef.current;
+    if (!canvas || !wrapper || !slider) return;
 
     const scene = new THREE.Scene();
     const renderer = new THREE.WebGLRenderer({
@@ -449,81 +250,68 @@ const AtomixPyramidExplorer: React.FC<AtomixPyramidExplorerProps> = ({
     });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.setClearColor(cfg.colors.background, 1);
-
     const camera = new THREE.PerspectiveCamera(cfg.camera.fov, 1, 0.1, 100);
     camera.position.set(0, 0, cfg.camera.distance);
     camera.lookAt(0, 0, 0);
 
     const lt = cfg.lighting;
     scene.add(new THREE.AmbientLight(0xffffff, lt.ambientIntensity));
-
-    const keyLight = new THREE.DirectionalLight(0xffffff, lt.keyIntensity);
-    keyLight.position.set(...lt.keyPosition);
-    scene.add(keyLight);
-
-    const fillLight = new THREE.DirectionalLight(0xffffff, lt.fillIntensity);
-    fillLight.position.set(...lt.fillPosition);
-    scene.add(fillLight);
-
-    const rimLight = new THREE.DirectionalLight(0xffffff, lt.rimIntensity);
-    rimLight.position.set(...lt.rimPosition);
-    scene.add(rimLight);
-
-    const pyramidGroup = new THREE.Group();
-    scene.add(pyramidGroup);
-
-    const S = cfg.pyramidScale;
-    const H = S * cfg.heightRatio;
-    const R = S * cfg.baseRatio;
-    const by = -H * cfg.baseCentreY;
-    const ay = H + by;
-
-    const rawApex = new THREE.Vector3(0, ay, 0);
-    const rawB1 = new THREE.Vector3(
-      -R * Math.cos(Math.PI / 6),
-      by,
-      -R * Math.sin(Math.PI / 6),
-    );
-    const rawB2 = new THREE.Vector3(
-      R * Math.cos(Math.PI / 6),
-      by,
-      -R * Math.sin(Math.PI / 6),
-    );
-    const rawB3 = new THREE.Vector3(0, by, R);
-
-    const pivotApexWeight = 0.4;
-    const pivotBaseWeight = (1 - pivotApexWeight) / 3;
-    const centroid = new THREE.Vector3()
-      .addScaledVector(rawApex, pivotApexWeight)
-      .addScaledVector(rawB1, pivotBaseWeight)
-      .addScaledVector(rawB2, pivotBaseWeight)
-      .addScaledVector(rawB3, pivotBaseWeight);
-
-    const apex = rawApex.clone().sub(centroid);
-    const b1 = rawB1.clone().sub(centroid);
-    const b2 = rawB2.clone().sub(centroid);
-    const b3 = rawB3.clone().sub(centroid);
-
-    const sideMat = new THREE.MeshPhongMaterial({
-      color: cfg.colors.sideFace,
-      side: THREE.DoubleSide,
-      shininess: lt.sideShininess,
-      specular: new THREE.Color(cfg.colors.sideSpecular),
+    [
+      [lt.keyIntensity, lt.keyPosition],
+      [lt.fillIntensity, lt.fillPosition],
+      [lt.rimIntensity, lt.rimPosition],
+    ].forEach(([i, p]) => {
+      const l = new THREE.DirectionalLight(0xffffff, i as number);
+      l.position.set(...(p as [number, number, number]));
+      scene.add(l);
     });
 
-    const baseMat = new THREE.MeshPhongMaterial({
-      color: cfg.colors.baseFace,
-      side: THREE.DoubleSide,
-      shininess: lt.baseShininess,
-      specular: new THREE.Color(cfg.colors.baseSpecular),
-    });
+    const grp = new THREE.Group();
+    scene.add(grp);
 
-    const triMesh = (
-      a: THREE.Vector3,
-      b: THREE.Vector3,
-      c: THREE.Vector3,
-      mat: THREE.Material,
-    ) => {
+    const S = cfg.pyramidScale,
+      H = S * cfg.heightRatio,
+      R = S * cfg.baseRatio;
+    const by = -H * cfg.baseCentreY,
+      ay = H + by;
+    const c30 = Math.cos(Math.PI / 6),
+      s30 = Math.sin(Math.PI / 6);
+    const rawA = v3(0, ay, 0),
+      rawB1 = v3(-R * c30, by, -R * s30),
+      rawB2 = v3(R * c30, by, -R * s30),
+      rawB3 = v3(0, by, R);
+    const pw = 0.4,
+      bw = (1 - pw) / 3;
+    const ctr = new Vec3()
+      .addScaledVector(rawA, pw)
+      .addScaledVector(rawB1, bw)
+      .addScaledVector(rawB2, bw)
+      .addScaledVector(rawB3, bw);
+    const apex = rawA.clone().sub(ctr),
+      b1 = rawB1.clone().sub(ctr),
+      b2 = rawB2.clone().sub(ctr),
+      b3 = rawB3.clone().sub(ctr);
+    const verts = { b1, b2, b3 };
+
+    const phong = (color: number, spec: number, shin: number) =>
+      new THREE.MeshPhongMaterial({
+        color,
+        side: THREE.DoubleSide,
+        shininess: shin,
+        specular: new THREE.Color(spec),
+      });
+    const sideMat = phong(
+      cfg.colors.sideFace,
+      cfg.colors.sideSpecular,
+      lt.sideShininess,
+    );
+    const baseMat = phong(
+      cfg.colors.baseFace,
+      cfg.colors.baseSpecular,
+      lt.baseShininess,
+    );
+
+    const tri = (a: V3, b: V3, c: V3, mat: THREE.Material) => {
       const g = new THREE.BufferGeometry();
       g.setAttribute(
         "position",
@@ -536,53 +324,45 @@ const AtomixPyramidExplorer: React.FC<AtomixPyramidExplorerProps> = ({
       return new THREE.Mesh(g, mat);
     };
 
-    const makeEdgeLine = (
-      a: THREE.Vector3,
-      b: THREE.Vector3,
-      color: THREE.Color,
-      dashed: boolean,
-    ) => {
+    const de = cfg.dashedEdges;
+    const mkEdge = (a: V3, b: V3, col: THREE.Color, dashed: boolean) => {
       const g = new THREE.BufferGeometry().setFromPoints([a, b]);
-      const de = cfg.dashedEdges;
       const m = dashed
         ? new THREE.LineDashedMaterial({
-            color,
+            color: col,
             dashSize: de.dashSize,
             gapSize: de.gapSize,
             transparent: true,
             opacity: de.maxOpacity,
           })
-        : new THREE.LineBasicMaterial({ color });
+        : new THREE.LineBasicMaterial({ color: col });
       const l = new THREE.Line(g, m);
       if (dashed) l.computeLineDistances();
       return l;
     };
 
-    pyramidGroup.add(triMesh(apex, b1, b2, sideMat));
-    pyramidGroup.add(triMesh(apex, b2, b3, sideMat));
-    pyramidGroup.add(triMesh(apex, b3, b1, sideMat));
-    pyramidGroup.add(triMesh(b1, b3, b2, baseMat));
+    grp.add(
+      tri(apex, b1, b2, sideMat),
+      tri(apex, b2, b3, sideMat),
+      tri(apex, b3, b1, sideMat),
+      tri(b1, b3, b2, baseMat),
+    );
 
-    const TC = new THREE.Color(cfg.colors.apexEdge);
-    const PC = new THREE.Color(cfg.colors.baseEdge);
-    pyramidGroup.add(makeEdgeLine(apex, b1, TC, false));
-    pyramidGroup.add(makeEdgeLine(apex, b2, TC, false));
-    pyramidGroup.add(makeEdgeLine(apex, b3, TC, false));
-    pyramidGroup.add(makeEdgeLine(b1, b2, PC, false));
-    pyramidGroup.add(makeEdgeLine(b2, b3, PC, false));
-    pyramidGroup.add(makeEdgeLine(b3, b1, PC, false));
-
-    const dEdges = [
-      makeEdgeLine(apex, b1, TC, true),
-      makeEdgeLine(apex, b2, TC, true),
-      makeEdgeLine(apex, b3, TC, true),
-      makeEdgeLine(b1, b2, PC, true),
-      makeEdgeLine(b2, b3, PC, true),
-      makeEdgeLine(b3, b1, PC, true),
+    const TC = new THREE.Color(cfg.colors.apexEdge),
+      PC = new THREE.Color(cfg.colors.baseEdge);
+    const eDefs: [V3, V3, THREE.Color][] = [
+      [apex, b1, TC],
+      [apex, b2, TC],
+      [apex, b3, TC],
+      [b1, b2, PC],
+      [b2, b3, PC],
+      [b3, b1, PC],
     ];
-    dEdges.forEach((edge) => {
-      edge.visible = false;
-      pyramidGroup.add(edge);
+    eDefs.forEach(([a, b, c]) => grp.add(mkEdge(a, b, c, false)));
+    const dEdges = eDefs.map(([a, b, c]) => mkEdge(a, b, c, true));
+    dEdges.forEach((e) => {
+      e.visible = false;
+      grp.add(e);
     });
 
     const barMat = new THREE.MeshPhongMaterial({
@@ -590,459 +370,462 @@ const AtomixPyramidExplorer: React.FC<AtomixPyramidExplorerProps> = ({
       shininess: lt.barShininess,
       specular: new THREE.Color(cfg.colors.barSpecular),
     });
-
-    const makeCapsule = (from: THREE.Vector3, to: THREE.Vector3) => {
-      const group = new THREE.Group();
-      const dir = new THREE.Vector3().subVectors(to, from);
-      const len = dir.length();
+    const mkCap = (from: V3, to: V3) => {
+      const g2 = new THREE.Group(),
+        dir = new Vec3().subVectors(to, from),
+        len = dir.length();
       dir.normalize();
-
-      const cylGeo = new THREE.CylinderGeometry(
-        cfg.barCylRadius,
-        cfg.barCylRadius,
-        len,
-        12,
-        1,
+      g2.add(
+        new THREE.Mesh(
+          new THREE.CylinderGeometry(
+            cfg.barCylRadius,
+            cfg.barCylRadius,
+            len,
+            12,
+            1,
+          ),
+          barMat,
+        ),
       );
-      group.add(new THREE.Mesh(cylGeo, barMat));
-
-      const capGeo = new THREE.SphereGeometry(cfg.barSphereRadius, 16, 12);
-      const topCap = new THREE.Mesh(capGeo, barMat);
-      topCap.position.y = len / 2;
-      group.add(topCap);
-
-      const botCap = new THREE.Mesh(capGeo, barMat);
-      botCap.position.y = -len / 2;
-      group.add(botCap);
-
-      group.position.copy(
-        new THREE.Vector3().addVectors(from, to).multiplyScalar(0.5),
-      );
-      group.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir);
-      return group;
+      const cap = new THREE.SphereGeometry(cfg.barSphereRadius, 16, 12);
+      const t = new THREE.Mesh(cap, barMat);
+      t.position.y = len / 2;
+      g2.add(t);
+      const bo = new THREE.Mesh(cap, barMat);
+      bo.position.y = -len / 2;
+      g2.add(bo);
+      g2.position.copy(new Vec3().addVectors(from, to).multiplyScalar(0.5));
+      g2.quaternion.setFromUnitVectors(v3(0, 1, 0), dir);
+      return g2;
     };
+    [b1, b2, b3].forEach((v) => grp.add(mkCap(v, apex)));
 
-    pyramidGroup.add(makeCapsule(b1, apex));
-    pyramidGroup.add(makeCapsule(b2, apex));
-    pyramidGroup.add(makeCapsule(b3, apex));
-
-    const makeTextPlane = (
-      text: string,
-      color: string,
-      fontSize: number,
-      fontWeight: number,
-      worldHeight: number,
-    ) => {
-      const c2 = document.createElement("canvas");
-      const ctx = c2.getContext("2d");
+    const el = cfg.edgeLabels;
+    const mkText = (text: string) => {
+      const c2 = document.createElement("canvas"),
+        ctx = c2.getContext("2d");
       if (!ctx) return new THREE.Mesh();
-
-      const dpr = 2;
-      const font = `${fontWeight} ${fontSize * dpr}px -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif`;
+      const dpr = 2,
+        font = `${el.fontWeight} ${el.fontSize * dpr}px -apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif`;
       ctx.font = font;
-      const tw = Math.ceil(ctx.measureText(text).width) + 12 * dpr;
-      const th = Math.ceil(fontSize * dpr * 1.5) + 8 * dpr;
-
+      const tw = Math.ceil(ctx.measureText(text).width) + 24,
+        th = Math.ceil(el.fontSize * dpr * 1.5) + 16;
       c2.width = tw;
       c2.height = th;
       ctx.clearRect(0, 0, tw, th);
       ctx.font = font;
-      ctx.fillStyle = color;
+      ctx.fillStyle = cfg.colors.edgeLabelText;
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
       ctx.fillText(text, tw / 2, th / 2);
-
-      const texture = new THREE.CanvasTexture(c2);
-      texture.minFilter = THREE.LinearFilter;
-      const aspect = tw / th;
-      const geo = new THREE.PlaneGeometry(worldHeight * aspect, worldHeight);
-      const mat = new THREE.MeshBasicMaterial({
-        map: texture,
-        transparent: true,
-        depthTest: true,
-        depthWrite: false,
-        side: THREE.DoubleSide,
-      });
-      return new THREE.Mesh(geo, mat);
-    };
-
-    const edgeLabelCfg = cfg.edgeLabels;
-    const edgeMeshes = edgeLabelCfg.texts.map((text) =>
-      makeTextPlane(
-        text,
-        cfg.colors.edgeLabelText,
-        edgeLabelCfg.fontSize,
-        edgeLabelCfg.fontWeight,
-        edgeLabelCfg.worldHeight,
-      ),
-    );
-
-    const baseCentroid = new THREE.Vector3()
-      .add(b1)
-      .add(b2)
-      .add(b3)
-      .divideScalar(3);
-    const edgeMidpoint = (a: THREE.Vector3, b: THREE.Vector3) =>
-      new THREE.Vector3().addVectors(a, b).multiplyScalar(0.5);
-    const pushOutward = (
-      pt: THREE.Vector3,
-      centroidPoint: THREE.Vector3,
-      amount: number,
-    ) =>
-      pt
-        .clone()
-        .add(
-          new THREE.Vector3()
-            .subVectors(pt, centroidPoint)
-            .normalize()
-            .multiplyScalar(amount),
-        );
-
-    const edgePairs = [
-      { mesh: edgeMeshes[0], from: b1, to: b2 },
-      { mesh: edgeMeshes[1], from: b2, to: b3 },
-      { mesh: edgeMeshes[2], from: b3, to: b1 },
-    ];
-
-    const edgeLabelsData: Array<{
-      mesh: THREE.Mesh;
-      xAxis: THREE.Vector3;
-      yStart: THREE.Vector3;
-      yEnd: THREE.Vector3;
-    }> = [];
-
-    edgePairs.forEach((ep) => {
-      const mid = edgeMidpoint(ep.from, ep.to);
-      ep.mesh.position.copy(
-        pushOutward(mid, baseCentroid, edgeLabelCfg.edgeOffset),
-      );
-      pyramidGroup.add(ep.mesh);
-
-      const xAxis = new THREE.Vector3().subVectors(ep.to, ep.from).normalize();
-      const radialOut = new THREE.Vector3(mid.x, 0, mid.z).normalize();
-      const radialPerp = radialOut
-        .clone()
-        .sub(xAxis.clone().multiplyScalar(radialOut.dot(xAxis)))
-        .normalize();
-      const testZ = new THREE.Vector3().crossVectors(xAxis, radialPerp);
-      if (testZ.y > 0) xAxis.negate();
-      const toApex = new THREE.Vector3().subVectors(apex, mid).normalize();
-      const apexPerp = toApex
-        .clone()
-        .sub(xAxis.clone().multiplyScalar(toApex.dot(xAxis)))
-        .normalize();
-      edgeLabelsData.push({
-        mesh: ep.mesh,
-        xAxis,
-        yStart: radialPerp,
-        yEnd: apexPerp,
-      });
-    });
-
-    const makeLogoSprite = (b64: string | null) => {
-      const sprite = new THREE.Sprite(
-        new THREE.SpriteMaterial({
+      const tex = new THREE.CanvasTexture(c2);
+      tex.minFilter = THREE.LinearFilter;
+      return new THREE.Mesh(
+        new THREE.PlaneGeometry((el.worldHeight * tw) / th, el.worldHeight),
+        new THREE.MeshBasicMaterial({
+          map: tex,
           transparent: true,
           depthTest: true,
           depthWrite: false,
-          sizeAttenuation: true,
+          side: THREE.DoubleSide,
         }),
       );
-      sprite.scale.set(1.8, 0.45, 1);
-      if (!b64) return sprite;
+    };
 
+    const eMeshes = el.texts.map(mkText);
+    const bCtr = new Vec3().add(b1).add(b2).add(b3).divideScalar(3);
+    const mid = (a: V3, b: V3) =>
+      new Vec3().addVectors(a, b).multiplyScalar(0.5);
+    const push = (pt: V3, c: V3, amt: number) =>
+      pt
+        .clone()
+        .add(new Vec3().subVectors(pt, c).normalize().multiplyScalar(amt));
+
+    const ePairs = [
+      { m: eMeshes[0], f: b1, t: b2 },
+      { m: eMeshes[1], f: b2, t: b3 },
+      { m: eMeshes[2], f: b3, t: b1 },
+    ];
+    const eld: { m: THREE.Mesh; x: V3; ys: V3; ye: V3 }[] = [];
+
+    ePairs.forEach((ep) => {
+      const mp = mid(ep.f, ep.t);
+      ep.m.position.copy(push(mp, bCtr, el.edgeOffset));
+      grp.add(ep.m);
+      const xA = new Vec3().subVectors(ep.t, ep.f).normalize();
+      const ro = new Vec3(mp.x, 0, mp.z).normalize();
+      const rp = ro
+        .clone()
+        .sub(xA.clone().multiplyScalar(ro.dot(xA)))
+        .normalize();
+      if (new Vec3().crossVectors(xA, rp).y > 0) xA.negate();
+      const ta = new Vec3().subVectors(apex, mp).normalize();
+      const ap = ta
+        .clone()
+        .sub(xA.clone().multiplyScalar(ta.dot(xA)))
+        .normalize();
+      eld.push({ m: ep.m, x: xA, ys: rp, ye: ap });
+    });
+
+    const logoB64 = cfg.logo.svgBase64 || "";
+    const spr = new THREE.Sprite(
+      new THREE.SpriteMaterial({
+        transparent: true,
+        depthTest: true,
+        depthWrite: false,
+        sizeAttenuation: true,
+      }),
+    );
+    spr.scale.set(1.8, 0.45, 1);
+    if (logoB64) {
       const img = new Image();
       img.onload = () => {
         const c2 = document.createElement("canvas");
         c2.width = cfg.logo.canvasWidth;
         c2.height = cfg.logo.canvasHeight;
-        const context = c2.getContext("2d");
-        if (!context) return;
-        context.drawImage(img, 0, 0, c2.width, c2.height);
-        const tex = new THREE.CanvasTexture(c2);
-        tex.minFilter = THREE.LinearFilter;
-        const material = sprite.material as THREE.SpriteMaterial;
-        material.map = tex;
-        material.needsUpdate = true;
-        sprite.scale.set(
+        const ctx = c2.getContext("2d");
+        if (!ctx) return;
+        ctx.drawImage(img, 0, 0, c2.width, c2.height);
+        const tx = new THREE.CanvasTexture(c2);
+        tx.minFilter = THREE.LinearFilter;
+        const mat = spr.material as THREE.SpriteMaterial;
+        mat.map = tx;
+        mat.needsUpdate = true;
+        spr.scale.set(
           (cfg.logo.worldHeight * c2.width) / c2.height,
           cfg.logo.worldHeight,
           1,
         );
       };
-      img.src = `data:image/svg+xml;base64,${b64}`;
-      return sprite;
-    };
-
-    const spriteApex = makeLogoSprite(cfg.logo.svgBase64);
-    spriteApex.position
-      .copy(apex)
-      .add(new THREE.Vector3(0, cfg.logo.verticalOffset, 0));
-    pyramidGroup.add(spriteApex);
+      img.src = `data:image/svg+xml;base64,${logoB64}`;
+    }
+    spr.position.copy(apex).add(v3(0, cfg.logo.verticalOffset, 0));
+    grp.add(spr);
 
     const resize = () => {
-      const w = wrapper.clientWidth;
-      const h = wrapper.clientHeight;
+      const w = wrapper.clientWidth,
+        h = wrapper.clientHeight;
       renderer.setSize(w, h);
       camera.aspect = w / h;
       camera.updateProjectionMatrix();
     };
-
     resize();
     window.addEventListener("resize", resize);
 
     const rot = cfg.rotation;
-    const calloutOffsets: Record<VertexKey, { dx: number; dy: number }> = {
-      b1: { ...cfg.callouts.offsets.b1 },
-      b2: { ...cfg.callouts.offsets.b2 },
-      b3: { ...cfg.callouts.offsets.b3 },
-    };
-    const apexDescOffset = { ...cfg.apexCallout.offset };
-
-    if (cfg.dragMode) {
-      const readout = document.createElement("div");
-      readout.style.cssText =
-        "padding:8px 20px;font-size:11px;font-family:monospace;color:#999;white-space:pre;user-select:all;cursor:text;";
-      root.appendChild(readout);
-
-      const updateReadout = () => {
-        readout.textContent =
-          `b1: { dx: ${calloutOffsets.b1.dx}, dy: ${calloutOffsets.b1.dy} }  ` +
-          `b2: { dx: ${calloutOffsets.b2.dx}, dy: ${calloutOffsets.b2.dy} }  ` +
-          `b3: { dx: ${calloutOffsets.b3.dx}, dy: ${calloutOffsets.b3.dy} }  ` +
-          `apex: { dx: ${apexDescOffset.dx}, dy: ${apexDescOffset.dy} }`;
-      };
-
-      updateReadout();
-
-      const enableDrag = (
-        el: HTMLElement,
-        offsetObj: { dx: number; dy: number },
-        updateFn: () => void,
-      ) => {
-        el.style.pointerEvents = "auto";
-        el.style.cursor = "grab";
-
-        let dragging = false;
-        let sx = 0;
-        let sy = 0;
-        let sdx = 0;
-        let sdy = 0;
-
-        el.addEventListener("mousedown", (e) => {
-          dragging = true;
-          el.style.cursor = "grabbing";
-          sx = e.clientX;
-          sy = e.clientY;
-          sdx = offsetObj.dx;
-          sdy = offsetObj.dy;
-          e.preventDefault();
-        });
-
-        window.addEventListener("mousemove", (e) => {
-          if (!dragging) return;
-          offsetObj.dx = Math.round(sdx + (e.clientX - sx));
-          offsetObj.dy = Math.round(sdy + (e.clientY - sy));
-          updateFn();
-        });
-
-        window.addEventListener("mouseup", () => {
-          if (!dragging) return;
-          dragging = false;
-          el.style.cursor = "grab";
-        });
-      };
-
-      (["b1", "b2", "b3"] as VertexKey[]).forEach((key) =>
-        enableDrag(calloutEls[key], calloutOffsets[key], updateReadout),
-      );
-      enableDrag(apexEl, apexDescOffset, updateReadout);
-    }
-
-    let currentT = 0;
-    let spinAngle = 0;
-    let lastTime = performance.now();
-    let animationId = 0;
-
-    const wrapAngle = (a: number) => {
-      let wrapped = a % (Math.PI * 2);
-      if (wrapped > Math.PI) wrapped -= Math.PI * 2;
-      if (wrapped < -Math.PI) wrapped += Math.PI * 2;
-      return wrapped;
-    };
+    const cOff = Object.fromEntries(
+      KEYS.map((k) => [k, { ...cfg.callouts.offsets[k] }]),
+    ) as Record<VK, { dx: number; dy: number }>;
+    const aOff = { ...cfg.apexCallout.offset };
+    let curT = 0,
+      spin = 0,
+      last = performance.now(),
+      afId = 0;
 
     const animate = (now: number) => {
-      animationId = requestAnimationFrame(animate);
-
-      const dt = (now - lastTime) / 1000;
-      lastTime = now;
-
-      const target = Number(slider.value) / 100;
-      currentT += (target - currentT) * rot.sliderSmoothing;
-      const t = currentT;
-
-      const baseRotX = rot.startX + (rot.endX - rot.startX) * t;
-      const baseRotY = rot.startY + (rot.endY - rot.startY) * t;
+      afId = requestAnimationFrame(animate);
+      const dt = (now - last) / 1000;
+      last = now;
+      const tgt = Number(slider.value) / 100;
+      curT += (tgt - curT) * rot.sliderSmoothing;
+      const t = curT;
 
       if (t > rot.spinThreshold) {
-        const ramp = (t - rot.spinThreshold) / (1 - rot.spinThreshold);
-        spinAngle += rot.spinSpeed * dt * ramp;
+        spin +=
+          rot.spinSpeed *
+          dt *
+          ((t - rot.spinThreshold) / (1 - rot.spinThreshold));
       } else {
-        spinAngle = wrapAngle(spinAngle);
-        const proximity = t / rot.spinThreshold;
-        const halfLife = rot.decayHalfLife / Math.max(0.001, 1 - proximity);
-        spinAngle *= Math.pow(0.5, dt / halfLife);
-        if (Math.abs(spinAngle) < 0.001) spinAngle = 0;
+        let w = spin % (Math.PI * 2);
+        if (w > Math.PI) w -= Math.PI * 2;
+        if (w < -Math.PI) w += Math.PI * 2;
+        spin =
+          w *
+          Math.pow(
+            0.5,
+            dt /
+              (rot.decayHalfLife / Math.max(0.001, 1 - t / rot.spinThreshold)),
+          );
+        if (Math.abs(spin) < 0.001) spin = 0;
       }
 
-      pyramidGroup.rotation.x = baseRotX;
-      pyramidGroup.rotation.y = baseRotY + spinAngle;
+      grp.rotation.x = rot.startX + (rot.endX - rot.startX) * t;
+      grp.rotation.y = rot.startY + (rot.endY - rot.startY) * t + spin;
 
-      const de = cfg.dashedEdges;
-      const dashOn = t > de.fadeStart;
-      const dashOp =
+      const dOp =
         Math.min(1, (t - de.fadeStart) / (de.fadeEnd - de.fadeStart)) *
         de.maxOpacity;
-      dEdges.forEach((edge) => {
-        edge.visible = dashOn;
-        (edge.material as THREE.LineDashedMaterial).opacity = dashOp;
+      dEdges.forEach((e) => {
+        e.visible = t > de.fadeStart;
+        (e.material as THREE.LineDashedMaterial).opacity = dOp;
       });
 
-      edgeLabelsData.forEach((d) => {
-        const yAxis = new THREE.Vector3()
-          .lerpVectors(d.yStart, d.yEnd, t)
-          .normalize();
-        const zAxis = new THREE.Vector3()
-          .crossVectors(d.xAxis, yAxis)
-          .normalize();
-        const xPerp = new THREE.Vector3()
-          .crossVectors(yAxis, zAxis)
-          .normalize();
-        const m = new THREE.Matrix4();
-        m.makeBasis(xPerp, yAxis, zAxis);
-        d.mesh.quaternion.setFromRotationMatrix(m);
+      eld.forEach((d) => {
+        const yA = new Vec3().lerpVectors(d.ys, d.ye, t).normalize();
+        const zA = new Vec3().crossVectors(d.x, yA).normalize();
+        const xP = new Vec3().crossVectors(yA, zA).normalize();
+        const m4 = new THREE.Matrix4();
+        m4.makeBasis(xP, yA, zA);
+        d.m.quaternion.setFromRotationMatrix(m4);
       });
 
       renderer.render(scene, camera);
-
-      pyramidGroup.updateMatrixWorld();
-      const ww = wrapper.clientWidth;
-      const wh = wrapper.clientHeight;
-      const proj = (localPt: THREE.Vector3) => {
-        const v = localPt.clone();
-        pyramidGroup.localToWorld(v);
+      grp.updateMatrixWorld();
+      const ww = wrapper.clientWidth,
+        wh = wrapper.clientHeight;
+      const proj = (pt: V3) => {
+        const v = pt.clone();
+        grp.localToWorld(v);
         v.project(camera);
         return { x: (v.x * 0.5 + 0.5) * ww, y: (-v.y * 0.5 + 0.5) * wh };
       };
 
-      const calloutOpacity = Math.max(0, 1 - t / cfg.callouts.fadeRange);
-      const projections: Record<VertexKey, { x: number; y: number }> = {
-        b1: proj(b1),
-        b2: proj(b2),
-        b3: proj(b3),
-      };
+      const cAlpha = Math.max(0, 1 - t / cfg.callouts.fadeRange);
 
-      (["b1", "b2", "b3"] as VertexKey[]).forEach((key) => {
-        const callout = calloutEls[key];
-        const line = leaderLines[key];
-        const p = projections[key];
-        const off = calloutOffsets[key];
+      KEYS.forEach((key) => {
+        const co = calloutRefs.current[key],
+          ln = leaderRefs.current[key];
+        if (!co || !ln) return;
+        const p = proj(verts[key]),
+          off = cOff[key];
+        co.style.opacity = String(cAlpha);
+        const cr = co.getBoundingClientRect();
+        const c = clamp(
+          p.x + off.dx,
+          p.y + off.dy,
+          cr.width,
+          cr.height,
+          ww,
+          wh,
+          cfg.padding,
+        );
+        co.style.transform = `translate(${c.x}px,${c.y}px)`;
 
-        callout.style.opacity = String(calloutOpacity);
-
-        let clx = p.x + off.dx;
-        let cly = p.y + off.dy;
-        const cRect = callout.getBoundingClientRect();
-        const cm = cfg.padding;
-
-        if (clx + cRect.width > ww - cm) clx = ww - cRect.width - cm;
-        if (clx < cm) clx = cm;
-        if (cly < cm) cly = cm;
-        if (cly + cRect.height > wh - cm) cly = wh - cRect.height - cm;
-
-        callout.style.left = `${clx}px`;
-        callout.style.top = `${cly}px`;
-
-        const box = callout.getBoundingClientRect();
-        const wr = wrapper.getBoundingClientRect();
-        const bx1r = box.left - wr.left;
-        const by1r = box.top - wr.top;
-        const cx = bx1r + box.width / 2;
-        const cy = by1r + box.height / 2;
-
-        const dirX = p.x - cx;
-        const dirY = p.y - cy;
-        let ix = cx;
-        let iy = cy;
-        if (dirX !== 0 || dirY !== 0) {
-          const tMin = Math.min(
-            box.width / 2 / Math.abs(dirX || 0.001),
-            box.height / 2 / Math.abs(dirY || 0.001),
+        const wr = wrapper.getBoundingClientRect(),
+          cr2 = co.getBoundingClientRect();
+        const cx = cr2.left - wr.left + cr.width / 2,
+          cy = cr2.top - wr.top + cr.height / 2;
+        const dx = p.x - cx,
+          dy = p.y - cy;
+        let ix = cx,
+          iy = cy;
+        if (dx !== 0 || dy !== 0) {
+          const tm = Math.min(
+            cr.width / 2 / Math.abs(dx || 0.001),
+            cr.height / 2 / Math.abs(dy || 0.001),
           );
-          ix = cx + dirX * tMin;
-          iy = cy + dirY * tMin;
+          ix = cx + dx * tm;
+          iy = cy + dy * tm;
         }
-
-        line.setAttribute("x1", String(p.x));
-        line.setAttribute("y1", String(p.y));
-        line.setAttribute("x2", String(ix));
-        line.setAttribute("y2", String(iy));
-        line.style.opacity = String(calloutOpacity);
+        ln.setAttribute("x1", String(p.x));
+        ln.setAttribute("y1", String(p.y));
+        ln.setAttribute("x2", String(ix));
+        ln.setAttribute("y2", String(iy));
+        ln.style.opacity = String(cAlpha);
       });
 
       const ac = cfg.apexCallout;
-      const apexOp = Math.max(
+      const aOp = Math.max(
         0,
         Math.min(1, (t - ac.fadeStart) / (ac.fadeEnd - ac.fadeStart)),
       );
-      const pApex = proj(apex);
-      apexEl.style.opacity = String(apexOp);
-
-      let axLeft = pApex.x + apexDescOffset.dx;
-      let axTop = pApex.y + apexDescOffset.dy;
-      const aRect = apexEl.getBoundingClientRect();
-      const margin = cfg.padding;
-
-      if (axLeft + aRect.width > ww - margin)
-        axLeft = ww - aRect.width - margin;
-      if (axLeft < margin) axLeft = margin;
-      if (axTop < margin) axTop = margin;
-      if (axTop + aRect.height > wh - margin)
-        axTop = wh - aRect.height - margin;
-
-      apexEl.style.left = `${axLeft}px`;
-      apexEl.style.top = `${axTop}px`;
+      const pA = proj(apex);
+      if (apexRef.current) {
+        apexRef.current.style.opacity = String(aOp);
+        const ar = apexRef.current.getBoundingClientRect();
+        const a = clamp(
+          pA.x + aOff.dx,
+          pA.y + aOff.dy,
+          ar.width,
+          ar.height,
+          ww,
+          wh,
+          cfg.padding,
+        );
+        apexRef.current.style.transform = `translate(${a.x}px,${a.y}px)`;
+      }
     };
 
-    animationId = requestAnimationFrame(animate);
-
+    afId = requestAnimationFrame(animate);
     onReady?.({
-      setSlider: (value: number) => {
-        slider.value = String(Math.max(0, Math.min(100, value)));
+      setSlider: (v: number) => {
+        slider.value = String(Math.max(0, Math.min(100, v)));
       },
     });
 
     return () => {
-      cancelAnimationFrame(animationId);
+      cancelAnimationFrame(afId);
       window.removeEventListener("resize", resize);
-      if (thumbCSS.parentNode) thumbCSS.parentNode.removeChild(thumbCSS);
-
-      pyramidGroup.traverse((obj) => {
-        const mesh = obj as THREE.Mesh;
-        if (mesh.geometry) mesh.geometry.dispose();
-        if (Array.isArray(mesh.material)) {
-          mesh.material.forEach((m) => m.dispose());
-        } else if (mesh.material) {
-          mesh.material.dispose();
-        }
+      grp.traverse((o) => {
+        const m = o as THREE.Mesh;
+        if (m.geometry) m.geometry.dispose();
+        if (Array.isArray(m.material)) m.material.forEach((mt) => mt.dispose());
+        else if (m.material) m.material.dispose();
       });
       renderer.dispose();
-      root.innerHTML = "";
     };
-  }, [config, initialSliderValue, onReady]);
+  }, [cfg, initialSliderValue, onReady]);
 
-  return <div ref={rootRef} className={className} style={style} />;
+  const cs = cfg.callouts.style,
+    acs = cfg.apexCallout.style;
+  const grad = `linear-gradient(135deg,${cfg.colors.sliderThumbA},${cfg.colors.sliderThumbB})`;
+
+  return (
+    <div
+      className={className}
+      style={{
+        ...style,
+        position: "relative",
+        width: "100%",
+        maxWidth: `${cfg.maxWidth}px`,
+        fontFamily:
+          "-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif",
+      }}
+    >
+      <style>{`.as::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:${grad};cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.2)}.as::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:${grad};cursor:pointer;border:none;box-shadow:0 2px 6px rgba(0,0,0,.2)}`}</style>
+      <div
+        ref={wrapperRef}
+        style={{
+          position: "relative",
+          width: "100%",
+          height: `${cfg.canvasHeight}px`,
+          overflow: "hidden",
+        }}
+      >
+        <canvas
+          ref={canvasRef}
+          style={{ display: "block", width: "100%", height: "100%" }}
+        />
+        <div style={{ ...ABS_FILL, overflow: "visible" }}>
+          <svg style={ABS_FILL}>
+            {KEYS.map((k) => (
+              <line
+                key={k}
+                ref={(el) => {
+                  leaderRefs.current[k] = el;
+                }}
+                stroke={cfg.colors.leaderStroke}
+                strokeWidth={cs.leaderWidth}
+                strokeDasharray={cs.leaderDash}
+              />
+            ))}
+          </svg>
+          {KEYS.map((k) => {
+            const d = cfg.callouts[k];
+            return (
+              <div
+                key={k}
+                ref={(el) => {
+                  calloutRefs.current[k] = el;
+                }}
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  transition: "opacity .15s",
+                  opacity: 0,
+                  background: cs.background,
+                  border: cs.border,
+                  borderRadius: cs.borderRadius,
+                  padding: "10px 14px",
+                  minWidth: cs.minWidth,
+                  maxWidth: cs.maxWidth,
+                }}
+              >
+                <div
+                  style={{
+                    color: cs.titleColor,
+                    fontSize: cs.titleSize,
+                    fontWeight: 700,
+                    marginBottom: "6px",
+                    letterSpacing: "0.02em",
+                  }}
+                >
+                  {d.title}
+                </div>
+                {d.lines.map((l, i) => (
+                  <div
+                    key={i}
+                    style={{
+                      fontSize: cs.lineSize,
+                      lineHeight: 1.5,
+                      color: cs.lineColor,
+                    }}
+                  >
+                    <span
+                      style={{ color: l.positive ? cs.yesColor : cs.noColor }}
+                    >
+                      {l.positive ? "✓ " : "✗ "}
+                    </span>
+                    {l.text}
+                  </div>
+                ))}
+              </div>
+            );
+          })}
+          <div
+            ref={apexRef}
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              transition: "opacity .15s",
+              opacity: 0,
+              background: acs.background,
+              border: acs.border,
+              borderRadius: acs.borderRadius,
+              padding: "10px 14px",
+              maxWidth: acs.maxWidth,
+            }}
+          >
+            <div
+              style={{
+                color: acs.textColor,
+                fontSize: acs.fontSize,
+                lineHeight: acs.lineHeight,
+              }}
+            >
+              {cfg.apexCallout.text}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "16px",
+          padding: "24px 20px 12px",
+        }}
+      >
+        <span style={{ ...LABEL_S, color: cfg.colors.sliderLabel }}>
+          {cfg.slider.leftLabel}
+        </span>
+        <input
+          ref={sliderRef}
+          type="range"
+          min="0"
+          max="100"
+          defaultValue={initialSliderValue}
+          className="as"
+          style={{
+            flex: 1,
+            WebkitAppearance: "none",
+            appearance: "none",
+            height: "6px",
+            borderRadius: "3px",
+            background: cfg.colors.sliderTrack,
+            outline: "none",
+            cursor: "pointer",
+          }}
+        />
+        <span style={{ ...LABEL_S, color: cfg.colors.sliderLabel }}>
+          {cfg.slider.rightLabel}
+        </span>
+      </div>
+    </div>
+  );
 };
 
-export default AtomixPyramidExplorer;
+export default AtomixPyramidNewDesign;
 export { DEFAULTS as ATOMIX_PYRAMID_DEFAULTS };
