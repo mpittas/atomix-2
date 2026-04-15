@@ -376,7 +376,7 @@ const AtomixPyramidNewDesign: React.FC<AtomixPyramidNewDesignProps> = ({
       color: cfg.colors.dotColor,
     });
     const dotGeom = new THREE.SphereGeometry(0.12, 16, 16);
-    [b1, b2, b3].forEach((v) => {
+    [apex, b1, b2, b3].forEach((v) => {
       const dot = new THREE.Mesh(dotGeom, dotMat);
       dot.position.copy(v);
       grp.add(dot);
@@ -704,33 +704,6 @@ const AtomixPyramidNewDesign: React.FC<AtomixPyramidNewDesignProps> = ({
             zIndex: 1,
           }}
         />
-        <div style={{ ...ABS_FILL, overflow: "visible", zIndex: 2 }}>
-          <div
-            ref={apexRef}
-            style={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              transition: "opacity .15s",
-              opacity: 0,
-              background: acs.background,
-              border: acs.border,
-              borderRadius: acs.borderRadius,
-              padding: "10px 14px",
-              maxWidth: acs.maxWidth,
-            }}
-          >
-            <div
-              style={{
-                color: acs.textColor,
-                fontSize: acs.fontSize,
-                lineHeight: acs.lineHeight,
-              }}
-            >
-              {cfg.apexCallout.text}
-            </div>
-          </div>
-        </div>
       </div>
       <div
         style={{
