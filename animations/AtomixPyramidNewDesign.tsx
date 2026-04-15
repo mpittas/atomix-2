@@ -73,8 +73,8 @@ const DEFAULTS = {
     svgBase64: null as string | null,
     worldHeight: 0.55,
     verticalOffset: 0.5,
-    canvasWidth: 880,
-    canvasHeight: 222,
+    canvasWidth: 1016,
+    canvasHeight: 264,
   },
   dashedEdges: {
     dashSize: 0.1,
@@ -230,7 +230,29 @@ const AtomixPyramidNewDesign: React.FC<AtomixPyramidNewDesignProps> = ({
     b3: null,
   });
   const apexRef = useRef<HTMLDivElement>(null);
-  const cfg = useMemo(() => deepMerge(DEFAULTS, config), [config]);
+  const [logoB64, setLogoB64] = React.useState<string | null>(null);
+
+  useEffect(() => {
+    const loadLogo = async () => {
+      try {
+        const response = await fetch("/logo/atomix-logo-symbol.svg");
+        const svgText = await response.text();
+        const base64 = btoa(svgText);
+        setLogoB64(base64);
+      } catch (error) {
+        console.error("Failed to load logo:", error);
+      }
+    };
+    loadLogo();
+  }, []);
+
+  const cfg = useMemo(() => {
+    const mergedConfig = deepMerge(DEFAULTS, config);
+    if (logoB64) {
+      mergedConfig.logo.svgBase64 = logoB64;
+    }
+    return mergedConfig;
+  }, [config, logoB64]);
 
   useEffect(() => {
     const canvas = canvasRef.current,
@@ -245,7 +267,7 @@ const AtomixPyramidNewDesign: React.FC<AtomixPyramidNewDesignProps> = ({
       alpha: true,
     });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.setClearColor(cfg.colors.background, 1);
+    renderer.setClearColor(cfg.colors.background, 0);
     const camera = new THREE.PerspectiveCamera(cfg.camera.fov, 1, 0.1, 100);
     camera.position.set(0, 0, cfg.camera.distance);
     camera.lookAt(0, 0, 0);
@@ -433,6 +455,7 @@ const AtomixPyramidNewDesign: React.FC<AtomixPyramidNewDesignProps> = ({
         sizeAttenuation: true,
       }),
     );
+    spr.visible = false;
     spr.scale.set(1.8, 0.45, 1);
     if (logoB64) {
       const img = new Image();
@@ -453,6 +476,7 @@ const AtomixPyramidNewDesign: React.FC<AtomixPyramidNewDesignProps> = ({
           cfg.logo.worldHeight,
           1,
         );
+        spr.visible = true;
       };
       img.src = `data:image/svg+xml;base64,${logoB64}`;
     }

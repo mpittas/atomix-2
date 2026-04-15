@@ -39,8 +39,8 @@ export default function TriangleAnimationPage() {
 
       <div className="pt-23">
         <div>
-          <div className="max-w-[1200px] min-h-[200px] mx-auto bg-green-500 flex p-1">
-            <div className="flex-1 bg-blue-500">
+          <div className="max-w-[1200px] min-h-[200px] mx-auto flex p-1">
+            <div className="flex-1">
               <AtomixPyramidNewDesign />
             </div>
 
