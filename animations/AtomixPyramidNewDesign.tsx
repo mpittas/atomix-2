@@ -87,9 +87,9 @@ const DEFAULTS = {
   callouts: {
     fadeRange: 0.15,
     offsets: {
-      b1: { dx: 0, dy: 0 },
-      b2: { dx: 0, dy: 0 },
-      b3: { dx: 0, dy: 0 },
+      b1: { dx: -110, dy: 0 },
+      b2: { dx: 0, dy: 60 },
+      b3: { dx: 110, dy: 0 },
     },
     b1: {
       title: "Bespoke build",
@@ -561,11 +561,11 @@ const AtomixPyramidNewDesign: React.FC<AtomixPyramidNewDesignProps> = ({
         const p = proj(verts[key]),
           off = cOff[key];
         co.style.opacity = String(cAlpha);
-        const cr = co.getBoundingClientRect();
-        const cx = p.x - cr.width / 2 + off.dx;
-        const cy = p.y - cr.height / 2 + off.dy;
-        const c = clamp(cx, cy, cr.width, cr.height, ww, wh, cfg.padding);
-        co.style.transform = `translate(${c.x}px,${c.y}px)`;
+        const cw = co.offsetWidth;
+        const ch = co.offsetHeight;
+        const cx = p.x - cw / 2 + off.dx;
+        const cy = p.y - ch / 2 + off.dy;
+        co.style.transform = `translate(${cx}px,${cy}px)`;
       });
 
       const ac = cfg.apexCallout;
@@ -633,14 +633,10 @@ const AtomixPyramidNewDesign: React.FC<AtomixPyramidNewDesignProps> = ({
           position: "relative",
           width: "100%",
           height: `${cfg.canvasHeight}px`,
-          overflow: "hidden",
+          overflow: "visible",
         }}
       >
-        <canvas
-          ref={canvasRef}
-          style={{ display: "block", width: "100%", height: "100%" }}
-        />
-        <div style={{ ...ABS_FILL, overflow: "visible" }}>
+        <div style={{ ...ABS_FILL, overflow: "visible", zIndex: 0 }}>
           {KEYS.map((k) => {
             const d = cfg.callouts[k];
             return (
@@ -661,7 +657,7 @@ const AtomixPyramidNewDesign: React.FC<AtomixPyramidNewDesignProps> = ({
                   padding: "10px 14px",
                   minWidth: cs.minWidth,
                   maxWidth: cs.maxWidth,
-                  zIndex: 1,
+                  zIndex: 0,
                 }}
               >
                 <div
@@ -690,6 +686,18 @@ const AtomixPyramidNewDesign: React.FC<AtomixPyramidNewDesignProps> = ({
               </div>
             );
           })}
+        </div>
+        <canvas
+          ref={canvasRef}
+          style={{
+            display: "block",
+            width: "100%",
+            height: "100%",
+            position: "relative",
+            zIndex: 1,
+          }}
+        />
+        <div style={{ ...ABS_FILL, overflow: "visible", zIndex: 2 }}>
           <div
             ref={apexRef}
             style={{
