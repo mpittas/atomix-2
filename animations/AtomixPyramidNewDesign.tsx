@@ -93,6 +93,7 @@ const DEFAULTS = {
     },
     b1: {
       title: "Bespoke build",
+      textAlign: "left",
       lines: [
         { positive: true, text: "Automated" },
         { positive: true, text: "Complex logic" },
@@ -101,6 +102,7 @@ const DEFAULTS = {
     },
     b2: {
       title: "Simple SaaS",
+      textAlign: "center",
       lines: [
         { positive: true, text: "Automated" },
         { positive: true, text: "Cheap to build" },
@@ -109,6 +111,7 @@ const DEFAULTS = {
     },
     b3: {
       title: "Siloed modules",
+      textAlign: "right",
       lines: [
         { positive: true, text: "Complex logic" },
         { positive: true, text: "Cheap to build" },
@@ -658,6 +661,8 @@ const AtomixPyramidNewDesign: React.FC<AtomixPyramidNewDesignProps> = ({
                   minWidth: cs.minWidth,
                   maxWidth: cs.maxWidth,
                   zIndex: 0,
+                  textAlign:
+                    (d.textAlign as "left" | "center" | "right") || "left",
                 }}
               >
                 <div
@@ -667,6 +672,8 @@ const AtomixPyramidNewDesign: React.FC<AtomixPyramidNewDesignProps> = ({
                     fontWeight: 700,
                     marginBottom: "6px",
                     letterSpacing: "0.02em",
+                    textAlign:
+                      (d.textAlign as "left" | "center" | "right") || "left",
                   }}
                 >
                   {d.title}
