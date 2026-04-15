@@ -8,8 +8,8 @@ type DeepPartial<T> = {
 const KEYS: VK[] = ["b1", "b2", "b3"];
 
 const DEFAULTS = {
-  canvasHeight: 480,
-  maxWidth: 800,
+  canvasHeight: 680,
+  maxWidth: 1100,
   padding: 20,
   colors: {
     background: 0x000000,
