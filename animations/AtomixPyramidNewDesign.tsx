@@ -100,14 +100,6 @@ const DEFAULTS = {
       ],
     },
     b2: {
-      title: "Siloed modules",
-      lines: [
-        { positive: true, text: "Complex logic" },
-        { positive: true, text: "Cheap to build" },
-        { positive: false, text: "Not automated" },
-      ],
-    },
-    b3: {
       title: "Simple SaaS",
       lines: [
         { positive: true, text: "Automated" },
@@ -115,18 +107,26 @@ const DEFAULTS = {
         { positive: false, text: "Simple products only" },
       ],
     },
+    b3: {
+      title: "Siloed modules",
+      lines: [
+        { positive: true, text: "Complex logic" },
+        { positive: true, text: "Cheap to build" },
+        { positive: false, text: "Not automated" },
+      ],
+    },
     style: {
-      background: "rgba(30,30,50,0.92)",
-      border: "1px solid rgba(180,140,80,0.5)",
-      borderRadius: "8px",
-      titleColor: "#ddb866",
-      titleSize: "13px",
-      lineColor: "#ccc",
-      lineSize: "11.5px",
+      background: "rgba(13,60,70,1)",
+      border: "2px solid rgba(100,200,220,0.6)",
+      borderRadius: "16px",
+      titleColor: "#ffffff",
+      titleSize: "18px",
+      lineColor: "#e0e0e0",
+      lineSize: "14px",
       yesColor: "#6be0a0",
       noColor: "#e06b6b",
-      minWidth: "170px",
-      maxWidth: "210px",
+      minWidth: "220px",
+      maxWidth: "280px",
       leaderWidth: 1.5,
       leaderDash: "4,3",
     },
@@ -684,11 +684,6 @@ const AtomixPyramidNewDesign: React.FC<AtomixPyramidNewDesignProps> = ({
                       color: cs.lineColor,
                     }}
                   >
-                    <span
-                      style={{ color: l.positive ? cs.yesColor : cs.noColor }}
-                    >
-                      {l.positive ? "✓ " : "✗ "}
-                    </span>
                     {l.text}
                   </div>
                 ))}
