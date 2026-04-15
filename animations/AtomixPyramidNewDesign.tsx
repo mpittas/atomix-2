@@ -424,6 +424,41 @@ const AtomixPyramidNewDesign: React.FC<AtomixPyramidNewDesignProps> = ({
       eld.push({ m: ep.m, x: xA, ys: rp, ye: ap });
     });
 
+    const logoB64 = cfg.logo.svgBase64 || "";
+    const spr = new THREE.Sprite(
+      new THREE.SpriteMaterial({
+        transparent: true,
+        depthTest: true,
+        depthWrite: false,
+        sizeAttenuation: true,
+      }),
+    );
+    spr.scale.set(1.8, 0.45, 1);
+    if (logoB64) {
+      const img = new Image();
+      img.onload = () => {
+        const c2 = document.createElement("canvas");
+        c2.width = cfg.logo.canvasWidth;
+        c2.height = cfg.logo.canvasHeight;
+        const ctx = c2.getContext("2d");
+        if (!ctx) return;
+        ctx.drawImage(img, 0, 0, c2.width, c2.height);
+        const tx = new THREE.CanvasTexture(c2);
+        tx.minFilter = THREE.LinearFilter;
+        const mat = spr.material as THREE.SpriteMaterial;
+        mat.map = tx;
+        mat.needsUpdate = true;
+        spr.scale.set(
+          (cfg.logo.worldHeight * c2.width) / c2.height,
+          cfg.logo.worldHeight,
+          1,
+        );
+      };
+      img.src = `data:image/svg+xml;base64,${logoB64}`;
+    }
+    spr.position.copy(apex).add(v3(0, cfg.logo.verticalOffset, 0));
+    grp.add(spr);
+
     const resize = () => {
       const w = wrapper.clientWidth,
         h = wrapper.clientHeight;
