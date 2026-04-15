@@ -41,7 +41,7 @@ export default function TriangleAnimationPage() {
               <AtomixPyramidNewDesign />
             </div>
 
-            <div className="flex-1 flex flex-col justify-center gap-12 pl-12 pr-4">
+            <div className="flex-1 flex flex-col justify-center gap-12 pl-12 pr-4 relative left-6">
               {/* Simple SaaS */}
               <div className="flex items-start gap-4">
                 <img
