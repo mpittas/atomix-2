@@ -15,14 +15,15 @@ const DEFAULTS = {
     background: 0x000000,
     sideFace: 0x0a4a4a,
     sideSpecular: 0x1a8888,
-    baseFace: 0x8888aa,
-    baseSpecular: 0xaaaacc,
+    baseFace: 0x0a4a4a,
+    baseSpecular: 0x1a8888,
     apexEdge: 0x1a7a7a,
-    baseEdge: 0x534ab7,
+    baseEdge: 0x1a7a7a,
     bar: 0xb48c50,
     barSpecular: 0xddbb88,
     leaderStroke: "#b48c50",
     edgeLabelText: "#88EEBB",
+    dotColor: "#20ccfc",
     sliderThumbA: "#1D9E75",
     sliderThumbB: "#534AB7",
     sliderTrack: "#2a2a3e",
@@ -58,15 +59,15 @@ const DEFAULTS = {
     decayHalfLife: 0.3,
   },
   edgeLabels: {
-    texts: ["Fully automated", "Cheap to build", "Complex loan logic"] as [
+    texts: ["Bespoke\nFully", "Built or\ndesign", "Complex\nLoan Logic"] as [
       string,
       string,
       string,
     ],
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: 600,
-    worldHeight: 0.4,
-    edgeOffset: 0.3,
+    worldHeight: 0.5,
+    edgeOffset: 0.15,
   },
   logo: {
     svgBase64: null as string | null,
@@ -80,15 +81,15 @@ const DEFAULTS = {
     gapSize: 0.07,
     fadeStart: 0.3,
     fadeEnd: 0.6,
-    maxOpacity: 0.4,
+    maxOpacity: 0,
   },
   slider: { leftLabel: "Legacy technology", rightLabel: "Atomix" },
   callouts: {
     fadeRange: 0.15,
     offsets: {
-      b1: { dx: -220, dy: -117 },
-      b2: { dx: 108, dy: -49 },
-      b3: { dx: 41, dy: -123 },
+      b1: { dx: -280, dy: 80 },
+      b2: { dx: 200, dy: 80 },
+      b3: { dx: -40, dy: 200 },
     },
     b1: {
       title: "Bespoke build",
@@ -99,19 +100,19 @@ const DEFAULTS = {
       ],
     },
     b2: {
+      title: "Siloed modules",
+      lines: [
+        { positive: true, text: "Complex logic" },
+        { positive: true, text: "Cheap to build" },
+        { positive: false, text: "Not automated" },
+      ],
+    },
+    b3: {
       title: "Simple SaaS",
       lines: [
         { positive: true, text: "Automated" },
         { positive: true, text: "Cheap to build" },
         { positive: false, text: "Simple products only" },
-      ],
-    },
-    b3: {
-      title: "Siloed modules",
-      lines: [
-        { positive: true, text: "Complex logic" },
-        { positive: true, text: "Cheap to build" },
-        { positive: false, text: "Not automated (human glue)" },
       ],
     },
     style: {
@@ -228,11 +229,6 @@ const AtomixPyramidNewDesign: React.FC<AtomixPyramidNewDesignProps> = ({
     b2: null,
     b3: null,
   });
-  const leaderRefs = useRef<Record<VK, SVGLineElement | null>>({
-    b1: null,
-    b2: null,
-    b3: null,
-  });
   const apexRef = useRef<HTMLDivElement>(null);
   const cfg = useMemo(() => deepMerge(DEFAULTS, config), [config]);
 
@@ -327,17 +323,8 @@ const AtomixPyramidNewDesign: React.FC<AtomixPyramidNewDesignProps> = ({
     const de = cfg.dashedEdges;
     const mkEdge = (a: V3, b: V3, col: THREE.Color, dashed: boolean) => {
       const g = new THREE.BufferGeometry().setFromPoints([a, b]);
-      const m = dashed
-        ? new THREE.LineDashedMaterial({
-            color: col,
-            dashSize: de.dashSize,
-            gapSize: de.gapSize,
-            transparent: true,
-            opacity: de.maxOpacity,
-          })
-        : new THREE.LineBasicMaterial({ color: col });
+      const m = new THREE.LineBasicMaterial({ color: col });
       const l = new THREE.Line(g, m);
-      if (dashed) l.computeLineDistances();
       return l;
     };
 
@@ -345,7 +332,7 @@ const AtomixPyramidNewDesign: React.FC<AtomixPyramidNewDesignProps> = ({
       tri(apex, b1, b2, sideMat),
       tri(apex, b2, b3, sideMat),
       tri(apex, b3, b1, sideMat),
-      tri(b1, b3, b2, baseMat),
+      tri(b1, b3, b2, sideMat),
     );
 
     const TC = new THREE.Color(cfg.colors.apexEdge),
@@ -359,46 +346,16 @@ const AtomixPyramidNewDesign: React.FC<AtomixPyramidNewDesignProps> = ({
       [b3, b1, PC],
     ];
     eDefs.forEach(([a, b, c]) => grp.add(mkEdge(a, b, c, false)));
-    const dEdges = eDefs.map(([a, b, c]) => mkEdge(a, b, c, true));
-    dEdges.forEach((e) => {
-      e.visible = false;
-      grp.add(e);
-    });
 
-    const barMat = new THREE.MeshPhongMaterial({
-      color: cfg.colors.bar,
-      shininess: lt.barShininess,
-      specular: new THREE.Color(cfg.colors.barSpecular),
+    const dotMat = new THREE.MeshBasicMaterial({
+      color: cfg.colors.dotColor,
     });
-    const mkCap = (from: V3, to: V3) => {
-      const g2 = new THREE.Group(),
-        dir = new Vec3().subVectors(to, from),
-        len = dir.length();
-      dir.normalize();
-      g2.add(
-        new THREE.Mesh(
-          new THREE.CylinderGeometry(
-            cfg.barCylRadius,
-            cfg.barCylRadius,
-            len,
-            12,
-            1,
-          ),
-          barMat,
-        ),
-      );
-      const cap = new THREE.SphereGeometry(cfg.barSphereRadius, 16, 12);
-      const t = new THREE.Mesh(cap, barMat);
-      t.position.y = len / 2;
-      g2.add(t);
-      const bo = new THREE.Mesh(cap, barMat);
-      bo.position.y = -len / 2;
-      g2.add(bo);
-      g2.position.copy(new Vec3().addVectors(from, to).multiplyScalar(0.5));
-      g2.quaternion.setFromUnitVectors(v3(0, 1, 0), dir);
-      return g2;
-    };
-    [b1, b2, b3].forEach((v) => grp.add(mkCap(v, apex)));
+    const dotGeom = new THREE.SphereGeometry(0.12, 16, 16);
+    [b1, b2, b3].forEach((v) => {
+      const dot = new THREE.Mesh(dotGeom, dotMat);
+      dot.position.copy(v);
+      grp.add(dot);
+    });
 
     const el = cfg.edgeLabels;
     const mkText = (text: string) => {
@@ -467,41 +424,6 @@ const AtomixPyramidNewDesign: React.FC<AtomixPyramidNewDesignProps> = ({
       eld.push({ m: ep.m, x: xA, ys: rp, ye: ap });
     });
 
-    const logoB64 = cfg.logo.svgBase64 || "";
-    const spr = new THREE.Sprite(
-      new THREE.SpriteMaterial({
-        transparent: true,
-        depthTest: true,
-        depthWrite: false,
-        sizeAttenuation: true,
-      }),
-    );
-    spr.scale.set(1.8, 0.45, 1);
-    if (logoB64) {
-      const img = new Image();
-      img.onload = () => {
-        const c2 = document.createElement("canvas");
-        c2.width = cfg.logo.canvasWidth;
-        c2.height = cfg.logo.canvasHeight;
-        const ctx = c2.getContext("2d");
-        if (!ctx) return;
-        ctx.drawImage(img, 0, 0, c2.width, c2.height);
-        const tx = new THREE.CanvasTexture(c2);
-        tx.minFilter = THREE.LinearFilter;
-        const mat = spr.material as THREE.SpriteMaterial;
-        mat.map = tx;
-        mat.needsUpdate = true;
-        spr.scale.set(
-          (cfg.logo.worldHeight * c2.width) / c2.height,
-          cfg.logo.worldHeight,
-          1,
-        );
-      };
-      img.src = `data:image/svg+xml;base64,${logoB64}`;
-    }
-    spr.position.copy(apex).add(v3(0, cfg.logo.verticalOffset, 0));
-    grp.add(spr);
-
     const resize = () => {
       const w = wrapper.clientWidth,
         h = wrapper.clientHeight;
@@ -552,14 +474,6 @@ const AtomixPyramidNewDesign: React.FC<AtomixPyramidNewDesignProps> = ({
       grp.rotation.x = rot.startX + (rot.endX - rot.startX) * t;
       grp.rotation.y = rot.startY + (rot.endY - rot.startY) * t + spin;
 
-      const dOp =
-        Math.min(1, (t - de.fadeStart) / (de.fadeEnd - de.fadeStart)) *
-        de.maxOpacity;
-      dEdges.forEach((e) => {
-        e.visible = t > de.fadeStart;
-        (e.material as THREE.LineDashedMaterial).opacity = dOp;
-      });
-
       eld.forEach((d) => {
         const yA = new Vec3().lerpVectors(d.ys, d.ye, t).normalize();
         const zA = new Vec3().crossVectors(d.x, yA).normalize();
@@ -583,9 +497,8 @@ const AtomixPyramidNewDesign: React.FC<AtomixPyramidNewDesignProps> = ({
       const cAlpha = Math.max(0, 1 - t / cfg.callouts.fadeRange);
 
       KEYS.forEach((key) => {
-        const co = calloutRefs.current[key],
-          ln = leaderRefs.current[key];
-        if (!co || !ln) return;
+        const co = calloutRefs.current[key];
+        if (!co) return;
         const p = proj(verts[key]),
           off = cOff[key];
         co.style.opacity = String(cAlpha);
@@ -600,28 +513,6 @@ const AtomixPyramidNewDesign: React.FC<AtomixPyramidNewDesignProps> = ({
           cfg.padding,
         );
         co.style.transform = `translate(${c.x}px,${c.y}px)`;
-
-        const wr = wrapper.getBoundingClientRect(),
-          cr2 = co.getBoundingClientRect();
-        const cx = cr2.left - wr.left + cr.width / 2,
-          cy = cr2.top - wr.top + cr.height / 2;
-        const dx = p.x - cx,
-          dy = p.y - cy;
-        let ix = cx,
-          iy = cy;
-        if (dx !== 0 || dy !== 0) {
-          const tm = Math.min(
-            cr.width / 2 / Math.abs(dx || 0.001),
-            cr.height / 2 / Math.abs(dy || 0.001),
-          );
-          ix = cx + dx * tm;
-          iy = cy + dy * tm;
-        }
-        ln.setAttribute("x1", String(p.x));
-        ln.setAttribute("y1", String(p.y));
-        ln.setAttribute("x2", String(ix));
-        ln.setAttribute("y2", String(iy));
-        ln.style.opacity = String(cAlpha);
       });
 
       const ac = cfg.apexCallout;
@@ -697,19 +588,6 @@ const AtomixPyramidNewDesign: React.FC<AtomixPyramidNewDesignProps> = ({
           style={{ display: "block", width: "100%", height: "100%" }}
         />
         <div style={{ ...ABS_FILL, overflow: "visible" }}>
-          <svg style={ABS_FILL}>
-            {KEYS.map((k) => (
-              <line
-                key={k}
-                ref={(el) => {
-                  leaderRefs.current[k] = el;
-                }}
-                stroke={cfg.colors.leaderStroke}
-                strokeWidth={cs.leaderWidth}
-                strokeDasharray={cs.leaderDash}
-              />
-            ))}
-          </svg>
           {KEYS.map((k) => {
             const d = cfg.callouts[k];
             return (
@@ -730,6 +608,7 @@ const AtomixPyramidNewDesign: React.FC<AtomixPyramidNewDesignProps> = ({
                   padding: "10px 14px",
                   minWidth: cs.minWidth,
                   maxWidth: cs.maxWidth,
+                  zIndex: -1,
                 }}
               >
                 <div
