@@ -1,5 +1,9 @@
 import React, { CSSProperties, useEffect, useRef, useMemo } from "react";
 import * as THREE from "three";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 type VK = "b1" | "b2" | "b3";
 type DeepPartial<T> = {
@@ -226,7 +230,7 @@ const AtomixPyramidNewDesign: React.FC<AtomixPyramidNewDesignProps> = ({
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
-  const sliderRef = useRef<HTMLInputElement>(null);
+  const scrollProgressRef = useRef(0);
   const calloutRefs = useRef<Record<VK, HTMLDivElement | null>>({
     b1: null,
     b2: null,
@@ -258,10 +262,29 @@ const AtomixPyramidNewDesign: React.FC<AtomixPyramidNewDesignProps> = ({
   }, [config, logoB64]);
 
   useEffect(() => {
+    const wrapper = wrapperRef.current;
+    if (!wrapper) return;
+
+    const scrollTrigger = ScrollTrigger.create({
+      trigger: wrapper,
+      start: "top center",
+      end: "bottom center",
+      scrub: true,
+      onUpdate: (self) => {
+        const delayedProgress = Math.max(0, (self.progress - 0.5) / 0.5);
+        scrollProgressRef.current = delayedProgress;
+      },
+    });
+
+    return () => {
+      scrollTrigger.kill();
+    };
+  }, []);
+
+  useEffect(() => {
     const canvas = canvasRef.current,
-      wrapper = wrapperRef.current,
-      slider = sliderRef.current;
-    if (!canvas || !wrapper || !slider) return;
+      wrapper = wrapperRef.current;
+    if (!canvas || !wrapper) return;
 
     const scene = new THREE.Scene();
     const renderer = new THREE.WebGLRenderer({
@@ -510,7 +533,7 @@ const AtomixPyramidNewDesign: React.FC<AtomixPyramidNewDesignProps> = ({
       afId = requestAnimationFrame(animate);
       const dt = (now - last) / 1000;
       last = now;
-      const tgt = Number(slider.value) / 100;
+      const tgt = scrollProgressRef.current;
       curT += (tgt - curT) * rot.sliderSmoothing;
       const t = curT;
 
@@ -596,7 +619,7 @@ const AtomixPyramidNewDesign: React.FC<AtomixPyramidNewDesignProps> = ({
     afId = requestAnimationFrame(animate);
     onReady?.({
       setSlider: (v: number) => {
-        slider.value = String(Math.max(0, Math.min(100, v)));
+        scrollProgressRef.current = Math.max(0, Math.min(1, v));
       },
     });
 
@@ -704,39 +727,6 @@ const AtomixPyramidNewDesign: React.FC<AtomixPyramidNewDesignProps> = ({
             zIndex: 1,
           }}
         />
-      </div>
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: "16px",
-          padding: "24px 20px 12px",
-        }}
-      >
-        <span style={{ ...LABEL_S, color: cfg.colors.sliderLabel }}>
-          {cfg.slider.leftLabel}
-        </span>
-        <input
-          ref={sliderRef}
-          type="range"
-          min="0"
-          max="100"
-          defaultValue={initialSliderValue}
-          className="as"
-          style={{
-            flex: 1,
-            WebkitAppearance: "none",
-            appearance: "none",
-            height: "6px",
-            borderRadius: "3px",
-            background: cfg.colors.sliderTrack,
-            outline: "none",
-            cursor: "pointer",
-          }}
-        />
-        <span style={{ ...LABEL_S, color: cfg.colors.sliderLabel }}>
-          {cfg.slider.rightLabel}
-        </span>
       </div>
     </div>
   );
