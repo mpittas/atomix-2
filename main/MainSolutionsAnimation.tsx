@@ -633,19 +633,19 @@ export default function MainSolutionsAnimation() {
             </div>
             <div ref={row2Box2Ref} className="col-span-1 relative">
               <IconBox
-                src="https://api.iconify.design/lucide:puzzle.svg?color=white"
+                src="https://api.iconify.design/lucide:target.svg?color=white"
                 imageSize="small"
-                title="Composable logic blocks"
-                description="Adapts to any loan type or complexity without developer involvement"
+                title="Goal-driven reasoning"
+                description="Adjusts underwriting strategies in real time, delivering the most efficient route to a viable loan"
                 className="!p-4"
               />
             </div>
             <div ref={row2Box3Ref} className="col-span-1 relative">
               <IconBox
-                src="https://api.iconify.design/lucide:target.svg?color=white"
+                src="https://api.iconify.design/lucide:puzzle.svg?color=white"
                 imageSize="small"
-                title="Goal-driven reasoning"
-                description="Adjusts underwriting strategies in real time, delivering the most efficient route to a viable loan"
+                title="Composable logic blocks"
+                description="Adapts to any loan type or complexity without developer involvement"
                 className="!p-4"
               />
             </div>
