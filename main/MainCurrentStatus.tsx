@@ -127,7 +127,7 @@ export default function MainCurrentStatus() {
         gsap.set(path, {
           attr: {
             "stroke-dasharray": `${len} ${len}`,
-            "stroke-dashoffset": `${len}`,
+            "stroke-dashoffset": `${-len}`,
           },
         });
       });
