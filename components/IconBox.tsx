@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import { MouseEvent, ReactNode } from "react";
@@ -14,6 +15,7 @@ interface IconBoxProps {
   className?: string;
   imageSize?: "small" | "medium" | "large";
   fullWidthImage?: boolean;
+  iconSize?: number;
 }
 
 export default function IconBox({
@@ -26,6 +28,7 @@ export default function IconBox({
   className = "",
   imageSize = "medium",
   fullWidthImage = false,
+  iconSize = 48,
 }: IconBoxProps) {
   const handleMouseEnter = (event: MouseEvent<HTMLDivElement>) => {
     const target = event.currentTarget;
@@ -92,11 +95,10 @@ export default function IconBox({
         }`}
       >
         {icon ? (
-          <div
-            className="mb-2 flex items-center justify-center text-white"
-            style={{ width: finalWidth, height: finalWidth }}
-          >
-            {icon}
+          <div className="mb-2 flex items-center justify-center text-white">
+            {React.isValidElement(icon) && icon.type !== "img"
+              ? React.cloneElement(icon, { size: iconSize } as any)
+              : icon}
           </div>
         ) : (
           <Image

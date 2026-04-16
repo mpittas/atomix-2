@@ -9,31 +9,31 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import SoftAurora from "@/components/backgrounds/SoftAurora";
-import { BadgeHeadingPill } from "@/components/ui/BadgeHeadingPill";
 import IconBox from "@/components/IconBox";
+import { TbEyeClosed } from "react-icons/tb";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const aboutAtomixItems = [
   {
-    icon: "/icons/white/users-group.svg",
+    icon: <TbEyeClosed />,
     title: "What we are",
     subtitle:
-      "A white-label, fully configurable Platform-as-a-Service automating the full lifecycle of property loans, end-to-end",
+      "a Platform-as-a-Service automating the full lifecycle of property loans, end-to-end; fully configurable and white-label ready",
   },
   {
-    icon: "/icons/white/rocket-launch-white.svg",
-    title: "Who we serve",
-    subtitle: "Lenders, capital providers, brokers and borrowers",
-  },
-  {
-    icon: "/icons/white/atomix-icon.svg",
+    icon: <TbEyeClosed />,
     title: "What sets us apart",
     subtitle:
-      "Rules-first compliance enforcement, AI-assisted workflow construction and immutable on-chain audit in a single platform",
+      "rules-first architecture, immutable on-chain audit and goal-driven intelligence operating within both; compliance enforced at every level, not bolted on",
   },
   {
-    icon: "/icons/white/globe.svg",
+    icon: <TbEyeClosed />,
+    title: "Who we serve",
+    subtitle: "lenders, capital providers, brokers and borrowers",
+  },
+  {
+    icon: <TbEyeClosed />,
     title: "Where we operate",
     subtitle: "UK-based, with global expansion built into the model",
   },
@@ -244,8 +244,6 @@ export default function MainHero() {
         id="def-hero-title-2"
         style={{ visibility: "hidden" }}
       >
-        <BadgeHeadingPill>About Atomix</BadgeHeadingPill>
-
         <SplitText
           ref={title2SplitRef}
           startPaused
@@ -259,10 +257,10 @@ export default function MainHero() {
           {aboutAtomixItems.map((item) => (
             <div key={item.title} className="relative">
               <IconBox
-                src={item.icon}
+                icon={item.icon}
                 title={item.title}
                 description={item.subtitle}
-                imageSize="small"
+                imageSize="large"
                 titleClassName="text-md"
                 className="hero-list-item"
               />
@@ -285,7 +283,6 @@ export default function MainHero() {
                 <div className="absolute -bottom-8 -left-4 w-32 h-32 bg-white/25 rounded-full blur-2xl" />
               </div>
               <div className="relative z-10 flex flex-col items-center gap-3">
-                <BadgeHeadingPill color="blue">Mission</BadgeHeadingPill>
                 <div className="text-2xl font-semibold leading-[1.3em] text-white">
                   Fix UK property lending. Start with bridging. Extend into SME
                   CRE term loans — same infrastructure, no rebuild
@@ -300,7 +297,6 @@ export default function MainHero() {
                 <div className="absolute -bottom-8 -left-4 w-32 h-32 bg-white/25 rounded-full blur-2xl" />
               </div>
               <div className="relative z-10 flex flex-col items-center gap-3">
-                <BadgeHeadingPill color="blue">Vision</BadgeHeadingPill>
                 <div className="text-2xl font-semibold leading-[1.3em] text-white">
                   Four interconnected marketplaces. Every stakeholder connected.
                   Property lending reimagined — starting in the UK, built for
