@@ -65,6 +65,8 @@ export default function MainSolutionsAnimation() {
   const topGlow3Ref = useRef<SVGPathElement>(null);
   const topPath4Ref = useRef<SVGPathElement>(null);
   const topGlow4Ref = useRef<SVGPathElement>(null);
+  const topPath5Ref = useRef<SVGPathElement>(null);
+  const topGlow5Ref = useRef<SVGPathElement>(null);
 
   const bottomPath1Ref = useRef<SVGPathElement>(null);
   const bottomGlow1Ref = useRef<SVGPathElement>(null);
@@ -241,6 +243,7 @@ export default function MainSolutionsAnimation() {
         { opacity: 1, duration: 0.8, ease: "power2.out" },
       )
       .add(animatePathAndGlow(topPath1Ref, topGlow1Ref, 1.5, false))
+      .add(animatePathAndGlow(topPath5Ref, topGlow5Ref, 1.5, false), "<")
       .fromTo(
         row2Box2Ref.current,
         { opacity: 0, scale: 0.8 },
@@ -375,7 +378,7 @@ export default function MainSolutionsAnimation() {
           {/* Row 1: 1 col / 4 cols / 1 col */}
           <div className="grid grid-cols-6 gap-4">
             {/* COLUMN 1 */}
-            <div className="col-span-1 flex flex-col items-center gap-y-3">
+            <div className="col-span-1 flex flex-col items-center gap-y-3 relative">
               <div ref={iconText1Ref}>
                 <IconText
                   icon="https://api.iconify.design/lucide:cpu.svg?color=white"
@@ -406,6 +409,41 @@ export default function MainSolutionsAnimation() {
                   <path
                     ref={connector1GlowRef}
                     d="M 1 0 L 1 72"
+                    fill="none"
+                    stroke={GLOW_CONFIG.color}
+                    strokeWidth={GLOW_CONFIG.strokeWidth}
+                    strokeLinecap="round"
+                    vectorEffect="non-scaling-stroke"
+                    style={{ filter: `blur(${GLOW_CONFIG.blur}px)` }}
+                    opacity="0"
+                  />
+                </svg>
+              </div>
+
+              <div className="w-[194px] h-[72px] absolute bottom-0 left-[86px] -bottom-[0px]">
+                <svg
+                  viewBox="0 0 195 72"
+                  xmlns="http://www.w3.org/2000/svg"
+                  preserveAspectRatio="xMidYMid meet"
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    display: "block",
+                    overflow: "visible",
+                  }}
+                >
+                  <path
+                    ref={topPath5Ref}
+                    d="M 193 70 L 193 51 Q 193 36 178 36 L 17 36 Q 2 36 2 21 L 2 2"
+                    fill="none"
+                    stroke="#90abb3"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    vectorEffect="non-scaling-stroke"
+                  />
+                  <path
+                    ref={topGlow5Ref}
+                    d="M 193 70 L 193 51 Q 193 36 178 36 L 17 36 Q 2 36 2 21 L 2 2"
                     fill="none"
                     stroke={GLOW_CONFIG.color}
                     strokeWidth={GLOW_CONFIG.strokeWidth}
