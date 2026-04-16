@@ -243,30 +243,19 @@ const AtomixPyramidNewDesign: React.FC<AtomixPyramidNewDesignProps> = ({
 
   useEffect(() => {
     const loadLogo = async () => {
-      const paths = [
-        "/logo/atomix-logo-symbol.svg",
-        `${window.location.origin}/logo/atomix-logo-symbol.svg`,
-      ];
-
-      for (const path of paths) {
-        try {
-          const response = await fetch(path);
-          if (!response.ok) {
-            console.warn(
-              `Failed to fetch from ${path}: HTTP ${response.status}`,
-            );
-            continue;
-          }
-          const svgText = await response.text();
-          const base64 = btoa(svgText);
-          setLogoB64(base64);
-          console.log(`Successfully loaded logo from ${path}`);
+      try {
+        const response = await fetch("/logo/atomix-logo-symbol.svg");
+        if (!response.ok) {
+          console.warn(`Failed to fetch logo: HTTP ${response.status}`);
           return;
-        } catch (error) {
-          console.warn(`Failed to load logo from ${path}:`, error);
         }
+        const svgText = await response.text();
+        const base64 = btoa(svgText);
+        setLogoB64(base64);
+        console.log("Successfully loaded logo");
+      } catch (error) {
+        console.warn("Failed to load logo:", error);
       }
-      console.error("Failed to load logo from all paths");
     };
     loadLogo();
   }, []);
