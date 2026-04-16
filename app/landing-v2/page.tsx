@@ -10,7 +10,7 @@ import DefHeading from "@/components/typo/DefHeading";
 import FlowGraphicLight from "@/components/FlowGraphicLight";
 import FlowCardsHor from "@/components/FlowCardsHor";
 import { Button as DefButton } from "@/components/ui";
-import SolutionsRow from "@/components/SolutionsRow";
+import MainSolutionsAnimation from "@/main/MainSolutionsAnimation";
 import InfoRow from "@/components/InfoRow";
 import IconBoxHorizontal from "@/components/IconBoxHorizontal";
 import IconBox from "@/components/IconBox";
@@ -255,7 +255,7 @@ export default function LandingGradientV1Page() {
               </div>
 
               <div className="mt-16 flex flex-col items-center">
-                <SolutionsRow />
+                <MainSolutionsAnimation />
 
                 <div className="mt-14">
                   <DefButton size="large">Learn more</DefButton>

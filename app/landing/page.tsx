@@ -8,10 +8,10 @@ import Header from "@/components/header";
 import MainHero from "@/main/MainHero";
 import MainProblemsTabs from "@/main/MainProblemsTabs";
 import MainPyramidWrapper from "@/main/MainPyramidWrapper";
+import MainSolutionsAnimation from "@/main/MainSolutionsAnimation";
 
 import DefHeading from "@/components/typo/DefHeading";
 import { Button as DefButton } from "@/components/ui";
-import SolutionsRow from "@/components/SolutionsRow";
 import IconBox from "@/components/IconBox";
 import { FaGlobe, FaUsers, FaMicrochip } from "react-icons/fa6";
 import DefCta from "@/components/DefCta";
@@ -178,78 +178,12 @@ export default function LandingGradientV1Page() {
       </div>
 
       <div className="px-12 mt-2 flex flex-col gap-6">
-        {/* <div className="relative px-18 py-32 rounded-3xl bg-linear-to-b from-[#0B4858] via-[#81A6AF] to-[#0B4858] relative z-[50] overflow-hidden h-[calc(100vh - 116px)]">
-          <div className="absolute -top-0 left-0 w-full h-[500px]">
-            <SoftAurora
-              speed={1.3}
-              scale={1.2}
-              brightness={0.65}
-              color1="#78cfe3"
-              color2="#87b9d4"
-              noiseFrequency={1}
-              noiseAmplitude={3.5}
-              bandHeight={0.85}
-              bandSpread={1}
-              octaveDecay={0.12}
-              layerOffset={0.5}
-              colorSpeed={1}
-              enableMouseInteraction={false}
-              mouseInfluence={0.2}
-            />
-          </div>
-
-          <ScrollableTabsv2 />
-        </div> */}
-
         <MainProblemsTabs />
 
         <MainPyramidWrapper />
 
-        <div className="h-full mb-6">
-          <div className="px-18 py-36 rounded-t-3xl bg-linear-to-b from-[#0B4858] to-[#81A6AF] relative overflow-hidden">
-            <div className="absolute -top-10 left-0 w-full h-[500px]">
-              <SoftAurora
-                speed={1.3}
-                scale={1.2}
-                brightness={0.65}
-                color1="#78cfe3"
-                color2="#87b9d4"
-                noiseFrequency={1}
-                noiseAmplitude={3.5}
-                bandHeight={0.85}
-                bandSpread={1}
-                octaveDecay={0.12}
-                layerOffset={0.5}
-                colorSpeed={1}
-                enableMouseInteraction={false}
-                mouseInfluence={0.2}
-              />
-            </div>
+        <MainSolutionsAnimation />
 
-            <div className="max-w-[1260px] mx-auto px-4">
-              <div className="max-w-[1060px] mx-auto">
-                <DefHeading
-                  theme="light"
-                  badgeText=""
-                  showBadge={false}
-                  title="The Tech Stack Solution"
-                  description="AI-powered rule enforcement, full end-to-end automation, and blockchain-backed auditability
-— delivering visibility, collaboration, and trust across the lending ecosystem."
-                />
-              </div>
-
-              <div className="mt-16 flex flex-col items-center">
-                <SolutionsRow />
-
-                <div className="mt-14">
-                  <DefButton size="large" href="/landing-platform-benefits">
-                    Learn more
-                  </DefButton>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
         <div className="h-full mb-6">
           <div className="px-18 py-36 rounded-3xl bg-linear-to-b from-[#0B4858] via-[#81A6AF] to-[#0B4858] relative overflow-hidden">
             <div className="absolute -top-10 left-0 w-full h-[500px]">
