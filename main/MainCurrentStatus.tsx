@@ -90,6 +90,7 @@ function StatusFeatureCard({
 
 export default function MainCurrentStatus() {
   const sectionRef = useRef<HTMLDivElement>(null);
+  const buttonsRef = useRef<HTMLDivElement>(null);
 
   useGSAP(
     () => {
@@ -122,6 +123,9 @@ export default function MainCurrentStatus() {
       if (launchBoxes[0]) gsap.set(launchBoxes[0], { x: -120 });
       if (launchBoxes[1]) gsap.set(launchBoxes[1], { x: 120 });
       gsap.set(featureCards, { autoAlpha: 0, y: 36 });
+      if (buttonsRef.current) {
+        gsap.set(buttonsRef.current, { autoAlpha: 0, y: 20 });
+      }
 
       connectorPaths.forEach((path) => {
         const len = path.getTotalLength ? path.getTotalLength() : 1000;
@@ -163,17 +167,30 @@ export default function MainCurrentStatus() {
         );
       }
 
-      connectorPaths.forEach((path) => {
+      connectorPaths.forEach((path, index) => {
+        if (featureCards[index]) {
+          tl.to(featureCards[index], {
+            autoAlpha: 1,
+            y: 0,
+            duration: 0.8,
+            ease: "power2.out",
+          });
+        }
         tl.add(animatePathDraw(path, 0.95));
       });
 
-      tl.to(featureCards, {
-        autoAlpha: 1,
-        y: 0,
-        duration: 1,
-        ease: "power2.out",
-        stagger: 0.22,
-      });
+      if (buttonsRef.current) {
+        tl.to(
+          buttonsRef.current,
+          {
+            autoAlpha: 1,
+            y: 0,
+            duration: 0.8,
+            ease: "power2.out",
+          },
+          "-=0.4",
+        );
+      }
     },
     { scope: sectionRef },
   );
@@ -266,7 +283,7 @@ export default function MainCurrentStatus() {
           </div>
         </div>
 
-        <div className="w-full flex gap-x-4 justify-center">
+        <div ref={buttonsRef} className="w-full flex gap-x-4 justify-center">
           <DefButton href="/landing-platform-benefits">Learn more</DefButton>
 
           <DefButton variant="dark" href="/landing-platform-benefits">
