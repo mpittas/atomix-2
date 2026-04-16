@@ -239,34 +239,7 @@ const AtomixPyramidNewDesign: React.FC<AtomixPyramidNewDesignProps> = ({
     b3: null,
   });
   const apexRef = useRef<HTMLDivElement>(null);
-  const [logoB64, setLogoB64] = React.useState<string | null>(null);
-
-  useEffect(() => {
-    const loadLogo = async () => {
-      try {
-        const response = await fetch("/logo/atomix-logo-symbol.svg");
-        if (!response.ok) {
-          console.warn(`Failed to fetch logo: HTTP ${response.status}`);
-          return;
-        }
-        const svgText = await response.text();
-        const base64 = btoa(svgText);
-        setLogoB64(base64);
-        console.log("Successfully loaded logo");
-      } catch (error) {
-        console.warn("Failed to load logo:", error);
-      }
-    };
-    loadLogo();
-  }, []);
-
-  const cfg = useMemo(() => {
-    const mergedConfig = deepMerge(DEFAULTS, config);
-    if (logoB64) {
-      mergedConfig.logo.svgBase64 = logoB64;
-    }
-    return mergedConfig;
-  }, [config, logoB64]);
+  const cfg = useMemo(() => deepMerge(DEFAULTS, config), [config]);
 
   useEffect(() => {
     const wrapper = wrapperRef.current;
@@ -479,7 +452,6 @@ const AtomixPyramidNewDesign: React.FC<AtomixPyramidNewDesignProps> = ({
       eld.push({ m: ep.m, x: xA, ys: rp, ye: ap });
     });
 
-    const logoB64 = cfg.logo.svgBase64 || "";
     const spr = new THREE.Sprite(
       new THREE.SpriteMaterial({
         transparent: true,
@@ -490,29 +462,31 @@ const AtomixPyramidNewDesign: React.FC<AtomixPyramidNewDesignProps> = ({
     );
     spr.visible = false;
     spr.scale.set(1.8, 0.45, 1);
-    if (logoB64) {
-      const img = new Image();
-      img.onload = () => {
-        const c2 = document.createElement("canvas");
-        c2.width = cfg.logo.canvasWidth;
-        c2.height = cfg.logo.canvasHeight;
-        const ctx = c2.getContext("2d");
-        if (!ctx) return;
-        ctx.drawImage(img, 0, 0, c2.width, c2.height);
-        const tx = new THREE.CanvasTexture(c2);
-        tx.minFilter = THREE.LinearFilter;
-        const mat = spr.material as THREE.SpriteMaterial;
-        mat.map = tx;
-        mat.needsUpdate = true;
-        spr.scale.set(
-          (cfg.logo.worldHeight * c2.width) / c2.height,
-          cfg.logo.worldHeight,
-          1,
-        );
-        spr.visible = true;
-      };
-      img.src = `data:image/svg+xml;base64,${logoB64}`;
-    }
+    const logoImg = new Image();
+    logoImg.crossOrigin = "anonymous";
+    logoImg.onload = () => {
+      const c2 = document.createElement("canvas");
+      c2.width = cfg.logo.canvasWidth;
+      c2.height = cfg.logo.canvasHeight;
+      const ctx = c2.getContext("2d");
+      if (!ctx) return;
+      ctx.drawImage(logoImg, 0, 0, c2.width, c2.height);
+      const tx = new THREE.CanvasTexture(c2);
+      tx.minFilter = THREE.LinearFilter;
+      const mat = spr.material as THREE.SpriteMaterial;
+      mat.map = tx;
+      mat.needsUpdate = true;
+      spr.scale.set(
+        (cfg.logo.worldHeight * c2.width) / c2.height,
+        cfg.logo.worldHeight,
+        1,
+      );
+      spr.visible = true;
+    };
+    logoImg.onerror = () => console.warn("Failed to load logo image");
+    logoImg.src = cfg.logo.svgBase64
+      ? `data:image/svg+xml;base64,${cfg.logo.svgBase64}`
+      : "/logo/atomix-logo-symbol.svg";
     spr.position.copy(apex).add(v3(0, cfg.logo.verticalOffset, 0));
     grp.add(spr);
 
