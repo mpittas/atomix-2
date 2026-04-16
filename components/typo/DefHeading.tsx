@@ -56,6 +56,9 @@ const DefHeading: React.FC<DefHeadingProps> = ({
           start: "top 85%",
           once: true,
         },
+        onComplete: () => {
+          onAnimationComplete?.();
+        },
       });
 
       if (showBadge && badgeRef.current) {
@@ -110,7 +113,7 @@ const DefHeading: React.FC<DefHeadingProps> = ({
         tag="h2"
         className={`text-5xl leading-[1.2em] font-semibold ${titleColor}`}
         duration={0.8}
-        onLetterAnimationComplete={onAnimationComplete}
+        onLetterAnimationComplete={undefined}
       />
 
       <div

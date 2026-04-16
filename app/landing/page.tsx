@@ -177,7 +177,7 @@ export default function LandingGradientV1Page() {
         <MainHero />
       </div>
 
-      <div className="px-12 mt-2 flex flex-col gap-2">
+      <div className="px-12 mt-2 flex flex-col gap-6">
         {/* <div className="relative px-18 py-32 rounded-3xl bg-linear-to-b from-[#0B4858] via-[#81A6AF] to-[#0B4858] relative z-[50] overflow-hidden h-[calc(100vh - 116px)]">
           <div className="absolute -top-0 left-0 w-full h-[500px]">
             <SoftAurora

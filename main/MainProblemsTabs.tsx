@@ -1,8 +1,9 @@
 "use client";
 
-import { type ReactNode, useRef, useState } from "react";
+import { type ReactNode, useCallback, useRef, useState } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
+import { Button as DefButton } from "@/components/ui";
 import DefHeading from "@/components/typo/DefHeading";
 
 import {
@@ -196,19 +197,93 @@ const tabsData: TabData[] = [
 export default function MainProblemsTabs() {
   const [activeIndex, setActiveIndex] = useState(0);
   const iconBoxContainerRef = useRef<HTMLDivElement>(null);
+  const tabButtonsRef = useRef<HTMLDivElement>(null);
+  const initialAnimDone = useRef(false);
+  const learnMoreRef = useRef<HTMLDivElement>(null);
 
+  // Set initial hidden state for tab buttons and content
+  useGSAP(() => {
+    if (tabButtonsRef.current) {
+      gsap.set(Array.from(tabButtonsRef.current.children), {
+        opacity: 0,
+        y: 30,
+      });
+    }
+    if (iconBoxContainerRef.current) {
+      gsap.set(Array.from(iconBoxContainerRef.current.children), {
+        opacity: 0,
+        y: 30,
+      });
+    }
+    if (learnMoreRef.current) {
+      gsap.set(learnMoreRef.current, { opacity: 0, y: 20 });
+    }
+  });
+
+  // Tab-switch animation — skip on initial render (handled by entrance chain)
   useGSAP(
     () => {
       if (!iconBoxContainerRef.current) return;
+      if (!initialAnimDone.current) return;
       const boxes = iconBoxContainerRef.current.children;
       gsap.fromTo(
         boxes,
         { y: 30, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.5, stagger: 0.1, ease: "power2.out" },
+        { y: 0, opacity: 1, duration: 1.2, stagger: 0.3, ease: "power2.out" },
       );
     },
     { dependencies: [activeIndex] },
   );
+
+  // Called when DefHeading finishes its full animation sequence
+  const handleHeadingComplete = useCallback(() => {
+    const tl = gsap.timeline();
+
+    // 1. Tab buttons fade in up with stagger
+    if (tabButtonsRef.current) {
+      tl.to(Array.from(tabButtonsRef.current.children), {
+        opacity: 1,
+        y: 0,
+        duration: 0.6,
+        stagger: 0.12,
+        ease: "power2.out",
+      });
+    }
+
+    // Mark entrance done so tab-switch animation is unlocked
+    tl.add(() => {
+      initialAnimDone.current = true;
+    });
+
+    // 2. Tab content fade in up (same animation as tab switch)
+    if (iconBoxContainerRef.current) {
+      tl.to(
+        Array.from(iconBoxContainerRef.current.children),
+        {
+          opacity: 1,
+          y: 0,
+          duration: 1.2,
+          stagger: 0.3,
+          ease: "power2.out",
+        },
+        "+=0.15",
+      );
+    }
+
+    // 3. Learn more button fade in up
+    if (learnMoreRef.current) {
+      tl.to(
+        learnMoreRef.current,
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          ease: "power2.out",
+        },
+        "-=0.8",
+      );
+    }
+  }, []);
 
   return (
     <div className="min-h-[calc(100vh-126px)] rounded-3xl bg-linear-to-b from-[#0B4858] via-[#486c74] to-[#0B4858] relative overflow-hidden flex flex-col justify-center items-center">
@@ -238,11 +313,12 @@ export default function MainProblemsTabs() {
           title="The Existing Problems"
           description="Property lending is manual, opaque and structurally exposed to fraud — not by intent, but by design. Legacy infrastructure was never built to handle the volume, complexity or transparency this market demands."
           showBadge={false}
+          onAnimationComplete={handleHeadingComplete}
         />
 
         <div className="w-full flex flex-col gap-y-6">
           {/* Tab Buttons - Horizontal */}
-          <div className="flex gap-4 w-full">
+          <div ref={tabButtonsRef} className="flex gap-4 w-full">
             {tabsData.map((tab, index) => (
               <div
                 key={tab.title}
@@ -289,6 +365,12 @@ export default function MainProblemsTabs() {
               </div>
             ))}
           </div>
+        </div>
+
+        <div ref={learnMoreRef} className="w-full flex justify-center">
+          <DefButton size="large" href="/landing-platform-benefits">
+            Learn more
+          </DefButton>
         </div>
       </div>
     </div>
