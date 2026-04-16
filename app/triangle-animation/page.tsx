@@ -77,10 +77,12 @@ export default function TriangleAnimationPage() {
       stagger: 0.4,
     });
 
+    const sectionHeight = section.offsetHeight;
+
     const pinTrigger = ScrollTrigger.create({
       trigger: section,
       start: "top top+=110px",
-      end: "+=1000",
+      end: `+=${sectionHeight}`,
       pin: true,
       pinSpacing: true,
       scrub: true,
