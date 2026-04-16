@@ -34,14 +34,14 @@ export default function TriangleAnimationPage() {
       <Header />
 
       <div className="pt-23">
-        <div className="min-h-screen bg-red-500/50"></div>
+        <div className="min-h-screen"></div>
         <div ref={pyramidSectionRef}>
           <div className="max-w-[1200px] min-h-[200px] mx-auto flex pt-[56px]">
             <div className="flex-1">
               <AtomixPyramidNewDesign />
             </div>
 
-            <div className="flex-1 flex flex-col justify-center gap-12 pl-12 pr-4 relative left-6">
+            <div className="flex-1 flex flex-col justify-center gap-12 pl-20 max-w-lg">
               {/* Simple SaaS */}
               <div className="flex items-start gap-4">
                 <img
@@ -54,9 +54,7 @@ export default function TriangleAnimationPage() {
                     Simple SaaS
                   </h3>
                   <p className="text-white/80 text-base leading-relaxed">
-                    automated and easy to change,
-                    <br />
-                    but simple products only
+                    automated and easy to change, but simple products only
                   </p>
                 </div>
               </div>
@@ -73,9 +71,8 @@ export default function TriangleAnimationPage() {
                     Bespoke builds
                   </h3>
                   <p className="text-white/80 text-base leading-relaxed mb-4">
-                    automated and complex, but £500k+
-                    <br />
-                    upfront and expensive to change
+                    automated and complex, but £500k+ upfront and expensive to
+                    change
                   </p>
                   <ul className="space-y-1">
                     <li className="flex items-center gap-3 text-gray-300">
@@ -106,9 +103,8 @@ export default function TriangleAnimationPage() {
                     Disconnected stacks
                   </h3>
                   <p className="text-white/80 text-base leading-relaxed">
-                    complex and configurable, but humans are
-                    <br />
-                    the glue; nothing is truly automated
+                    complex and configurable, but humans are the glue; nothing
+                    is truly automated
                   </p>
                 </div>
               </div>
