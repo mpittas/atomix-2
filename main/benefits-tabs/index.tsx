@@ -371,9 +371,7 @@ export default function MainBenefitsTabs() {
         </div>
 
         <div ref={learnMoreRef} className="w-full flex justify-center">
-          <DefButton size="large" href="/landing-platform-benefits">
-            Learn more
-          </DefButton>
+          <DefButton href="/landing-platform-benefits">Learn more</DefButton>
         </div>
       </div>
     </div>

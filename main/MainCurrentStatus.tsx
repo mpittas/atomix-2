@@ -14,6 +14,7 @@ import {
 import DefHeading from "@/components/typo/DefHeading";
 import SoftAurora from "@/components/backgrounds/SoftAurora";
 import CurrentStatusConnectors from "@/main/CurrentStatusConnectors";
+import { Button as DefButton } from "@/components/ui";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -263,6 +264,12 @@ export default function MainCurrentStatus() {
               />
             </div>
           </div>
+        </div>
+
+        <div className="w-full flex gap-x-4 justify-center">
+          <DefButton href="/landing-platform-benefits">Learn more</DefButton>
+
+          <DefButton href="/landing-platform-benefits">Watch Videos</DefButton>
         </div>
       </div>
     </div>

@@ -16,6 +16,8 @@ interface IconBoxProps {
   imageSize?: "small" | "medium" | "large";
   fullWidthImage?: boolean;
   iconSize?: number;
+  align?: "center" | "left";
+  hideIcon?: boolean;
 }
 
 export default function IconBox({
@@ -29,6 +31,8 @@ export default function IconBox({
   imageSize = "medium",
   fullWidthImage = false,
   iconSize = 48,
+  align = "center",
+  hideIcon = false,
 }: IconBoxProps) {
   const handleMouseEnter = (event: MouseEvent<HTMLDivElement>) => {
     const target = event.currentTarget;
@@ -80,7 +84,7 @@ export default function IconBox({
 
   return (
     <div
-      className={`relative flex flex-col items-center gap-1 p-7 rounded-2xl text-center h-full border border-[#1491B3] bg-[#003746] overflow-hidden will-change-transform ${className}`}
+      className={`relative flex flex-col ${align === "left" ? "items-start text-left" : "items-center text-center"} gap-1 p-7 rounded-2xl h-full border border-[#1491B3] bg-[#003746] overflow-hidden will-change-transform ${className}`}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
@@ -91,25 +95,33 @@ export default function IconBox({
 
       <div
         className={`relative flex flex-col gap-1 ${
-          fullWidthImage ? "w-full items-stretch" : "items-center"
+          fullWidthImage
+            ? "w-full items-stretch"
+            : align === "left"
+              ? "items-start"
+              : "items-center"
         }`}
       >
-        {icon ? (
-          <div className="mb-2 flex items-center justify-center text-white">
+        {!hideIcon && icon ? (
+          <div
+            className={`mb-2 flex items-center ${align === "left" ? "justify-start" : "justify-center"} text-white`}
+          >
             {React.isValidElement(icon) && icon.type !== "img"
               ? React.cloneElement(icon, { size: iconSize } as any)
               : icon}
           </div>
         ) : (
-          <Image
-            src={src}
-            alt={title}
-            width={fullWidthImage ? 1200 : finalWidth}
-            height={fullWidthImage ? 720 : finalWidth}
-            className={
-              fullWidthImage ? "mb-3 w-full h-auto rounded-lg" : "mb-2"
-            }
-          />
+          !hideIcon && (
+            <Image
+              src={src}
+              alt={title}
+              width={fullWidthImage ? 1200 : finalWidth}
+              height={fullWidthImage ? 720 : finalWidth}
+              className={
+                fullWidthImage ? "mb-3 w-full h-auto rounded-lg" : "mb-2"
+              }
+            />
+          )
         )}
         <div
           className={`text-lg font-semibold leading-[1.3em] text-white ${titleClassName}`}

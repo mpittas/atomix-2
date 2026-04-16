@@ -26,6 +26,7 @@ import TheMarket from "@/components/TheMarket";
 import ScrollableTabsBenefits from "@/components/ScrollableTabsBenefits";
 import CurrentStatusDiagram from "@/components/CurrentStatusDiagram";
 import MainCurrentStatus from "@/main/MainCurrentStatus";
+import MainWhyWorkWithUs from "@/main/MainWhyWorkWithUs";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -193,9 +194,11 @@ export default function LandingGradientV1Page() {
 
         <MainCurrentStatus />
 
+        <MainWhyWorkWithUs />
+
         <div
           ref={useCasesRef}
-          className="mb-64 bg-red-500/0 min-h-[50vh]"
+          className="mb-6 py-26 bg-red-500/10 min-h-[50vh]"
           id="use-cases"
         >
           <div className="max-w-[1200px] mx-auto px-4">
@@ -235,7 +238,7 @@ export default function LandingGradientV1Page() {
             </div>
 
             <div className="flex justify-center mt-12">
-              <DefButton size="large">Learn more</DefButton>
+              <DefButton>Learn more</DefButton>
             </div>
           </div>
         </div>

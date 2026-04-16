@@ -290,7 +290,7 @@ export default function MainHero() {
               />
             </div>
             <div ref={iconBoxButtonRef} className="mt-2">
-              <DefButton size="large">Learn more</DefButton>
+              <DefButton>Learn more</DefButton>
             </div>
           </div>
         </div>

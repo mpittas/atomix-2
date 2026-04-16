@@ -26,7 +26,7 @@ const Button = React.forwardRef<
   ) => {
     const sizeClasses = {
       small: "px-4 py-2 text-sm",
-      medium: "px-5 py-2.5 text-base",
+      medium: "px-6 py-3 text-base",
       large: "px-8 py-4 text-lg",
     };
 

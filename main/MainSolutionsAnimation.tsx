@@ -5,6 +5,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import IconBox from "@/components/IconBox";
 import SoftAurora from "@/components/backgrounds/SoftAurora";
 import DefHeading from "@/components/typo/DefHeading";
+import { Button as DefButton } from "@/components/ui";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -909,6 +910,10 @@ export default function MainSolutionsAnimation() {
               </div>
             </div>
           </div>
+        </div>
+
+        <div className="w-full flex justify-center">
+          <DefButton href="/landing-platform-benefits">Learn more</DefButton>
         </div>
       </div>
     </div>

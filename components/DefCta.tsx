@@ -55,7 +55,7 @@ const DefCta: React.FC<DefCtaProps> = ({ title }) => {
             textAlign="left"
           />
 
-          <DefButton size="large">Book a Demo</DefButton>
+          <DefButton>Book a Demo</DefButton>
         </div>
       </div>
 
