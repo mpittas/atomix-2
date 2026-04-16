@@ -23,7 +23,7 @@ function MainStatCard({
 }: MainStatCardProps) {
   return (
     <div
-      className={`relative overflow-hidden rounded-3xl border border-[#4a8a9a]/50 bg-[#0a3d4d]/60 p-6 ${className || ""}`}
+      className={`relative h-full overflow-hidden rounded-3xl border border-[#4a8a9a]/50 bg-[#0a3d4d]/60 p-6 ${className || ""}`}
     >
       {/* <div className="absolute inset-0 bg-gradient-to-br from-[#4a8a9a]/10 via-transparent to-transparent" /> */}
 
@@ -72,24 +72,34 @@ function SimpleStatBox({ value, unit, description }: SimpleStatBoxProps) {
 
 export default function MainTheMarket() {
   const contentRef = useRef<HTMLDivElement>(null);
+  const revealStartedRef = useRef(false);
 
-  // Set initial hidden state
+  // Set initial hidden state for each reveal item
   useGSAP(() => {
     if (contentRef.current) {
-      gsap.set(contentRef.current, { opacity: 0, y: 30 });
+      const revealItems = contentRef.current.querySelectorAll(
+        ".market-reveal-item",
+      );
+      gsap.set(revealItems, { opacity: 0, y: 30 });
     }
   });
 
   // Animate content in when heading completes
   const handleHeadingComplete = () => {
-    if (contentRef.current) {
-      gsap.to(contentRef.current, {
-        opacity: 1,
-        y: 0,
-        duration: 1,
-        ease: "power2.out",
-      });
-    }
+    if (!contentRef.current || revealStartedRef.current) return;
+
+    revealStartedRef.current = true;
+    const revealItems = contentRef.current.querySelectorAll(
+      ".market-reveal-item",
+    );
+
+    gsap.to(revealItems, {
+      y: 0,
+      opacity: 1,
+      duration: 1.2,
+      stagger: 0.3,
+      ease: "power2.out",
+    });
   };
 
   return (
@@ -126,79 +136,101 @@ export default function MainTheMarket() {
         <div ref={contentRef} className="w-full space-y-4">
           {/* Top row - 3 main stat cards */}
           <div className="grid grid-cols-1 md:grid-cols-3">
-            <MainStatCard
-              badge="Total Market"
-              value="£350"
-              unit="bn"
-              description="total annual UK property loan originations"
-              className="rounded-r-none border-r-0"
-            />
-            <MainStatCard
-              badge="Core Atomix Market"
-              value="£60"
-              unit="bn"
-              description="Bridging, buy-to-let and SME CRE term loans – the Atomix target segment"
-              className="rounded-none"
-            />
-            <MainStatCard
-              badge="Immediate Opportunity"
-              value="£11.5"
-              unit="bn"
-              description="Annual UK bridging originations - majority processed manually, smaller loans structurally underserved"
-              className="rounded-l-none border-l-0"
-            />
+            <div className="market-reveal-item">
+              <MainStatCard
+                badge="Total Market"
+                value="£350"
+                unit="bn"
+                description="total annual UK property loan originations"
+                className="rounded-r-none border-r-0"
+              />
+            </div>
+            <div className="market-reveal-item">
+              <MainStatCard
+                badge="Core Atomix Market"
+                value="£60"
+                unit="bn"
+                description="Bridging, buy-to-let and SME CRE term loans – the Atomix target segment"
+                className="rounded-none"
+              />
+            </div>
+            <div className="market-reveal-item">
+              <MainStatCard
+                badge="Immediate Opportunity"
+                value="£11.5"
+                unit="bn"
+                description="Annual UK bridging originations - majority processed manually, smaller loans structurally underserved"
+                className="rounded-l-none border-l-0"
+              />
+            </div>
           </div>
 
           {/* Second row - 2 stat cards */}
           <div className="grid grid-cols-1 md:grid-cols-2">
-            <MainStatCard
-              badge="US Market"
-              value="£2"
-              unit="tn"
-              description="Global expansion - same model, next market"
-              className="rounded-r-none border-r-0"
-            />
-            <MainStatCard
-              badge="Global Market"
-              value="£4"
-              unit="tn"
-              description="Global expansion - same model, next market"
-              className="rounded-l-none"
-            />
+            <div className="market-reveal-item">
+              <MainStatCard
+                badge="US Market"
+                value="£2"
+                unit="tn"
+                description="Global expansion - same model, next market"
+                className="rounded-r-none border-r-0"
+              />
+            </div>
+            <div className="market-reveal-item">
+              <MainStatCard
+                badge="Global Market"
+                value="£4"
+                unit="tn"
+                description="Global expansion - same model, next market"
+                className="rounded-l-none"
+              />
+            </div>
           </div>
 
           {/* Bottom section - 6 simple stat boxes in 3x2 grid */}
           <div className="pt-14 grid grid-cols-1 md:grid-cols-3 gap-x-14 gap-y-14">
-            <SimpleStatBox
-              value="70"
-              unit="%"
-              description="of bridging loans originate through brokers — smaller loans unprofitable to service; automation changes this"
-            />
-            <SimpleStatBox
-              value="30"
-              unit="%"
-              description="of commercial lending already direct-to-customer — a growing channel Atomix supports natively"
-            />
-            <SimpleStatBox
-              value="£5.5"
-              unit="bn"
-              description="in auction sales stalled by 28-day completion requirements manual lending cannot meet"
-            />
-            <SimpleStatBox
-              value="70"
-              unit="%"
-              description="of lenders actively considering technology investment — Atomix pay-as-you-go model removes the barrier to entry"
-            />
-            <SimpleStatBox
-              value="64"
-              unit="%"
-              description="of leading non-bank lenders need to raise or refinance within 12 months — compliance and transparency is the unlock"
-            />
-            <SimpleStatBox
-              value="£2"
-              unit="tn"
-              description="the US commercial real estate market opportunity, addressable on the same model"
-            />
+            <div className="market-reveal-item">
+              <SimpleStatBox
+                value="70"
+                unit="%"
+                description="of bridging loans originate through brokers — smaller loans unprofitable to service; automation changes this"
+              />
+            </div>
+            <div className="market-reveal-item">
+              <SimpleStatBox
+                value="30"
+                unit="%"
+                description="of commercial lending already direct-to-customer — a growing channel Atomix supports natively"
+              />
+            </div>
+            <div className="market-reveal-item">
+              <SimpleStatBox
+                value="£5.5"
+                unit="bn"
+                description="in auction sales stalled by 28-day completion requirements manual lending cannot meet"
+              />
+            </div>
+            <div className="market-reveal-item">
+              <SimpleStatBox
+                value="70"
+                unit="%"
+                description="of lenders actively considering technology investment — Atomix pay-as-you-go model removes the barrier to entry"
+              />
+            </div>
+            <div className="market-reveal-item">
+              <SimpleStatBox
+                value="64"
+                unit="%"
+                description="of leading non-bank lenders need to raise or refinance within 12 months — compliance and transparency is the unlock"
+              />
+            </div>
+            <div className="market-reveal-item">
+              <SimpleStatBox
+                value="£2"
+                unit="tn"
+                description="the US commercial real estate market opportunity, addressable on the same model"
+              />
+            </div>
           </div>
         </div>
       </div>
