@@ -233,6 +233,9 @@ const AtomixPyramidNewDesign: React.FC<AtomixPyramidNewDesignProps> = ({
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const scrollProgressRef = useRef(0);
+  const curTRef = useRef(0);
+  const spinRef = useRef(0);
+  const hasTriggeredInfiniteSpinRef = useRef(false);
   const calloutRefs = useRef<Record<VK, HTMLDivElement | null>>({
     b1: null,
     b2: null,
@@ -253,6 +256,19 @@ const AtomixPyramidNewDesign: React.FC<AtomixPyramidNewDesignProps> = ({
       onUpdate: (self) => {
         const delayedProgress = Math.max(0, (self.progress - 0.5) / 0.5);
         scrollProgressRef.current = delayedProgress;
+      },
+      onLeaveBack: () => {
+        // Scrolled back above trigger — hard reset so the pyramid is
+        // guaranteed to return to its exact initial state (no residual
+        // spin or partially-lerped rotation).
+        scrollProgressRef.current = 0;
+        curTRef.current = 0;
+        spinRef.current = 0;
+        hasTriggeredInfiniteSpinRef.current = false;
+      },
+      onLeave: () => {
+        // Scrolled fully past — pin progress at 1.
+        scrollProgressRef.current = 1;
       },
     });
 
@@ -505,10 +521,7 @@ const AtomixPyramidNewDesign: React.FC<AtomixPyramidNewDesignProps> = ({
       KEYS.map((k) => [k, { ...cfg.callouts.offsets[k] }]),
     ) as Record<VK, { dx: number; dy: number }>;
     const aOff = { ...cfg.apexCallout.offset };
-    let hasTriggeredInfiniteSpinStart = false;
-    let curT = 0,
-      spin = 0,
-      last = performance.now(),
+    let last = performance.now(),
       afId = 0;
 
     const animate = (now: number) => {
@@ -516,34 +529,35 @@ const AtomixPyramidNewDesign: React.FC<AtomixPyramidNewDesignProps> = ({
       const dt = (now - last) / 1000;
       last = now;
       const tgt = scrollProgressRef.current;
-      curT += (tgt - curT) * rot.sliderSmoothing;
-      const t = curT;
+      curTRef.current += (tgt - curTRef.current) * rot.sliderSmoothing;
+      const t = curTRef.current;
 
       if (t > rot.spinThreshold) {
-        if (!hasTriggeredInfiniteSpinStart) {
-          hasTriggeredInfiniteSpinStart = true;
+        if (!hasTriggeredInfiniteSpinRef.current) {
+          hasTriggeredInfiniteSpinRef.current = true;
           onInfiniteSpinStart?.();
         }
-        spin +=
+        spinRef.current +=
           rot.spinSpeed *
           dt *
           ((t - rot.spinThreshold) / (1 - rot.spinThreshold));
       } else {
-        let w = spin % (Math.PI * 2);
+        let w = spinRef.current % (Math.PI * 2);
         if (w > Math.PI) w -= Math.PI * 2;
         if (w < -Math.PI) w += Math.PI * 2;
-        spin =
+        spinRef.current =
           w *
           Math.pow(
             0.5,
             dt /
               (rot.decayHalfLife / Math.max(0.001, 1 - t / rot.spinThreshold)),
           );
-        if (Math.abs(spin) < 0.001) spin = 0;
+        if (Math.abs(spinRef.current) < 0.001) spinRef.current = 0;
       }
 
       grp.rotation.x = rot.startX + (rot.endX - rot.startX) * t;
-      grp.rotation.y = rot.startY + (rot.endY - rot.startY) * t + spin;
+      grp.rotation.y =
+        rot.startY + (rot.endY - rot.startY) * t + spinRef.current;
 
       eld.forEach((d) => {
         const yA = new Vec3().lerpVectors(d.ys, d.ye, t).normalize();
