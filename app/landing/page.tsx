@@ -23,6 +23,7 @@ import WhyAtomixLayout from "@/components/WhyAtomixLayout";
 import TheMarket from "@/components/TheMarket";
 import ScrollableTabsBenefits from "@/components/ScrollableTabsBenefits";
 import CurrentStatusDiagram from "@/components/CurrentStatusDiagram";
+import MainBenefitsTabs from "@/main/MainBenefitsTabs";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -183,6 +184,8 @@ export default function LandingGradientV1Page() {
         <MainPyramidWrapper />
 
         <MainSolutionsAnimation />
+
+        <MainBenefitsTabs />
 
         <div className="h-full mb-6">
           <div className="px-18 py-36 rounded-3xl bg-linear-to-b from-[#0B4858] via-[#81A6AF] to-[#0B4858] relative overflow-hidden">
