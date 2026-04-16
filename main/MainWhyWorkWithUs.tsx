@@ -1,15 +1,61 @@
 "use client";
 
-import { useCallback } from "react";
+import { useCallback, useRef } from "react";
 import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
 import DefHeading from "@/components/typo/DefHeading";
 import SoftAurora from "@/components/backgrounds/SoftAurora";
 import { Button as DefButton } from "@/components/ui";
 import IconBox from "@/components/IconBox";
 
 export default function MainWhyWorkWithUs() {
+  const iconBoxContainerRef = useRef<HTMLDivElement>(null);
+  const learnMoreRef = useRef<HTMLDivElement>(null);
+
+  // Set initial hidden state
+  useGSAP(() => {
+    if (iconBoxContainerRef.current) {
+      gsap.set(Array.from(iconBoxContainerRef.current.children), {
+        opacity: 0,
+        y: 30,
+      });
+    }
+    if (learnMoreRef.current) {
+      gsap.set(learnMoreRef.current, { opacity: 0, y: 20 });
+    }
+  });
+
   const handleHeadingComplete = useCallback(() => {
-    // Animation placeholder for content below heading
+    const tl = gsap.timeline();
+
+    // IconBox containers fade in up with stagger
+    if (iconBoxContainerRef.current) {
+      tl.to(
+        Array.from(iconBoxContainerRef.current.children),
+        {
+          opacity: 1,
+          y: 0,
+          duration: 1.2,
+          stagger: 0.3,
+          ease: "power2.out",
+        },
+        "+=0.15",
+      );
+    }
+
+    // Learn more button fade in up
+    if (learnMoreRef.current) {
+      tl.to(
+        learnMoreRef.current,
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          ease: "power2.out",
+        },
+        "-=0.8",
+      );
+    }
   }, []);
 
   return (
@@ -43,24 +89,28 @@ export default function MainWhyWorkWithUs() {
           onAnimationComplete={handleHeadingComplete}
         />
 
-        <div className="grid grid-cols-2 gap-4">
-          <IconBox
-            align="left"
-            hideIcon
-            title="Team"
-            titleClassName="!text-2xl"
-            description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
-          />
-          <IconBox
-            align="left"
-            hideIcon
-            title="Values"
-            titleClassName="!text-2xl"
-            description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
-          />
+        <div ref={iconBoxContainerRef} className="grid grid-cols-2 gap-4">
+          <div>
+            <IconBox
+              align="left"
+              hideIcon
+              title="Team"
+              titleClassName="!text-2xl"
+              description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
+            />
+          </div>
+          <div>
+            <IconBox
+              align="left"
+              hideIcon
+              title="Values"
+              titleClassName="!text-2xl"
+              description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
+            />
+          </div>
         </div>
 
-        <div className="w-full flex justify-center">
+        <div ref={learnMoreRef} className="w-full flex justify-center">
           <DefButton href="/landing-platform-benefits">Learn more</DefButton>
         </div>
       </div>
