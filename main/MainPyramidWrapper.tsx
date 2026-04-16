@@ -97,7 +97,7 @@ export default function MainPyramidWrapper() {
           duration: 0.25,
           stagger: 0.08,
         },
-        0.1,
+        0.35,
       );
 
     return () => {
