@@ -69,18 +69,37 @@ export default function MainPyramidWrapper() {
     gsap.set(pyramidCol, { xPercent: 50 });
     gsap.set(boxes, { autoAlpha: 0, y: 32 });
 
-    const sectionHeight = section.offsetHeight;
-
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: section,
         start: "top top+=110px",
-        end: `+=${sectionHeight * 3}`,
+        end: () => `+=${section.offsetHeight * 3}`,
         pin: true,
         pinSpacing: true,
         scrub: true,
+        invalidateOnRefresh: true,
       },
     });
+
+    // Upstream sections (e.g. MainProblemsTabs) change height when their
+    // tabs switch between 3- and 4-column layouts. Window resize alone
+    // won't catch that, so observe the document height and refresh
+    // ScrollTrigger whenever it changes — otherwise the pin start/end
+    // stay stale and the pyramid section jumps mid-scroll.
+    let rafId = 0;
+    let lastHeight = document.body.scrollHeight;
+    const refreshST = () => {
+      rafId = 0;
+      const h = document.body.scrollHeight;
+      if (h === lastHeight) return;
+      lastHeight = h;
+      ScrollTrigger.refresh();
+    };
+    const resizeObserver = new ResizeObserver(() => {
+      if (rafId) return;
+      rafId = requestAnimationFrame(refreshST);
+    });
+    resizeObserver.observe(document.body);
 
     // As the user scrolls, slide the pyramid from the centered position
     // to its original left-column position.
@@ -101,6 +120,8 @@ export default function MainPyramidWrapper() {
       );
 
     return () => {
+      resizeObserver.disconnect();
+      if (rafId) cancelAnimationFrame(rafId);
       tl.scrollTrigger?.kill();
       tl.kill();
     };
