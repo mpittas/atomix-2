@@ -332,7 +332,7 @@ export default function MainSolutionsAnimation() {
   }, []);
 
   return (
-    <div className="min-h-[calc(100vh-126px)] rounded-3xl bg-linear-to-b from-[#0B4858] via-[#486c74] to-[#0B4858] relative overflow-hidden flex flex-col justify-center items-center">
+    <div className="min-h-[calc(100vh-126px)] rounded-3xl bg-linear-to-b from-[#0B4858] via-[#1e5360] to-[#0B4858] relative overflow-hidden flex flex-col justify-center items-center">
       <div className="absolute top-0 left-0 w-full h-[500px]">
         <SoftAurora
           speed={1.3}
@@ -913,7 +913,7 @@ export default function MainSolutionsAnimation() {
         </div>
 
         <div className="w-full flex justify-center">
-          <DefButton href="/landing-platform-benefits">Learn more</DefButton>
+          <DefButton>Learn more</DefButton>
         </div>
       </div>
     </div>

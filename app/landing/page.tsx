@@ -181,7 +181,7 @@ export default function LandingGradientV1Page() {
         <MainHero />
       </div>
 
-      <div className="px-12 mt-2 flex flex-col gap-6">
+      <div className="px-12 mt-2 mb-12 flex flex-col gap-6">
         <MainProblemsTabs />
 
         <MainPyramidWrapper />
@@ -195,61 +195,9 @@ export default function LandingGradientV1Page() {
         <MainCurrentStatus />
 
         <MainWhyWorkWithUs />
-
-        <div
-          ref={useCasesRef}
-          className="mb-6 py-26 bg-red-500/10 min-h-[50vh]"
-          id="use-cases"
-        >
-          <div className="max-w-[1200px] mx-auto px-4">
-            <div className="max-w-[1060px] mx-auto">
-              <DefHeading
-                theme="dark"
-                badgeText="Careers"
-                title="Why Work With Us"
-                description="Join us in building the future of lending technology."
-              />
-            </div>
-
-            <div className="w-full mt-16 flex items-center gap-6 bg-red-500/0">
-              <div ref={card1Ref} className="flex-1">
-                <IconBox
-                  icon={<FaGlobe className="h-10 w-10" />}
-                  title="Real-World Financial Infrastructure"
-                  description="Build technology that powers real lending markets and impacts billions in asset-backed finance."
-                />
-              </div>
-
-              <div ref={card2Ref} className="flex-1">
-                <IconBox
-                  icon={<FaUsers className="h-10 w-10" />}
-                  title="Small Team, Big Impact"
-                  description="Join a focused team where every contribution directly shapes the product, technology, and company."
-                />
-              </div>
-
-              <div ref={card3Ref} className="flex-1">
-                <IconBox
-                  icon={<FaMicrochip className="h-10 w-10" />}
-                  title="Cutting-Edge Technology"
-                  description="Work across AI, automation, data systems, and blockchain-backed infrastructure."
-                />
-              </div>
-            </div>
-
-            <div className="flex justify-center mt-12">
-              <DefButton>Learn more</DefButton>
-            </div>
-          </div>
-        </div>
       </div>
 
-      <div id="def-cta">
-        <DefCta
-          title="Build the Future of
-Asset-Backed Lending"
-        />
-      </div>
+      <DefCta title="Build the Future of Asset-Backed Lending" />
 
       <Footer />
     </div>

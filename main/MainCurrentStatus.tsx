@@ -196,7 +196,7 @@ export default function MainCurrentStatus() {
   );
 
   return (
-    <div className="min-h-[calc(100vh-126px)] rounded-3xl bg-linear-to-b from-[#0B4858] via-[#486c74] to-[#0B4858] relative overflow-hidden flex flex-col justify-center items-center">
+    <div className="min-h-[calc(100vh-126px)] rounded-3xl bg-linear-to-b from-[#0B4858] via-[#1e5360] to-[#0B4858] relative overflow-hidden flex flex-col justify-center items-center">
       <div className="absolute top-0 left-0 w-full h-[500px]">
         <SoftAurora
           speed={1.3}
@@ -284,11 +284,9 @@ export default function MainCurrentStatus() {
         </div>
 
         <div ref={buttonsRef} className="w-full flex gap-x-4 justify-center">
-          <DefButton href="/landing-platform-benefits">Learn more</DefButton>
+          <DefButton>Learn more</DefButton>
 
-          <DefButton variant="dark" href="/landing-platform-benefits">
-            Watch Videos
-          </DefButton>
+          <DefButton variant="dark">Watch Videos</DefButton>
         </div>
       </div>
     </div>
