@@ -17,7 +17,7 @@ export default function IconBoxHorizontal({
   return (
     <div className="flex items-start gap-4">
       <div className="flex-shrink-0">
-        <div className="relative w-8 h-8 flex items-center justify-center text-white">
+        <div className="relative w-6 h-6 pt-3.5 flex items-center justify-center text-white">
           {icon ? (
             icon
           ) : src ? (

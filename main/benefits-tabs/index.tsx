@@ -15,7 +15,6 @@ export default function MainBenefitsTabs() {
   const contentRef = useRef<HTMLDivElement>(null);
   const tabButtonsRef = useRef<HTMLDivElement>(null);
   const initialAnimDone = useRef(false);
-  const learnMoreRef = useRef<HTMLDivElement>(null);
 
   const animateActivePanel = () => {
     const panel = contentRef.current?.firstElementChild as HTMLElement | null;
@@ -76,9 +75,6 @@ export default function MainBenefitsTabs() {
     if (contentRef.current) {
       gsap.set(contentRef.current, { autoAlpha: 0 });
     }
-    if (learnMoreRef.current) {
-      gsap.set(learnMoreRef.current, { opacity: 0, y: 20 });
-    }
   });
 
   // Tab-switch animation — skip on initial render (handled by entrance chain)
@@ -114,20 +110,6 @@ export default function MainBenefitsTabs() {
     if (contentRef.current) {
       tl.set(contentRef.current, { autoAlpha: 1 }, "+=0.15");
       tl.add(animateActivePanel, ">");
-    }
-
-    // 3. Learn more button fade in up
-    if (learnMoreRef.current) {
-      tl.to(
-        learnMoreRef.current,
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.8,
-          ease: "power2.out",
-        },
-        "-=0.5",
-      );
     }
   }, []);
 
@@ -241,9 +223,7 @@ export default function MainBenefitsTabs() {
                         <div key={index}>
                           <IconBoxHorizontal src={item.icon}>
                             <div className="">
-                              <span className="font-semibold text-white">
-                                {item.text}
-                              </span>
+                              <span className="text-white">{item.text}</span>
                             </div>
                           </IconBoxHorizontal>
                         </div>
@@ -368,10 +348,6 @@ export default function MainBenefitsTabs() {
               </div>
             )}
           </div>
-        </div>
-
-        <div ref={learnMoreRef} className="w-full flex justify-center">
-          <DefButton href="/landing-platform-benefits">Learn more</DefButton>
         </div>
       </div>
     </div>
