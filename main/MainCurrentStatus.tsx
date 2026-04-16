@@ -1,8 +1,9 @@
 "use client";
 
-import { type ReactNode, useCallback, useRef } from "react";
+import { type ReactNode, useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
   FaGavel,
   FaHouse,
@@ -13,6 +14,8 @@ import {
 import DefHeading from "@/components/typo/DefHeading";
 import SoftAurora from "@/components/backgrounds/SoftAurora";
 import CurrentStatusConnectors from "@/main/CurrentStatusConnectors";
+
+gsap.registerPlugin(ScrollTrigger);
 
 interface StatusLaunchBoxProps {
   tag: string;
@@ -76,7 +79,7 @@ function StatusFeatureCard({
   description,
 }: StatusFeatureCardProps) {
   return (
-    <div className="flex flex-col gap-y-3">
+    <div className="status-feature-card flex flex-col gap-y-3">
       <div className="text-white">{icon}</div>
       <h4 className="text-lg leading-6 font-semibold text-white">{title}</h4>
       <div className="text-sm text-white/80">{description}</div>
@@ -85,26 +88,94 @@ function StatusFeatureCard({
 }
 
 export default function MainCurrentStatus() {
-  const contentRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLDivElement>(null);
 
-  // Set initial hidden state
-  useGSAP(() => {
-    if (contentRef.current) {
-      gsap.set(contentRef.current, { opacity: 0, y: 30 });
-    }
-  });
+  useGSAP(
+    () => {
+      if (!sectionRef.current) return;
 
-  // Animate content in when heading completes
-  const handleHeadingComplete = useCallback(() => {
-    if (contentRef.current) {
-      gsap.to(contentRef.current, {
-        opacity: 1,
+      const animatePathDraw = (path: SVGPathElement, duration: number) => {
+        const pathTl = gsap.timeline();
+        pathTl.to(path, {
+          attr: { "stroke-dashoffset": "0" },
+          duration,
+          ease: "power2.inOut",
+        });
+        return pathTl;
+      };
+
+      const launchBoxes = gsap.utils.toArray<HTMLElement>(
+        ".status-launch-box",
+        sectionRef.current,
+      );
+      const connectorPaths = gsap.utils.toArray<SVGPathElement>(
+        ".status-connector-path",
+        sectionRef.current,
+      );
+      const featureCards = gsap.utils.toArray<HTMLElement>(
+        ".status-feature-card",
+        sectionRef.current,
+      );
+
+      gsap.set(launchBoxes, { autoAlpha: 0 });
+      if (launchBoxes[0]) gsap.set(launchBoxes[0], { x: -120 });
+      if (launchBoxes[1]) gsap.set(launchBoxes[1], { x: 120 });
+      gsap.set(featureCards, { autoAlpha: 0, y: 36 });
+
+      connectorPaths.forEach((path) => {
+        const len = path.getTotalLength ? path.getTotalLength() : 1000;
+        gsap.set(path, {
+          attr: {
+            "stroke-dasharray": `${len} ${len}`,
+            "stroke-dashoffset": `${len}`,
+          },
+        });
+      });
+
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top 75%",
+          once: true,
+        },
+      });
+
+      if (launchBoxes[0]) {
+        tl.to(launchBoxes[0], {
+          x: 0,
+          autoAlpha: 1,
+          duration: 1.6,
+          ease: "power2.out",
+        });
+      }
+
+      if (launchBoxes[1]) {
+        tl.to(
+          launchBoxes[1],
+          {
+            x: 0,
+            autoAlpha: 1,
+            duration: 1.6,
+            ease: "power2.out",
+          },
+          "<0.2",
+        );
+      }
+
+      connectorPaths.forEach((path) => {
+        tl.add(animatePathDraw(path, 0.95));
+      });
+
+      tl.to(featureCards, {
+        autoAlpha: 1,
         y: 0,
         duration: 1,
         ease: "power2.out",
+        stagger: 0.22,
       });
-    }
-  }, []);
+    },
+    { scope: sectionRef },
+  );
 
   return (
     <div className="min-h-[calc(100vh-126px)] rounded-3xl bg-linear-to-b from-[#0B4858] via-[#486c74] to-[#0B4858] relative overflow-hidden flex flex-col justify-center items-center">
@@ -134,14 +205,13 @@ export default function MainCurrentStatus() {
           title="Current Status"
           description="Atomix is live and building — two product launches confirmed for 2026: quick home sale MVP (Q2) and auction finance MVP (Q3)."
           showBadge={false}
-          onAnimationComplete={handleHeadingComplete}
         />
 
-        <div className="flex flex-col justify-center items-center">
-          <div
-            ref={contentRef}
-            className="w-full grid grid-cols-1 lg:grid-cols-2 -mb-[2px]"
-          >
+        <div
+          ref={sectionRef}
+          className="flex flex-col justify-center items-center"
+        >
+          <div className="w-full grid grid-cols-1 lg:grid-cols-2 -mb-[2px]">
             <StatusLaunchBox
               tag="Q2 2026"
               launchLabel="Launching Q2 2026"
@@ -151,7 +221,7 @@ export default function MainCurrentStatus() {
               highlightIcon={<FaHouse className="h-4 w-4" />}
               imageSrc="/images/quick-home-sale-dashboard.svg"
               imageAlt="Quick Home Sale MVP dashboard"
-              className="rounded-r-none border-r-0"
+              className="status-launch-box rounded-r-none border-r-0"
             />
 
             <StatusLaunchBox
@@ -163,13 +233,13 @@ export default function MainCurrentStatus() {
               highlightIcon={<FaGavel className="h-4 w-4" />}
               imageSrc="/images/auction-finance-mvp-dashboard.svg"
               imageAlt="Auction Finance MVP dashboard"
-              className="rounded-l-none"
+              className="status-launch-box rounded-l-none"
             />
           </div>
 
           <CurrentStatusConnectors />
 
-          <div className="-mt-[2px] p-8 rounded-3xl border border-[#1491B3] bg-[#003746]">
+          <div className="status-features-section -mt-[2px] p-8 rounded-3xl border border-[#1491B3] bg-[#003746]">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12">
               <StatusFeatureCard
                 icon={<FaSliders className="h-7 w-7" />}
