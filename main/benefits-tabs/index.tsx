@@ -169,10 +169,10 @@ export default function MainBenefitsTabs() {
               <div
                 key={tab.title}
                 onClick={() => setActiveIndex(index)}
-                className={`relative flex-1 flex flex-col justify-center gap-4 rounded-xl transition-all duration-500 cursor-pointer p-5 overflow-hidden ${
+                className={`relative flex-1 flex flex-col justify-center gap-4 rounded-2xl transition-all duration-500 cursor-pointer p-5 overflow-hidden ${
                   index === activeIndex
-                    ? "bg-[#eaeff1] text-black"
-                    : "bg-[#124652]"
+                    ? "bg-[#eaeff1] text-black border-transparent"
+                    : "border border-[#1491B3] bg-[#003746]"
                 }`}
               >
                 <div className="pointer-events-none absolute inset-0 rounded-xl overflow-hidden">

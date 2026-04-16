@@ -276,38 +276,18 @@ export default function MainHero() {
             style={{ visibility: "hidden" }}
           >
             <div ref={iconBox1Ref}>
-              <div className="relative flex flex-col items-center gap-3 p-7 rounded-2xl text-center border border-dashed bg-[#124652] border-[#82b0ba] overflow-hidden will-change-transform">
-                <div className="pointer-events-none absolute inset-0 rounded-2xl overflow-hidden">
-                  <div className="absolute -top-8 -right-4 w-32 h-32 bg-white/25 rounded-full blur-2xl" />
-                  <div className="absolute -bottom-8 -left-4 w-32 h-32 bg-white/25 rounded-full blur-2xl" />
-                </div>
-                <div className="relative z-10 flex flex-col items-center gap-3">
-                  <BadgeHeadingPill color="blue">Mission</BadgeHeadingPill>
-                  <div className="text-xl font-semibold leading-[1.3em] text-white">
-                    Rebuild UK property lending. Start with bridging. Extend
-                    into SME CRE term loans — same infrastructure, no rebuild.
-                  </div>
-                </div>
-              </div>
+              <IconBox
+                icon={<BadgeHeadingPill color="blue">Mission</BadgeHeadingPill>}
+                description=""
+                title="Rebuild UK property lending. Start with bridging. Extend into SME CRE term loans — same infrastructure, no rebuild."
+              />
             </div>
             <div ref={iconBox2Ref}>
-              <div className="relative flex flex-col items-center gap-3 p-7 rounded-2xl text-center border border-dashed bg-[#124652] border-[#82b0ba] overflow-hidden will-change-transform">
-                <div className="pointer-events-none absolute inset-0 rounded-2xl overflow-hidden">
-                  <div className="absolute -top-8 -right-4 w-32 h-32 bg-white/25 rounded-full blur-2xl" />
-                  <div className="absolute -bottom-8 -left-4 w-32 h-32 bg-white/25 rounded-full blur-2xl" />
-                </div>
-                <div className="relative z-10 flex flex-col items-center gap-3">
-                  <BadgeHeadingPill color="blue">Vision</BadgeHeadingPill>
-                  <div className="text-xl font-semibold leading-[1.3em] text-white">
-                    Interconnected marketplaces — borrowers, lenders, capital
-                    providers and investors, each connected within a single
-                    ecosystem. Distribution partners deploy their own discrete,
-                    white-labelled environments within the same infrastructure.
-                    Property lending reimagined — starting in the UK, built for
-                    global scale.
-                  </div>
-                </div>
-              </div>
+              <IconBox
+                icon={<BadgeHeadingPill color="blue">Vision</BadgeHeadingPill>}
+                description=""
+                title="Interconnected marketplaces — borrowers, lenders, capital providers and investors, each connected within a single ecosystem. Distribution partners deploy their own discrete, white-labelled environments within the same infrastructure. Property lending reimagined — starting in the UK, built for global scale."
+              />
             </div>
             <div ref={iconBoxButtonRef} className="mt-2">
               <DefButton size="large">Learn more</DefButton>

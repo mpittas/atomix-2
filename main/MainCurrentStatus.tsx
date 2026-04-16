@@ -36,7 +36,7 @@ function StatusLaunchBox({
   imageAlt,
 }: StatusLaunchBoxProps) {
   return (
-    <article className="rounded-3xl rounded-3xl border border-[#4a8a9a]/50 bg-[#003746] p-6">
+    <article className="rounded-3xl border border-[#1491B3] bg-[#003746] p-6">
       <div className="mb-6 flex items-center justify-between">
         <span className="rounded-full border border-[#4a8a9a]/50 bg-[#38b8b8]/25 px-4 py-1 text-sm font-semibold uppercase text-[#2de1d1]">
           {tag}
@@ -48,7 +48,7 @@ function StatusLaunchBox({
 
       <p className="mt-4 text-white/80">{description}</p>
 
-      <div className="mt-4 rounded-xl border border-[#4a8a9a]/50 bg-white/7 p-3 text-sm text-white flex items-center gap-2">
+      <div className="mt-4 rounded-xl bg-white/7 p-2.5 text-sm text-white flex items-center gap-2">
         <span className="text-white">{highlightIcon}</span>
         <span>{highlight}</span>
       </div>
@@ -161,7 +161,7 @@ export default function MainCurrentStatus() {
             />
           </div>
 
-          <div className="mt-8 p-8 rounded-3xl border border-[#4a8a9a]/50 bg-[#0a3d4d]/60">
+          <div className="mt-8 p-8 rounded-3xl border border-[#1491B3] bg-[#003746]">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12">
               <StatusFeatureCard
                 icon={<FaFileSignature className="h-7 w-7" />}

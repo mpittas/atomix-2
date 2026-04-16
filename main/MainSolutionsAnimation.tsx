@@ -38,7 +38,7 @@ function IconText({ icon, text }: { icon: string; text: string }) {
 
 function SquareBadge({ text }: { text: string }) {
   return (
-    <div className="w-full px-3 py-2 border border-dashed border-[#82b0ba] rounded-md text-center text-sm text-white font-bold bg-gradient-to-r from-[#124652] to-[#1e5a68]">
+    <div className="w-full px-3 py-2 border border-[#1491B3] bg-[#003746] rounded-md text-center text-sm text-white font-bold">
       {text}
     </div>
   );

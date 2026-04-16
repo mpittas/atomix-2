@@ -56,7 +56,7 @@ function MainStatCard({
 
   return (
     <div
-      className={`relative h-full overflow-hidden rounded-3xl border border-[#4a8a9a]/50 bg-[#0a3d4d]/60 p-6 ${className || ""}`}
+      className={`relative h-full overflow-hidden rounded-3xl border border-[#1491B3] bg-[#003746] p-6 ${className || ""}`}
     >
       {/* <div className="absolute inset-0 bg-gradient-to-br from-[#4a8a9a]/10 via-transparent to-transparent" /> */}
 
