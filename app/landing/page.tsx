@@ -5,31 +5,23 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import Header from "@/components/header";
-import MainHero from "@/components/MainHero";
+import MainHero from "@/main/MainHero";
+import MainProblemsTabs from "@/main/MainProblemsTabs";
+import MainPyramidWrapper from "@/main/MainPyramidWrapper";
+
 import DefHeading from "@/components/typo/DefHeading";
-import FlowGraphicLight from "@/components/FlowGraphicLight";
-import FlowCardsHor from "@/components/FlowCardsHor";
 import { Button as DefButton } from "@/components/ui";
 import SolutionsRow from "@/components/SolutionsRow";
-import InfoRow from "@/components/InfoRow";
-import IconBoxHorizontal from "@/components/IconBoxHorizontal";
 import IconBox from "@/components/IconBox";
 import { FaGlobe, FaUsers, FaMicrochip } from "react-icons/fa6";
 import DefCta from "@/components/DefCta";
 import Footer from "@/components/Footer";
 import SoftAurora from "@/components/backgrounds/SoftAurora";
-import BenefitsLayout from "@/components/BenefitsLayout";
 import ScrollableTabsv2 from "@/components/ScrollableTabsv2";
 import TechLimitations from "@/components/TechLimitations";
-import WhyAtomix from "@/components/WhyAtomix";
 import WhyAtomixLayout from "@/components/WhyAtomixLayout";
 import TheMarket from "@/components/TheMarket";
-import WhyWorkWithUs from "@/components/WhyWorkWithUs";
-import ScrollableHeadingV2 from "@/components/ScrollableHeadingV2";
-import CurrentStatus from "@/components/CurrentStatus";
-import ScrollableTabsWhyAtomix from "@/components/ScrollableTabsWhyAtomix";
 import ScrollableTabsBenefits from "@/components/ScrollableTabsBenefits";
-import ScrollableTabsCurrentStatus from "@/components/ScrollableTabsCurrentStatus";
 import CurrentStatusDiagram from "@/components/CurrentStatusDiagram";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
@@ -179,40 +171,39 @@ export default function LandingGradientV1Page() {
   }, []);
 
   return (
-    <div className="overflow-x-hidden">
+    <div className="overflow-x-hidden bg-white">
       <Header />
-      <div className="bg-white px-12 mb-6 pt-24" id="def-hero-main">
+      <div className="px-12 mb-6 pt-24" id="def-hero-main">
         <MainHero />
       </div>
 
       <div className="px-12 mt-2 flex flex-col gap-2">
-        <div className="h-full mb-6">
-          <div
-            // ref={sectionRef}
-            className="relative px-18 py-36 rounded-3xl bg-linear-to-b from-[#0B4858] via-[#81A6AF] to-[#0B4858] relative z-[50] overflow-hidden"
-          >
-            <div className="absolute -top-0 left-0 w-full h-[500px]">
-              <SoftAurora
-                speed={1.3}
-                scale={1.2}
-                brightness={0.65}
-                color1="#78cfe3"
-                color2="#87b9d4"
-                noiseFrequency={1}
-                noiseAmplitude={3.5}
-                bandHeight={0.85}
-                bandSpread={1}
-                octaveDecay={0.12}
-                layerOffset={0.5}
-                colorSpeed={1}
-                enableMouseInteraction={false}
-                mouseInfluence={0.2}
-              />
-            </div>
-
-            <ScrollableTabsv2 />
+        {/* <div className="relative px-18 py-32 rounded-3xl bg-linear-to-b from-[#0B4858] via-[#81A6AF] to-[#0B4858] relative z-[50] overflow-hidden h-[calc(100vh - 116px)]">
+          <div className="absolute -top-0 left-0 w-full h-[500px]">
+            <SoftAurora
+              speed={1.3}
+              scale={1.2}
+              brightness={0.65}
+              color1="#78cfe3"
+              color2="#87b9d4"
+              noiseFrequency={1}
+              noiseAmplitude={3.5}
+              bandHeight={0.85}
+              bandSpread={1}
+              octaveDecay={0.12}
+              layerOffset={0.5}
+              colorSpeed={1}
+              enableMouseInteraction={false}
+              mouseInfluence={0.2}
+            />
           </div>
-        </div>
+
+          <ScrollableTabsv2 />
+        </div> */}
+
+        <MainProblemsTabs />
+
+        <MainPyramidWrapper />
 
         <div className="h-full mb-6">
           <div className="px-18 py-36 rounded-t-3xl bg-linear-to-b from-[#0B4858] to-[#81A6AF] relative overflow-hidden">
@@ -235,15 +226,6 @@ export default function LandingGradientV1Page() {
               />
             </div>
 
-            <div
-              className="max-w-[1160px] px-8 mx-auto bg-red-500/0"
-              id="tech-limitations"
-            >
-              <TechLimitations />
-            </div>
-          </div>
-
-          <div className="px-18 py-36 rounded-b-3xl bg-linear-to-t from-[#0B4858] to-[#81A6AF]">
             <div className="max-w-[1260px] mx-auto px-4">
               <div className="max-w-[1060px] mx-auto">
                 <DefHeading
@@ -268,7 +250,6 @@ export default function LandingGradientV1Page() {
             </div>
           </div>
         </div>
-
         <div className="h-full mb-6">
           <div className="px-18 py-36 rounded-3xl bg-linear-to-b from-[#0B4858] via-[#81A6AF] to-[#0B4858] relative overflow-hidden">
             <div className="absolute -top-10 left-0 w-full h-[500px]">
@@ -303,7 +284,6 @@ export default function LandingGradientV1Page() {
             
           </div> */}
         </div>
-
         <div className="h-full mb-6">
           <div className="px-18 py-36 rounded-t-3xl bg-linear-to-b from-[#0B4858] to-[#81A6AF] relative overflow-hidden">
             <div className="absolute -top-10 left-0 w-full h-[500px]">
@@ -344,7 +324,6 @@ export default function LandingGradientV1Page() {
             </div>
           </div>
         </div>
-
         <div className="h-full mb-12">
           <div className="px-18 py-36 rounded-3xl bg-linear-to-b from-[#0B4858] via-[#81A6AF] to-[#0B4858] relative overflow-hidden">
             <div className="absolute -top-10 left-0 w-full h-[500px]">
@@ -373,7 +352,6 @@ export default function LandingGradientV1Page() {
             </div>
           </div>
         </div>
-
         <div
           ref={useCasesRef}
           className="mb-64 bg-red-500/0 min-h-[50vh]"

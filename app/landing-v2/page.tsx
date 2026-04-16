@@ -5,7 +5,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import Header from "@/components/header";
-import MainHero from "@/components/MainHero";
+import MainHero from "@/main/MainHero";
 import DefHeading from "@/components/typo/DefHeading";
 import FlowGraphicLight from "@/components/FlowGraphicLight";
 import FlowCardsHor from "@/components/FlowCardsHor";

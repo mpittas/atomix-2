@@ -76,28 +76,31 @@ const tabsData: TabData[] = [
         icon: icons.noVisibility,
         title:
           "No real-time visibility into loan performance, policy adherence or portfolio analytics",
-        description: "",
+        description:
+          "lenders cannot be held to account in real time; oversight only after the fact",
       },
       {
         icon: icons.noCompliance,
         title: "Must trust lenders to follow stated policies",
-        description: "With checks only after the fact",
+        description:
+          "With no mechanism to verify compliance until it is too late",
       },
       {
         icon: icons.fraud,
-        title: "Fraud and misrepresentation risks",
+        title: "Lending rules can be broken with no mechanism for detection",
         description:
-          "Lending rules can be broken with no mechanism for detection",
+          "Fraud and misrepresentation risks are structural, not incidental",
       },
       {
         icon: icons.scattered,
         title: "Capital locked for the full term",
-        description: "No secondary liquidity, no exit mechanism",
+        description:
+          "Incumbents lack the blockchain layer and regulatory architecture needed to unlock secondary liquidity; no exit mechanism exists",
       },
       {
         icon: icons.fragmented,
         title:
-          "Diversiﬁed small-loan portfolios are administratively punishing",
+          "Diversified small-loan portfolios are administratively punishing",
         description:
           "Pushing capital toward larger, more concentrated positions",
       },
@@ -240,7 +243,7 @@ export default function ScrollableTabsv2() {
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: sectionRef.current,
-          start: "center center",
+          start: "top top",
           end: "+=10000",
           pin: true,
           pinSpacing: true,
@@ -321,14 +324,14 @@ export default function ScrollableTabsv2() {
   return (
     <div
       ref={sectionRef}
-      className="flex flex-col items-center px-4 gap-y-16 relative z-[120]"
+      className="flex flex-col items-center px-4 pt-[140px] gap-y-16 relative z-[120]"
     >
       {/* Top - DefHeading */}
       <DefHeading
         theme="light"
         badgeText="The Market Reality"
-        title="Market Problems"
-        description="Property lending is manual, slow and opaque — at every level."
+        title="The Existing Problems"
+        description="Property lending is manual, opaque and structurally exposed to fraud — not by intent, but by design. Legacy infrastructure was never built to handle the volume, complexity or transparency this market demands."
         showBadge={false}
       />
 
