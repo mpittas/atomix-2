@@ -3,7 +3,14 @@
 import { type ReactNode, useCallback, useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
-import { FaGavel, FaHouse } from "react-icons/fa6";
+import {
+  FaChartLine,
+  FaDatabase,
+  FaFileSignature,
+  FaGavel,
+  FaHouse,
+  FaScaleBalanced,
+} from "react-icons/fa6";
 import DefHeading from "@/components/typo/DefHeading";
 import SoftAurora from "@/components/backgrounds/SoftAurora";
 
@@ -50,6 +57,26 @@ function StatusLaunchBox({
         <img src={imageSrc} alt={imageAlt} className="h-auto w-full" />
       </div>
     </article>
+  );
+}
+
+interface StatusFeatureCardProps {
+  icon: ReactNode;
+  title: string;
+  description: string;
+}
+
+function StatusFeatureCard({
+  icon,
+  title,
+  description,
+}: StatusFeatureCardProps) {
+  return (
+    <div className="flex flex-col gap-y-3">
+      <div className="text-white">{icon}</div>
+      <h4 className="text-lg leading-6 font-semibold text-white">{title}</h4>
+      <p className="text-white/80">{description}</p>
+    </div>
   );
 }
 
@@ -106,31 +133,58 @@ export default function MainCurrentStatus() {
           onAnimationComplete={handleHeadingComplete}
         />
 
-        <div
-          ref={contentRef}
-          className="w-full grid grid-cols-1 lg:grid-cols-2 gap-6"
-        >
-          <StatusLaunchBox
-            tag="Q2 2026"
-            launchLabel="Launching Q2 2026"
-            title="Quick Home Sale MVP"
-            description="Quick home sale providers depend on speed and certainty of funding. Atomix is built for this model — repeat, high-volume bridging with a pre-approved offer generated instantly and a process that removes friction at every step."
-            highlight="Part of the £350bn UK annual property loan market"
-            highlightIcon={<FaHouse className="h-4 w-4" />}
-            imageSrc="/images/quick-home-sale-dashboard.svg"
-            imageAlt="Quick Home Sale MVP dashboard"
-          />
+        <div>
+          <div
+            ref={contentRef}
+            className="w-full grid grid-cols-1 lg:grid-cols-2 gap-6"
+          >
+            <StatusLaunchBox
+              tag="Q2 2026"
+              launchLabel="Launching Q2 2026"
+              title="Quick Home Sale MVP"
+              description="Quick home sale providers depend on speed and certainty of funding. Atomix is built for this model — repeat, high-volume bridging with a pre-approved offer generated instantly and a process that removes friction at every step."
+              highlight="Part of the £350bn UK annual property loan market"
+              highlightIcon={<FaHouse className="h-4 w-4" />}
+              imageSrc="/images/quick-home-sale-dashboard.svg"
+              imageAlt="Quick Home Sale MVP dashboard"
+            />
 
-          <StatusLaunchBox
-            tag="Q3 2026"
-            launchLabel="Launching Q3 2026"
-            title="Auction Finance MVP"
-            description="Pre-approved finance embedded into the auction experience — certainty of funding before the hammer falls, within the 28-day completion window."
-            highlight="Unlocking £5.5bn stalled by 30-day completion requirements"
-            highlightIcon={<FaGavel className="h-4 w-4" />}
-            imageSrc="/images/auction-finance-mvp-dashboard.svg"
-            imageAlt="Auction Finance MVP dashboard"
-          />
+            <StatusLaunchBox
+              tag="Q3 2026"
+              launchLabel="Launching Q3 2026"
+              title="Auction Finance MVP"
+              description="Pre-approved finance embedded into the auction experience — certainty of funding before the hammer falls, within the 28-day completion window."
+              highlight="Unlocking £5.5bn stalled by 30-day completion requirements"
+              highlightIcon={<FaGavel className="h-4 w-4" />}
+              imageSrc="/images/auction-finance-mvp-dashboard.svg"
+              imageAlt="Auction Finance MVP dashboard"
+            />
+          </div>
+
+          <div className="mt-8 p-8 rounded-3xl border border-[#4a8a9a]/50 bg-[#0a3d4d]/60">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12">
+              <StatusFeatureCard
+                icon={<FaFileSignature className="h-7 w-7" />}
+                title="Loan origination"
+                description="Data entered once, eligibility checked instantly, indicative offer returned in real time — fully configurable by stakeholders, no developer involvement."
+              />
+              <StatusFeatureCard
+                icon={<FaScaleBalanced className="h-7 w-7" />}
+                title="Lawyer workflow"
+                description="Every legal step managed on-platform — from instruction to execution, no manual chasing, no fragmented communication."
+              />
+              <StatusFeatureCard
+                icon={<FaDatabase className="h-7 w-7" />}
+                title="Loan management"
+                description="Automated lifecycle management from drawdown to exit — breach detection, payment distributions and borrower self-service, every action on blockchain."
+              />
+              <StatusFeatureCard
+                icon={<FaChartLine className="h-7 w-7" />}
+                title="Capital provider dashboards"
+                description="Real-time visibility across every funded loan — performance, distributions and compliance in a single dedicated dashboard."
+              />
+            </div>
+          </div>
         </div>
       </div>
     </div>

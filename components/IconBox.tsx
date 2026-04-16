@@ -80,13 +80,13 @@ export default function IconBox({
 
   return (
     <div
-      className={`relative flex flex-col items-center gap-1 p-7 rounded-2xl text-center h-full border border-dashed bg-[#124652] border-[#82b0ba] overflow-hidden will-change-transform ${className}`}
+      className={`relative flex flex-col items-center gap-1 p-7 rounded-2xl text-center h-full border border-[#1491B3] bg-[#003746] overflow-hidden will-change-transform ${className}`}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
       <div className="pointer-events-none absolute inset-0 rounded-2xl overflow-hidden">
-        <div className="absolute -top-8 -right-4 w-32 h-32 bg-white/25 rounded-full blur-2xl" />
-        <div className="absolute -bottom-8 -left-4 w-32 h-32 bg-white/25 rounded-full blur-2xl" />
+        <div className="absolute -top-8 -right-4 w-[20%] h-[20%] bg-[#58fffc]/30 rounded-full blur-2xl" />
+        <div className="absolute -bottom-8 -left-4 w-[20%] h-[20%] bg-[#58fffc]/30 rounded-full blur-2xl" />
       </div>
 
       <div
