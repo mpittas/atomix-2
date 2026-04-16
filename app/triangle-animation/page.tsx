@@ -8,6 +8,7 @@ import Header from "@/components/header";
 import Footer from "@/components/Footer";
 import AtomixPyramidNewDesign from "@/animations/AtomixPyramidNewDesign";
 import { FiCheck, FiX } from "react-icons/fi";
+import SoftAurora from "@/components/backgrounds/SoftAurora";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -105,11 +106,28 @@ export default function TriangleAnimationPage() {
       <div className="pt-23">
         <div className="p-4 flex flex-col gap-y-4 ">
           <div className="min-h-screen bg-red-500/30 rounded-2xl"></div>
-
           <div
             ref={pyramidSectionRef}
             className="min-h-[calc(100vh-126px)] rounded-3xl bg-linear-to-b from-[#0B4858] via-[#486c74] to-[#0B4858] relative overflow-hidden flex flex-col justify-center items-center"
           >
+            <div className="absolute top-0 left-0 w-full h-[500px]">
+              <SoftAurora
+                speed={1.3}
+                scale={1.2}
+                brightness={0.65}
+                color1="#78cfe3"
+                color2="#87b9d4"
+                noiseFrequency={1}
+                noiseAmplitude={3.5}
+                bandHeight={0.85}
+                bandSpread={1}
+                octaveDecay={0.12}
+                layerOffset={0.5}
+                colorSpeed={1}
+                enableMouseInteraction={false}
+                mouseInfluence={0.2}
+              />
+            </div>
             <div className="max-w-[1200px] min-h-[200px] my-auto flex">
               <div className="flex-1">
                 <AtomixPyramidNewDesign
