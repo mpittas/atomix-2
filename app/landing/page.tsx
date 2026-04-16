@@ -10,6 +10,7 @@ import MainProblemsTabs from "@/main/MainProblemsTabs";
 import MainPyramidWrapper from "@/main/MainPyramidWrapper";
 import MainSolutionsAnimation from "@/main/MainSolutionsAnimation";
 import MainBenefitsTabs from "@/main/benefits-tabs/";
+import MainTheMarket from "@/main/MainTheMarket";
 
 import DefHeading from "@/components/typo/DefHeading";
 import { Button as DefButton } from "@/components/ui";
@@ -187,6 +188,8 @@ export default function LandingGradientV1Page() {
 
         <MainBenefitsTabs />
 
+        <MainTheMarket />
+
         <div className="h-full mb-6">
           <div className="px-18 py-36 rounded-t-3xl bg-linear-to-b from-[#0B4858] to-[#81A6AF] relative overflow-hidden">
             <div className="absolute -top-10 left-0 w-full h-[500px]">
@@ -227,6 +230,7 @@ export default function LandingGradientV1Page() {
             </div>
           </div>
         </div>
+
         <div className="h-full mb-12">
           <div className="px-18 py-36 rounded-3xl bg-linear-to-b from-[#0B4858] via-[#81A6AF] to-[#0B4858] relative overflow-hidden">
             <div className="absolute -top-10 left-0 w-full h-[500px]">
