@@ -78,8 +78,8 @@ export default function TriangleAnimationPage() {
 
     const pinTrigger = ScrollTrigger.create({
       trigger: section,
-      start: "top top+=96px",
-      end: "+=2000",
+      start: "top top+=110px",
+      end: "+=1000",
       pin: true,
       pinSpacing: true,
       scrub: true,
@@ -99,61 +99,69 @@ export default function TriangleAnimationPage() {
   }, []);
 
   return (
-    <div ref={containerRef} className="flex flex-col min-h-screen bg-[#004054]">
+    <div ref={containerRef} className="flex flex-col min-h-screen bg-gray-200">
       <Header />
 
       <div className="pt-23">
-        <div className="min-h-screen bg-red-500/30"></div>
-        <div ref={pyramidSectionRef}>
-          <div className="max-w-[1200px] min-h-[200px] mx-auto flex pt-[56px]">
-            <div className="flex-1">
-              <AtomixPyramidNewDesign
-                onInfiniteSpinStart={handleInfiniteSpinStart}
-              />
-            </div>
+        <div className="p-4 flex flex-col gap-y-4 ">
+          <div className="min-h-screen bg-red-500/30 rounded-2xl"></div>
 
-            <div className="flex-1 flex flex-col justify-center gap-12 pl-20 max-w-lg">
-              {iconBoxesData.map((box, index) => (
-                <div
-                  key={index}
-                  ref={(el) => {
-                    iconBoxRefs.current[index] = el;
-                  }}
-                  className="flex items-start gap-4"
-                >
-                  <img
-                    src={box.icon}
-                    alt={box.title}
-                    className="w-10 h-10 shrink-0 mt-1"
-                  />
-                  <div>
-                    <h3 className="text-white font-semibold text-lg mb-1">
-                      {box.title}
-                    </h3>
-                    <p
-                      className={`text-white/80 text-base leading-relaxed ${
-                        box.items ? "mb-4" : ""
-                      }`}
-                    >
-                      {box.description}
-                    </p>
-                    {box.items && (
-                      <ul className="space-y-1">
-                        {box.items.map((item, itemIndex) => (
-                          <li
-                            key={itemIndex}
-                            className="flex items-center gap-3 text-gray-300"
-                          >
-                            {item.icon} {item.text}
-                          </li>
-                        ))}
-                      </ul>
-                    )}
+          <div
+            ref={pyramidSectionRef}
+            className="min-h-[calc(100vh-126px)] rounded-3xl bg-linear-to-b from-[#0B4858] via-[#486c74] to-[#0B4858] relative overflow-hidden flex flex-col justify-center items-center"
+          >
+            <div className="max-w-[1200px] min-h-[200px] my-auto flex">
+              <div className="flex-1">
+                <AtomixPyramidNewDesign
+                  onInfiniteSpinStart={handleInfiniteSpinStart}
+                />
+              </div>
+
+              <div className="flex-1 flex flex-col justify-center gap-12 pl-20 max-w-lg">
+                {iconBoxesData.map((box, index) => (
+                  <div
+                    key={index}
+                    ref={(el) => {
+                      iconBoxRefs.current[index] = el;
+                    }}
+                    className="flex items-start gap-4"
+                  >
+                    <img
+                      src={box.icon}
+                      alt={box.title}
+                      className="w-10 h-10 shrink-0 mt-1"
+                    />
+                    <div>
+                      <h3 className="text-white font-semibold text-lg mb-1">
+                        {box.title}
+                      </h3>
+                      <p
+                        className={`text-white/80 text-base leading-relaxed ${
+                          box.items ? "mb-4" : ""
+                        }`}
+                      >
+                        {box.description}
+                      </p>
+                      {box.items && (
+                        <ul className="space-y-1">
+                          {box.items.map((item, itemIndex) => (
+                            <li
+                              key={itemIndex}
+                              className="flex items-center gap-3 text-white/80"
+                            >
+                              {item.icon} {item.text}
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
+
+          <div className="min-h-screen bg-red-500/30 rounded-2xl"></div>
         </div>
       </div>
 
