@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useRef } from "react";
+import React, { useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
@@ -53,49 +53,57 @@ const iconBoxesData: IconBoxData[] = [
 
 export default function MainPyramidWrapper() {
   const pyramidSectionRef = useRef<HTMLDivElement>(null);
+  const pyramidColRef = useRef<HTMLDivElement>(null);
   const iconBoxRefs = useRef<Array<HTMLDivElement | null>>([]);
-  const revealTimelineRef = useRef<gsap.core.Timeline | null>(null);
-  const hasPlayedRevealRef = useRef(false);
 
   useGSAP(() => {
     const section = pyramidSectionRef.current;
+    const pyramidCol = pyramidColRef.current;
     const boxes = iconBoxRefs.current.filter(
       (box): box is HTMLDivElement => box !== null,
     );
-    if (!section || boxes.length === 0) return;
+    if (!section || !pyramidCol || boxes.length === 0) return;
 
+    // Initial state: pyramid horizontally centered in the wrapper,
+    // icon boxes hidden and slightly offset for entry animation.
+    gsap.set(pyramidCol, { xPercent: 50 });
     gsap.set(boxes, { autoAlpha: 0, y: 32 });
-
-    revealTimelineRef.current = gsap.timeline({ paused: true }).to(boxes, {
-      autoAlpha: 1,
-      y: 0,
-      duration: 2,
-      ease: "power2.out",
-      stagger: 0.4,
-    });
 
     const sectionHeight = section.offsetHeight;
 
-    const pinTrigger = ScrollTrigger.create({
-      trigger: section,
-      start: "top top+=110px",
-      end: `+=${sectionHeight * 3}`,
-      pin: true,
-      pinSpacing: true,
-      scrub: true,
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: section,
+        start: "top top+=110px",
+        end: `+=${sectionHeight * 3}`,
+        pin: true,
+        pinSpacing: true,
+        scrub: true,
+      },
     });
 
-    return () => {
-      pinTrigger.kill();
-      revealTimelineRef.current?.kill();
-      revealTimelineRef.current = null;
-    };
-  }, []);
+    // As the user scrolls, slide the pyramid from the centered position
+    // to its original left-column position.
+    tl.to(pyramidCol, { xPercent: 0, ease: "none", duration: 0.3 }, 0)
+      // Icon boxes fade/slide in during the same early portion of the
+      // pinned scroll. Because the timeline is scrubbed, scrolling back
+      // up naturally reverses this into an animate-out.
+      .to(
+        boxes,
+        {
+          autoAlpha: 1,
+          y: 0,
+          ease: "power2.out",
+          duration: 0.25,
+          stagger: 0.08,
+        },
+        0.1,
+      );
 
-  const handleInfiniteSpinStart = useCallback(() => {
-    if (hasPlayedRevealRef.current) return;
-    hasPlayedRevealRef.current = true;
-    revealTimelineRef.current?.play(0);
+    return () => {
+      tl.scrollTrigger?.kill();
+      tl.kill();
+    };
   }, []);
 
   return (
@@ -123,10 +131,8 @@ export default function MainPyramidWrapper() {
       </div>
 
       <div className="max-w-[1200px] min-h-[200px] my-auto flex">
-        <div className="flex-1">
-          <AtomixPyramidNewDesign
-            onInfiniteSpinStart={handleInfiniteSpinStart}
-          />
+        <div ref={pyramidColRef} className="flex-1">
+          <AtomixPyramidNewDesign />
         </div>
 
         <div className="flex-1 flex flex-col justify-center gap-12 pl-20 max-w-lg">
