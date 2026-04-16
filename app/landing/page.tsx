@@ -9,6 +9,7 @@ import MainHero from "@/main/MainHero";
 import MainProblemsTabs from "@/main/MainProblemsTabs";
 import MainPyramidWrapper from "@/main/MainPyramidWrapper";
 import MainSolutionsAnimation from "@/main/MainSolutionsAnimation";
+import MainBenefitsTabs from "@/main/benefits-tabs/";
 
 import DefHeading from "@/components/typo/DefHeading";
 import { Button as DefButton } from "@/components/ui";
@@ -23,7 +24,6 @@ import WhyAtomixLayout from "@/components/WhyAtomixLayout";
 import TheMarket from "@/components/TheMarket";
 import ScrollableTabsBenefits from "@/components/ScrollableTabsBenefits";
 import CurrentStatusDiagram from "@/components/CurrentStatusDiagram";
-import MainBenefitsTabs from "@/main/MainBenefitsTabs";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -187,40 +187,6 @@ export default function LandingGradientV1Page() {
 
         <MainBenefitsTabs />
 
-        <div className="h-full mb-6">
-          <div className="px-18 py-36 rounded-3xl bg-linear-to-b from-[#0B4858] via-[#81A6AF] to-[#0B4858] relative overflow-hidden">
-            <div className="absolute -top-10 left-0 w-full h-[500px]">
-              <SoftAurora
-                speed={1.3}
-                scale={1.2}
-                brightness={0.65}
-                color1="#78cfe3"
-                color2="#87b9d4"
-                noiseFrequency={1}
-                noiseAmplitude={3.5}
-                bandHeight={0.85}
-                bandSpread={1}
-                octaveDecay={0.12}
-                layerOffset={0.5}
-                colorSpeed={1}
-                enableMouseInteraction={false}
-                mouseInfluence={0.2}
-              />
-            </div>
-            <div className="max-w-[1200px] px-8 mx-auto bg-red-500/0">
-              <div className="mt-0 flex flex-col items-center">
-                <div className="w-full flex flex-col gap-32" id="info-rows">
-                  {/* <BenefitsLayout /> */}
-                  <ScrollableTabsBenefits />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* <div className="px-18 py-36 rounded-b-3xl bg-linear-to-t from-[#0B4858] to-[#81A6AF]">
-            
-          </div> */}
-        </div>
         <div className="h-full mb-6">
           <div className="px-18 py-36 rounded-t-3xl bg-linear-to-b from-[#0B4858] to-[#81A6AF] relative overflow-hidden">
             <div className="absolute -top-10 left-0 w-full h-[500px]">

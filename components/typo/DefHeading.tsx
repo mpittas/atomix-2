@@ -11,7 +11,7 @@ export interface DefHeadingProps {
   badgeText: string;
   badgeColor?: "blue" | "red";
   title: string;
-  description: string;
+  description: React.ReactNode;
   className?: string;
   badgeClassName?: string;
   theme?: "dark" | "light";

@@ -351,12 +351,21 @@ export default function MainSolutionsAnimation() {
         />
       </div>
 
-      <div className="relative z-10 flex flex-col gap-y-12 w-full max-w-[1200px] px-8 py-32">
+      <div className="relative z-10 flex flex-col gap-y-16 w-full max-w-[1200px] px-8 py-32">
         <DefHeading
           theme="light"
           badgeText=""
-          title="The Existing Problems"
-          description="Property lending is manual, opaque and structurally exposed to fraud — not by intent, but by design. Legacy infrastructure was never built to handle the volume, complexity or transparency this market demands."
+          title="The Atomix Solution"
+          description={
+            <>
+              Three distinct layers — trust, rules and intelligence. Blockchain
+              underpins everything; rules govern every step; intelligence finds
+              the most efficient path through, constrained by both.
+              <br />
+              Atomix delivers all three — complex logic, self-serve
+              modifications, fully automated. No compromises.
+            </>
+          }
           showBadge={false}
           // onAnimationComplete={handleHeadingComplete}
         />
