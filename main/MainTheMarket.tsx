@@ -6,6 +6,37 @@ import { useGSAP } from "@gsap/react";
 import DefHeading from "@/components/typo/DefHeading";
 import SoftAurora from "@/components/backgrounds/SoftAurora";
 
+function getCountParts(value: string) {
+  const match = value.match(/^([^\d.-]*)(\d+(?:\.\d+)?)(.*)$/);
+
+  if (!match) {
+    return {
+      prefix: "",
+      target: 0,
+      decimals: 0,
+    };
+  }
+
+  const [, prefix, numericPart] = match;
+  const decimals = numericPart.includes(".")
+    ? numericPart.split(".")[1].length
+    : 0;
+
+  return {
+    prefix,
+    target: Number(numericPart),
+    decimals,
+  };
+}
+
+function formatCount(value: number, decimals: number) {
+  if (decimals === 0) {
+    return Math.round(value).toString();
+  }
+
+  return value.toFixed(decimals);
+}
+
 interface MainStatCardProps {
   badge: string;
   value: string;
@@ -21,6 +52,8 @@ function MainStatCard({
   description,
   className,
 }: MainStatCardProps) {
+  const countParts = getCountParts(value);
+
   return (
     <div
       className={`relative h-full overflow-hidden rounded-3xl border border-[#4a8a9a]/50 bg-[#0a3d4d]/60 p-6 ${className || ""}`}
@@ -37,7 +70,14 @@ function MainStatCard({
           {badge}
         </span>
         <div className="mt-4 flex items-baseline gap-1">
-          <span className="text-5xl font-bold text-white">{value}</span>
+          <span
+            className="text-5xl font-bold text-white market-count-value"
+            data-count-prefix={countParts.prefix}
+            data-count-target={countParts.target}
+            data-count-decimals={countParts.decimals}
+          >
+            {`${countParts.prefix}${formatCount(0, countParts.decimals)}`}
+          </span>
           <span className="text-2xl font-medium text-white">{unit}</span>
         </div>
         <p className="mt-3 text-md leading-relaxed text-white/80">
@@ -55,10 +95,19 @@ interface SimpleStatBoxProps {
 }
 
 function SimpleStatBox({ value, unit, description }: SimpleStatBoxProps) {
+  const countParts = getCountParts(value);
+
   return (
     <div>
       <div className="flex items-baseline gap-1">
-        <span className="text-5xl font-bold text-white">{value}</span>
+        <span
+          className="text-5xl font-bold text-white market-count-value"
+          data-count-prefix={countParts.prefix}
+          data-count-target={countParts.target}
+          data-count-decimals={countParts.decimals}
+        >
+          {`${countParts.prefix}${formatCount(0, countParts.decimals)}`}
+        </span>
         {unit && (
           <span className="text-2xl font-medium text-white">{unit}</span>
         )}
@@ -92,13 +141,38 @@ export default function MainTheMarket() {
     const revealItems = contentRef.current.querySelectorAll(
       ".market-reveal-item",
     );
+    const countValues = contentRef.current.querySelectorAll<HTMLElement>(
+      ".market-count-value",
+    );
 
-    gsap.to(revealItems, {
+    const tl = gsap.timeline();
+
+    tl.to(revealItems, {
       y: 0,
       opacity: 1,
       duration: 1.2,
       stagger: 0.3,
       ease: "power2.out",
+    });
+
+    countValues.forEach((element, index) => {
+      const target = Number(element.dataset.countTarget ?? "0");
+      const decimals = Number(element.dataset.countDecimals ?? "0");
+      const prefix = element.dataset.countPrefix ?? "";
+      const counter = { value: 0 };
+
+      tl.to(
+        counter,
+        {
+          value: target,
+          duration: 1.2,
+          ease: "power2.out",
+          onUpdate: () => {
+            element.textContent = `${prefix}${formatCount(counter.value, decimals)}`;
+          },
+        },
+        index * 0.3,
+      );
     });
   };
 
