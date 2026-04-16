@@ -269,7 +269,9 @@ export default function MainCurrentStatus() {
         <div className="w-full flex gap-x-4 justify-center">
           <DefButton href="/landing-platform-benefits">Learn more</DefButton>
 
-          <DefButton href="/landing-platform-benefits">Watch Videos</DefButton>
+          <DefButton variant="dark" href="/landing-platform-benefits">
+            Watch Videos
+          </DefButton>
         </div>
       </div>
     </div>

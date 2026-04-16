@@ -2,7 +2,7 @@ import React from "react";
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   size?: "small" | "medium" | "large";
-  variant?: "primary";
+  variant?: "primary" | "dark";
   gradient?: boolean | string;
   children: React.ReactNode;
   href?: string;
@@ -31,6 +31,10 @@ const Button = React.forwardRef<
     };
 
     const getBackgroundClass = () => {
+      if (variant === "dark") {
+        return "bg-[#003746] hover:bg-[#004a5e] border border-[#1491B3]";
+      }
+
       if (gradient === false) {
         return "bg-blue-600 hover:bg-blue-700";
       }
