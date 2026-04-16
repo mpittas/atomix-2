@@ -186,6 +186,7 @@ export interface AtomixPyramidNewDesignProps {
   style?: CSSProperties;
   initialSliderValue?: number;
   onReady?: (api: { setSlider: (v: number) => void }) => void;
+  onInfiniteSpinStart?: () => void;
 }
 
 const ABS_FILL: CSSProperties = {
@@ -227,6 +228,7 @@ const AtomixPyramidNewDesign: React.FC<AtomixPyramidNewDesignProps> = ({
   style,
   initialSliderValue = 0,
   onReady,
+  onInfiniteSpinStart,
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -540,6 +542,7 @@ const AtomixPyramidNewDesign: React.FC<AtomixPyramidNewDesignProps> = ({
       KEYS.map((k) => [k, { ...cfg.callouts.offsets[k] }]),
     ) as Record<VK, { dx: number; dy: number }>;
     const aOff = { ...cfg.apexCallout.offset };
+    let hasTriggeredInfiniteSpinStart = false;
     let curT = 0,
       spin = 0,
       last = performance.now(),
@@ -554,6 +557,10 @@ const AtomixPyramidNewDesign: React.FC<AtomixPyramidNewDesignProps> = ({
       const t = curT;
 
       if (t > rot.spinThreshold) {
+        if (!hasTriggeredInfiniteSpinStart) {
+          hasTriggeredInfiniteSpinStart = true;
+          onInfiniteSpinStart?.();
+        }
         spin +=
           rot.spinSpeed *
           dt *
@@ -650,7 +657,7 @@ const AtomixPyramidNewDesign: React.FC<AtomixPyramidNewDesignProps> = ({
       });
       renderer.dispose();
     };
-  }, [cfg, initialSliderValue, onReady]);
+  }, [cfg, initialSliderValue, onInfiniteSpinStart, onReady]);
 
   const cs = cfg.callouts.style,
     acs = cfg.apexCallout.style;

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef } from "react";
+import React, { useCallback, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
@@ -11,15 +11,72 @@ import { FiCheck, FiX } from "react-icons/fi";
 
 gsap.registerPlugin(ScrollTrigger);
 
+type IconBoxData = {
+  icon: string;
+  title: string;
+  description: string;
+  items?: Array<{ icon: React.ReactNode; text: string }>;
+};
+
+const iconBoxesData: IconBoxData[] = [
+  {
+    icon: "/icons/white/shield-check-white.svg",
+    title: "Simple SaaS",
+    description: "automated and easy to change, but simple products only",
+  },
+  {
+    icon: "/icons/white/target-arrow.svg",
+    title: "Bespoke builds",
+    description:
+      "automated and complex, but £500k+ upfront and expensive to change",
+    items: [
+      {
+        icon: <FiCheck className="text-white/80 w-5 h-5 shrink-0" />,
+        text: "Automated",
+      },
+      {
+        icon: <FiCheck className="text-white/80 w-5 h-5 shrink-0" />,
+        text: "Complex logic",
+      },
+      {
+        icon: <FiX className="text-white/80 w-5 h-5 shrink-0" />,
+        text: "£600k, slow to change",
+      },
+    ],
+  },
+  {
+    icon: "/icons/white/module-simple.svg",
+    title: "Disconnected stacks",
+    description:
+      "complex and configurable, but humans are the glue; nothing is truly automated",
+  },
+];
+
 export default function TriangleAnimationPage() {
   const containerRef = useRef<HTMLDivElement>(null);
   const pyramidSectionRef = useRef<HTMLDivElement>(null);
+  const iconBoxRefs = useRef<Array<HTMLDivElement | null>>([]);
+  const revealTimelineRef = useRef<gsap.core.Timeline | null>(null);
+  const hasPlayedRevealRef = useRef(false);
 
   useGSAP(() => {
     const section = pyramidSectionRef.current;
-    if (!section) return;
+    const boxes = iconBoxRefs.current.filter(
+      (box): box is HTMLDivElement => box !== null,
+    );
+    if (!section || boxes.length === 0) return;
 
-    ScrollTrigger.create({
+    gsap.set(boxes, { autoAlpha: 0, y: 32 });
+
+    revealTimelineRef.current = gsap.timeline({ paused: true }).to(boxes, {
+      autoAlpha: 1,
+      y: 0,
+      duration: 2,
+      ease: "power2.out",
+      stagger: 0.4,
+    });
+
+    const pinTrigger = ScrollTrigger.create({
       trigger: section,
       start: "top top+=96px",
       end: "+=2000",
@@ -27,87 +84,74 @@ export default function TriangleAnimationPage() {
       pinSpacing: true,
       scrub: true,
     });
+
+    return () => {
+      pinTrigger.kill();
+      revealTimelineRef.current?.kill();
+      revealTimelineRef.current = null;
+    };
+  }, []);
+
+  const handleInfiniteSpinStart = useCallback(() => {
+    if (hasPlayedRevealRef.current) return;
+    hasPlayedRevealRef.current = true;
+    revealTimelineRef.current?.play(0);
   }, []);
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#004054]">
+    <div ref={containerRef} className="flex flex-col min-h-screen bg-[#004054]">
       <Header />
 
       <div className="pt-23">
-        <div className="min-h-screen"></div>
+        <div className="min-h-screen bg-red-500/30"></div>
         <div ref={pyramidSectionRef}>
           <div className="max-w-[1200px] min-h-[200px] mx-auto flex pt-[56px]">
             <div className="flex-1">
-              <AtomixPyramidNewDesign />
+              <AtomixPyramidNewDesign
+                onInfiniteSpinStart={handleInfiniteSpinStart}
+              />
             </div>
 
             <div className="flex-1 flex flex-col justify-center gap-12 pl-20 max-w-lg">
-              {/* Simple SaaS */}
-              <div className="flex items-start gap-4">
-                <img
-                  src="/icons/white/shield-check-white.svg"
-                  alt="Disconnected stacks"
-                  className="w-10 h-10 shrink-0 mt-1"
-                />
-                <div>
-                  <h3 className="text-white font-semibold text-lg mb-1">
-                    Simple SaaS
-                  </h3>
-                  <p className="text-white/80 text-base leading-relaxed">
-                    automated and easy to change, but simple products only
-                  </p>
+              {iconBoxesData.map((box, index) => (
+                <div
+                  key={index}
+                  ref={(el) => {
+                    iconBoxRefs.current[index] = el;
+                  }}
+                  className="flex items-start gap-4"
+                >
+                  <img
+                    src={box.icon}
+                    alt={box.title}
+                    className="w-10 h-10 shrink-0 mt-1"
+                  />
+                  <div>
+                    <h3 className="text-white font-semibold text-lg mb-1">
+                      {box.title}
+                    </h3>
+                    <p
+                      className={`text-white/80 text-base leading-relaxed ${
+                        box.items ? "mb-4" : ""
+                      }`}
+                    >
+                      {box.description}
+                    </p>
+                    {box.items && (
+                      <ul className="space-y-1">
+                        {box.items.map((item, itemIndex) => (
+                          <li
+                            key={itemIndex}
+                            className="flex items-center gap-3 text-gray-300"
+                          >
+                            {item.icon} {item.text}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
                 </div>
-              </div>
-
-              {/* Bespoke builds */}
-              <div className="flex items-start gap-4">
-                <img
-                  src="/icons/white/target-arrow.svg"
-                  alt="Disconnected stacks"
-                  className="w-10 h-10 shrink-0 mt-1"
-                />
-                <div>
-                  <h3 className="text-white font-semibold text-lg mb-1">
-                    Bespoke builds
-                  </h3>
-                  <p className="text-white/80 text-base leading-relaxed mb-4">
-                    automated and complex, but £500k+ upfront and expensive to
-                    change
-                  </p>
-                  <ul className="space-y-1">
-                    <li className="flex items-center gap-3 text-gray-300">
-                      <FiCheck className="text-white/80 w-5 h-5 shrink-0" />{" "}
-                      Automated
-                    </li>
-                    <li className="flex items-center gap-3 text-gray-300">
-                      <FiCheck className="text-white/80 w-5 h-5 shrink-0" />{" "}
-                      Complex logic
-                    </li>
-                    <li className="flex items-center gap-3 text-gray-300">
-                      <FiX className="text-white/80 w-5 h-5 shrink-0" /> £600k,
-                      slow to change
-                    </li>
-                  </ul>
-                </div>
-              </div>
-
-              {/* Disconnected stacks */}
-              <div className="flex items-start gap-4">
-                <img
-                  src="/icons/white/module-simple.svg"
-                  alt="Disconnected stacks"
-                  className="w-10 h-10 shrink-0 mt-1"
-                />
-                <div>
-                  <h3 className="text-white font-semibold text-lg mb-1">
-                    Disconnected stacks
-                  </h3>
-                  <p className="text-white/80 text-base leading-relaxed">
-                    complex and configurable, but humans are the glue; nothing
-                    is truly automated
-                  </p>
-                </div>
-              </div>
+              ))}
             </div>
           </div>
         </div>
