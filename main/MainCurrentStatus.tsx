@@ -4,15 +4,15 @@ import { type ReactNode, useCallback, useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import {
-  FaChartLine,
-  FaDatabase,
-  FaFileSignature,
   FaGavel,
   FaHouse,
-  FaScaleBalanced,
+  FaSliders,
+  FaRotate,
+  FaChartPie,
 } from "react-icons/fa6";
 import DefHeading from "@/components/typo/DefHeading";
 import SoftAurora from "@/components/backgrounds/SoftAurora";
+import CurrentStatusConnectors from "@/main/CurrentStatusConnectors";
 
 interface StatusLaunchBoxProps {
   tag: string;
@@ -23,6 +23,7 @@ interface StatusLaunchBoxProps {
   highlightIcon: ReactNode;
   imageSrc: string;
   imageAlt: string;
+  className?: string;
 }
 
 function StatusLaunchBox({
@@ -34,9 +35,12 @@ function StatusLaunchBox({
   highlightIcon,
   imageSrc,
   imageAlt,
+  className = "",
 }: StatusLaunchBoxProps) {
   return (
-    <article className="rounded-3xl border border-[#1491B3] bg-[#003746] p-6">
+    <article
+      className={`rounded-3xl border border-[#1491B3] bg-[#003746] p-10 ${className}`}
+    >
       <div className="mb-6 flex items-center justify-between">
         <span className="rounded-full border border-[#4a8a9a]/50 bg-[#38b8b8]/25 px-4 py-1 text-sm font-semibold uppercase text-[#2de1d1]">
           {tag}
@@ -75,7 +79,7 @@ function StatusFeatureCard({
     <div className="flex flex-col gap-y-3">
       <div className="text-white">{icon}</div>
       <h4 className="text-lg leading-6 font-semibold text-white">{title}</h4>
-      <p className="text-white/80">{description}</p>
+      <div className="text-sm text-white/80">{description}</div>
     </div>
   );
 }
@@ -133,10 +137,10 @@ export default function MainCurrentStatus() {
           onAnimationComplete={handleHeadingComplete}
         />
 
-        <div>
+        <div className="flex flex-col justify-center items-center">
           <div
             ref={contentRef}
-            className="w-full grid grid-cols-1 lg:grid-cols-2 gap-6"
+            className="w-full grid grid-cols-1 lg:grid-cols-2 -mb-[2px]"
           >
             <StatusLaunchBox
               tag="Q2 2026"
@@ -147,6 +151,7 @@ export default function MainCurrentStatus() {
               highlightIcon={<FaHouse className="h-4 w-4" />}
               imageSrc="/images/quick-home-sale-dashboard.svg"
               imageAlt="Quick Home Sale MVP dashboard"
+              className="rounded-r-none border-r-0"
             />
 
             <StatusLaunchBox
@@ -158,28 +163,31 @@ export default function MainCurrentStatus() {
               highlightIcon={<FaGavel className="h-4 w-4" />}
               imageSrc="/images/auction-finance-mvp-dashboard.svg"
               imageAlt="Auction Finance MVP dashboard"
+              className="rounded-l-none"
             />
           </div>
 
-          <div className="mt-8 p-8 rounded-3xl border border-[#1491B3] bg-[#003746]">
+          <CurrentStatusConnectors />
+
+          <div className="-mt-[2px] p-8 rounded-3xl border border-[#1491B3] bg-[#003746]">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12">
               <StatusFeatureCard
-                icon={<FaFileSignature className="h-7 w-7" />}
+                icon={<FaSliders className="h-7 w-7" />}
                 title="Loan origination"
                 description="Data entered once, eligibility checked instantly, indicative offer returned in real time — fully configurable by stakeholders, no developer involvement."
               />
               <StatusFeatureCard
-                icon={<FaScaleBalanced className="h-7 w-7" />}
+                icon={<FaGavel className="h-7 w-7" />}
                 title="Lawyer workflow"
                 description="Every legal step managed on-platform — from instruction to execution, no manual chasing, no fragmented communication."
               />
               <StatusFeatureCard
-                icon={<FaDatabase className="h-7 w-7" />}
+                icon={<FaRotate className="h-7 w-7" />}
                 title="Loan management"
                 description="Automated lifecycle management from drawdown to exit — breach detection, payment distributions and borrower self-service, every action on blockchain."
               />
               <StatusFeatureCard
-                icon={<FaChartLine className="h-7 w-7" />}
+                icon={<FaChartPie className="h-7 w-7" />}
                 title="Capital provider dashboards"
                 description="Real-time visibility across every funded loan — performance, distributions and compliance in a single dedicated dashboard."
               />
