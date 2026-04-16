@@ -248,7 +248,7 @@ const AtomixPyramidNewDesign: React.FC<AtomixPyramidNewDesignProps> = ({
     const scrollTrigger = ScrollTrigger.create({
       trigger: wrapper,
       start: "top center",
-      end: "bottom center",
+      end: () => `+=${wrapper.clientHeight * 3}`,
       scrub: true,
       onUpdate: (self) => {
         const delayedProgress = Math.max(0, (self.progress - 0.5) / 0.5);
