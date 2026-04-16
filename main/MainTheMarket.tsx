@@ -25,7 +25,13 @@ function MainStatCard({
     <div
       className={`relative overflow-hidden rounded-3xl border border-[#4a8a9a]/50 bg-[#0a3d4d]/60 p-6 ${className || ""}`}
     >
-      <div className="absolute inset-0 bg-gradient-to-br from-[#4a8a9a]/10 via-transparent to-transparent" />
+      {/* <div className="absolute inset-0 bg-gradient-to-br from-[#4a8a9a]/10 via-transparent to-transparent" /> */}
+
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute -top-8 -right-4 w-32 h-32 bg-white/15 rounded-full blur-[60px]" />
+        <div className="absolute -bottom-8 -left-4 w-32 h-32 bg-white/15 rounded-full blur-[60px]" />
+      </div>
+
       <div className="relative z-10">
         <span className="inline-block rounded-full bg-white px-3 py-1 text-sm font-semibold text-[#0B4858]">
           {badge}
