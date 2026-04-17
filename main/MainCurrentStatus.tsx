@@ -1,8 +1,7 @@
 "use client";
 
-import { type ReactNode, useRef } from "react";
+import { type ReactNode, useEffect, useRef } from "react";
 import gsap from "gsap";
-import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
   FaGavel,
@@ -17,6 +16,16 @@ import CurrentStatusConnectors from "@/main/CurrentStatusConnectors";
 import { Button as DefButton } from "@/components/ui";
 
 gsap.registerPlugin(ScrollTrigger);
+
+const GLOW_CONFIG = {
+  maxLength: 100,
+  maxOpacity: 1,
+  travelDuration: 3,
+  fadeInDuration: 0.4,
+  fadeOutDuration: 0.4,
+  repeatDelay: 1.5,
+  startDelay: 0.2,
+};
 
 interface StatusLaunchBoxProps {
   tag: string;
@@ -91,109 +100,183 @@ function StatusFeatureCard({
 export default function MainCurrentStatus() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const buttonsRef = useRef<HTMLDivElement>(null);
+  const glowTimelinesRef = useRef<gsap.core.Timeline[]>([]);
 
-  useGSAP(
-    () => {
-      if (!sectionRef.current) return;
+  useEffect(() => {
+    if (!sectionRef.current) return;
 
-      const animatePathDraw = (path: SVGPathElement, duration: number) => {
-        const pathTl = gsap.timeline();
-        pathTl.to(path, {
-          attr: { "stroke-dashoffset": "0" },
-          duration,
-          ease: "power2.inOut",
-        });
-        return pathTl;
-      };
+    const animatePathAndGlow = (
+      path: SVGPathElement,
+      glow: SVGPathElement | undefined,
+      duration: number,
+    ) => {
+      const len = path.getTotalLength ? path.getTotalLength() : 1000;
+      const pathTl = gsap.timeline();
 
-      const launchBoxes = gsap.utils.toArray<HTMLElement>(
-        ".status-launch-box",
-        sectionRef.current,
-      );
-      const connectorPaths = gsap.utils.toArray<SVGPathElement>(
-        ".status-connector-path",
-        sectionRef.current,
-      );
-      const featureCards = gsap.utils.toArray<HTMLElement>(
-        ".status-feature-card",
-        sectionRef.current,
-      );
-
-      gsap.set(launchBoxes, { autoAlpha: 0 });
-      if (launchBoxes[0]) gsap.set(launchBoxes[0], { x: -120 });
-      if (launchBoxes[1]) gsap.set(launchBoxes[1], { x: 120 });
-      gsap.set(featureCards, { autoAlpha: 0, y: 36 });
-      if (buttonsRef.current) {
-        gsap.set(buttonsRef.current, { autoAlpha: 0, y: 20 });
-      }
-
-      connectorPaths.forEach((path) => {
-        const len = path.getTotalLength ? path.getTotalLength() : 1000;
-        gsap.set(path, {
-          attr: {
-            "stroke-dasharray": `${len} ${len}`,
-            "stroke-dashoffset": `${-len}`,
-          },
-        });
-      });
-
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 75%",
-          once: true,
+      // Enforce zero state to fix any strict-mode hot reload glitches
+      gsap.set(path, {
+        attr: {
+          "stroke-dasharray": `${len} ${len + 50}`,
+          "stroke-dashoffset": `${len}`,
         },
       });
 
-      if (launchBoxes[0]) {
-        tl.to(launchBoxes[0], {
+      pathTl.to(path, {
+        attr: { "stroke-dashoffset": "0" },
+        duration,
+        ease: "power2.inOut",
+      });
+
+      if (glow) {
+        // Glow trail is up to half the line length
+        const glowLen = Math.min(GLOW_CONFIG.maxLength, len / 2);
+
+        pathTl.add(() => {
+          const glowTl = gsap.timeline({
+            repeat: -1,
+            repeatDelay: GLOW_CONFIG.repeatDelay,
+          });
+          glowTimelinesRef.current.push(glowTl);
+
+          glowTl
+            .set(glow, {
+              attr: {
+                "stroke-dasharray": `${glowLen} ${len + 50}`,
+                "stroke-dashoffset": `${glowLen}`,
+              },
+              opacity: 0,
+            })
+            .to(glow, {
+              attr: { "stroke-dashoffset": `-${len}` },
+              duration: GLOW_CONFIG.travelDuration,
+              ease: "power1.inOut",
+            })
+            .to(
+              glow,
+              {
+                opacity: GLOW_CONFIG.maxOpacity,
+                duration: GLOW_CONFIG.fadeInDuration,
+                ease: "power2.out",
+              },
+              "<",
+            )
+            .to(
+              glow,
+              {
+                opacity: 0,
+                duration: GLOW_CONFIG.fadeOutDuration,
+                ease: "power2.in",
+              },
+              `-=${GLOW_CONFIG.fadeOutDuration}`,
+            );
+        }, `<+=${GLOW_CONFIG.startDelay}`);
+      }
+
+      return pathTl;
+    };
+
+    const launchBoxes = gsap.utils.toArray<HTMLElement>(
+      ".status-launch-box",
+      sectionRef.current,
+    );
+    const connectorPaths = gsap.utils.toArray<SVGPathElement>(
+      ".status-connector-path",
+      sectionRef.current,
+    );
+    const connectorGlows = gsap.utils.toArray<SVGPathElement>(
+      ".status-connector-glow",
+      sectionRef.current,
+    );
+    const featureCards = gsap.utils.toArray<HTMLElement>(
+      ".status-feature-card",
+      sectionRef.current,
+    );
+
+    gsap.set(launchBoxes, { autoAlpha: 0 });
+    if (launchBoxes[0]) gsap.set(launchBoxes[0], { x: -120 });
+    if (launchBoxes[1]) gsap.set(launchBoxes[1], { x: 120 });
+    gsap.set(featureCards, { autoAlpha: 0, y: 36 });
+    if (buttonsRef.current) {
+      gsap.set(buttonsRef.current, { autoAlpha: 0, y: 20 });
+    }
+
+    connectorPaths.forEach((path, index) => {
+      // Base line is already hidden by HTML attributes
+      // GSAP animatePathAndGlow will reset its length dynamically when it runs
+
+      if (connectorGlows[index]) {
+        const len = path.getTotalLength ? path.getTotalLength() : 1000;
+        gsap.set(connectorGlows[index], {
+          attr: {
+            "stroke-dasharray": `${Math.min(GLOW_CONFIG.maxLength, len / 2)} ${len + 50}`,
+            "stroke-dashoffset": `${Math.min(GLOW_CONFIG.maxLength, len / 2)}`,
+          },
+          opacity: 0,
+        });
+      }
+    });
+
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: sectionRef.current,
+        start: "top 75%",
+        once: true,
+      },
+    });
+
+    if (launchBoxes[0]) {
+      tl.to(launchBoxes[0], {
+        x: 0,
+        autoAlpha: 1,
+        duration: 1.6,
+        ease: "power2.out",
+      });
+    }
+
+    if (launchBoxes[1]) {
+      tl.to(
+        launchBoxes[1],
+        {
           x: 0,
           autoAlpha: 1,
           duration: 1.6,
           ease: "power2.out",
+        },
+        "<0.2",
+      );
+    }
+
+    connectorPaths.forEach((path, index) => {
+      if (featureCards[index]) {
+        tl.to(featureCards[index], {
+          autoAlpha: 1,
+          y: 0,
+          duration: 0.8,
+          ease: "power2.out",
         });
       }
+      tl.add(animatePathAndGlow(path, connectorGlows[index], 0.95));
+    });
 
-      if (launchBoxes[1]) {
-        tl.to(
-          launchBoxes[1],
-          {
-            x: 0,
-            autoAlpha: 1,
-            duration: 1.6,
-            ease: "power2.out",
-          },
-          "<0.2",
-        );
-      }
+    if (buttonsRef.current) {
+      tl.to(
+        buttonsRef.current,
+        {
+          autoAlpha: 1,
+          y: 0,
+          duration: 0.8,
+          ease: "power2.out",
+        },
+        "-=0.4",
+      );
+    }
 
-      connectorPaths.forEach((path, index) => {
-        if (featureCards[index]) {
-          tl.to(featureCards[index], {
-            autoAlpha: 1,
-            y: 0,
-            duration: 0.8,
-            ease: "power2.out",
-          });
-        }
-        tl.add(animatePathDraw(path, 0.95));
-      });
-
-      if (buttonsRef.current) {
-        tl.to(
-          buttonsRef.current,
-          {
-            autoAlpha: 1,
-            y: 0,
-            duration: 0.8,
-            ease: "power2.out",
-          },
-          "-=0.4",
-        );
-      }
-    },
-    { scope: sectionRef },
-  );
+    return () => {
+      tl.kill();
+      glowTimelinesRef.current.forEach((t) => t.kill());
+      glowTimelinesRef.current = [];
+    };
+  }, []);
 
   return (
     <div className="min-h-[calc(100vh-126px)] rounded-3xl bg-linear-to-b from-[#0B4858] via-[#1e5360] to-[#0B4858] relative overflow-hidden flex flex-col justify-center items-center">
