@@ -757,7 +757,7 @@ export default function MainSolutionsAnimation() {
                 </div>
 
                 {/* Bottom arrow 2 - flipped from topPath2 */}
-                <div className="w-[101px] absolute left-[276px] -bottom-[1px] opacity-100">
+                {/* <div className="w-[101px] absolute left-[276px] -bottom-[1px] opacity-100">
                   <svg
                     viewBox="0 0 111 80"
                     xmlns="http://www.w3.org/2000/svg"
@@ -790,7 +790,7 @@ export default function MainSolutionsAnimation() {
                       opacity="0"
                     />
                   </svg>
-                </div>
+                </div> */}
 
                 {/* Bottom arrow 4 - flipped from topPath3 (right side) */}
                 <div className="w-[294px] absolute right-[83px] bottom-0">
@@ -829,7 +829,7 @@ export default function MainSolutionsAnimation() {
                 </div>
 
                 {/* Bottom arrow 3 - flipped from topPath4 (right side) */}
-                <div className="w-[101px] absolute right-[276px] -bottom-[1px]">
+                {/* <div className="w-[101px] absolute right-[276px] -bottom-[1px]">
                   <svg
                     viewBox="0 0 111 80"
                     xmlns="http://www.w3.org/2000/svg"
@@ -862,7 +862,7 @@ export default function MainSolutionsAnimation() {
                       opacity="0"
                     />
                   </svg>
-                </div>
+                </div> */}
               </div>
 
               <div ref={row3Badge1Ref} className="w-full">
