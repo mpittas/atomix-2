@@ -51,29 +51,38 @@ function StatusLaunchBox({
   className = "",
 }: StatusLaunchBoxProps) {
   return (
-    <article
-      className={`rounded-3xl border border-[#1491B3] bg-[#003746] p-10 ${className}`}
+    <div
+      className={`relative rounded-3xl border border-[#1491B3] bg-[#003746] p-10 overflow-hidden ${className}`}
     >
-      <div className="mb-6 flex items-center justify-between">
-        <span className="rounded-full border border-[#4a8a9a]/50 bg-[#38b8b8]/25 px-4 py-1 text-sm font-semibold uppercase text-[#2de1d1]">
-          {tag}
-        </span>
-        <span className="text-sm font-medium text-white/80">{launchLabel}</span>
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute -top-8 -bottom-8 right-4 w-[15%] rotate-20 bg-[#58fffc]/15 blur-2xl" />
+        <div className="absolute -top-8 -bottom-8 right-65 w-[3%] rotate-20 bg-[#58fffc]/15 blur-xl" />
       </div>
 
-      <h3 className="text-3xl leading-6 font-semibold text-white">{title}</h3>
+      <div className="relative">
+        <div className="mb-6 flex items-center justify-between">
+          <span className="rounded-full border border-[#4a8a9a]/50 bg-[#38b8b8]/25 px-4 py-1 text-sm font-semibold uppercase text-[#2de1d1]">
+            {tag}
+          </span>
+          <span className="text-sm font-medium text-white/80">
+            {launchLabel}
+          </span>
+        </div>
 
-      <p className="mt-4 text-white/80">{description}</p>
+        <h3 className="text-3xl leading-6 font-semibold text-white">{title}</h3>
 
-      <div className="mt-4 rounded-xl bg-white/7 p-2.5 text-sm text-white flex items-center gap-2">
-        <span className="text-white">{highlightIcon}</span>
-        <span>{highlight}</span>
+        <p className="mt-4 text-white/80">{description}</p>
+
+        <div className="mt-4 rounded-xl bg-white/7 p-2.5 text-sm text-white flex items-center gap-2">
+          <span className="text-white">{highlightIcon}</span>
+          <span>{highlight}</span>
+        </div>
+
+        <div className="mt-6 overflow-hidden rounded-2xl border border-white/20 bg-white/8">
+          <img src={imageSrc} alt={imageAlt} className="h-auto w-full" />
+        </div>
       </div>
-
-      <div className="mt-6 overflow-hidden rounded-2xl border border-white/20 bg-white/8">
-        <img src={imageSrc} alt={imageAlt} className="h-auto w-full" />
-      </div>
-    </article>
+    </div>
   );
 }
 

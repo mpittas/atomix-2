@@ -89,8 +89,8 @@ export default function IconBox({
       onMouseLeave={handleMouseLeave}
     >
       <div className="pointer-events-none absolute inset-0 rounded-2xl overflow-hidden">
-        <div className="absolute -top-8 -right-4 w-[20%] h-[20%] bg-[#58fffc]/30 rounded-full blur-2xl" />
-        <div className="absolute -bottom-8 -left-4 w-[20%] h-[20%] bg-[#58fffc]/30 rounded-full blur-2xl" />
+        <div className="absolute -top-8 -bottom-8 right-4 w-[15%] rotate-20 bg-[#58fffc]/15 blur-xl" />
+        <div className="absolute -top-8 -bottom-8 right-65 w-[3%] rotate-20 bg-[#58fffc]/15 blur-xl" />
       </div>
 
       <div
