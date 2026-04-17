@@ -117,7 +117,7 @@ export default function MainCurrentStatus() {
       gsap.set(path, {
         attr: {
           "stroke-dasharray": `${len} ${len + 50}`,
-          "stroke-dashoffset": `${len}`,
+          "stroke-dashoffset": `${-len}`, // Negative length hides the dash past the end of the path
         },
       });
 
@@ -142,12 +142,12 @@ export default function MainCurrentStatus() {
             .set(glow, {
               attr: {
                 "stroke-dasharray": `${glowLen} ${len + 50}`,
-                "stroke-dashoffset": `${glowLen}`,
+                "stroke-dashoffset": `${-len}`, // Start past the end of the path
               },
               opacity: 0,
             })
             .to(glow, {
-              attr: { "stroke-dashoffset": `-${len}` },
+              attr: { "stroke-dashoffset": `${glowLen}` }, // Travel backwards to the start
               duration: GLOW_CONFIG.travelDuration,
               ease: "power1.inOut",
             })
@@ -209,7 +209,7 @@ export default function MainCurrentStatus() {
         gsap.set(connectorGlows[index], {
           attr: {
             "stroke-dasharray": `${Math.min(GLOW_CONFIG.maxLength, len / 2)} ${len + 50}`,
-            "stroke-dashoffset": `${Math.min(GLOW_CONFIG.maxLength, len / 2)}`,
+            "stroke-dashoffset": `${-len}`,
           },
           opacity: 0,
         });
