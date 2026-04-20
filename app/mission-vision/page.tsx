@@ -10,7 +10,7 @@ export default function MissionVisionSections() {
       <div className="fixed inset-0 w-[1240px] left-1/2 -translate-x-1/2 border-l border-r border-dashed border-gray-950/30 z-[9999] pointer-events-none"></div>
       <Header />
       <div className="mt-24 pt-4 px-12 bg-red-500/20 page-wrapper flex flex-col gap-y-12">
-        <MissionVisionV1 />
+        {/* <MissionVisionV1 /> */}
         <MissionVisionV2 />
         <MissionVisionV3 />
       </div>

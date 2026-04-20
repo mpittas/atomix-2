@@ -277,14 +277,14 @@ export default function MainHero() {
           >
             <div ref={iconBox1Ref}>
               <IconBox
-                icon={<BadgeHeadingPill color="blue">Mission</BadgeHeadingPill>}
+                icon={<BadgeHeadingPill>Mission</BadgeHeadingPill>}
                 description=""
                 title="Rebuild UK property lending. Start with bridging. Extend into SME CRE term loans — same infrastructure, no rebuild."
               />
             </div>
             <div ref={iconBox2Ref}>
               <IconBox
-                icon={<BadgeHeadingPill color="blue">Vision</BadgeHeadingPill>}
+                icon={<BadgeHeadingPill>Vision</BadgeHeadingPill>}
                 description=""
                 title="Interconnected marketplaces — borrowers, lenders, capital providers and investors, each connected within a single ecosystem. Distribution partners deploy their own discrete, white-labelled environments within the same infrastructure. Property lending reimagined — starting in the UK, built for global scale."
               />

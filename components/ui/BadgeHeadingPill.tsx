@@ -2,23 +2,19 @@ import React from "react";
 
 interface BadgeHeadingPillProps {
   children: React.ReactNode;
-  color?: "blue" | "red";
+  color?: "dark";
   className?: string;
 }
 
 export const BadgeHeadingPill: React.FC<BadgeHeadingPillProps> = ({
   children,
-  color = "blue",
+  color = "dark",
   className = "",
 }) => {
   const colorStyles = {
-    blue: {
-      background: "bg-[#eaeff1]",
-      textGradient: "from-[#1ba4c9] to-[#1991af]",
-    },
-    red: {
-      background: "bg-[#FEEAE9]",
-      textGradient: "from-[#EF2D2A] to-[#F08739]",
+    dark: {
+      background: "bg-linear-to-r from-[#3C6671] to-[#184A57]",
+      textGradient: "from-[#fff] to-[#fff]",
     },
   };
 
