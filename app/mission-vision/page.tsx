@@ -11,7 +11,7 @@ export default function MissionVisionSections() {
       <Header />
       <div className="mt-24 pt-4 px-12 bg-red-500/20 page-wrapper flex flex-col gap-y-12">
         {/* <MissionVisionV1 /> */}
-        <MissionVisionV2 />
+        {/* <MissionVisionV2 /> */}
         <MissionVisionV3 />
       </div>
       <Footer />
