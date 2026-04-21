@@ -61,15 +61,15 @@ function OverlayContent({
     },
     {
       icon: <FaMicrochip className="h-8 w-8" />,
-      title: "Small Team, Big Impact",
+      title: "Cutting-Edge Technology",
       description:
-        "Join a focused team where every contribution directly shapes the product, technology, and company.",
+        "Work across AI, automation, data systems, and blockchain-backed infrastructure.",
     },
     {
       icon: <FaGlobe className="h-8 w-8" />,
-      title: "Small Team, Big Impact",
+      title: "Real-World Financial Infrastructure",
       description:
-        "Join a focused team where every contribution directly shapes the product, technology, and company.",
+        "Build technology that powers real lending markets and impacts billions in asset-backed finance.",
     },
   ];
 
