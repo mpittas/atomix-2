@@ -519,7 +519,7 @@ export default function CurrentStatusV1() {
             <div
               key={`small-${activeTab}`}
               data-cs-middle-image-small
-              className="absolute top-16 -right-19 z-2 flex flex-col gap-3"
+              className="absolute top-4 -right-19 z-2 flex flex-col gap-3"
             >
               {TABS[activeTab].smallImages.map((src, index) => (
                 <Image
