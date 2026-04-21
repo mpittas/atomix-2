@@ -203,7 +203,7 @@ export default function MainTheMarket() {
           theme="light"
           badgeText=""
           title="The Market"
-          description=""
+          description="UK property lending is large, active and chronically under-automated."
           showBadge={false}
           onAnimationComplete={handleHeadingComplete}
         />
