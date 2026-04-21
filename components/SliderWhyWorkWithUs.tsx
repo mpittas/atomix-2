@@ -12,6 +12,8 @@ gsap.registerPlugin(Draggable);
 interface WhyCardProps {
   title: string;
   description: string;
+  buttonText?: string;
+  linkText?: string;
 }
 
 interface OverlayItemCardProps {
@@ -20,13 +22,16 @@ interface OverlayItemCardProps {
   description: string;
 }
 
-function WhyCard({ title, description }: WhyCardProps) {
+function WhyCard({ title, description, buttonText, linkText }: WhyCardProps) {
   return (
     <div className="text-white flex flex-col items-start gap-y-7 max-w-sm">
       <div className="text-5xl uppercase">{title}</div>
       <div className="text-lg">{description}</div>
-      <a href="#" className="py-2 px-4 border border-white rounded-full">
-        See Opportunities
+      <a
+        href={linkText || "#"}
+        className="py-2 px-4 border border-white rounded-full"
+      >
+        {buttonText || "See Opportunities"}
       </a>
     </div>
   );
@@ -42,7 +47,11 @@ function OverlayItemCard({ icon, title, description }: OverlayItemCardProps) {
   );
 }
 
-function OverlayContent() {
+function OverlayContent({
+  innerRef,
+}: {
+  innerRef?: React.RefObject<HTMLDivElement | null>;
+}) {
   const overlayItems: OverlayItemCardProps[] = [
     {
       icon: <FaUsers className="h-8 w-8" />,
@@ -66,7 +75,11 @@ function OverlayContent() {
 
   return (
     <div className="max-w-[1440px] mx-auto w-full px-8 h-full flex flex-col justify-center items-end">
-      <div className="flex flex-col items-end text-white text-center gap-y-3 max-w-md">
+      <div
+        ref={innerRef}
+        className="flex flex-col items-end text-white text-center gap-y-3 max-w-md"
+        style={{ opacity: 0 }}
+      >
         {overlayItems.map((item, index) => (
           <OverlayItemCard
             key={`${item.title}-${index}`}
@@ -85,6 +98,7 @@ export default function SliderWhyWorkWithUs() {
   const handleRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
   const fadeCardRef = useRef<HTMLDivElement>(null);
+  const overlayContentRef = useRef<HTMLDivElement>(null);
   const dividerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -102,6 +116,9 @@ export default function SliderWhyWorkWithUs() {
       }
       if (fadeCardRef.current) {
         gsap.set(fadeCardRef.current, { opacity: 1 - progress });
+      }
+      if (overlayContentRef.current) {
+        gsap.set(overlayContentRef.current, { opacity: progress });
       }
       if (dividerRef.current) {
         gsap.set(dividerRef.current, { x });
@@ -148,12 +165,16 @@ export default function SliderWhyWorkWithUs() {
             title="Team"
             description="Lorem ipsum dolor sit amet, consectetur adipiscing elit.
               Suspendisse varius lorem eget leo vehicula consectetur."
+            buttonText="See Team"
+            linkText="#"
           />
           <div ref={fadeCardRef}>
             <WhyCard
               title="OPPORTUNITIES"
               description="Lorem ipsum dolor sit amet, consectetur adipiscing elit.
               Suspendisse varius lorem eget leo vehicula consectetur."
+              buttonText="See Opportunities"
+              linkText="#"
             />
           </div>
         </div>
@@ -165,7 +186,7 @@ export default function SliderWhyWorkWithUs() {
         className="absolute inset-0 z-20 bg-linear-to-b from-[#0B4858] via-[#1e5360] to-[#0B4858] pointer-events-none"
         // style={{ clipPath: "inset(0 50% 0 50%)" }}
       >
-        <OverlayContent />
+        <OverlayContent innerRef={overlayContentRef} />
       </div>
 
       {/* Vertical divider line (moves with the handle) */}
