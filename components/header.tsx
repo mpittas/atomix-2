@@ -67,7 +67,7 @@ export default function Header() {
 
   return (
     <header
-      className={`fixed z-999 top-0 left-0 right-0 z-50 bg-green-500/20  transition-all duration-300 ${isScrolled ? "" : ""}`}
+      className={`fixed z-999 top-0 left-0 right-0 z-50 bg-white transition-all duration-300 ${isScrolled ? "" : ""}`}
     >
       <div className="px-12">
         <nav>
