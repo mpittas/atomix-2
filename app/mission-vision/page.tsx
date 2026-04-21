@@ -9,7 +9,7 @@ export default function MissionVisionSections() {
     <div className="html-wrap  relative">
       <div className="fixed inset-0 w-[1240px] left-1/2 -translate-x-1/2 border-l border-r border-dashed border-gray-950/30 z-[9999] pointer-events-none"></div>
       <Header />
-      <div className="mt-24 pt-4 px-12 bg-red-500/20 page-wrapper flex flex-col gap-y-12">
+      <div className="mt-24 pt-4 px-12 bg-neutral-200 page-wrapper flex flex-col gap-y-12">
         <div className="min-h-[calc(100vh-126px)] bg-white rounded-3xl p-8 flex flex-col justify-center text-center ">
           <div className="text-black text-6xl text-black/70">Scroll down</div>
 
