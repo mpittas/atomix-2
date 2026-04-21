@@ -205,6 +205,13 @@ export default function CurrentStatusV1() {
       const section = sectionRef.current;
       const topCards =
         section.querySelectorAll<HTMLElement>("[data-cs-top-card]");
+      const topCardsRow = topCards[0]?.parentElement ?? null;
+      const topCardDescriptions = section.querySelectorAll<HTMLElement>(
+        "[data-cs-top-card-desc]",
+      );
+      const topCardMarketInfo = section.querySelectorAll<HTMLElement>(
+        "[data-cs-top-card-market]",
+      );
       const middleRow = section.querySelector<HTMLElement>(
         "[data-cs-middle-row]",
       );
@@ -252,6 +259,9 @@ export default function CurrentStatusV1() {
       });
       gsap.set(middleImageMain, { autoAlpha: 0 });
       gsap.set(middleImageSmall, { autoAlpha: 0, x: 80 });
+      gsap.set([topCardDescriptions, topCardMarketInfo], {
+        overflow: "hidden",
+      });
       gsap.set(featureCards, {
         autoAlpha: 0,
         y: 0,
@@ -333,6 +343,44 @@ export default function CurrentStatusV1() {
           },
           "-=1.2",
         );
+
+      if (topCardsRow) {
+        const topCardsCollapseTl = gsap.timeline({
+          scrollTrigger: {
+            trigger: topCardsRow,
+            start: "bottom 60%",
+            toggleActions: "play reverse play reverse",
+          },
+        });
+
+        topCardsCollapseTl
+          .to(
+            topCardDescriptions,
+            {
+              autoAlpha: 0,
+              y: -10,
+              height: 0,
+              marginTop: 0,
+              duration: 1,
+              ease: "power2.inOut",
+            },
+            0,
+          )
+          .to(
+            topCardMarketInfo,
+            {
+              autoAlpha: 0,
+              y: -10,
+              height: 0,
+              marginTop: 0,
+              paddingTop: 0,
+              paddingBottom: 0,
+              duration: 1,
+              ease: "power2.inOut",
+            },
+            "<",
+          );
+      }
 
       for (let index = 0; index < featureCards.length; index += 1) {
         const path = connectorSequence[index];
