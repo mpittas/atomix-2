@@ -5,6 +5,7 @@ import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
+import SoftAurora from "@/components/backgrounds/SoftAurora";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -161,9 +162,28 @@ export default function MissionVisionV3() {
         ref={innerRef}
         className="min-h-[calc(100vh-126px)] rounded-3xl bg-linear-to-b from-[#0B4858] via-[#1e5360] to-[#0B4858] relative overflow-hidden flex items-center justify-center"
       >
+        <div className="absolute top-0 left-0 w-full h-[500px] user-select-none pointer-events-none">
+          <SoftAurora
+            speed={1.3}
+            scale={1.2}
+            brightness={0.65}
+            color1="#78cfe3"
+            color2="#87b9d4"
+            noiseFrequency={1}
+            noiseAmplitude={3.5}
+            bandHeight={0.85}
+            bandSpread={1}
+            octaveDecay={0.12}
+            layerOffset={0.5}
+            colorSpeed={1}
+            enableMouseInteraction={false}
+            mouseInfluence={0.2}
+          />
+        </div>
+
         <div className="max-w-[1240px] h-full mx-auto text-white flex w-full py-24 bg-orange-500/0 overflow-hidden">
           {/* Mission - top left */}
-          <div className="relative w-full flex justify-start px-12">
+          <div className="relative w-full flex justify-start px-12 bg-red-500/0">
             <div
               data-mv3-mission-content
               className="max-w-md flex flex-col gap-y-6 bg-red-500/0"
@@ -195,7 +215,7 @@ export default function MissionVisionV3() {
               width="881"
               height="688"
               fill="none"
-              className="absolute left-0 -top-[50%] select-none pointer-events-none"
+              className="absolute left-0 -top-[20%] select-none pointer-events-none"
             >
               <path
                 fill="url(#a)"
@@ -219,7 +239,7 @@ export default function MissionVisionV3() {
           </div>
 
           {/* Vision - bottom right */}
-          <div className="relative w-full flex justify-end">
+          <div className="relative w-full flex justify-end bg-green-500/0">
             <div
               data-mv3-vision-content
               className="max-w-md flex flex-col gap-y-6 bg-red-500/0 pt-32"
@@ -246,7 +266,6 @@ export default function MissionVisionV3() {
                 SME CRE term loans — same infrastructure, no rebuild.
               </p>
             </div>
-
             <svg
               data-mv3-vision-glow
               width="880"
@@ -254,7 +273,7 @@ export default function MissionVisionV3() {
               viewBox="0 0 880 758"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
-              className="absolute right-0 -top-[21%] select-none pointer-events-none"
+              className="absolute right-0 -top-[0%] select-none pointer-events-none"
             >
               <path
                 d="M773.407 9.5849C820.398 -17.6204 879.201 16.3296 879.135 70.627L878.109 923.692C878.043 977.876 819.379 1011.7 772.454 984.607L35.2184 558.964C-11.7067 531.872 -11.7476 464.155 35.1448 437.006L773.407 9.5849Z"
