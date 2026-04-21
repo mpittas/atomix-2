@@ -136,6 +136,9 @@ export default function CurrentStatusV1() {
       const featureCards = section.querySelectorAll<HTMLElement>(
         "[data-cs-feature-card]",
       );
+      const buttons = section.querySelectorAll<HTMLElement>(
+        "[data-cs-buttons] > *",
+      );
       const connectorSequence = [
         connector1,
         connector2,
@@ -151,6 +154,7 @@ export default function CurrentStatusV1() {
       gsap.set(middleImageMain, { autoAlpha: 0 });
       gsap.set(middleImageSmall, { autoAlpha: 0, x: 80 });
       gsap.set(featureCards, { autoAlpha: 0, y: 56 });
+      gsap.set(buttons, { autoAlpha: 0, y: 40 });
 
       connectorSequence.forEach((path) => {
         if (!path) return;
@@ -256,6 +260,17 @@ export default function CurrentStatusV1() {
           );
         }
       }
+
+      tl.to(
+        buttons,
+        {
+          autoAlpha: 1,
+          y: 0,
+          duration: 1,
+          ease: "power4.inOut",
+        },
+        "-=7",
+      );
     },
     { scope: sectionRef },
   );
