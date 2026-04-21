@@ -1,3 +1,3 @@
-Duplicate MainHero and rename it to MainHeroV2
+inside @MissionVisionV1.tsx i need to make the section pinned to the top untill the animation inside finishes. I'll dfescrtiopbe the animation now
 
-For MainHero.tsx add 3 more slides similar to the "Vision" and "Mision" copying the same scroll behaviour (1 time each)
+Inside make each title to animate with @SplitText.tsx animation please.
