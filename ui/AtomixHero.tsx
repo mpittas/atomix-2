@@ -39,7 +39,7 @@ function BrandedBox({ label, text }: { label: string; text: string }) {
     <div className="flex-1">
       <div className="relative flex flex-col items-center gap-3 p-7 rounded-2xl text-center h-full border border-dashed bg-[#124652] border-[#82b0ba] overflow-hidden will-change-transform">
         <div className="relative z-10 flex flex-col items-center gap-3">
-          <BadgeHeadingPill color="blue">{label}</BadgeHeadingPill>
+          <BadgeHeadingPill color="dark">{label}</BadgeHeadingPill>
           <div className="text-2xl font-semibold leading-[1.3em] text-white">
             {text}
           </div>
