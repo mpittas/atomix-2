@@ -140,7 +140,7 @@ export default function ScrollableHeadingV2() {
                   <div className="absolute -bottom-8 -left-4 w-32 h-32 bg-white/25 rounded-full blur-2xl" />
                 </div>
                 <div className="relative z-10 flex flex-col items-center gap-3">
-                  <BadgeHeadingPill color="blue">Mission</BadgeHeadingPill>
+                  <BadgeHeadingPill color="dark">Mission</BadgeHeadingPill>
                   <div className="text-2xl font-semibold leading-[1.3em] text-white">
                     Fix UK property lending. Start with bridging. Extend into
                     SME CRE term loans — same infrastructure, no rebuild
@@ -155,7 +155,7 @@ export default function ScrollableHeadingV2() {
                   <div className="absolute -bottom-8 -left-4 w-32 h-32 bg-white/25 rounded-full blur-2xl" />
                 </div>
                 <div className="relative z-10 flex flex-col items-center gap-3">
-                  <BadgeHeadingPill color="blue">Vision</BadgeHeadingPill>
+                  <BadgeHeadingPill color="dark">Vision</BadgeHeadingPill>
                   <div className="text-2xl font-semibold leading-[1.3em] text-white">
                     Four interconnected marketplaces. Every stakeholder
                     connected. Property lending reimagined — starting in the UK,
