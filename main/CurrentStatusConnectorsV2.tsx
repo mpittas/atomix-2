@@ -20,7 +20,7 @@ const STATIC_GLOW_PROPS = {
 
 export default function CurrentStatusConnectorsV2() {
   return (
-    <div className="flex min-h-[108px] w-full relative mx-auto bg-red-500/20">
+    <div className="flex min-h-[108px] w-full relative mx-auto bg-red-500/0">
       <div className="w-[440px] absolute left-[calc(50%+3px)] -translate-x-1/1">
         <svg
           viewBox="0 0 325 80"

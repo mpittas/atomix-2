@@ -1,7 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import SoftAurora from "@/components/backgrounds/SoftAurora";
 import CurrentStatusConnectorsV2 from "@/main/CurrentStatusConnectorsV2";
@@ -73,17 +73,28 @@ interface StatusFeatureCardProps {
   icon: ReactNode;
   title: string;
   description: string;
+  active?: boolean;
+  onClick?: () => void;
 }
 
 function StatusFeatureCard({
   icon,
   title,
   description,
+  active = false,
+  onClick,
 }: StatusFeatureCardProps) {
   return (
-    <div
+    <button
+      type="button"
+      onClick={onClick}
+      aria-pressed={active}
       data-cs-feature-card
-      className="relative rounded-3xl border border-[#1491B3] bg-[#003746] p-6 overflow-hidden flex flex-col gap-y-3"
+      className={`relative rounded-3xl border bg-[#003746] p-6 overflow-hidden flex flex-col gap-y-3 text-left cursor-pointer transition-[border-color,box-shadow] duration-300 ${
+        active
+          ? "border-[#58fffc] ring-2 ring-[#58fffc]/60 shadow-[0_0_30px_rgba(88,255,252,0.25)]"
+          : "border-[#1491B3] hover:border-[#58fffc]/70"
+      }`}
     >
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute -top-8 -bottom-8 right-4 w-[15%] rotate-20 bg-[#58fffc]/15 blur-2xl" />
@@ -92,12 +103,100 @@ function StatusFeatureCard({
       <div className="text-white">{icon}</div>
       <h4 className="text-2xl font-semibold text-white">{title}</h4>
       <div className="text-white/80">{description}</div>
-    </div>
+    </button>
   );
 }
 
+interface TabData {
+  title: string;
+  description: string;
+  mainImage: string;
+  smallImages: string[];
+}
+
+const TABS: TabData[] = [
+  {
+    title: "Loan\norigination",
+    description:
+      "Data entered once, then structured workflow from application to drawdown.",
+    mainImage: "/dashboard/current-status-dashboard-1.svg",
+    smallImages: ["/dashboard/current-status-dashboard-1-small.svg"],
+  },
+  {
+    title: "Lawyer workflow",
+    description: "End-to-end legal, no chasing.",
+    mainImage: "/dashboard/current-status-dashboard-2.svg",
+    smallImages: [
+      "/dashboard/current-status-dashboard-2-small-1.svg",
+      "/dashboard/current-status-dashboard-2-small-2.svg",
+    ],
+  },
+  {
+    title: "Loan management",
+    description: "Automated lifecycle, start to finish.",
+    mainImage: "/dashboard/current-status-dashboard-2.svg",
+    smallImages: [
+      "/dashboard/current-status-dashboard-3-small-1.svg",
+      "/dashboard/current-status-dashboard-3-small-2.svg",
+    ],
+  },
+  {
+    title: "Capital provider dashboards",
+    description: "Real-time loan insights, all in one place.",
+    mainImage: "/dashboard/current-status-dashboard-2.svg",
+    smallImages: [
+      "/dashboard/current-status-dashboard-4-small-1.svg",
+      "/dashboard/current-status-dashboard-4-small-2.svg",
+      "/dashboard/current-status-dashboard-4-small-3.svg",
+    ],
+  },
+];
+
 export default function CurrentStatusV1() {
   const sectionRef = useRef<HTMLDivElement>(null);
+  const [activeTab, setActiveTab] = useState(0);
+  const isFirstTabRender = useRef(true);
+
+  useEffect(() => {
+    if (isFirstTabRender.current) {
+      isFirstTabRender.current = false;
+      return;
+    }
+    if (!sectionRef.current) return;
+    const main = sectionRef.current.querySelector<HTMLElement>(
+      "[data-cs-middle-image-main]",
+    );
+    const smallImages = sectionRef.current.querySelectorAll<HTMLElement>(
+      "[data-cs-middle-image-small] > *",
+    );
+    if (main) {
+      gsap.fromTo(
+        main,
+        { autoAlpha: 0 },
+        {
+          autoAlpha: 1,
+          duration: 0.55,
+          ease: "power2.out",
+          overwrite: "auto",
+        },
+      );
+    }
+    if (smallImages.length) {
+      gsap.fromTo(
+        smallImages,
+        { autoAlpha: 0, y: 20 },
+        {
+          autoAlpha: 1,
+          y: 0,
+          duration: 0.55,
+          ease: "power2.out",
+          delay: 0.08,
+          stagger: 0.18,
+          overwrite: "auto",
+        },
+      );
+    }
+  }, [activeTab]);
 
   useGSAP(
     () => {
@@ -153,8 +252,13 @@ export default function CurrentStatusV1() {
       });
       gsap.set(middleImageMain, { autoAlpha: 0 });
       gsap.set(middleImageSmall, { autoAlpha: 0, x: 80 });
-      gsap.set(featureCards, { autoAlpha: 0, y: 56 });
-      gsap.set(buttons, { autoAlpha: 0, y: 40 });
+      gsap.set(featureCards, {
+        autoAlpha: 0,
+        y: 0,
+        scale: 0.9,
+        transformOrigin: "center center",
+      });
+      gsap.set(buttons, { autoAlpha: 0, y: 20 });
 
       connectorSequence.forEach((path) => {
         if (!path) return;
@@ -240,7 +344,7 @@ export default function CurrentStatusV1() {
             path,
             {
               strokeDashoffset: 0,
-              duration: 0.95,
+              duration: 1,
               ease: "power2.inOut",
             },
             isFirstStep ? "-=4" : ">",
@@ -248,13 +352,20 @@ export default function CurrentStatusV1() {
         }
 
         if (card) {
-          tl.to(
+          tl.fromTo(
             card,
+            {
+              autoAlpha: 0,
+              y: 0,
+              scale: 0.9,
+            },
             {
               autoAlpha: 1,
               y: 0,
-              duration: 1.05,
+              scale: 1,
+              duration: 1.35,
               ease: "power2.out",
+              immediateRender: false,
             },
             ">",
           );
@@ -269,7 +380,7 @@ export default function CurrentStatusV1() {
           duration: 1,
           ease: "power4.inOut",
         },
-        "-=7",
+        "-=6",
       );
     },
     { scope: sectionRef },
@@ -348,7 +459,8 @@ export default function CurrentStatusV1() {
           <div data-cs-middle-image className="relative w-full relative">
             <div data-cs-middle-image-main className="w-full">
               <Image
-                src="/dashboard/current-status-dashboard-1.svg"
+                key={`main-${activeTab}`}
+                src={TABS[activeTab].mainImage}
                 alt=""
                 width={600}
                 height={400}
@@ -356,14 +468,22 @@ export default function CurrentStatusV1() {
               />
             </div>
 
-            <Image
+            <div
+              key={`small-${activeTab}`}
               data-cs-middle-image-small
-              src="/dashboard/current-status-dashboard-1-small.svg"
-              alt=""
-              width={320}
-              height={200}
-              className="object-cover rounded-lg absolute top-16 -right-19 z-2"
-            />
+              className="absolute top-16 -right-19 z-2 flex flex-col gap-3"
+            >
+              {TABS[activeTab].smallImages.map((src, index) => (
+                <Image
+                  key={`${src}-${index}`}
+                  src={src}
+                  alt=""
+                  width={320}
+                  height={200}
+                  className="object-cover rounded-lg"
+                />
+              ))}
+            </div>
           </div>
         </div>
 
@@ -372,27 +492,16 @@ export default function CurrentStatusV1() {
         </div>
 
         <div className="-mt-1 mb-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-          <StatusFeatureCard
-            icon={<TbTargetArrow className="h-10 w-10" />}
-            title="Loan
-origination"
-            description="Data entered once, then structured workflow from application to drawdown."
-          />
-          <StatusFeatureCard
-            icon={<TbTargetArrow className="h-10 w-10" />}
-            title="Lawyer workflow"
-            description="End-to-end legal, no chasing."
-          />
-          <StatusFeatureCard
-            icon={<TbTargetArrow className="h-10 w-10" />}
-            title="Loan management"
-            description="Automated lifecycle, start to finish."
-          />
-          <StatusFeatureCard
-            icon={<TbTargetArrow className="h-10 w-10" />}
-            title="Capital provider dashboards"
-            description="Real-time loan insights, all in one place."
-          />
+          {TABS.map((tab, index) => (
+            <StatusFeatureCard
+              key={tab.title}
+              icon={<TbTargetArrow className="h-10 w-10" />}
+              title={tab.title}
+              description={tab.description}
+              active={activeTab === index}
+              onClick={() => setActiveTab(index)}
+            />
+          ))}
         </div>
 
         <div data-cs-buttons className="w-full flex gap-x-4 justify-center">
