@@ -106,13 +106,6 @@ export default function CurrentStatusV1() {
       const section = sectionRef.current;
       const topCards =
         section.querySelectorAll<HTMLElement>("[data-cs-top-card]");
-      const topCardDescriptions = section.querySelectorAll<HTMLElement>(
-        "[data-cs-top-card-desc]",
-      );
-      const topCardMarketInfo = section.querySelectorAll<HTMLElement>(
-        "[data-cs-top-card-market]",
-      );
-
       const middleRow = section.querySelector<HTMLElement>(
         "[data-cs-middle-row]",
       );
@@ -122,38 +115,45 @@ export default function CurrentStatusV1() {
       const middleSubtitle = section.querySelector<HTMLElement>(
         "[data-cs-middle-subtitle]",
       );
-      const middleImage = section.querySelector<HTMLElement>(
-        "[data-cs-middle-image]",
+      const middleImageMain = section.querySelector<HTMLElement>(
+        "[data-cs-middle-image-main]",
       );
-
-      const connectorWrap = section.querySelector<HTMLElement>(
-        "[data-cs-connectors]",
+      const middleImageSmall = section.querySelector<HTMLElement>(
+        "[data-cs-middle-image-small]",
       );
-      const connectorPaths = section.querySelectorAll<SVGPathElement>(
-        "[data-cs-connectors] path",
+      const connector1 = section.querySelector<SVGPathElement>(
+        "[data-cs-connector-1]",
       );
-
+      const connector2 = section.querySelector<SVGPathElement>(
+        "[data-cs-connector-2]",
+      );
+      const connector3 = section.querySelector<SVGPathElement>(
+        "[data-cs-connector-3]",
+      );
+      const connector4 = section.querySelector<SVGPathElement>(
+        "[data-cs-connector-4]",
+      );
       const featureCards = section.querySelectorAll<HTMLElement>(
         "[data-cs-feature-card]",
       );
-      const buttons = section.querySelectorAll<HTMLElement>(
-        "[data-cs-buttons] > *",
-      );
+      const connectorSequence = [
+        connector1,
+        connector2,
+        connector3,
+        connector4,
+      ];
 
-      gsap.set(topCards, { autoAlpha: 0, y: 48 });
-
-      gsap.set([middleRow, middleTitle, middleSubtitle, middleImage], {
+      gsap.set(topCards, { autoAlpha: 0, y: 60 });
+      gsap.set([middleRow, middleTitle, middleSubtitle], {
         autoAlpha: 0,
-        y: 36,
+        y: 60,
       });
-      gsap.set(featureCards, { autoAlpha: 0, y: 34 });
-      gsap.set(buttons, { autoAlpha: 0, y: 26 });
+      gsap.set(middleImageMain, { autoAlpha: 0 });
+      gsap.set(middleImageSmall, { autoAlpha: 0, x: 80 });
+      gsap.set(featureCards, { autoAlpha: 0, y: 56 });
 
-      if (connectorWrap) {
-        gsap.set(connectorWrap, { autoAlpha: 1 });
-      }
-
-      connectorPaths.forEach((path) => {
+      connectorSequence.forEach((path) => {
+        if (!path) return;
         const length = path.getTotalLength();
         gsap.set(path, {
           strokeDasharray: `${length}`,
@@ -164,117 +164,98 @@ export default function CurrentStatusV1() {
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: section,
-          start: "top 72%",
-          end: "+=1200",
-          scrub: 0.85,
-          invalidateOnRefresh: true,
+          start: "top 80%",
+          toggleActions: "restart reset restart reset",
         },
       });
 
       tl.to(topCards, {
         autoAlpha: 1,
         y: 0,
-        duration: 0.7,
-        ease: "power3.out",
-        stagger: 0.12,
+        duration: 1.6,
+        ease: "power2.out",
+        stagger: 0.5,
       })
-        .to(
-          [topCardDescriptions, topCardMarketInfo],
-          {
-            autoAlpha: 0,
-            y: -8,
-            duration: 0.3,
-            ease: "power2.inOut",
-            stagger: 0.03,
-          },
-          "+=0.1",
-        )
-        .to(
-          topCardDescriptions,
-          {
-            height: 0,
-            marginTop: 0,
-            duration: 0.35,
-            ease: "power2.inOut",
-          },
-          ">-0.05",
-        )
-        .to(
-          topCardMarketInfo,
-          {
-            height: 0,
-            marginTop: 0,
-            paddingTop: 0,
-            paddingBottom: 0,
-            duration: 0.35,
-            ease: "power2.inOut",
-          },
-          "<",
-        )
         .to(
           middleRow,
           {
             autoAlpha: 1,
             y: 0,
-            duration: 0.45,
+            duration: 1.4,
             ease: "power2.out",
           },
-          "-=0.15",
+          "-=1",
         )
         .to(
           middleTitle,
           {
             autoAlpha: 1,
             y: 0,
-            duration: 0.4,
+            duration: 1.6,
             ease: "power2.out",
           },
-          "-=0.2",
+          "-=0.75",
         )
         .to(
           middleSubtitle,
           {
             autoAlpha: 1,
             y: 0,
-            duration: 0.35,
+            duration: 1.6,
             ease: "power2.out",
           },
-          "-=0.2",
+          "-=0.85",
         )
         .to(
-          middleImage,
+          middleImageMain,
           {
             autoAlpha: 1,
-            y: 0,
-            duration: 0.5,
-            ease: "power3.out",
+            duration: 2,
+            ease: "power1.out",
           },
-          "-=0.15",
+          "-=0.7",
         )
         .to(
-          connectorPaths,
+          middleImageSmall,
           {
-            strokeDashoffset: 0,
-            duration: 0.8,
+            autoAlpha: 1,
+            x: 0,
+            duration: 1.6,
             ease: "power2.out",
-            stagger: 0.06,
           },
-          "-=0.1",
-        )
-        .to(featureCards, {
-          autoAlpha: 1,
-          y: 0,
-          duration: 0.55,
-          ease: "power3.out",
-          stagger: 0.16,
-        })
-        .to(buttons, {
-          autoAlpha: 1,
-          y: 0,
-          duration: 0.5,
-          ease: "power3.out",
-          stagger: 0.1,
-        });
+          "-=1.2",
+        );
+
+      for (let index = 0; index < featureCards.length; index += 1) {
+        const path = connectorSequence[index];
+        const card = featureCards[index];
+        const isFirstStep = index === 0;
+
+        if (path) {
+          tl.to(
+            path,
+            {
+              strokeDashoffset: 0,
+              duration: 0.95,
+              ease: "power2.inOut",
+            },
+            isFirstStep ? "-=4" : ">",
+          );
+        }
+
+        if (card) {
+          tl.to(
+            card,
+            {
+              autoAlpha: 1,
+              y: 0,
+              duration: 1.05,
+              ease: "power2.out",
+            },
+            ">",
+          );
+        }
+      }
     },
     { scope: sectionRef },
   );
@@ -350,7 +331,7 @@ export default function CurrentStatusV1() {
           </div>
 
           <div data-cs-middle-image className="relative w-full relative">
-            <div className="w-full">
+            <div data-cs-middle-image-main className="w-full">
               <Image
                 src="/dashboard/current-status-dashboard-1.svg"
                 alt=""
@@ -361,6 +342,7 @@ export default function CurrentStatusV1() {
             </div>
 
             <Image
+              data-cs-middle-image-small
               src="/dashboard/current-status-dashboard-1-small.svg"
               alt=""
               width={320}

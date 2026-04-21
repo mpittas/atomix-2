@@ -20,7 +20,7 @@ const STATIC_GLOW_PROPS = {
 
 export default function CurrentStatusConnectorsV2() {
   return (
-    <div className="flex min-h-[108px] w-full relative mx-auto bg-red-500/0">
+    <div className="flex min-h-[108px] w-full relative mx-auto bg-red-500/20">
       <div className="w-[440px] absolute left-[calc(50%+3px)] -translate-x-1/1">
         <svg
           viewBox="0 0 325 80"
@@ -34,6 +34,7 @@ export default function CurrentStatusConnectorsV2() {
           }}
         >
           <path
+            data-cs-connector-1
             d="M323 2 V25 Q323 40 308 40 H17 Q2 40 2 55 V78"
             {...STATIC_PATH_PROPS}
           />
@@ -57,6 +58,7 @@ export default function CurrentStatusConnectorsV2() {
           }}
         >
           <path
+            data-cs-connector-2
             d="M109 2 V25 Q109 40 94 40 H17 Q2 40 2 55 V78"
             {...STATIC_PATH_PROPS}
           />
@@ -80,6 +82,7 @@ export default function CurrentStatusConnectorsV2() {
           }}
         >
           <path
+            data-cs-connector-4
             d="M2 2 V25 Q2 40 17 40 H308 Q323 40 323 55 V78"
             {...STATIC_PATH_PROPS}
           />
@@ -103,6 +106,7 @@ export default function CurrentStatusConnectorsV2() {
           }}
         >
           <path
+            data-cs-connector-3
             d="M2 2 V25 Q2 40 17 40 H94 Q109 40 109 55 V78"
             {...STATIC_PATH_PROPS}
           />
