@@ -74,10 +74,7 @@ function OverlayContent({
   ];
 
   return (
-    <div
-      ref={innerRef}
-      className="max-w-[1440px] mx-auto w-full px-8 h-full flex flex-col justify-center items-end"
-    >
+    <div className="max-w-[1440px] mx-auto w-full px-8 h-full flex flex-col justify-center items-end">
       <div
         ref={innerRef}
         className="flex flex-col items-end text-white text-center gap-y-3 max-w-md"

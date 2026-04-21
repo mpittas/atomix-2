@@ -26,17 +26,36 @@ export default function MissionVisionV2() {
       const buttonItem = section.querySelector<HTMLElement>(
         "[data-mv2-button-item]",
       );
+      const cardStack = section.querySelector<HTMLElement>(
+        "[data-mv2-card-stack]",
+      );
 
-      gsap.set(iconItems, { autoAlpha: 0, scale: 0.88, y: 30 });
+      const syncCardStackHeight = () => {
+        if (!cardStack || iconItems.length === 0) return 0;
+        const maxHeight = Math.max(
+          ...Array.from(iconItems).map(
+            (item) => item.getBoundingClientRect().height,
+          ),
+        );
+        gsap.set(cardStack, { height: maxHeight || "auto" });
+        return maxHeight;
+      };
+
+      let lastStackHeight = syncCardStackHeight();
+
+      gsap.set(iconItems[0], { autoAlpha: 0, scale: 0.94 });
+      if (iconItems[1]) {
+        gsap.set(iconItems[1], { autoAlpha: 0, scale: 0.94 });
+      }
       if (buttonItem) {
-        gsap.set(buttonItem, { autoAlpha: 0, scale: 0.88, y: 30 });
+        gsap.set(buttonItem, { autoAlpha: 0, scale: 0.92, y: 40 });
       }
 
       const master = gsap.timeline({
         scrollTrigger: {
           trigger: section,
           start: "top top+=110px",
-          end: () => `+=${section.offsetHeight * 5.5}`,
+          end: () => `+=${section.offsetHeight * 5}`,
           pin: true,
           pinSpacing: true,
           scrub: true,
@@ -44,28 +63,30 @@ export default function MissionVisionV2() {
         },
       });
 
-      if (iconItems[0]) {
-        master.to(iconItems[0], {
-          autoAlpha: 1,
-          scale: 1,
-          y: 0,
-          duration: 0.8,
-          ease: "power3.out",
-        });
-      }
-
-      if (iconItems[1]) {
-        master.to(
-          iconItems[1],
-          {
+      if (iconItems[0] && iconItems[1]) {
+        master
+          .to(iconItems[0], {
             autoAlpha: 1,
             scale: 1,
-            y: 0,
             duration: 0.8,
-            ease: "power3.out",
-          },
-          "-=0.35",
-        );
+            ease: "power2.out",
+          })
+          .to(iconItems[0], {
+            autoAlpha: 0,
+            scale: 0.96,
+            duration: 1,
+            ease: "power2.inOut",
+          })
+          .to(
+            iconItems[1],
+            {
+              autoAlpha: 1,
+              scale: 1,
+              duration: 1,
+              ease: "power2.inOut",
+            },
+            ">+=0.2",
+          );
       }
 
       if (buttonItem) {
@@ -82,9 +103,11 @@ export default function MissionVisionV2() {
       let lastHeight = document.body.scrollHeight;
       const refreshST = () => {
         rafId = 0;
+        const stackHeight = syncCardStackHeight();
         const h = document.body.scrollHeight;
-        if (h === lastHeight) return;
+        if (h === lastHeight && stackHeight === lastStackHeight) return;
         lastHeight = h;
+        lastStackHeight = stackHeight;
         ScrollTrigger.refresh();
       };
 
@@ -128,9 +151,12 @@ export default function MissionVisionV2() {
             mouseInfluence={0.2}
           />
         </div>
-        <div className="relative w-full max-w-[860px] px-4">
-          <div className="flex flex-col items-center gap-6 w-full">
-            <div data-mv2-icon-item>
+        <div className="relative w-full max-w-[860px] px-4 flex flex-col items-center">
+          <div data-mv2-card-stack className="relative w-full">
+            <div
+              data-mv2-icon-item
+              className="absolute left-0 top-1/2 w-full -translate-y-1/2 flex justify-center"
+            >
               <IconBox
                 icon={<BadgeHeadingPill color="dark">Mission</BadgeHeadingPill>}
                 description=""
@@ -138,7 +164,10 @@ export default function MissionVisionV2() {
                 titleClassName="!text-2xl"
               />
             </div>
-            <div data-mv2-icon-item>
+            <div
+              data-mv2-icon-item
+              className="absolute left-0 top-1/2 w-full -translate-y-1/2 flex justify-center"
+            >
               <IconBox
                 icon={<BadgeHeadingPill color="dark">Vision</BadgeHeadingPill>}
                 description=""
@@ -146,9 +175,9 @@ export default function MissionVisionV2() {
                 titleClassName="!text-2xl"
               />
             </div>
-            <div data-mv2-button-item className="mt-2">
-              <DefButton>Learn more</DefButton>
-            </div>
+          </div>
+          <div data-mv2-button-item className="mt-6">
+            <DefButton>Learn more</DefButton>
           </div>
         </div>
       </div>
