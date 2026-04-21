@@ -5,6 +5,7 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import DefHeading from "@/components/typo/DefHeading";
 import SoftAurora from "@/components/backgrounds/SoftAurora";
+import { BadgeHeadingPill } from "@/components/ui/BadgeHeadingPill";
 
 function getCountParts(value: string) {
   const match = value.match(/^([^\d.-]*)(\d+(?:\.\d+)?)(.*)$/);
@@ -56,7 +57,7 @@ function MainStatCard({
 
   return (
     <div
-      className={`relative h-full overflow-hidden rounded-3xl border border-[#1491B3] bg-[#003746] p-6 ${className || ""}`}
+      className={`relative h-full overflow-hidden rounded-3xl bg-[#003746] p-6 ${className || ""}`}
     >
       {/* <div className="absolute inset-0 bg-gradient-to-br from-[#4a8a9a]/10 via-transparent to-transparent" /> */}
 
@@ -66,9 +67,9 @@ function MainStatCard({
       </div>
 
       <div className="relative z-10">
-        <span className="inline-block rounded-full bg-white px-3 py-1 text-sm font-semibold text-[#0B4858]">
+        <BadgeHeadingPill color="dark" size="small">
           {badge}
-        </span>
+        </BadgeHeadingPill>
         <div className="mt-4 flex items-baseline gap-1">
           <span
             className="text-5xl font-bold text-white market-count-value"
@@ -207,16 +208,16 @@ export default function MainTheMarket() {
           onAnimationComplete={handleHeadingComplete}
         />
 
-        <div ref={contentRef} className="w-full space-y-4">
+        <div ref={contentRef} className="w-full space-y-2">
           {/* Top row - 3 main stat cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
             <div className="market-reveal-item">
               <MainStatCard
                 badge="Total Market"
                 value="£350"
                 unit="bn"
                 description="total annual UK property loan originations"
-                className="rounded-r-none border-r-0"
+                className="rounded-r-none rounded-b-none"
               />
             </div>
             <div className="market-reveal-item">
@@ -234,20 +235,20 @@ export default function MainTheMarket() {
                 value="£11.5"
                 unit="bn"
                 description="Annual UK bridging originations - majority processed manually, smaller loans structurally underserved"
-                className="rounded-l-none border-l-0"
+                className="rounded-l-none rounded-b-none"
               />
             </div>
           </div>
 
           {/* Second row - 2 stat cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
             <div className="market-reveal-item">
               <MainStatCard
                 badge="US Market"
                 value="£2"
                 unit="tn"
                 description="Global expansion - same model, next market"
-                className="rounded-r-none border-r-0"
+                className="rounded-t-none rounded-r-none"
               />
             </div>
             <div className="market-reveal-item">
@@ -256,13 +257,13 @@ export default function MainTheMarket() {
                 value="£4"
                 unit="tn"
                 description="Global expansion - same model, next market"
-                className="rounded-l-none"
+                className="rounded-t-none rounded-l-none"
               />
             </div>
           </div>
 
           {/* Bottom section - 6 simple stat boxes in 3x2 grid */}
-          <div className="pt-14 grid grid-cols-1 md:grid-cols-3 gap-x-14 gap-y-14">
+          <div className="pt-14 grid grid-cols-1 md:grid-cols-2 gap-x-14 gap-y-14">
             <div className="market-reveal-item">
               <SimpleStatBox
                 value="70"
@@ -279,13 +280,6 @@ export default function MainTheMarket() {
             </div>
             <div className="market-reveal-item">
               <SimpleStatBox
-                value="£5.5"
-                unit="bn"
-                description="in auction sales stalled by 28-day completion requirements manual lending cannot meet"
-              />
-            </div>
-            <div className="market-reveal-item">
-              <SimpleStatBox
                 value="70"
                 unit="%"
                 description="of lenders actively considering technology investment — Atomix pay-as-you-go model removes the barrier to entry"
@@ -296,13 +290,6 @@ export default function MainTheMarket() {
                 value="64"
                 unit="%"
                 description="of leading non-bank lenders need to raise or refinance within 12 months — compliance and transparency is the unlock"
-              />
-            </div>
-            <div className="market-reveal-item">
-              <SimpleStatBox
-                value="£2"
-                unit="tn"
-                description="the US commercial real estate market opportunity, addressable on the same model"
               />
             </div>
           </div>
