@@ -9,7 +9,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 export interface DefHeadingProps {
   badgeText: string;
-  badgeColor?: "blue" | "red";
+  badgeColor?: "dark";
   title: string;
   description: React.ReactNode;
   className?: string;
@@ -21,7 +21,7 @@ export interface DefHeadingProps {
 
 const DefHeading: React.FC<DefHeadingProps> = ({
   badgeText,
-  badgeColor = "blue",
+  badgeColor = "dark",
   title,
   description,
   className = "",
