@@ -9,28 +9,23 @@ import SoftAurora from "@/components/backgrounds/SoftAurora";
 
 gsap.registerPlugin(ScrollTrigger);
 
-// Splits a string into spans of individual letters.
-// Whitespace is preserved as a non-animated span and line breaks render as <br />.
-function renderLetters(text: string) {
-  // Each word renders on its own line, inside its own clipping mask so
-  // the per-letter translate animation reveals smoothly.
-  const words = text.split(/\s+/).filter(Boolean);
-  return words.map((word, wordIdx) => (
-    <span
-      key={wordIdx}
-      className="block overflow-hidden pb-[0.1em]"
-      style={{ lineHeight: 1.05 }}
-    >
-      {Array.from(word).map((ch, i) => (
+// Splits text into spans for typewriter effect
+// Characters animate in sequence with stagger
+function renderTypewriterText(text: string) {
+  const lines = text.split("\n");
+  return lines.map((line, lineIdx) => (
+    <span key={lineIdx} className="block" style={{ lineHeight: 1.05 }}>
+      {Array.from(line).map((ch, i) => (
         <span
           key={i}
-          data-mv-letter
-          className="inline-block will-change-transform"
-          style={{ transformOrigin: "0% 100%" }}
+          data-mv-type-char
+          className="inline-block will-change-opacity"
+          style={{ opacity: 0 }}
         >
-          {ch}
+          {ch === " " ? "\u00A0" : ch}
         </span>
       ))}
+      {lineIdx < lines.length - 1 && <br />}
     </span>
   ));
 }
@@ -55,9 +50,9 @@ const MissionVisionBlock = forwardRef<HTMLDivElement, MissionVisionBlockProps>(
       >
         <h2
           data-mv-title
-          className="text-[80px] font-normal font-bold uppercase leading-[1.05em]"
+          className="text-[100px] font-normal font-bold uppercase leading-[1.05em]"
         >
-          {renderLetters(`Our\n${title}`)}
+          {renderTypewriterText(`Our\n${title}`)}
         </h2>
         <div data-mv-item className="w-full h-[1px] bg-white/16"></div>
         <div data-mv-item className="text-xl">
@@ -91,30 +86,28 @@ export default function MissionVisionV1() {
 
       // Initial hidden state for both blocks
       blocks.forEach((block) => {
-        const letters = block.querySelectorAll<HTMLElement>("[data-mv-letter]");
+        const typeChars = block.querySelectorAll<HTMLElement>(
+          "[data-mv-type-char]",
+        );
         const items = block.querySelectorAll<HTMLElement>("[data-mv-item]");
         gsap.set(block, { autoAlpha: 0 });
-        gsap.set(letters, {
-          yPercent: 110,
-          rotate: 8,
-          opacity: 0,
-        });
+        gsap.set(typeChars, { opacity: 0 });
         gsap.set(items, { y: 40, opacity: 0 });
       });
 
       const animateBlockIn = (block: HTMLElement) => {
-        const letters = block.querySelectorAll<HTMLElement>("[data-mv-letter]");
+        const typeChars = block.querySelectorAll<HTMLElement>(
+          "[data-mv-type-char]",
+        );
         const items = block.querySelectorAll<HTMLElement>("[data-mv-item]");
         const tl = gsap.timeline();
         tl.set(block, { autoAlpha: 1 });
-        // New split-letter animation: rise from below + small rotation unwind
-        tl.to(letters, {
-          yPercent: 0,
-          rotate: 0,
+        // Typewriter effect: characters appear one by one
+        tl.to(typeChars, {
           opacity: 1,
-          duration: 0.9,
-          ease: "power3.out",
-          stagger: 0.035,
+          duration: 0.05,
+          ease: "none",
+          stagger: 0.045,
         });
         // Fade-in-up cascade for separator, description, button
         tl.to(
@@ -126,13 +119,15 @@ export default function MissionVisionV1() {
             ease: "power2.out",
             stagger: 0.18,
           },
-          "-=0.55",
+          "-=0.3",
         );
         return tl;
       };
 
       const animateBlockOut = (block: HTMLElement) => {
-        const letters = block.querySelectorAll<HTMLElement>("[data-mv-letter]");
+        const typeChars = block.querySelectorAll<HTMLElement>(
+          "[data-mv-type-char]",
+        );
         const items = block.querySelectorAll<HTMLElement>("[data-mv-item]");
         const tl = gsap.timeline();
         tl.to(items, {
@@ -143,14 +138,12 @@ export default function MissionVisionV1() {
           stagger: 0.05,
         });
         tl.to(
-          letters,
+          typeChars,
           {
-            yPercent: -110,
-            rotate: -8,
             opacity: 0,
-            duration: 0.5,
-            ease: "power3.in",
-            stagger: 0.015,
+            duration: 0.3,
+            ease: "power2.in",
+            stagger: 0.01,
           },
           "-=0.35",
         );
@@ -216,13 +209,13 @@ export default function MissionVisionV1() {
         <div className="absolute top-0 left-0 w-full h-[500px]">
           <SoftAurora
             speed={1.3}
-            scale={1.2}
+            scale={1.75}
             brightness={0.65}
             color1="#78cfe3"
             color2="#87b9d4"
             noiseFrequency={1}
             noiseAmplitude={3.5}
-            bandHeight={0.85}
+            bandHeight={0.5}
             bandSpread={1}
             octaveDecay={0.12}
             layerOffset={0.5}
