@@ -3,9 +3,12 @@
 import { useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import DefHeading from "@/components/typo/DefHeading";
 import SoftAurora from "@/components/backgrounds/SoftAurora";
 import { BadgeHeadingPill } from "@/components/ui/BadgeHeadingPill";
+
+gsap.registerPlugin(ScrollTrigger);
 
 function getCountParts(value: string) {
   const match = value.match(/^([^\d.-]*)(\d+(?:\.\d+)?)(.*)$/);
@@ -92,28 +95,111 @@ function MainStatCard({
 interface SimpleStatBoxProps {
   value: string;
   unit?: string;
+  title?: string;
   description: string;
 }
 
-function SimpleStatBox({ value, unit, description }: SimpleStatBoxProps) {
+function SimpleStatBox({
+  value,
+  unit,
+  title,
+  description,
+}: SimpleStatBoxProps) {
   const countParts = getCountParts(value);
+  const boxRef = useRef<HTMLDivElement>(null);
+  const progressRef = useRef<SVGCircleElement>(null);
+  const circleRadius = 56;
+  const circleCircumference = 2 * Math.PI * circleRadius;
+
+  useGSAP(
+    () => {
+      if (!progressRef.current) return;
+
+      const targetProgress = countParts.target / 100;
+      const circumference = circleCircumference;
+
+      gsap.set(progressRef.current, {
+        strokeDasharray: circumference,
+        strokeDashoffset: circumference,
+      });
+
+      gsap.to(progressRef.current, {
+        strokeDashoffset: circumference * (1 - targetProgress),
+        ease: "none",
+        scrollTrigger: {
+          trigger: boxRef.current,
+          start: "top 80%",
+          end: "top 30%",
+          scrub: 1,
+        },
+      });
+    },
+    { scope: boxRef },
+  );
 
   return (
-    <div>
-      <div className="flex items-baseline gap-1">
-        <span
-          className="text-5xl font-bold text-white market-count-value"
-          data-count-prefix={countParts.prefix}
-          data-count-target={countParts.target}
-          data-count-decimals={countParts.decimals}
+    <div ref={boxRef} className="flex flex-col items-center text-center">
+      <div className="relative mb-4">
+        <svg
+          width="140"
+          height="140"
+          viewBox="0 0 140 140"
+          className="-rotate-90"
         >
-          {`${countParts.prefix}${formatCount(0, countParts.decimals)}`}
-        </span>
-        {unit && (
-          <span className="text-2xl font-medium text-white">{unit}</span>
-        )}
+          {/* Background circle */}
+          <circle
+            cx="70"
+            cy="70"
+            r={circleRadius}
+            fill="none"
+            stroke="rgba(88, 255, 252, 0.15)"
+            strokeWidth="6"
+            strokeLinecap="round"
+          />
+          {/* Progress circle */}
+          <defs>
+            <linearGradient
+              id={`progressGradient-${value}`}
+              x1="0%"
+              y1="0%"
+              x2="100%"
+              y2="0%"
+            >
+              <stop offset="0%" stopColor="#0ea5e9" />
+              <stop offset="100%" stopColor="#22d3ee" />
+            </linearGradient>
+          </defs>
+          <circle
+            ref={progressRef}
+            cx="70"
+            cy="70"
+            r={circleRadius}
+            fill="none"
+            stroke={`url(#progressGradient-${value})`}
+            strokeWidth="6"
+            strokeLinecap="round"
+          />
+        </svg>
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="flex items-baseline gap-0.5">
+            <span
+              className="text-3xl font-semibold text-white market-count-value"
+              data-count-prefix={countParts.prefix}
+              data-count-target={countParts.target}
+              data-count-decimals={countParts.decimals}
+            >
+              {`${countParts.prefix}${formatCount(0, countParts.decimals)}`}
+            </span>
+            {unit && (
+              <span className="text-xl font-medium text-white">{unit}</span>
+            )}
+          </div>
+        </div>
       </div>
-      <p className="mt-3 text-md leading-relaxed text-white/80">
+      {title && (
+        <h3 className="text-lg font-semibold text-white mb-2">{title}</h3>
+      )}
+      <p className="text-base leading-relaxed text-white/80 max-w-md">
         {description}
       </p>
     </div>
