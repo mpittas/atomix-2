@@ -5,11 +5,9 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-type VK = "b1" | "b2" | "b3";
 type DeepPartial<T> = {
   [K in keyof T]?: T[K] extends object ? DeepPartial<T[K]> : T[K];
 };
-const KEYS: VK[] = ["b1", "b2", "b3"];
 
 const DEFAULTS = {
   canvasHeight: 680,
@@ -63,7 +61,7 @@ const DEFAULTS = {
     decayHalfLife: 0.3,
   },
   edgeLabels: {
-    texts: ["Bespoke\nFully", "Built or\ndesign", "Complex\nLoan Logic"] as [
+    texts: ["Fully\nautomated", "Cheap to\nbuild", "Complex\nLoan Logic"] as [
       string,
       string,
       string,
@@ -190,15 +188,6 @@ export interface AtomixPyramidNewDesignProps {
   disableScrollTrigger?: boolean;
 }
 
-const ABS_FILL: CSSProperties = {
-  position: "absolute",
-  top: 0,
-  left: 0,
-  width: "100%",
-  height: "100%",
-  pointerEvents: "none",
-};
-
 const clamp = (
   x: number,
   y: number,
@@ -238,11 +227,6 @@ const AtomixPyramidNewDesign: React.FC<AtomixPyramidNewDesignProps> = ({
   const curTRef = useRef(0);
   const spinRef = useRef(0);
   const hasTriggeredInfiniteSpinRef = useRef(false);
-  const calloutRefs = useRef<Record<VK, HTMLDivElement | null>>({
-    b1: null,
-    b2: null,
-    b3: null,
-  });
   const apexRef = useRef<HTMLDivElement>(null);
   const cfg = useMemo(() => deepMerge(DEFAULTS, config), [config]);
 
@@ -331,7 +315,6 @@ const AtomixPyramidNewDesign: React.FC<AtomixPyramidNewDesignProps> = ({
       b1 = rawB1.clone().sub(ctr),
       b2 = rawB2.clone().sub(ctr),
       b3 = rawB3.clone().sub(ctr);
-    const verts = { b1, b2, b3 };
 
     const phong = (color: number, spec: number, shin: number) =>
       new THREE.MeshPhongMaterial({
@@ -563,9 +546,6 @@ const AtomixPyramidNewDesign: React.FC<AtomixPyramidNewDesignProps> = ({
     window.addEventListener("resize", resize);
 
     const rot = cfg.rotation;
-    const cOff = Object.fromEntries(
-      KEYS.map((k) => [k, { ...cfg.callouts.offsets[k] }]),
-    ) as Record<VK, { dx: number; dy: number }>;
     const aOff = { ...cfg.apexCallout.offset };
     let last = performance.now(),
       afId = 0;
@@ -662,21 +642,6 @@ const AtomixPyramidNewDesign: React.FC<AtomixPyramidNewDesignProps> = ({
         return { x: (v.x * 0.5 + 0.5) * ww, y: (-v.y * 0.5 + 0.5) * wh };
       };
 
-      const cAlpha = Math.max(0, 1 - t / cfg.callouts.fadeRange);
-
-      KEYS.forEach((key) => {
-        const co = calloutRefs.current[key];
-        if (!co) return;
-        const p = proj(verts[key]),
-          off = cOff[key];
-        co.style.opacity = String(cAlpha);
-        const cw = co.offsetWidth;
-        const ch = co.offsetHeight;
-        const cx = p.x - cw / 2 + off.dx;
-        const cy = p.y - ch / 2 + off.dy;
-        co.style.transform = `translate(${cx}px,${cy}px)`;
-      });
-
       const ac = cfg.apexCallout;
       const aOp = Math.max(
         0,
@@ -719,7 +684,6 @@ const AtomixPyramidNewDesign: React.FC<AtomixPyramidNewDesignProps> = ({
     };
   }, [cfg, initialSliderValue, onInfiniteSpinStart, onReady]);
 
-  const cs = cfg.callouts.style;
   const grad = `linear-gradient(135deg,${cfg.colors.sliderThumbA},${cfg.colors.sliderThumbB})`;
 
   return (
@@ -744,61 +708,6 @@ const AtomixPyramidNewDesign: React.FC<AtomixPyramidNewDesignProps> = ({
           overflow: "visible",
         }}
       >
-        <div style={{ ...ABS_FILL, overflow: "visible", zIndex: 0 }}>
-          {KEYS.map((k) => {
-            const d = cfg.callouts[k];
-            return (
-              <div
-                key={k}
-                ref={(el) => {
-                  calloutRefs.current[k] = el;
-                }}
-                style={{
-                  position: "absolute",
-                  top: 0,
-                  left: 0,
-                  transition: "opacity .15s",
-                  opacity: 0,
-                  background: cs.background,
-                  border: cs.border,
-                  borderRadius: cs.borderRadius,
-                  padding: "10px 14px",
-                  minWidth: cs.minWidth,
-                  maxWidth: cs.maxWidth,
-                  zIndex: 0,
-                  textAlign:
-                    (d.textAlign as "left" | "center" | "right") || "left",
-                }}
-              >
-                <div
-                  style={{
-                    color: cs.titleColor,
-                    fontSize: cs.titleSize,
-                    fontWeight: 700,
-                    marginBottom: "6px",
-                    letterSpacing: "0.02em",
-                    textAlign:
-                      (d.textAlign as "left" | "center" | "right") || "left",
-                  }}
-                >
-                  {d.title}
-                </div>
-                {d.lines.map((l, i) => (
-                  <div
-                    key={i}
-                    style={{
-                      fontSize: cs.lineSize,
-                      lineHeight: 1.5,
-                      color: cs.lineColor,
-                    }}
-                  >
-                    {l.text}
-                  </div>
-                ))}
-              </div>
-            );
-          })}
-        </div>
         <canvas
           ref={canvasRef}
           style={{
