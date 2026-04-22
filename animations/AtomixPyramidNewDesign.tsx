@@ -214,6 +214,7 @@ const HIGHLIGHT_EDGE_BASE_WIDTH = 1.6;
 const HIGHLIGHT_EDGE_EXTRA_WIDTH = 2.2;
 const EDGE_LABEL_BASE_OPACITY = 0.16;
 const EDGE_LABEL_ACTIVE_BOOST = 0.84;
+const PYRAMID_SCROLL_DISTANCE_MULTIPLIER = 4.5;
 
 type V3 = THREE.Vector3;
 const Vec3 = THREE.Vector3;
@@ -249,7 +250,8 @@ const AtomixPyramidNewDesign: React.FC<AtomixPyramidNewDesignProps> = ({
     const scrollTrigger = ScrollTrigger.create({
       trigger: wrapper,
       start: "top center",
-      end: () => `+=${wrapper.clientHeight * 3}`,
+      end: () =>
+        `+=${wrapper.clientHeight * PYRAMID_SCROLL_DISTANCE_MULTIPLIER}`,
       scrub: true,
       onUpdate: (self) => {
         scrollProgressRef.current = clamp01(self.progress);
@@ -623,11 +625,13 @@ const AtomixPyramidNewDesign: React.FC<AtomixPyramidNewDesignProps> = ({
       applyEdgeHighlight(bottomEdgeMat, bottomWeight);
 
       const edgeLabelWeights = [bottomWeight, rightWeight, leftWeight];
+      const shouldForceAllEdgeLabelsVisible = rawT >= HIGHLIGHT_SEQUENCE_END;
       eMeshes.forEach((mesh, index) => {
         const material = mesh.material;
-        const opacity =
-          EDGE_LABEL_BASE_OPACITY +
-          EDGE_LABEL_ACTIVE_BOOST * edgeLabelWeights[index];
+        const opacity = shouldForceAllEdgeLabelsVisible
+          ? 1
+          : EDGE_LABEL_BASE_OPACITY +
+            EDGE_LABEL_ACTIVE_BOOST * edgeLabelWeights[index];
         if (Array.isArray(material)) {
           material.forEach((mat) => {
             if (mat instanceof THREE.MeshBasicMaterial) {

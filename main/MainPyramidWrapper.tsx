@@ -10,6 +10,8 @@ import SoftAurora from "@/components/backgrounds/SoftAurora";
 
 gsap.registerPlugin(ScrollTrigger);
 
+const PYRAMID_SECTION_SCROLL_DISTANCE_MULTIPLIER = 4.5;
+
 type IconBoxData = {
   icon: string;
   title: string;
@@ -74,7 +76,8 @@ export default function MainPyramidWrapper() {
       scrollTrigger: {
         trigger: section,
         start: "top top+=110px",
-        end: () => `+=${section.offsetHeight * 3}`,
+        end: () =>
+          `+=${section.offsetHeight * PYRAMID_SECTION_SCROLL_DISTANCE_MULTIPLIER}`,
         pin: true,
         pinSpacing: true,
         scrub: true,
