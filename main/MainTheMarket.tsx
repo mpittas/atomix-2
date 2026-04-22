@@ -125,12 +125,12 @@ function SimpleStatBox({
 
       gsap.to(progressRef.current, {
         strokeDashoffset: circumference * (1 - targetProgress),
-        ease: "none",
+        duration: 1.2,
+        ease: "power2.out",
         scrollTrigger: {
           trigger: boxRef.current,
           start: "top 80%",
-          end: "top 30%",
-          scrub: 1,
+          once: true,
         },
       });
     },
@@ -354,28 +354,32 @@ export default function MainTheMarket() {
               <SimpleStatBox
                 value="70"
                 unit="%"
-                description="of bridging loans originate through brokers — smaller loans unprofitable to service; automation changes this"
+                title="Broker-led Loan Origination"
+                description="70% of bridging loans come through brokers, making smaller loans costly to service — automation changes this."
               />
             </div>
             <div className="market-reveal-item">
               <SimpleStatBox
                 value="30"
                 unit="%"
-                description="of commercial lending already direct-to-customer — a growing channel Atomix supports natively"
+                title="Direct-to-Customer Growth"
+                description="30% of commercial lending is already direct-to-customer — a growing channel Atomix supports natively."
               />
             </div>
             <div className="market-reveal-item">
               <SimpleStatBox
                 value="70"
                 unit="%"
-                description="of lenders actively considering technology investment — Atomix pay-as-you-go model removes the barrier to entry"
+                title="Rising Tech Adoption"
+                description="70% of lenders are considering tech investment — Atomix’s pay-as-you-go model lowers the barrier to entry."
               />
             </div>
             <div className="market-reveal-item">
               <SimpleStatBox
                 value="64"
                 unit="%"
-                description="of leading non-bank lenders need to raise or refinance within 12 months — compliance and transparency is the unlock"
+                title="Refinancing Pressure"
+                description="64% of leading non-bank lenders need to raise or refinance within 12 months — compliance and transparency are key."
               />
             </div>
           </div>
