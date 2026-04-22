@@ -10,7 +10,7 @@ import SoftAurora from "@/components/backgrounds/SoftAurora";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const PYRAMID_SECTION_SCROLL_DISTANCE_MULTIPLIER = 4.5;
+const PYRAMID_SECTION_SCROLL_DISTANCE_MULTIPLIER = 6;
 
 type IconBoxData = {
   icon: string;
