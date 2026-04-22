@@ -55,6 +55,7 @@ export default function MainPyramidWrapper() {
   const pyramidSectionRef = useRef<HTMLDivElement>(null);
   const pyramidColRef = useRef<HTMLDivElement>(null);
   const iconBoxRefs = useRef<Array<HTMLDivElement | null>>([]);
+  const pyramidApiRef = useRef<{ setSlider: (v: number) => void } | null>(null);
 
   useGSAP(() => {
     const section = pyramidSectionRef.current;
@@ -80,6 +81,7 @@ export default function MainPyramidWrapper() {
         invalidateOnRefresh: true,
       },
     });
+    const pyramidProgress = { value: 0 };
 
     // Upstream sections (e.g. MainProblemsTabs) change height when their
     // tabs switch between 3- and 4-column layouts. Window resize alone
@@ -101,12 +103,15 @@ export default function MainPyramidWrapper() {
     });
     resizeObserver.observe(document.body);
 
-    // As the user scrolls, slide the pyramid from the centered position
-    // to its original left-column position.
-    tl.to(pyramidCol, { xPercent: 0, ease: "none", duration: 0.3 }, 0)
-      // Icon boxes fade/slide in during the same early portion of the
-      // pinned scroll. Because the timeline is scrubbed, scrolling back
-      // up naturally reverses this into an animate-out.
+    tl.to(pyramidProgress, {
+      value: 1,
+      ease: "none",
+      duration: 1,
+      onUpdate: () => {
+        pyramidApiRef.current?.setSlider(pyramidProgress.value);
+      },
+    })
+      .to(pyramidCol, { xPercent: 0, ease: "none", duration: 0.22 }, 0.42)
       .to(
         boxes,
         {
@@ -116,7 +121,7 @@ export default function MainPyramidWrapper() {
           duration: 0.25,
           stagger: 0.08,
         },
-        0.35,
+        0.68,
       );
 
     return () => {
@@ -153,7 +158,13 @@ export default function MainPyramidWrapper() {
 
       <div className="max-w-[1200px] min-h-[200px] my-auto flex">
         <div ref={pyramidColRef} className="flex-1">
-          <AtomixPyramidNewDesign />
+          <AtomixPyramidNewDesign
+            disableScrollTrigger
+            onReady={(api) => {
+              pyramidApiRef.current = api;
+              api.setSlider(0);
+            }}
+          />
         </div>
 
         <div className="flex-1 flex flex-col justify-center gap-12 pl-20 max-w-lg">

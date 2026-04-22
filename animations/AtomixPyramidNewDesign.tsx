@@ -187,6 +187,7 @@ export interface AtomixPyramidNewDesignProps {
   initialSliderValue?: number;
   onReady?: (api: { setSlider: (v: number) => void }) => void;
   onInfiniteSpinStart?: () => void;
+  disableScrollTrigger?: boolean;
 }
 
 const ABS_FILL: CSSProperties = {
@@ -196,13 +197,6 @@ const ABS_FILL: CSSProperties = {
   width: "100%",
   height: "100%",
   pointerEvents: "none",
-};
-const LABEL_S: CSSProperties = {
-  fontSize: "12px",
-  fontWeight: 500,
-  flexShrink: 0,
-  letterSpacing: "0.02em",
-  textTransform: "uppercase",
 };
 
 const clamp = (
@@ -218,6 +212,11 @@ const clamp = (
   y: Math.max(p, Math.min(y, wh - h - p)),
 });
 
+const clamp01 = (value: number) => Math.max(0, Math.min(1, value));
+
+const HIGHLIGHT_SEQUENCE_END = 0.42;
+const HIGHLIGHT_SEQUENCE_FADE = 0.18;
+
 type V3 = THREE.Vector3;
 const Vec3 = THREE.Vector3;
 const v3 = (...a: [number, number, number]) => new Vec3(...a);
@@ -229,10 +228,13 @@ const AtomixPyramidNewDesign: React.FC<AtomixPyramidNewDesignProps> = ({
   initialSliderValue = 0,
   onReady,
   onInfiniteSpinStart,
+  disableScrollTrigger = false,
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
-  const scrollProgressRef = useRef(0);
+  const scrollProgressRef = useRef(clamp01(initialSliderValue));
+  const initialDisableScrollTriggerRef = useRef(disableScrollTrigger);
+  const initialSliderValueRef = useRef(clamp01(initialSliderValue));
   const curTRef = useRef(0);
   const spinRef = useRef(0);
   const hasTriggeredInfiniteSpinRef = useRef(false);
@@ -246,7 +248,10 @@ const AtomixPyramidNewDesign: React.FC<AtomixPyramidNewDesignProps> = ({
 
   useEffect(() => {
     const wrapper = wrapperRef.current;
-    if (!wrapper) return;
+    if (!wrapper || initialDisableScrollTriggerRef.current) {
+      scrollProgressRef.current = initialSliderValueRef.current;
+      return;
+    }
 
     const scrollTrigger = ScrollTrigger.create({
       trigger: wrapper,
@@ -254,20 +259,15 @@ const AtomixPyramidNewDesign: React.FC<AtomixPyramidNewDesignProps> = ({
       end: () => `+=${wrapper.clientHeight * 3}`,
       scrub: true,
       onUpdate: (self) => {
-        const delayedProgress = Math.max(0, (self.progress - 0.5) / 0.5);
-        scrollProgressRef.current = delayedProgress;
+        scrollProgressRef.current = clamp01(self.progress);
       },
       onLeaveBack: () => {
-        // Scrolled back above trigger — hard reset so the pyramid is
-        // guaranteed to return to its exact initial state (no residual
-        // spin or partially-lerped rotation).
         scrollProgressRef.current = 0;
         curTRef.current = 0;
         spinRef.current = 0;
         hasTriggeredInfiniteSpinRef.current = false;
       },
       onLeave: () => {
-        // Scrolled fully past — pin progress at 1.
         scrollProgressRef.current = 1;
       },
     });
@@ -340,16 +340,46 @@ const AtomixPyramidNewDesign: React.FC<AtomixPyramidNewDesignProps> = ({
         shininess: shin,
         specular: new THREE.Color(spec),
       });
-    const sideMat = phong(
-      cfg.colors.sideFace,
-      cfg.colors.sideSpecular,
-      lt.sideShininess,
-    );
-    const baseMat = phong(
+    const makeSideMat = () =>
+      new THREE.MeshPhongMaterial({
+        color: cfg.colors.sideFace,
+        side: THREE.DoubleSide,
+        shininess: lt.sideShininess,
+        specular: new THREE.Color(cfg.colors.sideSpecular),
+        emissive: new THREE.Color(cfg.colors.dotColor),
+        emissiveIntensity: 0,
+      });
+    const bottomFaceMat = makeSideMat();
+    const rightFaceMat = makeSideMat();
+    const leftFaceMat = makeSideMat();
+    const baseFaceMat = phong(
       cfg.colors.baseFace,
       cfg.colors.baseSpecular,
       lt.baseShininess,
     );
+    const sideFaceBaseColor = new THREE.Color(cfg.colors.sideFace);
+    const sideFaceHighlightColor = new THREE.Color(cfg.colors.dotColor);
+    const perimeterEdgeBaseColor = new THREE.Color(cfg.colors.baseEdge);
+    const perimeterEdgeHighlightColor = new THREE.Color(cfg.colors.dotColor);
+    const applyFaceHighlight = (
+      material: THREE.MeshPhongMaterial,
+      weight: number,
+    ) => {
+      material.color
+        .copy(sideFaceBaseColor)
+        .lerp(sideFaceHighlightColor, 0.4 * weight);
+      material.emissiveIntensity = 0.08 + 0.45 * weight;
+    };
+    const applyEdgeHighlight = (
+      material: THREE.LineBasicMaterial,
+      weight: number,
+    ) => {
+      material.color
+        .copy(perimeterEdgeBaseColor)
+        .lerp(perimeterEdgeHighlightColor, weight);
+      material.opacity = 0.45 + 0.55 * weight;
+      material.transparent = true;
+    };
 
     const tri = (a: V3, b: V3, c: V3, mat: THREE.Material) => {
       const g = new THREE.BufferGeometry();
@@ -364,32 +394,48 @@ const AtomixPyramidNewDesign: React.FC<AtomixPyramidNewDesignProps> = ({
       return new THREE.Mesh(g, mat);
     };
 
-    const de = cfg.dashedEdges;
-    const mkEdge = (a: V3, b: V3, col: THREE.Color, dashed: boolean) => {
+    const mkEdge = (a: V3, b: V3, material: THREE.LineBasicMaterial) => {
       const g = new THREE.BufferGeometry().setFromPoints([a, b]);
-      const m = new THREE.LineBasicMaterial({ color: col });
-      const l = new THREE.Line(g, m);
+      const l = new THREE.Line(g, material);
       return l;
     };
 
     grp.add(
-      tri(apex, b1, b2, sideMat),
-      tri(apex, b2, b3, sideMat),
-      tri(apex, b3, b1, sideMat),
-      tri(b1, b3, b2, sideMat),
+      tri(apex, b1, b2, bottomFaceMat),
+      tri(apex, b2, b3, rightFaceMat),
+      tri(apex, b3, b1, leftFaceMat),
+      tri(b1, b3, b2, baseFaceMat),
     );
 
     const TC = new THREE.Color(cfg.colors.apexEdge),
       PC = new THREE.Color(cfg.colors.baseEdge);
-    const eDefs: [V3, V3, THREE.Color][] = [
-      [apex, b1, TC],
-      [apex, b2, TC],
-      [apex, b3, TC],
-      [b1, b2, PC],
-      [b2, b3, PC],
-      [b3, b1, PC],
-    ];
-    eDefs.forEach(([a, b, c]) => grp.add(mkEdge(a, b, c, false)));
+    const apexLeftEdgeMat = new THREE.LineBasicMaterial({ color: TC });
+    const apexRightEdgeMat = new THREE.LineBasicMaterial({ color: TC });
+    const apexRearEdgeMat = new THREE.LineBasicMaterial({ color: TC });
+    const bottomEdgeMat = new THREE.LineBasicMaterial({
+      color: PC,
+      transparent: true,
+      opacity: 1,
+    });
+    const rightEdgeMat = new THREE.LineBasicMaterial({
+      color: PC,
+      transparent: true,
+      opacity: 1,
+    });
+    const leftEdgeMat = new THREE.LineBasicMaterial({
+      color: PC,
+      transparent: true,
+      opacity: 1,
+    });
+
+    grp.add(
+      mkEdge(apex, b1, apexLeftEdgeMat),
+      mkEdge(apex, b2, apexRightEdgeMat),
+      mkEdge(apex, b3, apexRearEdgeMat),
+      mkEdge(b1, b2, bottomEdgeMat),
+      mkEdge(b2, b3, rightEdgeMat),
+      mkEdge(b3, b1, leftEdgeMat),
+    );
 
     const dotMat = new THREE.MeshBasicMaterial({
       color: cfg.colors.dotColor,
@@ -530,7 +576,44 @@ const AtomixPyramidNewDesign: React.FC<AtomixPyramidNewDesignProps> = ({
       last = now;
       const tgt = scrollProgressRef.current;
       curTRef.current += (tgt - curTRef.current) * rot.sliderSmoothing;
-      const t = curTRef.current;
+      const rawT = curTRef.current;
+      const introT = Math.min(1, rawT / HIGHLIGHT_SEQUENCE_END);
+      const t =
+        rawT <= HIGHLIGHT_SEQUENCE_END
+          ? 0
+          : (rawT - HIGHLIGHT_SEQUENCE_END) / (1 - HIGHLIGHT_SEQUENCE_END);
+
+      const introStep = introT * 3;
+      let leftWeight = 0;
+      let rightWeight = 0;
+      let bottomWeight = 0;
+
+      if (introStep <= 1) {
+        leftWeight = 1;
+        rightWeight = 1;
+      } else if (introStep <= 2) {
+        const blend = introStep - 1;
+        leftWeight = 1 - blend;
+        rightWeight = 1;
+        bottomWeight = blend;
+      } else {
+        const blend = Math.min(1, introStep - 2);
+        leftWeight = blend;
+        rightWeight = 1 - blend;
+        bottomWeight = 1;
+      }
+
+      const highlightFade = 1 - Math.min(1, t / HIGHLIGHT_SEQUENCE_FADE);
+      leftWeight *= highlightFade;
+      rightWeight *= highlightFade;
+      bottomWeight *= highlightFade;
+
+      applyFaceHighlight(leftFaceMat, leftWeight);
+      applyFaceHighlight(rightFaceMat, rightWeight);
+      applyFaceHighlight(bottomFaceMat, bottomWeight);
+      applyEdgeHighlight(leftEdgeMat, leftWeight);
+      applyEdgeHighlight(rightEdgeMat, rightWeight);
+      applyEdgeHighlight(bottomEdgeMat, bottomWeight);
 
       if (t > rot.spinThreshold) {
         if (!hasTriggeredInfiniteSpinRef.current) {
@@ -619,7 +702,7 @@ const AtomixPyramidNewDesign: React.FC<AtomixPyramidNewDesignProps> = ({
     afId = requestAnimationFrame(animate);
     onReady?.({
       setSlider: (v: number) => {
-        scrollProgressRef.current = Math.max(0, Math.min(1, v));
+        scrollProgressRef.current = clamp01(v);
       },
     });
 
@@ -636,8 +719,7 @@ const AtomixPyramidNewDesign: React.FC<AtomixPyramidNewDesignProps> = ({
     };
   }, [cfg, initialSliderValue, onInfiniteSpinStart, onReady]);
 
-  const cs = cfg.callouts.style,
-    acs = cfg.apexCallout.style;
+  const cs = cfg.callouts.style;
   const grad = `linear-gradient(135deg,${cfg.colors.sliderThumbA},${cfg.colors.sliderThumbB})`;
 
   return (
