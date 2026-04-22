@@ -9,23 +9,28 @@ import SoftAurora from "@/components/backgrounds/SoftAurora";
 
 gsap.registerPlugin(ScrollTrigger);
 
-// Splits text into spans for typewriter effect
-// Characters animate in sequence with stagger
-function renderTypewriterText(text: string) {
-  const lines = text.split("\n");
-  return lines.map((line, lineIdx) => (
-    <span key={lineIdx} className="block" style={{ lineHeight: 1.05 }}>
-      {Array.from(line).map((ch, i) => (
+// Splits a string into spans of individual letters.
+// Whitespace is preserved as a non-animated span and line breaks render as <br />.
+function renderLetters(text: string) {
+  // Each word renders on its own line, inside its own clipping mask so
+  // the per-letter translate animation reveals smoothly.
+  const words = text.split(/\s+/).filter(Boolean);
+  return words.map((word, wordIdx) => (
+    <span
+      key={wordIdx}
+      className="block overflow-hidden pb-[0.1em]"
+      style={{ lineHeight: 1.05 }}
+    >
+      {Array.from(word).map((ch, i) => (
         <span
           key={i}
-          data-mv-type-char
-          className="inline-block will-change-opacity"
-          style={{ opacity: 0 }}
+          data-mv-letter
+          className="inline-block will-change-transform"
+          style={{ transformOrigin: "0% 100%" }}
         >
-          {ch === " " ? "\u00A0" : ch}
+          {ch}
         </span>
       ))}
-      {lineIdx < lines.length - 1 && <br />}
     </span>
   ));
 }
@@ -50,9 +55,9 @@ const MissionVisionBlock = forwardRef<HTMLDivElement, MissionVisionBlockProps>(
       >
         <h2
           data-mv-title
-          className="text-[100px] font-normal font-bold uppercase leading-[1.05em]"
+          className="text-[80px] font-normal font-bold uppercase leading-[1.05em]"
         >
-          {renderTypewriterText(`Our\n${title}`)}
+          {renderLetters(`Our\n${title}`)}
         </h2>
         <div data-mv-item className="w-full h-[1px] bg-white/16"></div>
         <div data-mv-item className="text-xl">
@@ -86,28 +91,30 @@ export default function MissionVisionV1() {
 
       // Initial hidden state for both blocks
       blocks.forEach((block) => {
-        const typeChars = block.querySelectorAll<HTMLElement>(
-          "[data-mv-type-char]",
-        );
+        const letters = block.querySelectorAll<HTMLElement>("[data-mv-letter]");
         const items = block.querySelectorAll<HTMLElement>("[data-mv-item]");
         gsap.set(block, { autoAlpha: 0 });
-        gsap.set(typeChars, { opacity: 0 });
+        gsap.set(letters, {
+          yPercent: 110,
+          rotate: 8,
+          opacity: 0,
+        });
         gsap.set(items, { y: 40, opacity: 0 });
       });
 
       const animateBlockIn = (block: HTMLElement) => {
-        const typeChars = block.querySelectorAll<HTMLElement>(
-          "[data-mv-type-char]",
-        );
+        const letters = block.querySelectorAll<HTMLElement>("[data-mv-letter]");
         const items = block.querySelectorAll<HTMLElement>("[data-mv-item]");
         const tl = gsap.timeline();
         tl.set(block, { autoAlpha: 1 });
-        // Typewriter effect: characters appear one by one
-        tl.to(typeChars, {
+        // New split-letter animation: rise from below + small rotation unwind
+        tl.to(letters, {
+          yPercent: 0,
+          rotate: 0,
           opacity: 1,
-          duration: 0.05,
-          ease: "none",
-          stagger: 0.045,
+          duration: 0.9,
+          ease: "power3.out",
+          stagger: 0.035,
         });
         // Fade-in-up cascade for separator, description, button
         tl.to(
@@ -119,15 +126,13 @@ export default function MissionVisionV1() {
             ease: "power2.out",
             stagger: 0.18,
           },
-          "-=0.3",
+          "-=0.55",
         );
         return tl;
       };
 
       const animateBlockOut = (block: HTMLElement) => {
-        const typeChars = block.querySelectorAll<HTMLElement>(
-          "[data-mv-type-char]",
-        );
+        const letters = block.querySelectorAll<HTMLElement>("[data-mv-letter]");
         const items = block.querySelectorAll<HTMLElement>("[data-mv-item]");
         const tl = gsap.timeline();
         tl.to(items, {
@@ -138,12 +143,14 @@ export default function MissionVisionV1() {
           stagger: 0.05,
         });
         tl.to(
-          typeChars,
+          letters,
           {
+            yPercent: -110,
+            rotate: -8,
             opacity: 0,
-            duration: 0.3,
-            ease: "power2.in",
-            stagger: 0.01,
+            duration: 0.5,
+            ease: "power3.in",
+            stagger: 0.015,
           },
           "-=0.35",
         );
@@ -152,15 +159,57 @@ export default function MissionVisionV1() {
       };
 
       const section = innerRef.current;
-      const master = gsap.timeline({
-        scrollTrigger: {
-          trigger: section,
-          start: "top top+=110px",
-          end: () => `+=${section.offsetHeight * 5.5}`,
-          pin: true,
-          pinSpacing: true,
-          scrub: true,
-          invalidateOnRefresh: true,
+
+      // Step state: 0 = nothing shown, 1 = mission shown, 2 = vision shown.
+      let currentStep = 0;
+      let activeTween: gsap.core.Timeline | null = null;
+
+      const goToStep = (next: number) => {
+        if (next === currentStep) return;
+        activeTween?.kill();
+        const tl = gsap.timeline();
+
+        if (next === 0) {
+          if (currentStep === 1) tl.add(animateBlockOut(missionRef.current!));
+          if (currentStep === 2) tl.add(animateBlockOut(visionRef.current!));
+        } else if (next === 1) {
+          if (currentStep === 2) tl.add(animateBlockOut(visionRef.current!));
+          tl.add(animateBlockIn(missionRef.current!));
+        } else if (next === 2) {
+          if (currentStep === 1) tl.add(animateBlockOut(missionRef.current!));
+          tl.add(animateBlockIn(visionRef.current!));
+        }
+
+        currentStep = next;
+        activeTween = tl;
+      };
+
+      const pinST = ScrollTrigger.create({
+        trigger: section,
+        start: "top top+=110px",
+        end: "+=200%",
+        pin: true,
+        pinSpacing: true,
+        invalidateOnRefresh: true,
+        snap: {
+          snapTo: [0, 1],
+          duration: { min: 0.25, max: 0.6 },
+          ease: "power1.inOut",
+        },
+        onEnter: () => goToStep(1),
+        onEnterBack: () => {
+          // Coming back up from below the pin end.
+          goToStep(2);
+        },
+        onLeave: () => {
+          // Scrolled past pin end — keep vision visible as section unpins.
+          goToStep(2);
+        },
+        onLeaveBack: () => goToStep(0),
+        onUpdate: (self) => {
+          const p = self.progress;
+          if (p < 0.5) goToStep(1);
+          else goToStep(2);
         },
       });
 
@@ -181,20 +230,11 @@ export default function MissionVisionV1() {
       });
       resizeObserver.observe(document.body);
 
-      master
-        .addLabel("missionIn")
-        .add(animateBlockIn(missionRef.current))
-        .addLabel("missionHold", "+=0.6")
-        .add(animateBlockOut(missionRef.current), "+=0.4")
-        .addLabel("visionIn")
-        .add(animateBlockIn(visionRef.current))
-        .addLabel("visionHold", "+=0.8");
-
       return () => {
         resizeObserver.disconnect();
         if (rafId) cancelAnimationFrame(rafId);
-        master.scrollTrigger?.kill();
-        master.kill();
+        activeTween?.kill();
+        pinST.kill();
       };
     },
     { scope: wrapperRef },
@@ -209,13 +249,13 @@ export default function MissionVisionV1() {
         <div className="absolute top-0 left-0 w-full h-[500px]">
           <SoftAurora
             speed={1.3}
-            scale={1.75}
+            scale={1.2}
             brightness={0.65}
             color1="#78cfe3"
             color2="#87b9d4"
             noiseFrequency={1}
             noiseAmplitude={3.5}
-            bandHeight={0.5}
+            bandHeight={0.85}
             bandSpread={1}
             octaveDecay={0.12}
             layerOffset={0.5}
