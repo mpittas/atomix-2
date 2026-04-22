@@ -203,8 +203,10 @@ const clamp = (
 
 const clamp01 = (value: number) => Math.max(0, Math.min(1, value));
 
-const HIGHLIGHT_SEQUENCE_END = 0.42;
-const HIGHLIGHT_SEQUENCE_FADE = 0.18;
+const HIGHLIGHT_SEQUENCE_END = 0.56;
+const HIGHLIGHT_SEQUENCE_FADE = 0.24;
+const HIGHLIGHT_PHASE_1_END = 0.26;
+const HIGHLIGHT_PHASE_2_END = 0.52;
 
 type V3 = THREE.Vector3;
 const Vec3 = THREE.Vector3;
@@ -563,21 +565,23 @@ const AtomixPyramidNewDesign: React.FC<AtomixPyramidNewDesignProps> = ({
           ? 0
           : (rawT - HIGHLIGHT_SEQUENCE_END) / (1 - HIGHLIGHT_SEQUENCE_END);
 
-      const introStep = introT * 3;
       let leftWeight = 0;
       let rightWeight = 0;
       let bottomWeight = 0;
 
-      if (introStep <= 1) {
+      if (introT <= HIGHLIGHT_PHASE_1_END) {
         leftWeight = 1;
         rightWeight = 1;
-      } else if (introStep <= 2) {
-        const blend = introStep - 1;
+      } else if (introT <= HIGHLIGHT_PHASE_2_END) {
+        const blend =
+          (introT - HIGHLIGHT_PHASE_1_END) /
+          (HIGHLIGHT_PHASE_2_END - HIGHLIGHT_PHASE_1_END);
         leftWeight = 1 - blend;
         rightWeight = 1;
         bottomWeight = blend;
       } else {
-        const blend = Math.min(1, introStep - 2);
+        const blend =
+          (introT - HIGHLIGHT_PHASE_2_END) / (1 - HIGHLIGHT_PHASE_2_END);
         leftWeight = blend;
         rightWeight = 1 - blend;
         bottomWeight = 1;

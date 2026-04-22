@@ -111,7 +111,7 @@ export default function MainPyramidWrapper() {
         pyramidApiRef.current?.setSlider(pyramidProgress.value);
       },
     })
-      .to(pyramidCol, { xPercent: 0, ease: "none", duration: 0.22 }, 0.42)
+      .to(pyramidCol, { xPercent: 0, ease: "none", duration: 0.22 }, 0.56)
       .to(
         boxes,
         {
@@ -121,7 +121,7 @@ export default function MainPyramidWrapper() {
           duration: 0.25,
           stagger: 0.08,
         },
-        0.68,
+        0.8,
       );
 
     return () => {
