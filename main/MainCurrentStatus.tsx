@@ -55,8 +55,8 @@ function StatusLaunchBox({
       className={`relative rounded-3xl border border-[#1491B3] bg-[#003746] p-10 overflow-hidden ${className}`}
     >
       <div className="pointer-events-none absolute inset-0">
-        <div className="absolute -top-8 -bottom-8 right-4 w-[15%] rotate-20 bg-[#58fffc]/15 blur-2xl" />
-        <div className="absolute -top-8 -bottom-8 right-65 w-[3%] rotate-20 bg-[#58fffc]/15 blur-xl" />
+        <div className="absolute -top-5 -right-5 w-[35%] h-[35%] rounded-full bg-[#58fffc]/10 blur-xl" />
+        <div className="absolute -bottom-5 -left-5 w-[35%] h-[35%] rounded-full bg-[#58fffc]/15 blur-xl" />
       </div>
 
       <div className="relative">
