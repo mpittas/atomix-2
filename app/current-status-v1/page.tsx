@@ -3,6 +3,7 @@
 import Header from "@/components/header";
 import Footer from "@/components/Footer";
 import CurrentStatusV1 from "@/components/current-status/CurrentStatusV1";
+import CurrentStatusV2 from "@/components/current-status/CurrentStatusV2";
 import DefHeading from "@/components/typo/DefHeading";
 
 export default function CurrentStatusV1Page() {
@@ -19,7 +20,8 @@ export default function CurrentStatusV1Page() {
           <div className="text-[16px] mt-4 text-black/60">Scroll down</div>
         </div>
 
-        <CurrentStatusV1 />
+        {/* <CurrentStatusV1 /> */}
+        <CurrentStatusV2 />
       </div>
       <Footer />
     </div>
