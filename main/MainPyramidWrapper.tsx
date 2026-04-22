@@ -111,7 +111,7 @@ export default function MainPyramidWrapper() {
         pyramidApiRef.current?.setSlider(pyramidProgress.value);
       },
     })
-      .to(pyramidCol, { xPercent: 0, ease: "none", duration: 0.22 }, 0.56)
+      .to(pyramidCol, { xPercent: 0, ease: "none", duration: 0.22 }, 0.66)
       .to(
         boxes,
         {

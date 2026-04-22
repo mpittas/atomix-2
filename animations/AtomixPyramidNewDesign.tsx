@@ -2,6 +2,9 @@ import React, { CSSProperties, useEffect, useRef, useMemo } from "react";
 import * as THREE from "three";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { Line2 } from "three/examples/jsm/lines/Line2.js";
+import { LineGeometry } from "three/examples/jsm/lines/LineGeometry.js";
+import { LineMaterial } from "three/examples/jsm/lines/LineMaterial.js";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -203,10 +206,12 @@ const clamp = (
 
 const clamp01 = (value: number) => Math.max(0, Math.min(1, value));
 
-const HIGHLIGHT_SEQUENCE_END = 0.56;
+const HIGHLIGHT_SEQUENCE_END = 0.66;
 const HIGHLIGHT_SEQUENCE_FADE = 0.24;
 const HIGHLIGHT_PHASE_1_END = 0.26;
 const HIGHLIGHT_PHASE_2_END = 0.52;
+const HIGHLIGHT_EDGE_BASE_WIDTH = 1.6;
+const HIGHLIGHT_EDGE_EXTRA_WIDTH = 2.2;
 
 type V3 = THREE.Vector3;
 const Vec3 = THREE.Vector3;
@@ -355,15 +360,14 @@ const AtomixPyramidNewDesign: React.FC<AtomixPyramidNewDesignProps> = ({
         .lerp(sideFaceHighlightColor, 0.4 * weight);
       material.emissiveIntensity = 0.08 + 0.45 * weight;
     };
-    const applyEdgeHighlight = (
-      material: THREE.LineBasicMaterial,
-      weight: number,
-    ) => {
+    const applyEdgeHighlight = (material: LineMaterial, weight: number) => {
       material.color
         .copy(perimeterEdgeBaseColor)
         .lerp(perimeterEdgeHighlightColor, weight);
       material.opacity = 0.45 + 0.55 * weight;
       material.transparent = true;
+      material.linewidth =
+        HIGHLIGHT_EDGE_BASE_WIDTH + HIGHLIGHT_EDGE_EXTRA_WIDTH * weight;
     };
 
     const tri = (a: V3, b: V3, c: V3, mat: THREE.Material) => {
@@ -384,6 +388,13 @@ const AtomixPyramidNewDesign: React.FC<AtomixPyramidNewDesignProps> = ({
       const l = new THREE.Line(g, material);
       return l;
     };
+    const mkThickEdge = (a: V3, b: V3, material: LineMaterial) => {
+      const g = new LineGeometry();
+      g.setPositions([a.x, a.y, a.z, b.x, b.y, b.z]);
+      const l = new Line2(g, material);
+      l.computeLineDistances();
+      return l;
+    };
 
     grp.add(
       tri(apex, b1, b2, bottomFaceMat),
@@ -397,29 +408,35 @@ const AtomixPyramidNewDesign: React.FC<AtomixPyramidNewDesignProps> = ({
     const apexLeftEdgeMat = new THREE.LineBasicMaterial({ color: TC });
     const apexRightEdgeMat = new THREE.LineBasicMaterial({ color: TC });
     const apexRearEdgeMat = new THREE.LineBasicMaterial({ color: TC });
-    const bottomEdgeMat = new THREE.LineBasicMaterial({
+    const bottomEdgeMat = new LineMaterial({
       color: PC,
       transparent: true,
       opacity: 1,
+      linewidth: HIGHLIGHT_EDGE_BASE_WIDTH,
+      worldUnits: false,
     });
-    const rightEdgeMat = new THREE.LineBasicMaterial({
+    const rightEdgeMat = new LineMaterial({
       color: PC,
       transparent: true,
       opacity: 1,
+      linewidth: HIGHLIGHT_EDGE_BASE_WIDTH,
+      worldUnits: false,
     });
-    const leftEdgeMat = new THREE.LineBasicMaterial({
+    const leftEdgeMat = new LineMaterial({
       color: PC,
       transparent: true,
       opacity: 1,
+      linewidth: HIGHLIGHT_EDGE_BASE_WIDTH,
+      worldUnits: false,
     });
 
     grp.add(
       mkEdge(apex, b1, apexLeftEdgeMat),
       mkEdge(apex, b2, apexRightEdgeMat),
       mkEdge(apex, b3, apexRearEdgeMat),
-      mkEdge(b1, b2, bottomEdgeMat),
-      mkEdge(b2, b3, rightEdgeMat),
-      mkEdge(b3, b1, leftEdgeMat),
+      mkThickEdge(b1, b2, bottomEdgeMat),
+      mkThickEdge(b2, b3, rightEdgeMat),
+      mkThickEdge(b3, b1, leftEdgeMat),
     );
 
     const dotMat = new THREE.MeshBasicMaterial({
@@ -543,6 +560,9 @@ const AtomixPyramidNewDesign: React.FC<AtomixPyramidNewDesignProps> = ({
       renderer.setSize(w, h);
       camera.aspect = w / h;
       camera.updateProjectionMatrix();
+      bottomEdgeMat.resolution.set(w, h);
+      rightEdgeMat.resolution.set(w, h);
+      leftEdgeMat.resolution.set(w, h);
     };
     resize();
     window.addEventListener("resize", resize);
