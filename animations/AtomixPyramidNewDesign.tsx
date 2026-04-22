@@ -18,17 +18,17 @@ const DEFAULTS = {
   padding: 20,
   colors: {
     background: 0x000000,
-    sideFace: 0x0a4a4a,
-    sideSpecular: 0x1a8888,
-    baseFace: 0x0a4a4a,
-    baseSpecular: 0x1a8888,
-    apexEdge: 0x1a7a7a,
-    baseEdge: 0x1a7a7a,
+    sideFace: 0x0f5f73,
+    sideSpecular: 0x49d0f4,
+    baseFace: 0x0f5f73,
+    baseSpecular: 0x2f94ad,
+    apexEdge: 0x2ab7de,
+    baseEdge: 0x1f89a7,
     bar: 0xb48c50,
     barSpecular: 0xddbb88,
     leaderStroke: "#b48c50",
-    edgeLabelText: "#88EEBB",
-    dotColor: "#20ccfc",
+    edgeLabelText: "#ffffff",
+    dotColor: "#5fd2f0",
     sliderThumbA: "#1D9E75",
     sliderThumbB: "#534AB7",
     sliderTrack: "#2a2a3e",
@@ -212,6 +212,8 @@ const HIGHLIGHT_PHASE_1_END = 0.26;
 const HIGHLIGHT_PHASE_2_END = 0.52;
 const HIGHLIGHT_EDGE_BASE_WIDTH = 1.6;
 const HIGHLIGHT_EDGE_EXTRA_WIDTH = 2.2;
+const EDGE_LABEL_BASE_OPACITY = 0.16;
+const EDGE_LABEL_ACTIVE_BOOST = 0.84;
 
 type V3 = THREE.Vector3;
 const Vec3 = THREE.Vector3;
@@ -474,7 +476,7 @@ const AtomixPyramidNewDesign: React.FC<AtomixPyramidNewDesignProps> = ({
         new THREE.MeshBasicMaterial({
           map: tex,
           transparent: true,
-          opacity: 0.2,
+          opacity: EDGE_LABEL_BASE_OPACITY,
           depthTest: true,
           depthWrite: false,
           side: THREE.DoubleSide,
@@ -623,7 +625,9 @@ const AtomixPyramidNewDesign: React.FC<AtomixPyramidNewDesignProps> = ({
       const edgeLabelWeights = [bottomWeight, rightWeight, leftWeight];
       eMeshes.forEach((mesh, index) => {
         const material = mesh.material;
-        const opacity = 0.6 + 0.4 * edgeLabelWeights[index];
+        const opacity =
+          EDGE_LABEL_BASE_OPACITY +
+          EDGE_LABEL_ACTIVE_BOOST * edgeLabelWeights[index];
         if (Array.isArray(material)) {
           material.forEach((mat) => {
             if (mat instanceof THREE.MeshBasicMaterial) {
