@@ -71,29 +71,66 @@ function OverlayContent({
       description:
         "Build technology that powers real lending markets and impacts billions in asset-backed finance.",
     },
+    {
+      icon: <FaUsers className="h-8 w-8" />,
+      title: "Ownership From Day One",
+      description:
+        "Take ownership of key systems early and help define both architecture and product direction.",
+    },
+    {
+      icon: <FaMicrochip className="h-8 w-8" />,
+      title: "Fast Product Iteration",
+      description:
+        "Ship quickly with short feedback loops, rapid experiments, and direct collaboration across teams.",
+    },
+    {
+      icon: <FaGlobe className="h-8 w-8" />,
+      title: "Global Scope, Practical Impact",
+      description:
+        "Deliver infrastructure used across regions, turning complex financial workflows into scalable products.",
+    },
   ];
 
+  const leftOverlayItems = overlayItems.slice(0, 3);
+  const rightOverlayItems = overlayItems.slice(3, 6);
+
   return (
-    <div className="max-w-[1440px] mx-auto w-full px-8 h-full flex flex-col justify-center items-end">
-      <div
-        ref={innerRef}
-        className="flex flex-col items-end text-white text-center gap-y-3 max-w-md"
-        style={{ opacity: 0 }}
-      >
-        {overlayItems.map((item, index) => (
-          <OverlayItemCard
-            key={`${item.title}-${index}`}
-            icon={item.icon}
-            title={item.title}
-            description={item.description}
-          />
-        ))}
+    <div
+      ref={innerRef}
+      className="w-full px-8 h-full flex"
+      style={{ opacity: 0 }}
+    >
+      <div className="flex-1 min-h-[100px] bg-green-500/0 flex justify-center items-center">
+        <div className="max-w-lg flex flex-col items-end text-white text-center gap-y-3">
+          {leftOverlayItems.map((item, index) => (
+            <OverlayItemCard
+              key={`${item.title}-${index}`}
+              icon={item.icon}
+              title={item.title}
+              description={item.description}
+            />
+          ))}
+        </div>
+      </div>
+
+      <div className="flex-1 min-h-[100px] bg-red-500/0 flex justify-center items-center">
+        <div className="max-w-lg flex flex-col items-end text-white text-center gap-y-3">
+          {rightOverlayItems.map((item, index) => (
+            <OverlayItemCard
+              key={`${item.title}-${index}`}
+              icon={item.icon}
+              title={item.title}
+              description={item.description}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );
 }
 
 export default function SliderWhyWorkWithUs() {
+  const DEBUG_SHOW_FULL_OVERLAY = false;
   const containerRef = useRef<HTMLDivElement>(null);
   const handleRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
@@ -108,17 +145,26 @@ export default function SliderWhyWorkWithUs() {
     let maxX = container.offsetWidth / 2;
 
     const update = (x: number) => {
-      const progress = maxX > 0 ? gsap.utils.clamp(0, 1, x / maxX) : 0;
+      const signedProgress = maxX > 0 ? gsap.utils.clamp(-1, 1, x / maxX) : 0;
+      const rightProgress = Math.max(0, signedProgress);
+      const leftProgress = Math.max(0, -signedProgress);
+      const revealProgress = Math.abs(signedProgress);
       if (overlayRef.current) {
+        const leftInset = (1 - leftProgress) * 50;
+        const rightInset = (1 - rightProgress) * 50;
         gsap.set(overlayRef.current, {
-          clipPath: `inset(0 ${(1 - progress) * 50}% 0 50%)`,
+          clipPath: DEBUG_SHOW_FULL_OVERLAY
+            ? "inset(0 0 0 0)"
+            : `inset(0 ${rightInset}% 0 ${leftInset}%)`,
         });
       }
       if (fadeCardRef.current) {
-        gsap.set(fadeCardRef.current, { opacity: 1 - progress });
+        gsap.set(fadeCardRef.current, { opacity: 1 - rightProgress });
       }
       if (overlayContentRef.current) {
-        gsap.set(overlayContentRef.current, { opacity: progress });
+        gsap.set(overlayContentRef.current, {
+          opacity: DEBUG_SHOW_FULL_OVERLAY ? 1 : revealProgress,
+        });
       }
       if (dividerRef.current) {
         gsap.set(dividerRef.current, { x });
@@ -129,7 +175,7 @@ export default function SliderWhyWorkWithUs() {
 
     const instance = Draggable.create(handleRef.current, {
       type: "x",
-      bounds: { minX: 0, maxX },
+      bounds: { minX: -maxX, maxX },
       inertia: false,
       cursor: "ew-resize",
       onDrag() {
@@ -142,7 +188,7 @@ export default function SliderWhyWorkWithUs() {
 
     const handleResize = () => {
       maxX = container.offsetWidth / 2;
-      instance.applyBounds({ minX: 0, maxX });
+      instance.applyBounds({ minX: -maxX, maxX });
       update(instance.x);
     };
     window.addEventListener("resize", handleResize);
@@ -159,16 +205,21 @@ export default function SliderWhyWorkWithUs() {
       className="min-h-[calc(100vh-126px)] rounded-3xl bg-linear-to-b from-[#0B4858] via-[#1e5360] to-[#0B4858] relative overflow-hidden flex flex-col justify-center items-center py-28 select-none"
     >
       {/* Base content */}
-      <div className="max-w-[1440px] mx-auto w-full px-8 mt-14 relative z-10">
+      <div className="w-full px-8 mt-14 relative z-10">
         <div className="w-full flex justify-between">
-          <WhyCard
-            title="Team"
-            description="Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+          <div className="w-1/2 bg-yellow-500/0 flex justify-center">
+            <WhyCard
+              title="Team"
+              description="Lorem ipsum dolor sit amet, consectetur adipiscing elit.
               Suspendisse varius lorem eget leo vehicula consectetur."
-            buttonText="See Team"
-            linkText="#"
-          />
-          <div ref={fadeCardRef}>
+              buttonText="See Team"
+              linkText="#"
+            />
+          </div>
+          <div
+            ref={fadeCardRef}
+            className="w-1/2 bg-yellow-500/0 flex justify-center"
+          >
             <WhyCard
               title="OPPORTUNITIES"
               description="Lorem ipsum dolor sit amet, consectetur adipiscing elit.
