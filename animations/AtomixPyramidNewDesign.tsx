@@ -463,7 +463,7 @@ const AtomixPyramidNewDesign: React.FC<AtomixPyramidNewDesignProps> = ({
       c2.height = th;
       ctx.clearRect(0, 0, tw, th);
       ctx.font = font;
-      ctx.fillStyle = cfg.colors.edgeLabelText;
+      ctx.fillStyle = "#ffffff";
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
       ctx.fillText(text, tw / 2, th / 2);
@@ -474,6 +474,7 @@ const AtomixPyramidNewDesign: React.FC<AtomixPyramidNewDesignProps> = ({
         new THREE.MeshBasicMaterial({
           map: tex,
           transparent: true,
+          opacity: 0.2,
           depthTest: true,
           depthWrite: false,
           side: THREE.DoubleSide,
@@ -618,6 +619,21 @@ const AtomixPyramidNewDesign: React.FC<AtomixPyramidNewDesignProps> = ({
       applyEdgeHighlight(leftEdgeMat, leftWeight);
       applyEdgeHighlight(rightEdgeMat, rightWeight);
       applyEdgeHighlight(bottomEdgeMat, bottomWeight);
+
+      const edgeLabelWeights = [bottomWeight, rightWeight, leftWeight];
+      eMeshes.forEach((mesh, index) => {
+        const material = mesh.material;
+        const opacity = 0.6 + 0.4 * edgeLabelWeights[index];
+        if (Array.isArray(material)) {
+          material.forEach((mat) => {
+            if (mat instanceof THREE.MeshBasicMaterial) {
+              mat.opacity = opacity;
+            }
+          });
+        } else if (material instanceof THREE.MeshBasicMaterial) {
+          material.opacity = opacity;
+        }
+      });
 
       if (t > rot.spinThreshold) {
         if (!hasTriggeredInfiniteSpinRef.current) {
