@@ -1,8 +1,6 @@
 import Header from "@/components/header";
 import Footer from "@/components/Footer";
-import MissionVisionV1 from "@/components/mission-vision/MissionVisionV1";
-import MissionVisionV2 from "@/components/mission-vision/MissionVisionV2";
-import MissionVisionV3 from "@/components/mission-vision/MissionVisionV3";
+import MainMissionVision from "@/main/MainMissionVision";
 
 export default function MissionVisionSections() {
   return (
@@ -18,7 +16,7 @@ export default function MissionVisionSections() {
           </div>
         </div>
 
-        <MissionVisionV1 />
+        <MainMissionVision />
         {/* 
         <MissionVisionV2 />
 

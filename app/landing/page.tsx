@@ -15,6 +15,7 @@ import MainBenefitsTabs from "@/main/benefits-tabs/";
 import MainTheMarket from "@/main/MainTheMarket";
 import MainWhyWorkWithUs from "@/main/MainWhyWorkWithUs";
 import MainCurrentStatus from "@/components/current-status/MainCurrentStatus";
+import MainMissionVision from "@/main/MainMissionVision";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -181,6 +182,8 @@ export default function LandingGradientV1Page() {
         <MainTheMarket />
 
         <MainCurrentStatus />
+
+        <MainMissionVision />
 
         <MainWhyWorkWithUs />
       </div>

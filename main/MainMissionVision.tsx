@@ -64,7 +64,7 @@ const MissionVisionBlock = forwardRef<HTMLDivElement, MissionVisionBlockProps>(
   },
 );
 
-export default function MissionVisionV1() {
+export default function MainMissionVision() {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const innerRef = useRef<HTMLDivElement>(null);
   const missionRef = useRef<HTMLDivElement>(null);
