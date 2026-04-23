@@ -85,9 +85,9 @@ const highlightSequenceData: HighlightInfo[] = [
   },
 ];
 
-const HIGHLIGHT_SEQUENCE_END = 0.66;
-const HIGHLIGHT_PHASE_1_END = 0.26;
-const HIGHLIGHT_PHASE_2_END = 0.52;
+const HIGHLIGHT_SEQUENCE_END = 0.78;
+const HIGHLIGHT_PHASE_1_END = 0.3;
+const HIGHLIGHT_PHASE_2_END = 0.6;
 
 export default function MainPyramidWrapper() {
   const pyramidSectionRef = useRef<HTMLDivElement>(null);
@@ -159,14 +159,16 @@ export default function MainPyramidWrapper() {
         pyramidApiRef.current?.setSlider(progress);
 
         // Update highlight box content based on pyramid highlight phase
-        let newIndex = 0;
-        const introT = Math.min(1, progress / HIGHLIGHT_SEQUENCE_END);
-        if (introT <= HIGHLIGHT_PHASE_1_END) {
-          newIndex = 1; // Both left & right highlighted -> Simple SaaS (side 2)
-        } else if (introT <= HIGHLIGHT_PHASE_2_END) {
-          newIndex = 0; // Transitioning to bottom -> Bespoke builds (side 1)
-        } else if (progress < HIGHLIGHT_SEQUENCE_END) {
-          newIndex = 2; // Bottom highlighted -> Disconnected stacks (side 3)
+        let newIndex = lastHighlightIndexRef.current;
+        if (progress < HIGHLIGHT_SEQUENCE_END) {
+          const introT = Math.min(1, progress / HIGHLIGHT_SEQUENCE_END);
+          if (introT <= HIGHLIGHT_PHASE_1_END) {
+            newIndex = 1; // Both left & right highlighted -> Simple SaaS (side 2)
+          } else if (introT <= HIGHLIGHT_PHASE_2_END) {
+            newIndex = 0; // Transitioning to bottom -> Bespoke builds (side 1)
+          } else {
+            newIndex = 2; // Bottom highlighted -> Disconnected stacks (side 3)
+          }
         }
 
         if (newIndex !== lastHighlightIndexRef.current) {
