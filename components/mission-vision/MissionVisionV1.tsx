@@ -2,9 +2,14 @@
 
 import { forwardRef, useRef } from "react";
 import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import { Button as DefButton } from "@/components/ui";
 import SoftAurora from "@/components/backgrounds/SoftAurora";
+
+gsap.registerPlugin(ScrollTrigger);
+
+const MISSION_VISION_SCROLL_DISTANCE_MULTIPLIER = 3;
 
 // Splits a string into spans of individual letters.
 // Whitespace is preserved as a non-animated span and line breaks render as <br />.
@@ -89,6 +94,7 @@ export default function MissionVisionV1() {
       const missionEl = missionRef.current;
       const visionEl = visionRef.current;
       const blocks = [missionEl, visionEl];
+      const section = innerRef.current;
 
       // Initial hidden state for both blocks
       blocks.forEach((block) => {
@@ -161,8 +167,38 @@ export default function MissionVisionV1() {
 
       animateBlockIn(missionEl);
 
-      const host = innerRef.current;
+      const pinTimeline = gsap.timeline({
+        scrollTrigger: {
+          trigger: section,
+          start: "top top+=110px",
+          end: () =>
+            `+=${section.offsetHeight * MISSION_VISION_SCROLL_DISTANCE_MULTIPLIER}`,
+          pin: true,
+          pinSpacing: true,
+          scrub: true,
+          invalidateOnRefresh: true,
+        },
+      });
+      pinTimeline.to({}, { duration: 1, ease: "none" });
+
+      let rafId = 0;
+      let lastHeight = document.body.scrollHeight;
+      const refreshST = () => {
+        rafId = 0;
+        const h = document.body.scrollHeight;
+        if (h === lastHeight) return;
+        lastHeight = h;
+        ScrollTrigger.refresh();
+      };
+      const resizeObserver = new ResizeObserver(() => {
+        if (rafId) return;
+        rafId = requestAnimationFrame(refreshST);
+      });
+      resizeObserver.observe(document.body);
+
+      const host = section;
       const onWheel = (event: WheelEvent) => {
+        if (!pinTimeline.scrollTrigger?.isActive) return;
         if (isAnimatingRef.current) return;
 
         const direction = Math.sign(event.deltaY);
@@ -201,16 +237,20 @@ export default function MissionVisionV1() {
 
       return () => {
         host.removeEventListener("wheel", onWheel);
+        resizeObserver.disconnect();
+        if (rafId) cancelAnimationFrame(rafId);
+        pinTimeline.scrollTrigger?.kill();
+        pinTimeline.kill();
       };
     },
     { scope: wrapperRef },
   );
 
   return (
-    <div ref={wrapperRef} className="relative h-[200vh]">
+    <div ref={wrapperRef}>
       <div
         ref={innerRef}
-        className="sticky top-0 h-screen rounded-3xl bg-linear-to-b from-[#0B4858] via-[#1e5360] to-[#0B4858] relative overflow-hidden flex flex-col justify-center items-center"
+        className="min-h-[calc(100vh-126px)] rounded-3xl bg-linear-to-b from-[#0B4858] via-[#1e5360] to-[#0B4858] relative overflow-hidden flex flex-col justify-center items-center"
       >
         <div className="absolute top-0 left-0 w-full h-[500px]">
           <SoftAurora
@@ -231,7 +271,7 @@ export default function MissionVisionV1() {
           />
         </div>
 
-        <div className="relative w-full h-screen">
+        <div className="relative w-full h-[calc(100vh-126px)]">
           <MissionVisionBlock
             ref={missionRef}
             title="Mission"
