@@ -2,12 +2,9 @@
 
 import { forwardRef, useRef } from "react";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import { Button as DefButton } from "@/components/ui";
 import SoftAurora from "@/components/backgrounds/SoftAurora";
-
-gsap.registerPlugin(ScrollTrigger);
 
 // Splits a string into spans of individual letters.
 // Whitespace is preserved as a non-animated span and line breaks render as <br />.
@@ -76,6 +73,8 @@ export default function MissionVisionV1() {
   const innerRef = useRef<HTMLDivElement>(null);
   const missionRef = useRef<HTMLDivElement>(null);
   const visionRef = useRef<HTMLDivElement>(null);
+  const activeIndexRef = useRef(0);
+  const isAnimatingRef = useRef(false);
 
   useGSAP(
     () => {
@@ -87,7 +86,9 @@ export default function MissionVisionV1() {
       )
         return;
 
-      const blocks = [missionRef.current, visionRef.current];
+      const missionEl = missionRef.current;
+      const visionEl = visionRef.current;
+      const blocks = [missionEl, visionEl];
 
       // Initial hidden state for both blocks
       blocks.forEach((block) => {
@@ -158,60 +159,58 @@ export default function MissionVisionV1() {
         return tl;
       };
 
-      const section = innerRef.current;
-      const master = gsap.timeline({
-        scrollTrigger: {
-          trigger: section,
-          start: "top top+=110px",
-          end: () => `+=${section.offsetHeight * 3}`,
-          pin: true,
-          pinSpacing: true,
-          scrub: true,
-          invalidateOnRefresh: true,
-        },
-      });
+      animateBlockIn(missionEl);
 
-      // Refresh ScrollTrigger when upstream sections change height so the
-      // pin start/end don't go stale mid-scroll.
-      let rafId = 0;
-      let lastHeight = document.body.scrollHeight;
-      const refreshST = () => {
-        rafId = 0;
-        const h = document.body.scrollHeight;
-        if (h === lastHeight) return;
-        lastHeight = h;
-        ScrollTrigger.refresh();
+      const host = innerRef.current;
+      const onWheel = (event: WheelEvent) => {
+        if (isAnimatingRef.current) return;
+
+        const direction = Math.sign(event.deltaY);
+        if (direction === 0) return;
+
+        if (direction > 0 && activeIndexRef.current === 0) {
+          event.preventDefault();
+          isAnimatingRef.current = true;
+          gsap
+            .timeline({
+              onComplete: () => {
+                activeIndexRef.current = 1;
+                isAnimatingRef.current = false;
+              },
+            })
+            .add(animateBlockOut(missionEl), 0)
+            .add(animateBlockIn(visionEl), 0.15);
+        }
+
+        if (direction < 0 && activeIndexRef.current === 1) {
+          event.preventDefault();
+          isAnimatingRef.current = true;
+          gsap
+            .timeline({
+              onComplete: () => {
+                activeIndexRef.current = 0;
+                isAnimatingRef.current = false;
+              },
+            })
+            .add(animateBlockOut(visionEl), 0)
+            .add(animateBlockIn(missionEl), 0.15);
+        }
       };
-      const resizeObserver = new ResizeObserver(() => {
-        if (rafId) return;
-        rafId = requestAnimationFrame(refreshST);
-      });
-      resizeObserver.observe(document.body);
 
-      master
-        .addLabel("missionIn")
-        .add(animateBlockIn(missionRef.current))
-        .addLabel("missionHold", "+=0.6")
-        .add(animateBlockOut(missionRef.current), "+=0.4")
-        .addLabel("visionIn")
-        .add(animateBlockIn(visionRef.current))
-        .addLabel("visionHold", "+=0.8");
+      host.addEventListener("wheel", onWheel, { passive: false });
 
       return () => {
-        resizeObserver.disconnect();
-        if (rafId) cancelAnimationFrame(rafId);
-        master.scrollTrigger?.kill();
-        master.kill();
+        host.removeEventListener("wheel", onWheel);
       };
     },
     { scope: wrapperRef },
   );
 
   return (
-    <div ref={wrapperRef}>
+    <div ref={wrapperRef} className="relative h-[200vh]">
       <div
         ref={innerRef}
-        className="min-h-[calc(100vh-126px)] rounded-3xl bg-linear-to-b from-[#0B4858] via-[#1e5360] to-[#0B4858] relative overflow-hidden flex flex-col justify-center items-center"
+        className="sticky top-0 h-screen rounded-3xl bg-linear-to-b from-[#0B4858] via-[#1e5360] to-[#0B4858] relative overflow-hidden flex flex-col justify-center items-center"
       >
         <div className="absolute top-0 left-0 w-full h-[500px]">
           <SoftAurora
@@ -232,7 +231,7 @@ export default function MissionVisionV1() {
           />
         </div>
 
-        <div className="relative w-full h-[calc(100vh-126px)]">
+        <div className="relative w-full h-screen">
           <MissionVisionBlock
             ref={missionRef}
             title="Mission"
