@@ -440,7 +440,7 @@ export default function CurrentStatusV2() {
         </div>
 
         <div className="flex justify-center">
-          <div className="w-[360px] -mr-[2px]">
+          <div className="w-[440px] -mr-[2px]">
             <svg
               viewBox="0 0 325 80"
               xmlns="http://www.w3.org/2000/svg"
@@ -473,7 +473,7 @@ export default function CurrentStatusV2() {
             </svg>
           </div>
 
-          <div className="w-[360px] -ml-[2px]">
+          <div className="w-[440px] -ml-[2px]">
             <svg
               viewBox="0 0 325 80"
               xmlns="http://www.w3.org/2000/svg"
