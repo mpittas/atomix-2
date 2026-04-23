@@ -346,6 +346,44 @@ export default function CurrentStatusV2() {
         },
         "-=6",
       );
+
+      if (topCardsRow) {
+        const topCardsCollapseTl = gsap.timeline({
+          scrollTrigger: {
+            trigger: topCardsRow,
+            start: "bottom 70%",
+            toggleActions: "play reverse play reverse",
+          },
+        });
+
+        topCardsCollapseTl
+          .to(
+            topCardDescriptions,
+            {
+              autoAlpha: 0,
+              y: -10,
+              height: 0,
+              marginTop: 0,
+              duration: 1,
+              ease: "power2.inOut",
+            },
+            0,
+          )
+          .to(
+            topCardMarketInfo,
+            {
+              autoAlpha: 0,
+              y: -10,
+              height: 0,
+              marginTop: 0,
+              paddingTop: 0,
+              paddingBottom: 0,
+              duration: 1,
+              ease: "power2.inOut",
+            },
+            "<",
+          );
+      }
     },
     { scope: sectionRef },
   );
