@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
@@ -95,8 +95,12 @@ export default function MainPyramidWrapper() {
   const iconBoxRefs = useRef<Array<HTMLDivElement | null>>([]);
   const pyramidApiRef = useRef<{ setSlider: (v: number) => void } | null>(null);
   const highlightBoxRef = useRef<HTMLDivElement>(null);
+  const highlightContentRef = useRef<HTMLDivElement>(null);
+  const highlightTitleRef = useRef<HTMLHeadingElement>(null);
+  const highlightItemsRef = useRef<Array<HTMLLIElement | null>>([]);
   const [highlightIndex, setHighlightIndex] = useState(0);
   const lastHighlightIndexRef = useRef(0);
+  const isFirstRenderRef = useRef(true);
 
   useGSAP(() => {
     const section = pyramidSectionRef.current;
@@ -201,6 +205,48 @@ export default function MainPyramidWrapper() {
     };
   }, []);
 
+  // Animate highlight content when highlightIndex changes
+  useEffect(() => {
+    const content = highlightContentRef.current;
+    const title = highlightTitleRef.current;
+    const items = highlightItemsRef.current.filter(
+      (item): item is HTMLLIElement => item !== null,
+    );
+
+    if (!content || !title) return;
+
+    const ctx = gsap.context(() => {
+      // Set initial state for animation
+      gsap.set(title, { opacity: 0, y: 16 });
+      gsap.set(items, { opacity: 0, x: -12 });
+
+      // Create entrance animation timeline
+      const tl = gsap.timeline({
+        defaults: { ease: "power2.out" },
+      });
+
+      // Animate title first, then items staggered
+      tl.to(title, {
+        opacity: 1,
+        y: 0,
+        duration: isFirstRenderRef.current ? 0.8 : 0.7,
+      }).to(
+        items,
+        {
+          opacity: 1,
+          x: 0,
+          duration: 0.8,
+          stagger: 0.15,
+        },
+        isFirstRenderRef.current ? "-=0.35" : "-=0.25",
+      );
+
+      isFirstRenderRef.current = false;
+    }, content);
+
+    return () => ctx.revert();
+  }, [highlightIndex]);
+
   return (
     <div
       ref={pyramidSectionRef}
@@ -229,23 +275,29 @@ export default function MainPyramidWrapper() {
         {/* Left highlight info box - absolutely positioned on left during pyramid highlight sequence */}
         <div
           ref={highlightBoxRef}
-          className="absolute left-30 top-1/2 -translate-y-1/2 w-[380px] opacity-0"
+          className="absolute left-34 top-1/2 -translate-y-1/2 w-[340px] opacity-0"
         >
           {(() => {
             const info =
               highlightSequenceData[highlightIndex] || highlightSequenceData[0];
             return (
               <div
-                key={highlightIndex}
-                className="highlight-content backdrop-blur-sm rounded-2xl p-6 animate-fadeIn border border-[#1491B3] bg-[#003746]"
+                ref={highlightContentRef}
+                className="highlight-content backdrop-blur-sm rounded-2xl p-6 border border-[#1491B3] bg-[#003746] min-h-[260px]"
               >
-                <h3 className="text-white font-semibold text-3xl mb-4">
+                <h3
+                  ref={highlightTitleRef}
+                  className="text-white font-semibold text-3xl mb-4"
+                >
                   {info.title}
                 </h3>
                 <ul className="space-y-2">
                   {info.items.map((item, idx) => (
                     <li
                       key={idx}
+                      ref={(el) => {
+                        highlightItemsRef.current[idx] = el;
+                      }}
                       className="flex items-center gap-2 text-lg text-white/80"
                     >
                       {item.positive ? (
