@@ -159,57 +159,15 @@ export default function MissionVisionV1() {
       };
 
       const section = innerRef.current;
-
-      // Step state: 0 = nothing shown, 1 = mission shown, 2 = vision shown.
-      let currentStep = 0;
-      let activeTween: gsap.core.Timeline | null = null;
-
-      const goToStep = (next: number) => {
-        if (next === currentStep) return;
-        activeTween?.kill();
-        const tl = gsap.timeline();
-
-        if (next === 0) {
-          if (currentStep === 1) tl.add(animateBlockOut(missionRef.current!));
-          if (currentStep === 2) tl.add(animateBlockOut(visionRef.current!));
-        } else if (next === 1) {
-          if (currentStep === 2) tl.add(animateBlockOut(visionRef.current!));
-          tl.add(animateBlockIn(missionRef.current!));
-        } else if (next === 2) {
-          if (currentStep === 1) tl.add(animateBlockOut(missionRef.current!));
-          tl.add(animateBlockIn(visionRef.current!));
-        }
-
-        currentStep = next;
-        activeTween = tl;
-      };
-
-      const pinST = ScrollTrigger.create({
-        trigger: section,
-        start: "top top+=110px",
-        end: "+=200%",
-        pin: true,
-        pinSpacing: true,
-        invalidateOnRefresh: true,
-        snap: {
-          snapTo: [0, 1],
-          duration: { min: 0.25, max: 0.6 },
-          ease: "power1.inOut",
-        },
-        onEnter: () => goToStep(1),
-        onEnterBack: () => {
-          // Coming back up from below the pin end.
-          goToStep(2);
-        },
-        onLeave: () => {
-          // Scrolled past pin end — keep vision visible as section unpins.
-          goToStep(2);
-        },
-        onLeaveBack: () => goToStep(0),
-        onUpdate: (self) => {
-          const p = self.progress;
-          if (p < 0.5) goToStep(1);
-          else goToStep(2);
+      const master = gsap.timeline({
+        scrollTrigger: {
+          trigger: section,
+          start: "top top+=110px",
+          end: () => `+=${section.offsetHeight * 3}`,
+          pin: true,
+          pinSpacing: true,
+          scrub: true,
+          invalidateOnRefresh: true,
         },
       });
 
@@ -230,11 +188,20 @@ export default function MissionVisionV1() {
       });
       resizeObserver.observe(document.body);
 
+      master
+        .addLabel("missionIn")
+        .add(animateBlockIn(missionRef.current))
+        .addLabel("missionHold", "+=0.6")
+        .add(animateBlockOut(missionRef.current), "+=0.4")
+        .addLabel("visionIn")
+        .add(animateBlockIn(visionRef.current))
+        .addLabel("visionHold", "+=0.8");
+
       return () => {
         resizeObserver.disconnect();
         if (rafId) cancelAnimationFrame(rafId);
-        activeTween?.kill();
-        pinST.kill();
+        master.scrollTrigger?.kill();
+        master.kill();
       };
     },
     { scope: wrapperRef },

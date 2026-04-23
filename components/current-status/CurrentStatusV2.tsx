@@ -189,7 +189,7 @@ export default function CurrentStatusV2() {
             quarter="Q3 2026"
             title="Auction Finance MVP"
             description="Pre-approved finance embedded into the auction experience — certainty of funding before the hammer falls, within the 28-day completion window."
-            marketInfo="Unlocking £5.5bn stalled by 30-day completion requirements"
+            marketInfo="Unlocking £5.5bnwwwwwwwwwwwwwwwwwwwww stalled by 30-day completion requirements"
             icon={<FaGavel className="h-6 w-6" />}
           />
         </div>
