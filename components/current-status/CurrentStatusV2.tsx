@@ -462,13 +462,13 @@ export default function CurrentStatusV2() {
                 strokeLinecap="round"
               />
               <path
+                className="status-connector-glow"
                 d="M2 2 V25 Q2 40 17 40 H308 Q323 40 323 55 V78"
                 fill="none"
                 stroke="#ddf7ff"
                 strokeWidth="4"
                 strokeLinecap="round"
                 style={{ filter: "blur(10px)" }}
-                opacity="0.0"
               />
             </svg>
           </div>
@@ -495,13 +495,13 @@ export default function CurrentStatusV2() {
                 strokeLinecap="round"
               />
               <path
+                className="status-connector-glow"
                 d="M323 2 V25 Q323 40 308 40 H17 Q2 40 2 55 V78"
                 fill="none"
                 stroke="#ddf7ff"
                 strokeWidth="4"
                 strokeLinecap="round"
                 style={{ filter: "blur(10px)" }}
-                opacity="0.0"
               />
             </svg>
           </div>

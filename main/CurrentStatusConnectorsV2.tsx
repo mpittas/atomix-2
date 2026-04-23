@@ -14,8 +14,8 @@ const STATIC_GLOW_PROPS = {
   stroke: GLOW_COLOR,
   strokeWidth: GLOW_STROKE_WIDTH,
   strokeLinecap: "round" as const,
+  className: "status-connector-glow",
   style: { filter: `blur(${GLOW_BLUR}px)` },
-  opacity: "0.0",
 };
 
 export default function CurrentStatusConnectorsV2() {
