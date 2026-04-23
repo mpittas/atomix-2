@@ -1,21 +1,8 @@
-const GLOW_COLOR = "#ddf7ff";
-const GLOW_STROKE_WIDTH = 4;
-const GLOW_BLUR = 10;
-
 const STATIC_PATH_PROPS = {
   fill: "none",
   stroke: "#90abb3",
   strokeWidth: "2",
   strokeLinecap: "round" as const,
-};
-
-const STATIC_GLOW_PROPS = {
-  fill: "none",
-  stroke: GLOW_COLOR,
-  strokeWidth: GLOW_STROKE_WIDTH,
-  strokeLinecap: "round" as const,
-  className: "status-connector-glow",
-  style: { filter: `blur(${GLOW_BLUR}px)` },
 };
 
 export default function CurrentStatusConnectorsV2() {
@@ -38,10 +25,6 @@ export default function CurrentStatusConnectorsV2() {
             d="M323 2 V25 Q323 40 308 40 H17 Q2 40 2 55 V78"
             {...STATIC_PATH_PROPS}
           />
-          <path
-            d="M323 2 V25 Q323 40 308 40 H17 Q2 40 2 55 V78"
-            {...STATIC_GLOW_PROPS}
-          />
         </svg>
       </div>
 
@@ -61,10 +44,6 @@ export default function CurrentStatusConnectorsV2() {
             data-cs-connector-2
             d="M109 2 V25 Q109 40 94 40 H17 Q2 40 2 55 V78"
             {...STATIC_PATH_PROPS}
-          />
-          <path
-            d="M109 2 V25 Q109 40 94 40 H17 Q2 40 2 55 V78"
-            {...STATIC_GLOW_PROPS}
           />
         </svg>
       </div>
@@ -86,10 +65,6 @@ export default function CurrentStatusConnectorsV2() {
             d="M2 2 V25 Q2 40 17 40 H308 Q323 40 323 55 V78"
             {...STATIC_PATH_PROPS}
           />
-          <path
-            d="M2 2 V25 Q2 40 17 40 H308 Q323 40 323 55 V78"
-            {...STATIC_GLOW_PROPS}
-          />
         </svg>
       </div>
 
@@ -109,10 +84,6 @@ export default function CurrentStatusConnectorsV2() {
             data-cs-connector-3
             d="M2 2 V25 Q2 40 17 40 H94 Q109 40 109 55 V78"
             {...STATIC_PATH_PROPS}
-          />
-          <path
-            d="M2 2 V25 Q2 40 17 40 H94 Q109 40 109 55 V78"
-            {...STATIC_GLOW_PROPS}
           />
         </svg>
       </div>

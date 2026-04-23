@@ -62,28 +62,6 @@ body {
   border-radius: 3.40282e38px;
 }
 
-.status-connector-glow {
-  stroke-dasharray: 40 500;
-  animation: connector-glow-travel 3s linear infinite;
-}
-
-@keyframes connector-glow-travel {
-  0% {
-    stroke-dashoffset: 500;
-    opacity: 0;
-  }
-  5% {
-    opacity: 0.8;
-  }
-  90% {
-    opacity: 0.8;
-  }
-  100% {
-    stroke-dashoffset: 0;
-    opacity: 0;
-  }
-}
-
 .text-gradient {
   background: linear-gradient(
     to right,
