@@ -352,7 +352,7 @@ export default function CurrentStatusV2() {
           scrollTrigger: {
             trigger: topCardsRow,
             start: "bottom 70%",
-            toggleActions: "play reverse play reverse",
+            toggleActions: "play none none none",
           },
         });
 

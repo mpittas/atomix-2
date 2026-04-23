@@ -6,27 +6,15 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import Header from "@/components/header";
 import MainHero from "@/main/MainHero";
+import DefCta from "@/components/DefCta";
+import Footer from "@/components/Footer";
 import MainProblemsTabs from "@/main/MainProblemsTabs";
 import MainPyramidWrapper from "@/main/MainPyramidWrapper";
 import MainSolutionsAnimation from "@/main/MainSolutionsAnimation";
 import MainBenefitsTabs from "@/main/benefits-tabs/";
 import MainTheMarket from "@/main/MainTheMarket";
-
-import DefHeading from "@/components/typo/DefHeading";
-import { Button as DefButton } from "@/components/ui";
-import IconBox from "@/components/IconBox";
-import { FaGlobe, FaUsers, FaMicrochip } from "react-icons/fa6";
-import DefCta from "@/components/DefCta";
-import Footer from "@/components/Footer";
-import SoftAurora from "@/components/backgrounds/SoftAurora";
-import ScrollableTabsv2 from "@/components/ScrollableTabsv2";
-import TechLimitations from "@/components/TechLimitations";
-import WhyAtomixLayout from "@/components/WhyAtomixLayout";
-import TheMarket from "@/components/TheMarket";
-import ScrollableTabsBenefits from "@/components/ScrollableTabsBenefits";
-import CurrentStatusDiagram from "@/components/CurrentStatusDiagram";
-import MainCurrentStatus from "@/main/MainCurrentStatus";
 import MainWhyWorkWithUs from "@/main/MainWhyWorkWithUs";
+import CurrentStatusV2 from "@/components/current-status/CurrentStatusV2";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -192,7 +180,7 @@ export default function LandingGradientV1Page() {
 
         <MainTheMarket />
 
-        <MainCurrentStatus />
+        <CurrentStatusV2 />
 
         <MainWhyWorkWithUs />
       </div>
