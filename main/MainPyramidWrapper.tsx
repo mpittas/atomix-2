@@ -283,7 +283,7 @@ export default function MainPyramidWrapper() {
             return (
               <div
                 ref={highlightContentRef}
-                className="highlight-content backdrop-blur-sm rounded-2xl p-6 border border-[#1491B3] bg-[#003746] min-h-[260px]"
+                className="highlight-content backdrop-blur-sm rounded-2xl"
               >
                 <h3
                   ref={highlightTitleRef}

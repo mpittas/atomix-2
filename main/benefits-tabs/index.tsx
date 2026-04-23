@@ -36,8 +36,8 @@ export default function MainBenefitsTabs() {
       autoAlpha: 1,
       y: 0,
       scale: 1,
-      duration: 0.45 * 2.2,
-      stagger: 0.08 * 2.2,
+      duration: 0.45 * 3,
+      stagger: 0.08 * 3,
       ease: "power2.out",
     })
       .to(
@@ -45,22 +45,22 @@ export default function MainBenefitsTabs() {
         {
           autoAlpha: 1,
           y: 0,
-          duration: 0.4 * 2.2,
-          stagger: 0.06 * 2.2,
+          duration: 0.4 * 3,
+          stagger: 0.06 * 3,
           ease: "power2.out",
         },
-        `-=${0.2 * 1.5}`,
+        `-=${0.2 * 2}`,
       )
       .to(
         listItems,
         {
           autoAlpha: 1,
           y: 0,
-          duration: 0.4 * 2.2,
-          stagger: 0.08 * 2.2,
+          duration: 0.4 * 3,
+          stagger: 0.08 * 3,
           ease: "power2.out",
         },
-        `-=${0.12 * 2.2}`,
+        `-=${0.12 * 3}`,
       );
   };
 
@@ -95,8 +95,8 @@ export default function MainBenefitsTabs() {
       tl.to(Array.from(tabButtonsRef.current.children), {
         opacity: 1,
         y: 0,
-        duration: 0.6,
-        stagger: 0.12,
+        duration: 1.2,
+        stagger: 0.2,
         ease: "power2.out",
       });
     }
