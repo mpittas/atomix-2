@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
@@ -17,6 +17,12 @@ type IconBoxData = {
   title: string;
   description: string;
   items?: Array<{ icon: React.ReactNode; text: string }>;
+};
+
+type HighlightInfo = {
+  title: string;
+  description: string;
+  items: Array<{ positive: boolean; text: string }>;
 };
 
 const iconBoxesData: IconBoxData[] = [
@@ -53,11 +59,48 @@ const iconBoxesData: IconBoxData[] = [
   },
 ];
 
+const highlightSequenceData: HighlightInfo[] = [
+  {
+    title: "Bespoke builds",
+    description: "Complex loan logic solutions",
+    items: [
+      { positive: true, text: "Automated" },
+      { positive: true, text: "Complex logic" },
+      { positive: false, text: "£600k+, slow to change" },
+    ],
+  },
+  {
+    title: "Simple SaaS",
+    description: "Easy to deploy, limited flexibility",
+    items: [
+      { positive: true, text: "Automated" },
+      { positive: true, text: "Cheap to build" },
+      { positive: false, text: "Simple products only" },
+    ],
+  },
+  {
+    title: "Disconnected stacks",
+    description: "Humans are the glue",
+    items: [
+      { positive: true, text: "Complex logic" },
+      { positive: true, text: "Cheap to build" },
+      { positive: false, text: "Not automated" },
+    ],
+  },
+];
+
+const HIGHLIGHT_SEQUENCE_END = 0.66;
+const HIGHLIGHT_PHASE_1_END = 0.26;
+const HIGHLIGHT_PHASE_2_END = 0.52;
+
 export default function MainPyramidWrapper() {
   const pyramidSectionRef = useRef<HTMLDivElement>(null);
   const pyramidColRef = useRef<HTMLDivElement>(null);
   const iconBoxRefs = useRef<Array<HTMLDivElement | null>>([]);
   const pyramidApiRef = useRef<{ setSlider: (v: number) => void } | null>(null);
+  const highlightBoxRef = useRef<HTMLDivElement>(null);
+  const [highlightIndex, setHighlightIndex] = useState(0);
+  const lastHighlightIndexRef = useRef(0);
 
   useGSAP(() => {
     const section = pyramidSectionRef.current;
@@ -67,10 +110,11 @@ export default function MainPyramidWrapper() {
     );
     if (!section || !pyramidCol || boxes.length === 0) return;
 
-    // Initial state: pyramid horizontally centered in the wrapper,
-    // icon boxes hidden and slightly offset for entry animation.
-    gsap.set(pyramidCol, { xPercent: 50 });
+    // Initial state: pyramid on the right side of the wrapper,
+    // icon boxes hidden, highlight box visible with first content.
+    gsap.set(pyramidCol, { xPercent: 85 });
     gsap.set(boxes, { autoAlpha: 0, y: 32 });
+    gsap.set(highlightBoxRef.current, { autoAlpha: 1 });
 
     const tl = gsap.timeline({
       scrollTrigger: {
@@ -111,10 +155,36 @@ export default function MainPyramidWrapper() {
       ease: "none",
       duration: 1,
       onUpdate: () => {
-        pyramidApiRef.current?.setSlider(pyramidProgress.value);
+        const progress = pyramidProgress.value;
+        pyramidApiRef.current?.setSlider(progress);
+
+        // Update highlight box content based on pyramid highlight phase
+        let newIndex = 0;
+        const introT = Math.min(1, progress / HIGHLIGHT_SEQUENCE_END);
+        if (introT <= HIGHLIGHT_PHASE_1_END) {
+          newIndex = 1; // Both left & right highlighted -> Simple SaaS (side 2)
+        } else if (introT <= HIGHLIGHT_PHASE_2_END) {
+          newIndex = 0; // Transitioning to bottom -> Bespoke builds (side 1)
+        } else if (progress < HIGHLIGHT_SEQUENCE_END) {
+          newIndex = 2; // Bottom highlighted -> Disconnected stacks (side 3)
+        }
+
+        if (newIndex !== lastHighlightIndexRef.current) {
+          lastHighlightIndexRef.current = newIndex;
+          setHighlightIndex(newIndex);
+        }
       },
     })
-      .to(pyramidCol, { xPercent: 0, ease: "none", duration: 0.22 }, 0.66)
+      .to(
+        pyramidCol,
+        { xPercent: 0, ease: "none", duration: 0.22 },
+        HIGHLIGHT_SEQUENCE_END,
+      )
+      .to(
+        highlightBoxRef.current,
+        { autoAlpha: 0, ease: "power2.out", duration: 0.15 },
+        HIGHLIGHT_SEQUENCE_END,
+      )
       .to(
         boxes,
         {
@@ -159,7 +229,44 @@ export default function MainPyramidWrapper() {
         />
       </div>
 
-      <div className="max-w-[1200px] min-h-[200px] my-auto flex">
+      <div className="max-w-[1200px] min-h-[200px] my-auto flex relative">
+        {/* Left highlight info box - absolutely positioned on left during pyramid highlight sequence */}
+        <div
+          ref={highlightBoxRef}
+          className="absolute left-30 top-1/2 -translate-y-1/2 w-[380px] opacity-0"
+        >
+          {(() => {
+            const info =
+              highlightSequenceData[highlightIndex] || highlightSequenceData[0];
+            return (
+              <div
+                key={highlightIndex}
+                className="highlight-content backdrop-blur-sm rounded-2xl p-6 animate-fadeIn border border-[#1491B3] bg-[#003746]"
+              >
+                <h3 className="text-white font-semibold text-2xl mb-3">
+                  {info.title}
+                </h3>
+                <p className="text-white/70 text-md mb-4">{info.description}</p>
+                <ul className="space-y-2">
+                  {info.items.map((item, idx) => (
+                    <li
+                      key={idx}
+                      className="flex items-center gap-2 text-md text-white/80"
+                    >
+                      {item.positive ? (
+                        <FiCheck className="w-4 h-4 shrink-0" />
+                      ) : (
+                        <FiX className="w-4 h-4 shrink-0" />
+                      )}
+                      {item.text}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            );
+          })()}
+        </div>
+
         <div ref={pyramidColRef} className="flex-1">
           <AtomixPyramidNewDesign
             disableScrollTrigger
