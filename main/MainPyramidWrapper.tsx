@@ -21,7 +21,6 @@ type IconBoxData = {
 
 type HighlightInfo = {
   title: string;
-  description: string;
   items: Array<{ positive: boolean; text: string }>;
 };
 
@@ -62,7 +61,6 @@ const iconBoxesData: IconBoxData[] = [
 const highlightSequenceData: HighlightInfo[] = [
   {
     title: "Bespoke builds",
-    description: "Complex loan logic solutions",
     items: [
       { positive: true, text: "Automated" },
       { positive: true, text: "Complex logic" },
@@ -71,7 +69,6 @@ const highlightSequenceData: HighlightInfo[] = [
   },
   {
     title: "Simple SaaS",
-    description: "Easy to deploy, limited flexibility",
     items: [
       { positive: true, text: "Automated" },
       { positive: true, text: "Cheap to build" },
@@ -80,7 +77,6 @@ const highlightSequenceData: HighlightInfo[] = [
   },
   {
     title: "Disconnected stacks",
-    description: "Humans are the glue",
     items: [
       { positive: true, text: "Complex logic" },
       { positive: true, text: "Cheap to build" },
@@ -243,15 +239,14 @@ export default function MainPyramidWrapper() {
                 key={highlightIndex}
                 className="highlight-content backdrop-blur-sm rounded-2xl p-6 animate-fadeIn border border-[#1491B3] bg-[#003746]"
               >
-                <h3 className="text-white font-semibold text-2xl mb-3">
+                <h3 className="text-white font-semibold text-3xl mb-4">
                   {info.title}
                 </h3>
-                <p className="text-white/70 text-md mb-4">{info.description}</p>
                 <ul className="space-y-2">
                   {info.items.map((item, idx) => (
                     <li
                       key={idx}
-                      className="flex items-center gap-2 text-md text-white/80"
+                      className="flex items-center gap-2 text-lg text-white/80"
                     >
                       {item.positive ? (
                         <FiCheck className="w-4 h-4 shrink-0" />
