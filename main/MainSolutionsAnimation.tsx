@@ -674,7 +674,7 @@ export default function MainSolutionsAnimation() {
                 src="https://api.iconify.design/lucide:target.svg?color=white"
                 imageSize="small"
                 title="Goal-driven reasoning"
-                description="Adjusts underwriting strategies in real time, delivering the most efficient route to a viable loan"
+                description="AI Adjusts underwriting strategies in real time, delivering the most efficient route to a viable loan"
                 className="!p-4"
               />
             </div>
