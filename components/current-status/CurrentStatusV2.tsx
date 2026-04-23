@@ -530,6 +530,7 @@ export default function CurrentStatusV2() {
         </div>
 
         <div data-cs-connectors>
+          {/* ds */}
           <CurrentStatusConnectorsV2 />
         </div>
 
