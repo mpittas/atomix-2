@@ -1,13 +1,18 @@
 "use client";
 
 import type { ReactNode } from "react";
-import Image from "next/image";
+import { useRef } from "react";
 import SoftAurora from "@/components/backgrounds/SoftAurora";
 import CurrentStatusConnectorsV2 from "@/main/CurrentStatusConnectorsV2";
 import DefHeading from "@/components/typo/DefHeading";
 import { FaHouse, FaGavel } from "react-icons/fa6";
 import { TbTargetArrow } from "react-icons/tb";
 import { Button as DefButton } from "@/components/ui";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
+
+gsap.registerPlugin(ScrollTrigger);
 
 interface StatusCardProps {
   quarter: string;
@@ -69,23 +74,17 @@ interface StatusFeatureCardProps {
   icon: ReactNode;
   title: string;
   description: string;
-  active?: boolean;
 }
 
 function StatusFeatureCard({
   icon,
   title,
   description,
-  active = false,
 }: StatusFeatureCardProps) {
   return (
     <div
       data-cs-feature-card
-      className={`relative rounded-3xl border bg-[#003746] p-6 overflow-hidden flex flex-col gap-y-3 text-left ${
-        active
-          ? "border-[#58fffc] ring-2 ring-[#58fffc]/60 shadow-[0_0_30px_rgba(88,255,252,0.25)]"
-          : "border-[#1491B3]"
-      }`}
+      className="relative rounded-3xl border border-[#1491B3] bg-[#003746] p-6 overflow-hidden flex flex-col gap-y-3 text-left"
     >
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute -top-8 -bottom-8 right-4 w-[15%] rotate-20 bg-[#58fffc]/15 blur-2xl" />
@@ -144,10 +143,218 @@ const TABS: TabData[] = [
 ];
 
 export default function CurrentStatusV2() {
-  const activeTab = 0;
+  const sectionRef = useRef<HTMLDivElement>(null);
+
+  useGSAP(
+    () => {
+      if (!sectionRef.current) return;
+
+      const section = sectionRef.current;
+      const topCards =
+        section.querySelectorAll<HTMLElement>("[data-cs-top-card]");
+      const topCardsRow = topCards[0]?.parentElement ?? null;
+      const topCardDescriptions = section.querySelectorAll<HTMLElement>(
+        "[data-cs-top-card-desc]",
+      );
+      const topCardMarketInfo = section.querySelectorAll<HTMLElement>(
+        "[data-cs-top-card-market]",
+      );
+      const inlineConnector1 = section.querySelector<SVGPathElement>(
+        "[data-cs-inline-connector-1]",
+      );
+      const inlineConnector2 = section.querySelector<SVGPathElement>(
+        "[data-cs-inline-connector-2]",
+      );
+      const connector1 = section.querySelector<SVGPathElement>(
+        "[data-cs-connector-1]",
+      );
+      const connector2 = section.querySelector<SVGPathElement>(
+        "[data-cs-connector-2]",
+      );
+      const connector3 = section.querySelector<SVGPathElement>(
+        "[data-cs-connector-3]",
+      );
+      const connector4 = section.querySelector<SVGPathElement>(
+        "[data-cs-connector-4]",
+      );
+      const statement1 = section.querySelector<HTMLElement>(
+        "[data-cs-statement-1]",
+      );
+      const verticalLine = section.querySelector<HTMLElement>(
+        "[data-cs-vertical-line]",
+      );
+      const statement2 = section.querySelector<HTMLElement>(
+        "[data-cs-statement-2]",
+      );
+      const featureCards = section.querySelectorAll<HTMLElement>(
+        "[data-cs-feature-card]",
+      );
+      const buttons = section.querySelectorAll<HTMLElement>(
+        "[data-cs-buttons] > *",
+      );
+      const bottomConnectorSequence = [
+        connector1,
+        connector2,
+        connector3,
+        connector4,
+      ];
+
+      gsap.set(topCards, { autoAlpha: 0, y: 60 });
+      gsap.set([statement1, statement2], {
+        autoAlpha: 0,
+        y: 60,
+      });
+      gsap.set(verticalLine, {
+        scaleY: 0,
+        transformOrigin: "top center",
+      });
+      gsap.set([topCardDescriptions, topCardMarketInfo], {
+        overflow: "hidden",
+      });
+      gsap.set(featureCards, {
+        autoAlpha: 0,
+        y: 0,
+        scale: 0.9,
+        transformOrigin: "center center",
+      });
+      gsap.set(buttons, { autoAlpha: 0, y: 20 });
+
+      if (inlineConnector1) {
+        const length = inlineConnector1.getTotalLength();
+        gsap.set(inlineConnector1, {
+          strokeDasharray: `${length}`,
+          strokeDashoffset: length,
+        });
+      }
+      if (inlineConnector2) {
+        const length = inlineConnector2.getTotalLength();
+        gsap.set(inlineConnector2, {
+          strokeDasharray: `${length}`,
+          strokeDashoffset: length,
+        });
+      }
+
+      bottomConnectorSequence.forEach((path) => {
+        if (!path) return;
+        const length = path.getTotalLength();
+        gsap.set(path, {
+          strokeDasharray: `${length}`,
+          strokeDashoffset: length,
+        });
+      });
+
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: section,
+          start: "top 80%",
+          toggleActions: "restart reset restart reset",
+        },
+      });
+
+      tl.to(topCards, {
+        autoAlpha: 1,
+        y: 0,
+        duration: 1.6,
+        ease: "power2.out",
+        stagger: 0.5,
+      })
+        .to(inlineConnector1, {
+          strokeDashoffset: 0,
+          duration: 1,
+          ease: "power2.inOut",
+        })
+        .to(inlineConnector2, {
+          strokeDashoffset: 0,
+          duration: 1,
+          ease: "power2.inOut",
+        })
+        .to(
+          statement1,
+          {
+            autoAlpha: 1,
+            y: 0,
+            duration: 1.6,
+            ease: "power2.out",
+          },
+          "-=0.5",
+        )
+        .to(
+          verticalLine,
+          {
+            scaleY: 1,
+            duration: 0.8,
+            ease: "power2.out",
+          },
+          "-=0.5",
+        )
+        .to(
+          statement2,
+          {
+            autoAlpha: 1,
+            y: 0,
+            duration: 1.6,
+            ease: "power2.out",
+          },
+          "-=0.5",
+        );
+
+      for (let index = 0; index < bottomConnectorSequence.length; index += 1) {
+        const path = bottomConnectorSequence[index];
+        const card = featureCards[index];
+        const isFirstStep = index === 0;
+
+        if (path) {
+          tl.to(
+            path,
+            {
+              strokeDashoffset: 0,
+              duration: 1,
+              ease: "power2.inOut",
+            },
+            isFirstStep ? "-=1" : ">",
+          );
+        }
+
+        if (card) {
+          tl.fromTo(
+            card,
+            {
+              autoAlpha: 0,
+              y: 0,
+              scale: 0.9,
+            },
+            {
+              autoAlpha: 1,
+              y: 0,
+              scale: 1,
+              duration: 1.35,
+              ease: "power2.out",
+              immediateRender: false,
+            },
+            ">",
+          );
+        }
+      }
+
+      tl.to(
+        buttons,
+        {
+          autoAlpha: 1,
+          y: 0,
+          duration: 1,
+          ease: "power4.inOut",
+        },
+        "-=6",
+      );
+    },
+    { scope: sectionRef },
+  );
 
   return (
-    <div className="min-h-[calc(100vh-126px)] rounded-3xl bg-linear-to-b from-[#0B4858] via-[#1e5360] to-[#0B4858] relative overflow-hidden flex flex-col justify-center items-center py-28">
+    <div
+      ref={sectionRef}
+      className="min-h-[calc(100vh-126px)] rounded-3xl bg-linear-to-b from-[#0B4858] via-[#1e5360] to-[#0B4858] relative overflow-hidden flex flex-col justify-center items-center py-28"
+    >
       <div className="absolute top-0 left-0 w-full h-[500px]">
         <SoftAurora
           speed={1.3}
@@ -189,7 +396,7 @@ export default function CurrentStatusV2() {
             quarter="Q3 2026"
             title="Auction Finance MVP"
             description="Pre-approved finance embedded into the auction experience — certainty of funding before the hammer falls, within the 28-day completion window."
-            marketInfo="Unlocking £5.5bnwwwwwwwwwwwwwwwwwwwww stalled by 30-day completion requirements"
+            marketInfo="Unlocking £5.5bn stalled by 30-day completion requirements"
             icon={<FaGavel className="h-6 w-6" />}
           />
         </div>
@@ -208,12 +415,22 @@ export default function CurrentStatusV2() {
               }}
             >
               <path
+                data-cs-inline-connector-1
                 className="status-connector-path"
                 d="M2 2 V25 Q2 40 17 40 H308 Q323 40 323 55 V78"
                 fill="none"
-                stroke="#FFFFFF"
+                stroke="#90abb3"
                 strokeWidth="2"
                 strokeLinecap="round"
+              />
+              <path
+                d="M2 2 V25 Q2 40 17 40 H308 Q323 40 323 55 V78"
+                fill="none"
+                stroke="#ddf7ff"
+                strokeWidth="4"
+                strokeLinecap="round"
+                style={{ filter: "blur(10px)" }}
+                opacity="0.0"
               />
             </svg>
           </div>
@@ -231,27 +448,46 @@ export default function CurrentStatusV2() {
               }}
             >
               <path
+                data-cs-inline-connector-2
                 className="status-connector-path"
                 d="M323 2 V25 Q323 40 308 40 H17 Q2 40 2 55 V78"
                 fill="none"
-                stroke="#FFFFFF"
+                stroke="#90abb3"
                 strokeWidth="2"
                 strokeLinecap="round"
+              />
+              <path
+                d="M323 2 V25 Q323 40 308 40 H17 Q2 40 2 55 V78"
+                fill="none"
+                stroke="#ddf7ff"
+                strokeWidth="4"
+                strokeLinecap="round"
+                style={{ filter: "blur(10px)" }}
+                opacity="0.0"
               />
             </svg>
           </div>
         </div>
 
-        <div className="text-3xl text-white text-center font-semibold py-4">
+        <div
+          data-cs-statement-1
+          className="text-3xl text-white text-center font-semibold py-4"
+        >
           Atomix is live and building — two product launches confirmed for 2026:
           quick home sale MVP (Q2) and auction finance MVP (Q3).
         </div>
 
         <div className="flex justify-center ">
-          <div className="h-12 bg-white w-[2px]"></div>
+          <div
+            data-cs-vertical-line
+            className="h-12 bg-white/60 w-[3px] rounded-lg"
+          ></div>
         </div>
 
-        <div className="text-3xl text-white text-center font-semibold py-4">
+        <div
+          data-cs-statement-2
+          className="text-3xl text-white text-center font-semibold py-4"
+        >
           Statement 2 comes here
         </div>
 
@@ -260,13 +496,12 @@ export default function CurrentStatusV2() {
         </div>
 
         <div className="-mt-1 mb-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-          {TABS.map((tab, index) => (
+          {TABS.map((tab) => (
             <StatusFeatureCard
               key={tab.title}
               icon={<TbTargetArrow className="h-10 w-10" />}
               title={tab.title}
               description={tab.description}
-              active={activeTab === index}
             />
           ))}
         </div>
