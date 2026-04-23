@@ -9,28 +9,19 @@ import SoftAurora from "@/components/backgrounds/SoftAurora";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const MISSION_VISION_SCROLL_DISTANCE_MULTIPLIER = 3;
+const MISSION_VISION_SCROLL_DISTANCE_MULTIPLIER = 1.4;
 
-// Splits a string into spans of individual letters.
-// Whitespace is preserved as a non-animated span and line breaks render as <br />.
-function renderLetters(text: string) {
-  // Each word renders on its own line, inside its own clipping mask so
-  // the per-letter translate animation reveals smoothly.
-  const words = text.split(/\s+/).filter(Boolean);
-  return words.map((word, wordIdx) => (
-    <span
-      key={wordIdx}
-      className="block overflow-hidden pb-[0.1em]"
-      style={{ lineHeight: 1.05 }}
-    >
-      {Array.from(word).map((ch, i) => (
+function renderTypewriterTitle(title: string) {
+  const lines = ["Our", title];
+  return lines.map((line, lineIdx) => (
+    <span key={lineIdx} className="block leading-[1.05]">
+      {Array.from(line).map((ch, i) => (
         <span
-          key={i}
-          data-mv-letter
-          className="inline-block will-change-transform"
-          style={{ transformOrigin: "0% 100%" }}
+          key={`${lineIdx}-${i}`}
+          data-mv-type-char
+          className="inline-block opacity-0"
         >
-          {ch}
+          {ch === " " ? "\u00A0" : ch}
         </span>
       ))}
     </span>
@@ -59,7 +50,7 @@ const MissionVisionBlock = forwardRef<HTMLDivElement, MissionVisionBlockProps>(
           data-mv-title
           className="text-[80px] font-normal font-bold uppercase leading-[1.05em]"
         >
-          {renderLetters(`Our\n${title}`)}
+          {renderTypewriterTitle(title)}
         </h2>
         <div data-mv-item className="w-full h-[1px] bg-white/16"></div>
         <div data-mv-item className="text-xl">
@@ -98,32 +89,30 @@ export default function MissionVisionV1() {
 
       // Initial hidden state for both blocks
       blocks.forEach((block) => {
-        const letters = block.querySelectorAll<HTMLElement>("[data-mv-letter]");
+        const typeChars = block.querySelectorAll<HTMLElement>(
+          "[data-mv-type-char]",
+        );
         const items = block.querySelectorAll<HTMLElement>("[data-mv-item]");
-        gsap.set(block, { autoAlpha: 0 });
-        gsap.set(letters, {
-          yPercent: 110,
-          rotate: 8,
+        gsap.set(block, { autoAlpha: 0, pointerEvents: "none" });
+        gsap.set(typeChars, {
           opacity: 0,
         });
         gsap.set(items, { y: 40, opacity: 0 });
       });
 
       const animateBlockIn = (block: HTMLElement) => {
-        const letters = block.querySelectorAll<HTMLElement>("[data-mv-letter]");
+        const typeChars = block.querySelectorAll<HTMLElement>(
+          "[data-mv-type-char]",
+        );
         const items = block.querySelectorAll<HTMLElement>("[data-mv-item]");
         const tl = gsap.timeline();
-        tl.set(block, { autoAlpha: 1 });
-        // New split-letter animation: rise from below + small rotation unwind
-        tl.to(letters, {
-          yPercent: 0,
-          rotate: 0,
+        tl.set(block, { autoAlpha: 1, pointerEvents: "auto" });
+        tl.to(typeChars, {
           opacity: 1,
-          duration: 0.9,
-          ease: "power3.out",
-          stagger: 0.035,
+          duration: 0.04,
+          ease: "none",
+          stagger: 0.075,
         });
-        // Fade-in-up cascade for separator, description, button
         tl.to(
           items,
           {
@@ -133,13 +122,15 @@ export default function MissionVisionV1() {
             ease: "power2.out",
             stagger: 0.18,
           },
-          "-=0.55",
+          "-=0.15",
         );
         return tl;
       };
 
       const animateBlockOut = (block: HTMLElement) => {
-        const letters = block.querySelectorAll<HTMLElement>("[data-mv-letter]");
+        const typeChars = block.querySelectorAll<HTMLElement>(
+          "[data-mv-type-char]",
+        );
         const items = block.querySelectorAll<HTMLElement>("[data-mv-item]");
         const tl = gsap.timeline();
         tl.to(items, {
@@ -150,18 +141,16 @@ export default function MissionVisionV1() {
           stagger: 0.05,
         });
         tl.to(
-          letters,
+          typeChars,
           {
-            yPercent: -110,
-            rotate: -8,
             opacity: 0,
-            duration: 0.5,
-            ease: "power3.in",
-            stagger: 0.015,
+            duration: 0.03,
+            ease: "none",
+            stagger: { each: 0.018, from: "end" },
           },
-          "-=0.35",
+          "-=0.2",
         );
-        tl.set(block, { autoAlpha: 0 });
+        tl.set(block, { autoAlpha: 0, pointerEvents: "none" });
         return tl;
       };
 
@@ -215,7 +204,7 @@ export default function MissionVisionV1() {
               },
             })
             .add(animateBlockOut(missionEl), 0)
-            .add(animateBlockIn(visionEl), 0.15);
+            .add(animateBlockIn(visionEl), "+=0.06");
         }
 
         if (direction < 0 && activeIndexRef.current === 1) {
@@ -229,7 +218,7 @@ export default function MissionVisionV1() {
               },
             })
             .add(animateBlockOut(visionEl), 0)
-            .add(animateBlockIn(missionEl), 0.15);
+            .add(animateBlockIn(missionEl), "+=0.06");
         }
       };
 
