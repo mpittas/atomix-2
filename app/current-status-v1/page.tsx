@@ -3,7 +3,7 @@
 import Header from "@/components/header";
 import Footer from "@/components/Footer";
 import CurrentStatusV1 from "@/components/current-status/CurrentStatusV1";
-import CurrentStatusV2 from "@/components/current-status/CurrentStatusV2";
+import MainCurrentStatus from "@/components/current-status/MainCurrentStatus";
 import DefHeading from "@/components/typo/DefHeading";
 
 export default function CurrentStatusV1Page() {
@@ -21,7 +21,7 @@ export default function CurrentStatusV1Page() {
         </div>
 
         {/* <CurrentStatusV1 /> */}
-        <CurrentStatusV2 />
+        <MainCurrentStatus />
       </div>
       <Footer />
     </div>
