@@ -14,7 +14,7 @@ import MainSolutionsAnimation from "@/main/MainSolutionsAnimation";
 import MainBenefitsTabs from "@/main/benefits-tabs/";
 import MainTheMarket from "@/main/MainTheMarket";
 import MainWhyWorkWithUs from "@/main/MainWhyWorkWithUs";
-import CurrentStatusV2 from "@/components/current-status/CurrentStatusV2";
+import MainCurrentStatus from "@/components/current-status/MainCurrentStatus";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -180,7 +180,7 @@ export default function LandingGradientV1Page() {
 
         <MainTheMarket />
 
-        <CurrentStatusV2 />
+        <MainCurrentStatus />
 
         <MainWhyWorkWithUs />
       </div>
