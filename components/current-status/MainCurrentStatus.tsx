@@ -247,7 +247,7 @@ export default function CurrentStatusV2() {
         scrollTrigger: {
           trigger: section,
           start: "top 80%",
-          toggleActions: "play none none none",
+          toggleActions: "restart reset restart reset",
         },
       });
 
@@ -352,7 +352,7 @@ export default function CurrentStatusV2() {
           scrollTrigger: {
             trigger: topCardsRow,
             start: "bottom 70%",
-            toggleActions: "play none none none",
+            toggleActions: "play play play reverse",
           },
         });
 
