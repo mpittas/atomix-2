@@ -151,7 +151,7 @@ export default function MainHero() {
       scrollTrigger: {
         trigger: "#def-hero-main",
         start: "top top",
-        end: "+=5000",
+        end: "+=7000",
         scrub: 2.5,
         pin: true,
       },
@@ -201,14 +201,14 @@ export default function MainHero() {
       .to(
         "#def-hero-title-2-list .hero-list-item",
         { autoAlpha: 0, y: -40, duration: 1, ease: "power2.in", stagger: 0.2 },
-        "listVisible+=1.5",
+        "listVisible+=2.1",
       )
       .to(
         "#def-hero-mission-vision",
         { autoAlpha: 1, duration: 0.5, ease: "power2.out" },
-        "listVisible+=3.5",
+        "listVisible+=4.7",
       )
-      .addLabel("missionVisible", "listVisible+=3.6")
+      .addLabel("missionVisible", "listVisible+=4.9")
       .fromTo(
         missionCardRef.current,
         { autoAlpha: 0 },
@@ -219,9 +219,9 @@ export default function MainHero() {
         missionChars,
         {
           opacity: 1,
-          duration: 0.04,
+          duration: 0.06,
           ease: "none",
-          stagger: 0.06,
+          stagger: 0.095,
         },
         "missionVisible",
       )
@@ -230,13 +230,13 @@ export default function MainHero() {
         {
           y: 0,
           opacity: 1,
-          duration: 0.7,
+          duration: 1.05,
           ease: "power2.out",
-          stagger: 0.18,
+          stagger: 0.28,
         },
-        "missionVisible+=0.3",
+        "missionVisible+=0.45",
       )
-      .addLabel("visionVisible", "missionVisible+=1.2")
+      .addLabel("visionVisible", "missionVisible+=2.4")
       .to(
         missionItems,
         {
@@ -261,34 +261,34 @@ export default function MainHero() {
       .to(
         missionCardRef.current,
         { autoAlpha: 0, duration: 0.55, ease: "power2.inOut" },
-        "visionVisible+=0.18",
+        "visionVisible+=0.3",
       )
       .fromTo(
         visionCardRef.current,
         { autoAlpha: 0 },
         { autoAlpha: 1, duration: 0.55, ease: "power2.inOut" },
-        "visionVisible+=0.18",
+        "visionVisible+=0.3",
       )
       .to(
         visionChars,
         {
           opacity: 1,
-          duration: 0.04,
+          duration: 0.06,
           ease: "none",
-          stagger: 0.06,
+          stagger: 0.095,
         },
-        "visionVisible+=0.78",
+        "visionVisible+=1.15",
       )
       .to(
         visionItems,
         {
           y: 0,
           opacity: 1,
-          duration: 0.7,
+          duration: 1.05,
           ease: "power2.out",
-          stagger: 0.18,
+          stagger: 0.28,
         },
-        "visionVisible+=1.0",
+        "visionVisible+=1.7",
       )
       .addLabel("missionVisionComplete");
   }, []);
