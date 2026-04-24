@@ -14,6 +14,16 @@ import { useGSAP } from "@gsap/react";
 
 gsap.registerPlugin(ScrollTrigger);
 
+const GLOW_CONFIG = {
+  maxLength: 100,
+  maxOpacity: 1,
+  travelDuration: 3,
+  fadeInDuration: 0.4,
+  fadeOutDuration: 0.4,
+  repeatDelay: 1.5,
+  startDelay: 0.2,
+};
+
 interface StatusCardProps {
   quarter: string;
   title: string;
@@ -144,6 +154,7 @@ const TABS: TabData[] = [
 
 export default function CurrentStatusV2() {
   const sectionRef = useRef<HTMLDivElement>(null);
+  const glowTimelinesRef = useRef<gsap.core.Timeline[]>([]);
 
   useGSAP(
     () => {
@@ -165,6 +176,12 @@ export default function CurrentStatusV2() {
       const inlineConnector2 = section.querySelector<SVGPathElement>(
         "[data-cs-inline-connector-2]",
       );
+      const inlineConnectorGlow1 = section.querySelector<SVGPathElement>(
+        "[data-cs-inline-connector-glow-1]",
+      );
+      const inlineConnectorGlow2 = section.querySelector<SVGPathElement>(
+        "[data-cs-inline-connector-glow-2]",
+      );
       const connector1 = section.querySelector<SVGPathElement>(
         "[data-cs-connector-1]",
       );
@@ -180,8 +197,11 @@ export default function CurrentStatusV2() {
       const statement1 = section.querySelector<HTMLElement>(
         "[data-cs-statement-1]",
       );
-      const verticalLine = section.querySelector<HTMLElement>(
+      const verticalLine = section.querySelector<SVGPathElement>(
         "[data-cs-vertical-line]",
+      );
+      const verticalLineGlow = section.querySelector<SVGPathElement>(
+        "[data-cs-vertical-line-glow]",
       );
       const statement2 = section.querySelector<HTMLElement>(
         "[data-cs-statement-2]",
@@ -198,6 +218,100 @@ export default function CurrentStatusV2() {
         connector3,
         connector4,
       ];
+      const connectorGlow1 = section.querySelector<SVGPathElement>(
+        "[data-cs-connector-glow-1]",
+      );
+      const connectorGlow2 = section.querySelector<SVGPathElement>(
+        "[data-cs-connector-glow-2]",
+      );
+      const connectorGlow3 = section.querySelector<SVGPathElement>(
+        "[data-cs-connector-glow-3]",
+      );
+      const connectorGlow4 = section.querySelector<SVGPathElement>(
+        "[data-cs-connector-glow-4]",
+      );
+      const bottomConnectorGlowSequence = [
+        connectorGlow1,
+        connectorGlow2,
+        connectorGlow3,
+        connectorGlow4,
+      ];
+
+      const startGlowLoop = (
+        path: SVGPathElement,
+        glow: SVGPathElement | null,
+        glowIndex: number,
+      ) => {
+        if (!glow) return;
+
+        const len = path.getTotalLength ? path.getTotalLength() : 1000;
+        const glowLen = Math.min(GLOW_CONFIG.maxLength, len / 2);
+        const previousTimeline = glowTimelinesRef.current[glowIndex];
+        previousTimeline?.kill();
+
+        const glowTl = gsap.timeline({
+          repeat: -1,
+          repeatDelay: GLOW_CONFIG.repeatDelay,
+        });
+        glowTimelinesRef.current[glowIndex] = glowTl;
+
+        glowTl
+          .set(glow, {
+            attr: {
+              "stroke-dasharray": `${glowLen} ${len + 50}`,
+              "stroke-dashoffset": `${glowLen}`,
+            },
+            opacity: 0,
+          })
+          .to(glow, {
+            attr: { "stroke-dashoffset": `${-len}` },
+            duration: GLOW_CONFIG.travelDuration,
+            ease: "power1.inOut",
+          })
+          .to(
+            glow,
+            {
+              opacity: GLOW_CONFIG.maxOpacity,
+              duration: GLOW_CONFIG.fadeInDuration,
+              ease: "power2.out",
+            },
+            "<",
+          )
+          .to(
+            glow,
+            {
+              opacity: 0,
+              duration: GLOW_CONFIG.fadeOutDuration,
+              ease: "power2.in",
+            },
+            `-=${GLOW_CONFIG.fadeOutDuration}`,
+          );
+      };
+
+      const animatePathAndGlow = (
+        path: SVGPathElement,
+        glow: SVGPathElement | null,
+        duration: number,
+        glowIndex: number,
+      ) => {
+        const len = path.getTotalLength ? path.getTotalLength() : 1000;
+        const pathTl = gsap.timeline();
+
+        pathTl.to(path, {
+          strokeDashoffset: 0,
+          duration,
+          ease: "power2.inOut",
+        });
+
+        if (glow) {
+          pathTl.add(
+            () => startGlowLoop(path, glow, glowIndex),
+            `<+=${GLOW_CONFIG.startDelay}`,
+          );
+        }
+
+        return pathTl;
+      };
 
       gsap.set(topCards, { autoAlpha: 0, y: 60 });
       gsap.set([statement1, statement2], {
@@ -233,6 +347,33 @@ export default function CurrentStatusV2() {
           strokeDashoffset: length,
         });
       }
+      const inlineConnectorSequence = [inlineConnector1, inlineConnector2];
+      const inlineConnectorGlowSequence = [
+        inlineConnectorGlow1,
+        inlineConnectorGlow2,
+      ];
+      inlineConnectorGlowSequence.forEach((glow, index) => {
+        const path = inlineConnectorSequence[index];
+        if (!glow || !path) return;
+        const length = path.getTotalLength();
+        gsap.set(glow, {
+          attr: {
+            "stroke-dasharray": `${Math.min(GLOW_CONFIG.maxLength, length / 2)} ${length + 50}`,
+            "stroke-dashoffset": `${Math.min(GLOW_CONFIG.maxLength, length / 2)}`,
+          },
+          opacity: 0,
+        });
+      });
+      if (verticalLineGlow && verticalLine) {
+        const length = verticalLine.getTotalLength();
+        gsap.set(verticalLineGlow, {
+          attr: {
+            "stroke-dasharray": `${Math.min(GLOW_CONFIG.maxLength, length / 2)} ${length + 50}`,
+            "stroke-dashoffset": `${Math.min(GLOW_CONFIG.maxLength, length / 2)}`,
+          },
+          opacity: 0,
+        });
+      }
 
       bottomConnectorSequence.forEach((path) => {
         if (!path) return;
@@ -240,6 +381,18 @@ export default function CurrentStatusV2() {
         gsap.set(path, {
           strokeDasharray: `${length}`,
           strokeDashoffset: length,
+        });
+      });
+      bottomConnectorGlowSequence.forEach((glow, index) => {
+        const path = bottomConnectorSequence[index];
+        if (!glow || !path) return;
+        const length = path.getTotalLength();
+        gsap.set(glow, {
+          attr: {
+            "stroke-dasharray": `${Math.min(GLOW_CONFIG.maxLength, length / 2)} ${length + 50}`,
+            "stroke-dashoffset": `${Math.min(GLOW_CONFIG.maxLength, length / 2)}`,
+          },
+          opacity: 0,
         });
       });
 
@@ -262,11 +415,19 @@ export default function CurrentStatusV2() {
           strokeDashoffset: 0,
           duration: 1,
           ease: "power2.inOut",
+          onComplete: () => {
+            if (!inlineConnector1) return;
+            startGlowLoop(inlineConnector1, inlineConnectorGlow1, 4);
+          },
         })
         .to(inlineConnector2, {
           strokeDashoffset: 0,
           duration: 1,
           ease: "power2.inOut",
+          onComplete: () => {
+            if (!inlineConnector2) return;
+            startGlowLoop(inlineConnector2, inlineConnectorGlow2, 5);
+          },
         })
         .to(
           statement1,
@@ -284,6 +445,10 @@ export default function CurrentStatusV2() {
             scaleY: 1,
             duration: 0.8,
             ease: "power2.out",
+            onComplete: () => {
+              if (!verticalLine) return;
+              startGlowLoop(verticalLine, verticalLineGlow, 6);
+            },
           },
           "-=0.5",
         )
@@ -304,13 +469,13 @@ export default function CurrentStatusV2() {
         const isFirstStep = index === 0;
 
         if (path) {
-          tl.to(
-            path,
-            {
-              strokeDashoffset: 0,
-              duration: 1,
-              ease: "power2.inOut",
-            },
+          tl.add(
+            animatePathAndGlow(
+              path,
+              bottomConnectorGlowSequence[index],
+              1,
+              index,
+            ),
             isFirstStep ? "-=1" : ">",
           );
         }
@@ -384,6 +549,11 @@ export default function CurrentStatusV2() {
             "<",
           );
       }
+
+      return () => {
+        glowTimelinesRef.current.forEach((timeline) => timeline?.kill());
+        glowTimelinesRef.current = [];
+      };
     },
     { scope: sectionRef },
   );
@@ -461,6 +631,19 @@ export default function CurrentStatusV2() {
                 strokeWidth="2"
                 strokeLinecap="round"
               />
+              <path
+                data-cs-inline-connector-glow-1
+                className="status-connector-glow"
+                d="M2 2 V25 Q2 40 17 40 H308 Q323 40 323 55 V78"
+                fill="none"
+                stroke="#ddf7ff"
+                strokeWidth="4"
+                strokeLinecap="round"
+                strokeDasharray="9999 9999"
+                strokeDashoffset="9999"
+                style={{ filter: "blur(10px)" }}
+                opacity="0"
+              />
             </svg>
           </div>
 
@@ -485,6 +668,19 @@ export default function CurrentStatusV2() {
                 strokeWidth="2"
                 strokeLinecap="round"
               />
+              <path
+                data-cs-inline-connector-glow-2
+                className="status-connector-glow"
+                d="M323 2 V25 Q323 40 308 40 H17 Q2 40 2 55 V78"
+                fill="none"
+                stroke="#ddf7ff"
+                strokeWidth="4"
+                strokeLinecap="round"
+                strokeDasharray="9999 9999"
+                strokeDashoffset="9999"
+                style={{ filter: "blur(10px)" }}
+                opacity="0"
+              />
             </svg>
           </div>
         </div>
@@ -498,10 +694,35 @@ export default function CurrentStatusV2() {
         </div>
 
         <div className="flex justify-center ">
-          <div
-            data-cs-vertical-line
-            className="h-12 bg-white/60 w-[3px] rounded-lg"
-          ></div>
+          <svg
+            className="h-12 w-[3px]"
+            viewBox="0 0 3 48"
+            xmlns="http://www.w3.org/2000/svg"
+            preserveAspectRatio="none"
+            style={{ overflow: "visible" }}
+          >
+            <path
+              data-cs-vertical-line
+              d="M1.5 1 V47"
+              fill="none"
+              stroke="rgba(255,255,255,0.6)"
+              strokeWidth="3"
+              strokeLinecap="round"
+            />
+            <path
+              data-cs-vertical-line-glow
+              className="status-connector-glow"
+              d="M1.5 1 V47"
+              fill="none"
+              stroke="#ddf7ff"
+              strokeWidth="4"
+              strokeLinecap="round"
+              strokeDasharray="9999 9999"
+              strokeDashoffset="9999"
+              style={{ filter: "blur(10px)" }}
+              opacity="0"
+            />
+          </svg>
         </div>
 
         <div
