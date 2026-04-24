@@ -62,7 +62,7 @@ function StatusCard({
 
         <div
           data-cs-top-card-market
-          className="mt-4 rounded-xl bg-white/7 p-2.5 text-lg leading-6 text-white flex items-center gap-2"
+          className="mt-4 rounded-xl bg-gradient-to-r from-[#19a1c6]/30 to-[#2bb9df]/30 p-2.5 text-lg leading-6 text-white flex items-center gap-2"
         >
           {icon ? (
             <span className="shrink-0 text-white mr-1">{icon}</span>

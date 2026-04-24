@@ -41,6 +41,57 @@ function formatCount(value: number, decimals: number) {
   return value.toFixed(decimals);
 }
 
+const MARKET_COUNT_GLOW_CONFIG = {
+  glowStrength: 1,
+  sweepDuration: 3,
+  pulseDuration: 1.5,
+};
+
+const MARKET_COUNT_GLOW_COLOR = "157,246,255";
+const MARKET_COUNT_GLOW_EDGE_ALPHA =
+  0.4 + MARKET_COUNT_GLOW_CONFIG.glowStrength * 0.35;
+const MARKET_COUNT_GLOW_CENTER_ALPHA =
+  0.5 + MARKET_COUNT_GLOW_CONFIG.glowStrength * 0.4;
+const MARKET_COUNT_GLOW_BLUR = 4 + MARKET_COUNT_GLOW_CONFIG.glowStrength * 6;
+const MARKET_COUNT_GLOW_PULSE_ALPHA =
+  0.16 + MARKET_COUNT_GLOW_CONFIG.glowStrength * 0.24;
+
+const MARKET_COUNT_GLOW_GRADIENT = `linear-gradient(110deg, rgba(255,255,255,${MARKET_COUNT_GLOW_EDGE_ALPHA}) 0%, rgba(${MARKET_COUNT_GLOW_COLOR},${MARKET_COUNT_GLOW_CENTER_ALPHA}) 42%, rgba(255,255,255,${MARKET_COUNT_GLOW_EDGE_ALPHA}) 100%)`;
+
+function startCountGlowSweep(group: Element) {
+  const glowTargets = group.querySelectorAll<HTMLElement>(
+    ".market-count-glow-target",
+  );
+
+  glowTargets.forEach((target) => {
+    gsap.set(target, {
+      backgroundImage: MARKET_COUNT_GLOW_GRADIENT,
+      backgroundSize: "220% 100%",
+      backgroundPosition: "-120% 50%",
+      WebkitBackgroundClip: "text",
+      backgroundClip: "text",
+      WebkitTextFillColor: "transparent",
+      textShadow: `0 0 0 rgba(${MARKET_COUNT_GLOW_COLOR},0)`,
+    });
+
+    gsap.to(target, {
+      backgroundPosition: "120% 50%",
+      duration: MARKET_COUNT_GLOW_CONFIG.sweepDuration,
+      ease: "none",
+      repeat: -1,
+      repeatDelay: 0,
+    });
+
+    gsap.to(target, {
+      textShadow: `0 0 ${MARKET_COUNT_GLOW_BLUR}px rgba(${MARKET_COUNT_GLOW_COLOR},${MARKET_COUNT_GLOW_PULSE_ALPHA})`,
+      duration: MARKET_COUNT_GLOW_CONFIG.pulseDuration,
+      ease: "sine.inOut",
+      repeat: -1,
+      yoyo: true,
+    });
+  });
+}
+
 interface MainStatCardProps {
   badge: string;
   value: string;
@@ -73,16 +124,20 @@ function MainStatCard({
         <BadgeHeadingPill color="dark" size="small">
           {badge}
         </BadgeHeadingPill>
-        <div className="mt-4 flex items-baseline gap-1">
-          <span
-            className="text-5xl font-bold text-white market-count-value"
-            data-count-prefix={countParts.prefix}
-            data-count-target={countParts.target}
-            data-count-decimals={countParts.decimals}
-          >
-            {`${countParts.prefix}${formatCount(0, countParts.decimals)}`}
+        <div className="mt-4 flex items-baseline gap-1 market-count-glow-group">
+          <span className="market-count-glow-target inline-flex items-baseline gap-1">
+            {countParts.prefix && (
+              <span className="text-5xl font-bold">{countParts.prefix}</span>
+            )}
+            <span
+              className="text-5xl font-bold market-count-value"
+              data-count-target={countParts.target}
+              data-count-decimals={countParts.decimals}
+            >
+              {formatCount(0, countParts.decimals)}
+            </span>
+            <span className="text-2xl font-medium">{unit}</span>
           </span>
-          <span className="text-2xl font-medium text-white">{unit}</span>
         </div>
         <p className="mt-3 text-md leading-relaxed text-white/80">
           {description}
@@ -181,18 +236,22 @@ function SimpleStatBox({
           />
         </svg>
         <div className="absolute inset-0 flex items-center justify-center">
-          <div className="flex items-baseline gap-0.5">
-            <span
-              className="text-3xl font-semibold text-white market-count-value"
-              data-count-prefix={countParts.prefix}
-              data-count-target={countParts.target}
-              data-count-decimals={countParts.decimals}
-            >
-              {`${countParts.prefix}${formatCount(0, countParts.decimals)}`}
+          <div className="flex items-baseline gap-0.5 market-count-glow-group">
+            <span className="market-count-glow-target inline-flex items-baseline gap-0.5">
+              {countParts.prefix && (
+                <span className="text-3xl font-semibold">
+                  {countParts.prefix}
+                </span>
+              )}
+              <span
+                className="text-3xl font-semibold market-count-value"
+                data-count-target={countParts.target}
+                data-count-decimals={countParts.decimals}
+              >
+                {formatCount(0, countParts.decimals)}
+              </span>
+              {unit && <span className="text-xl font-medium">{unit}</span>}
             </span>
-            {unit && (
-              <span className="text-xl font-medium text-white">{unit}</span>
-            )}
           </div>
         </div>
       </div>
@@ -231,6 +290,9 @@ export default function MainTheMarket() {
     const countValues = contentRef.current.querySelectorAll<HTMLElement>(
       ".market-count-value",
     );
+    const countGlowGroups = contentRef.current.querySelectorAll(
+      ".market-count-glow-group",
+    );
 
     const tl = gsap.timeline();
 
@@ -242,10 +304,13 @@ export default function MainTheMarket() {
       ease: "power2.out",
     });
 
+    countGlowGroups.forEach((group, index) => {
+      tl.call(() => startCountGlowSweep(group), [], index * 0.3);
+    });
+
     countValues.forEach((element, index) => {
       const target = Number(element.dataset.countTarget ?? "0");
       const decimals = Number(element.dataset.countDecimals ?? "0");
-      const prefix = element.dataset.countPrefix ?? "";
       const counter = { value: 0 };
 
       tl.to(
@@ -255,7 +320,7 @@ export default function MainTheMarket() {
           duration: 1.2,
           ease: "power2.out",
           onUpdate: () => {
-            element.textContent = `${prefix}${formatCount(counter.value, decimals)}`;
+            element.textContent = formatCount(counter.value, decimals);
           },
         },
         index * 0.3,
