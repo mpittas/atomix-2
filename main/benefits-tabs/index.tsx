@@ -4,17 +4,30 @@ import { useCallback, useRef, useState } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Button as DefButton } from "@/components/ui";
 import DefHeading from "@/components/typo/DefHeading";
 import IconBoxHorizontal from "@/components/IconBoxHorizontal";
 import SoftAurora from "@/components/backgrounds/SoftAurora";
 import { tabsData } from "./data";
 
+gsap.registerPlugin(ScrollTrigger);
+
+const TAB_ANIMATION = {
+  buttonDuration: 0.75,
+  buttonStagger: 0.1,
+  contentDuration: 1.4,
+  contentStagger: 0.22,
+  buttonEase: "power1.out",
+  contentEase: "power2.out",
+};
+
 export default function MainBenefitsTabs() {
   const [activeIndex, setActiveIndex] = useState(0);
   const contentRef = useRef<HTMLDivElement>(null);
   const tabButtonsRef = useRef<HTMLDivElement>(null);
   const initialAnimDone = useRef(false);
+  const entranceStartedRef = useRef(false);
 
   const animateActivePanel = () => {
     const panel = contentRef.current?.firstElementChild as HTMLElement | null;
@@ -36,31 +49,31 @@ export default function MainBenefitsTabs() {
       autoAlpha: 1,
       y: 0,
       scale: 1,
-      duration: 0.45 * 3,
-      stagger: 0.08 * 3,
-      ease: "power2.out",
+      duration: TAB_ANIMATION.contentDuration,
+      stagger: TAB_ANIMATION.contentStagger,
+      ease: TAB_ANIMATION.contentEase,
     })
       .to(
         textItems,
         {
           autoAlpha: 1,
           y: 0,
-          duration: 0.4 * 3,
-          stagger: 0.06 * 3,
-          ease: "power2.out",
+          duration: TAB_ANIMATION.contentDuration,
+          stagger: TAB_ANIMATION.contentStagger,
+          ease: TAB_ANIMATION.contentEase,
         },
-        `-=${0.2 * 2}`,
+        "-=0.35",
       )
       .to(
         listItems,
         {
           autoAlpha: 1,
           y: 0,
-          duration: 0.4 * 3,
-          stagger: 0.08 * 3,
-          ease: "power2.out",
+          duration: TAB_ANIMATION.contentDuration,
+          stagger: TAB_ANIMATION.contentStagger,
+          ease: TAB_ANIMATION.contentEase,
         },
-        `-=${0.12 * 3}`,
+        "-=0.25",
       );
   };
 
@@ -69,7 +82,6 @@ export default function MainBenefitsTabs() {
     if (tabButtonsRef.current) {
       gsap.set(Array.from(tabButtonsRef.current.children), {
         opacity: 0,
-        y: 30,
       });
     }
     if (contentRef.current) {
@@ -87,17 +99,19 @@ export default function MainBenefitsTabs() {
   );
 
   // Called when DefHeading finishes its full animation sequence
-  const handleHeadingComplete = useCallback(() => {
-    const tl = gsap.timeline();
+  const startTabsEntrance = useCallback(() => {
+    if (entranceStartedRef.current) return;
+    entranceStartedRef.current = true;
+
+    const tl = gsap.timeline({ delay: 1 });
 
     // 1. Tab buttons fade in up with stagger
     if (tabButtonsRef.current) {
       tl.to(Array.from(tabButtonsRef.current.children), {
         opacity: 1,
-        y: 0,
-        duration: 1.2,
-        stagger: 0.2,
-        ease: "power2.out",
+        duration: TAB_ANIMATION.buttonDuration,
+        stagger: TAB_ANIMATION.buttonStagger,
+        ease: TAB_ANIMATION.buttonEase,
       });
     }
 
@@ -112,6 +126,21 @@ export default function MainBenefitsTabs() {
       tl.add(animateActivePanel, ">");
     }
   }, []);
+
+  useGSAP(() => {
+    if (!tabButtonsRef.current) return;
+
+    const trigger = ScrollTrigger.create({
+      trigger: tabButtonsRef.current,
+      start: "top 92%",
+      once: true,
+      onEnter: startTabsEntrance,
+    });
+
+    return () => {
+      trigger.kill();
+    };
+  }, [startTabsEntrance]);
 
   return (
     <div className="min-h-[calc(100vh-126px)] rounded-3xl bg-linear-to-b from-[#0B4858] via-[#1e5360] to-[#0B4858] relative overflow-hidden flex flex-col justify-center items-center">
@@ -141,7 +170,7 @@ export default function MainBenefitsTabs() {
           title="Benefits"
           description=""
           showBadge={false}
-          onAnimationComplete={handleHeadingComplete}
+          onAnimationComplete={startTabsEntrance}
         />
 
         <div className="w-full flex flex-col gap-y-6">

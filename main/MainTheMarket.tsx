@@ -127,16 +127,18 @@ function MainStatCard({
         <div className="mt-4 flex items-baseline gap-1 market-count-glow-group">
           <span className="market-count-glow-target inline-flex items-baseline gap-1">
             {countParts.prefix && (
-              <span className="text-5xl font-bold">{countParts.prefix}</span>
+              <span className="text-5xl font-bold text-white">
+                {countParts.prefix}
+              </span>
             )}
             <span
-              className="text-5xl font-bold market-count-value"
+              className="text-5xl font-bold text-white market-count-value"
               data-count-target={countParts.target}
               data-count-decimals={countParts.decimals}
             >
               {formatCount(0, countParts.decimals)}
             </span>
-            <span className="text-2xl font-medium">{unit}</span>
+            <span className="text-2xl font-medium text-white">{unit}</span>
           </span>
         </div>
         <p className="mt-3 text-md leading-relaxed text-white/80">
@@ -180,7 +182,7 @@ function SimpleStatBox({
 
       gsap.to(progressRef.current, {
         strokeDashoffset: circumference * (1 - targetProgress),
-        duration: 1.2,
+        duration: 2.3,
         ease: "power2.out",
         scrollTrigger: {
           trigger: boxRef.current,
@@ -220,8 +222,8 @@ function SimpleStatBox({
               x2="100%"
               y2="0%"
             >
-              <stop offset="0%" stopColor="#0ea5e9" />
-              <stop offset="100%" stopColor="#22d3ee" />
+              <stop offset="0%" stopColor="#19a1c6" />
+              <stop offset="100%" stopColor="#2bb9df" />
             </linearGradient>
           </defs>
           <circle
@@ -236,27 +238,29 @@ function SimpleStatBox({
           />
         </svg>
         <div className="absolute inset-0 flex items-center justify-center">
-          <div className="flex items-baseline gap-0.5 market-count-glow-group">
-            <span className="market-count-glow-target inline-flex items-baseline gap-0.5">
+          <div className="flex items-baseline gap-0.5">
+            <span className="inline-flex items-baseline gap-0.5">
               {countParts.prefix && (
-                <span className="text-3xl font-semibold">
+                <span className="text-3xl font-semibold text-white">
                   {countParts.prefix}
                 </span>
               )}
               <span
-                className="text-3xl font-semibold market-count-value"
+                className="text-3xl font-semibold text-white market-count-value"
                 data-count-target={countParts.target}
                 data-count-decimals={countParts.decimals}
               >
                 {formatCount(0, countParts.decimals)}
               </span>
-              {unit && <span className="text-xl font-medium">{unit}</span>}
+              {unit && (
+                <span className="text-xl font-medium text-white">{unit}</span>
+              )}
             </span>
           </div>
         </div>
       </div>
       {title && (
-        <h3 className="text-lg font-semibold text-white mb-2">{title}</h3>
+        <h3 className="text-xl font-semibold text-white mb-2">{title}</h3>
       )}
       <p className="text-base leading-relaxed text-white/80 max-w-md">
         {description}
@@ -299,13 +303,13 @@ export default function MainTheMarket() {
     tl.to(revealItems, {
       y: 0,
       opacity: 1,
-      duration: 1.2,
-      stagger: 0.3,
+      duration: 2,
+      stagger: 0.5,
       ease: "power2.out",
     });
 
     countGlowGroups.forEach((group, index) => {
-      tl.call(() => startCountGlowSweep(group), [], index * 0.3);
+      tl.call(() => startCountGlowSweep(group), [], index * 0.5);
     });
 
     countValues.forEach((element, index) => {
@@ -317,13 +321,13 @@ export default function MainTheMarket() {
         counter,
         {
           value: target,
-          duration: 1.2,
+          duration: 2.3,
           ease: "power2.out",
           onUpdate: () => {
             element.textContent = formatCount(counter.value, decimals);
           },
         },
-        index * 0.3,
+        index * 0.5,
       );
     });
   };

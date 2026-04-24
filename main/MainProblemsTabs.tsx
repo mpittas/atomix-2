@@ -3,6 +3,7 @@
 import { type ReactNode, useCallback, useRef, useState } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Button as DefButton } from "@/components/ui";
 import DefHeading from "@/components/typo/DefHeading";
 
@@ -29,6 +30,8 @@ import {
 import SoftAurora from "@/components/backgrounds/SoftAurora";
 import IconBox from "@/components/IconBox";
 
+gsap.registerPlugin(ScrollTrigger);
+
 interface TabData {
   title: string;
   items: string[];
@@ -39,6 +42,15 @@ interface TabData {
     description: string;
   }[];
 }
+
+const TAB_ANIMATION = {
+  buttonDuration: 0.75,
+  buttonStagger: 0.1,
+  contentDuration: 1.4,
+  contentStagger: 0.22,
+  buttonEase: "power1.out",
+  contentEase: "power2.out",
+};
 
 const icons = {
   noVisibility: <FaBinoculars className="h-10 w-10" />,
@@ -200,13 +212,13 @@ export default function MainProblemsTabs() {
   const tabButtonsRef = useRef<HTMLDivElement>(null);
   const initialAnimDone = useRef(false);
   const learnMoreRef = useRef<HTMLDivElement>(null);
+  const entranceStartedRef = useRef(false);
 
   // Set initial hidden state for tab buttons and content
   useGSAP(() => {
     if (tabButtonsRef.current) {
       gsap.set(Array.from(tabButtonsRef.current.children), {
         opacity: 0,
-        y: 30,
       });
     }
     if (iconBoxContainerRef.current) {
@@ -229,24 +241,32 @@ export default function MainProblemsTabs() {
       gsap.fromTo(
         boxes,
         { y: 30, opacity: 0 },
-        { y: 0, opacity: 1, duration: 1.2, stagger: 0.3, ease: "power2.out" },
+        {
+          y: 0,
+          opacity: 1,
+          duration: TAB_ANIMATION.contentDuration,
+          stagger: TAB_ANIMATION.contentStagger,
+          ease: TAB_ANIMATION.contentEase,
+        },
       );
     },
     { dependencies: [activeIndex] },
   );
 
   // Called when DefHeading finishes its full animation sequence
-  const handleHeadingComplete = useCallback(() => {
-    const tl = gsap.timeline();
+  const startTabsEntrance = useCallback(() => {
+    if (entranceStartedRef.current) return;
+    entranceStartedRef.current = true;
+
+    const tl = gsap.timeline({ delay: 1 });
 
     // 1. Tab buttons fade in up with stagger
     if (tabButtonsRef.current) {
       tl.to(Array.from(tabButtonsRef.current.children), {
         opacity: 1,
-        y: 0,
-        duration: 0.6,
-        stagger: 0.12,
-        ease: "power2.out",
+        duration: TAB_ANIMATION.buttonDuration,
+        stagger: TAB_ANIMATION.buttonStagger,
+        ease: TAB_ANIMATION.buttonEase,
       });
     }
 
@@ -262,9 +282,9 @@ export default function MainProblemsTabs() {
         {
           opacity: 1,
           y: 0,
-          duration: 1.2,
-          stagger: 0.3,
-          ease: "power2.out",
+          duration: TAB_ANIMATION.contentDuration,
+          stagger: TAB_ANIMATION.contentStagger,
+          ease: TAB_ANIMATION.contentEase,
         },
         "+=0.15",
       );
@@ -284,6 +304,21 @@ export default function MainProblemsTabs() {
       );
     }
   }, []);
+
+  useGSAP(() => {
+    if (!tabButtonsRef.current) return;
+
+    const trigger = ScrollTrigger.create({
+      trigger: tabButtonsRef.current,
+      start: "top 92%",
+      once: true,
+      onEnter: startTabsEntrance,
+    });
+
+    return () => {
+      trigger.kill();
+    };
+  }, [startTabsEntrance]);
 
   return (
     <div className="min-h-[calc(100vh-126px)] rounded-3xl bg-linear-to-b from-[#0B4858] via-[#1e5360] to-[#0B4858] relative overflow-hidden flex flex-col justify-center items-center">
@@ -313,7 +348,7 @@ export default function MainProblemsTabs() {
           title="The Existing Problems"
           description="Property lending is manual, opaque and structurally exposed to fraud — not by intent, but by design. Legacy infrastructure was never built to handle the volume, complexity or transparency this market demands."
           showBadge={false}
-          onAnimationComplete={handleHeadingComplete}
+          onAnimationComplete={startTabsEntrance}
         />
 
         <div className="w-full flex flex-col gap-y-6">
