@@ -230,6 +230,18 @@ export default function CurrentStatusV2() {
         connectorGlow3,
         connectorGlow4,
       ];
+      const allGlowPaths = [
+        inlineConnectorGlow1,
+        inlineConnectorGlow2,
+        verticalLineGlow,
+        ...bottomConnectorGlowSequence,
+      ].filter((glow): glow is SVGPathElement => Boolean(glow));
+
+      const stopGlowLoops = () => {
+        glowTimelinesRef.current.forEach((timeline) => timeline?.kill());
+        glowTimelinesRef.current = [];
+        gsap.set(allGlowPaths, { opacity: 0 });
+      };
 
       const startGlowLoop = (
         path: SVGPathElement,
@@ -454,6 +466,8 @@ export default function CurrentStatusV2() {
           trigger: section,
           start: "top 80%",
           toggleActions: "restart reset restart reset",
+          onLeave: stopGlowLoops,
+          onLeaveBack: stopGlowLoops,
         },
       });
 
@@ -604,8 +618,7 @@ export default function CurrentStatusV2() {
       }
 
       return () => {
-        glowTimelinesRef.current.forEach((timeline) => timeline?.kill());
-        glowTimelinesRef.current = [];
+        stopGlowLoops();
       };
     },
     { scope: sectionRef },
