@@ -2,7 +2,7 @@ import { CURRENT_STATUS_GLOW_PATH_PROPS } from "@/components/current-status/glow
 
 const STATIC_PATH_PROPS = {
   fill: "none",
-  stroke: "#90abb3",
+  stroke: "#4fb3d4",
   strokeWidth: "2",
   strokeLinecap: "round" as const,
   strokeDasharray: "9999 9999",

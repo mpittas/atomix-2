@@ -18,6 +18,8 @@ import {
 
 gsap.registerPlugin(ScrollTrigger);
 
+const CONNECTOR_STROKE = "#7ccbe6";
+
 interface StatusCardProps {
   quarter: string;
   title: string;
@@ -637,7 +639,7 @@ export default function CurrentStatusV2() {
   return (
     <div
       ref={sectionRef}
-      className="min-h-[calc(100vh-126px)] rounded-3xl bg-linear-to-b from-[#0B4858] via-[#1e5360] to-[#0B4858] relative overflow-hidden flex flex-col justify-center items-center py-28"
+      className="min-h-[calc(100vh-126px)] rounded-3xl bg-linear-to-b from-[#0B4858] via-[#2e6775] to-[#0B4858] relative overflow-hidden flex flex-col justify-center items-center py-28"
     >
       <div className="absolute top-0 left-0 w-full h-[500px]">
         <SoftAurora
@@ -703,7 +705,7 @@ export default function CurrentStatusV2() {
                 className="status-connector-path"
                 d="M2 2 V25 Q2 40 17 40 H308 Q323 40 323 55 V78"
                 fill="none"
-                stroke="#90abb3"
+                stroke={CONNECTOR_STROKE}
                 strokeWidth="2"
                 strokeLinecap="round"
               />
@@ -733,7 +735,7 @@ export default function CurrentStatusV2() {
                 className="status-connector-path"
                 d="M323 2 V25 Q323 40 308 40 H17 Q2 40 2 55 V78"
                 fill="none"
-                stroke="#90abb3"
+                stroke={CONNECTOR_STROKE}
                 strokeWidth="2"
                 strokeLinecap="round"
               />
@@ -767,7 +769,7 @@ export default function CurrentStatusV2() {
               data-cs-vertical-line
               d="M1.5 1 V47"
               fill="none"
-              stroke="rgba(255,255,255,0.6)"
+              stroke={CONNECTOR_STROKE}
               strokeWidth="3"
               strokeLinecap="round"
             />

@@ -15,6 +15,8 @@ const GLOW_CONFIG = {
   blur: CURRENT_STATUS_GLOW_CONFIG.blurPx,
 };
 
+const CONNECTOR_STROKE = "#7ccbe6";
+
 function IconText({ icon, text }: { icon: string; text: string }) {
   return (
     <div className="flex flex-col items-center gap-2">
@@ -374,7 +376,7 @@ export default function MainSolutionsAnimation() {
   }, []);
 
   return (
-    <div className="min-h-[calc(100vh-126px)] rounded-3xl bg-linear-to-b from-[#0B4858] via-[#1e5360] to-[#0B4858] relative overflow-hidden flex flex-col justify-center items-center">
+    <div className="min-h-[calc(100vh-126px)] rounded-3xl bg-linear-to-b from-[#0B4858] via-[#2e6775] to-[#0B4858] relative overflow-hidden flex flex-col justify-center items-center">
       <div className="absolute top-0 left-0 w-full h-[500px]">
         <SoftAurora
           speed={1.3}
@@ -440,7 +442,7 @@ export default function MainSolutionsAnimation() {
                     ref={connector1PathRef}
                     d="M 1 0 L 1 72"
                     fill="none"
-                    stroke="#90abb3"
+                    stroke={CONNECTOR_STROKE}
                     strokeWidth="2"
                     strokeLinecap="round"
                     vectorEffect="non-scaling-stroke"
@@ -475,7 +477,7 @@ export default function MainSolutionsAnimation() {
                     ref={topPath5Ref}
                     d="M 193 70 L 193 51 Q 193 36 178 36 L 17 36 Q 2 36 2 21 L 2 2"
                     fill="none"
-                    stroke="#90abb3"
+                    stroke={CONNECTOR_STROKE}
                     strokeWidth="2"
                     strokeLinecap="round"
                     vectorEffect="non-scaling-stroke"
@@ -521,7 +523,7 @@ export default function MainSolutionsAnimation() {
                       ref={topPath1Ref}
                       d="M 2 78 L 2 55 Q 2 40 17 40 L 308 40 Q 323 40 323 25 L 323 2"
                       fill="none"
-                      stroke="#90abb3"
+                      stroke={CONNECTOR_STROKE}
                       strokeWidth="2"
                       strokeLinecap="round"
                       vectorEffect="non-scaling-stroke"
@@ -556,7 +558,7 @@ export default function MainSolutionsAnimation() {
                       ref={topPath2Ref}
                       d="M 2 78 L 2 55 Q 2 40 17 40 L 94 40 Q 109 40 109 25 L 109 2"
                       fill="none"
-                      stroke="#90abb3"
+                      stroke={CONNECTOR_STROKE}
                       strokeWidth="2"
                       strokeLinecap="round"
                       vectorEffect="non-scaling-stroke"
@@ -591,7 +593,7 @@ export default function MainSolutionsAnimation() {
                       ref={topPath3Ref}
                       d="M 323 78 L 323 55 Q 323 40 308 40 L 17 40 Q 2 40 2 25 L 2 2"
                       fill="none"
-                      stroke="#90abb3"
+                      stroke={CONNECTOR_STROKE}
                       strokeWidth="2"
                       strokeLinecap="round"
                       vectorEffect="non-scaling-stroke"
@@ -626,7 +628,7 @@ export default function MainSolutionsAnimation() {
                       ref={topPath4Ref}
                       d="M 109 78 L 109 55 Q 109 40 94 40 L 17 40 Q 2 40 2 25 L 2 2"
                       fill="none"
-                      stroke="#90abb3"
+                      stroke={CONNECTOR_STROKE}
                       strokeWidth="2"
                       strokeLinecap="round"
                       vectorEffect="non-scaling-stroke"
@@ -671,7 +673,7 @@ export default function MainSolutionsAnimation() {
                     ref={connector3PathRef}
                     d="M 1 0 L 1 72"
                     fill="none"
-                    stroke="#90abb3"
+                    stroke={CONNECTOR_STROKE}
                     strokeWidth="2"
                     strokeLinecap="round"
                     vectorEffect="non-scaling-stroke"
@@ -776,7 +778,7 @@ export default function MainSolutionsAnimation() {
                       ref={bottomPath1Ref}
                       d="M 2 2 L 2 25 Q 2 40 17 40 L 308 40 Q 323 40 323 55 L 323 78"
                       fill="none"
-                      stroke="#90abb3"
+                      stroke={CONNECTOR_STROKE}
                       strokeWidth="2"
                       strokeLinecap="round"
                       vectorEffect="non-scaling-stroke"
@@ -848,7 +850,7 @@ export default function MainSolutionsAnimation() {
                       ref={bottomPath3Ref}
                       d="M 323 2 L 323 25 Q 323 40 308 40 L 17 40 Q 2 40 2 55 L 2 78"
                       fill="none"
-                      stroke="#90abb3"
+                      stroke={CONNECTOR_STROKE}
                       strokeWidth="2"
                       strokeLinecap="round"
                       vectorEffect="non-scaling-stroke"
@@ -925,7 +927,7 @@ export default function MainSolutionsAnimation() {
                     ref={row3Connector2PathRef}
                     d="M 1 0 L 1 72"
                     fill="none"
-                    stroke="#90abb3"
+                    stroke={CONNECTOR_STROKE}
                     strokeWidth="2"
                     strokeLinecap="round"
                     vectorEffect="non-scaling-stroke"
@@ -964,7 +966,7 @@ export default function MainSolutionsAnimation() {
                     ref={row3Connector3PathRef}
                     d="M 1 0 L 1 72"
                     fill="none"
-                    stroke="#90abb3"
+                    stroke={CONNECTOR_STROKE}
                     strokeWidth="2"
                     strokeLinecap="round"
                     vectorEffect="non-scaling-stroke"
