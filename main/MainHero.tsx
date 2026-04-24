@@ -91,6 +91,7 @@ function MissionVisionCard({
 
 export default function MainHero() {
   const title1SplitRef = useRef<SplitTextHandle>(null);
+  const title2SplitRef = useRef<SplitTextHandle>(null);
   const missionCardRef = useRef<HTMLDivElement>(null);
   const visionCardRef = useRef<HTMLDivElement>(null);
 
@@ -138,6 +139,7 @@ export default function MainHero() {
       autoAlpha: 0,
       y: 40,
     });
+    gsap.set("#def-hero-title-2-heading", { autoAlpha: 1, y: 0 });
     gsap.set("#def-hero-mission-vision", { autoAlpha: 0 });
     gsap.set(missionCardRef.current, { autoAlpha: 0 });
     gsap.set(visionCardRef.current, { autoAlpha: 0 });
@@ -180,7 +182,8 @@ export default function MainHero() {
         "#def-hero-title-2",
         { autoAlpha: 1, scale: 1, duration: 1.35, ease: "power1.out" },
         "centerReached",
-      );
+      )
+      .call(() => title2SplitRef.current?.play(), [], "centerReached+=0.6");
 
     // Stage 3: List items and button
     tl.addLabel("title2Visible")
@@ -201,6 +204,11 @@ export default function MainHero() {
       .to(
         "#def-hero-title-2-list .hero-list-item",
         { autoAlpha: 0, y: -40, duration: 1, ease: "power2.in", stagger: 0.2 },
+        "listVisible+=2.1",
+      )
+      .to(
+        "#def-hero-title-2-heading",
+        { autoAlpha: 0, y: -24, duration: 1, ease: "power2.in" },
         "listVisible+=2.1",
       )
       .to(
@@ -370,6 +378,14 @@ export default function MainHero() {
         id="def-hero-title-2"
         style={{ visibility: "hidden" }}
       >
+        <div id="def-hero-title-2-heading">
+          <SplitText
+            ref={title2SplitRef}
+            startPaused
+            text="Property lending is overdue for a rebuild. Atomix is it."
+          />
+        </div>
+
         <div className="relative w-full max-w-[860px] mt-2">
           <div
             id="def-hero-title-2-list"
