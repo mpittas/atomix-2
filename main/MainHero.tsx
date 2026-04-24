@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import type { RefObject } from "react";
 import Image from "next/image";
 import { Button as DefButton } from "@/components/ui";
 import SplitText from "@/components/typo/SplitText";
@@ -10,7 +11,6 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import SoftAurora from "@/components/backgrounds/SoftAurora";
 import IconBox from "@/components/IconBox";
-import { BadgeHeadingPill } from "@/components/ui/BadgeHeadingPill";
 import { TbEyeClosed } from "react-icons/tb";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -40,14 +40,74 @@ const aboutAtomixItems = [
   },
 ];
 
+function renderTypewriterTitle(title: string) {
+  const lines = ["Our", title];
+  return lines.map((line, lineIdx) => (
+    <span key={lineIdx} className="block leading-[1.05]">
+      {Array.from(line).map((ch, i) => (
+        <span
+          key={`${lineIdx}-${i}`}
+          data-hero-type-char
+          className="inline-block opacity-0"
+        >
+          {ch === " " ? "\u00A0" : ch}
+        </span>
+      ))}
+    </span>
+  ));
+}
+
+interface MissionVisionCardProps {
+  cardRef: RefObject<HTMLDivElement | null>;
+  title: string;
+  description: string;
+}
+
+function MissionVisionCard({
+  cardRef,
+  title,
+  description,
+}: MissionVisionCardProps) {
+  return (
+    <div
+      ref={cardRef}
+      className="absolute left-1/2 top-1/2 -translate-1/2 md:p-8 text-left flex flex-col justify-center gap-5 w-xl"
+    >
+      <h3 className="text-4xl md:text-8xl uppercase leading-[1.05]">
+        {renderTypewriterTitle(title)}
+      </h3>
+      <div data-hero-item className="w-full h-px bg-white/20 mb-3" />
+      <div data-hero-item className="text-base md:text-xl leading-relaxed mb-6">
+        {description}
+      </div>
+      <div data-hero-item>
+        <DefButton href="#" size="large">
+          Learn More
+        </DefButton>
+      </div>
+    </div>
+  );
+}
+
 export default function MainHero() {
   const title1SplitRef = useRef<SplitTextHandle>(null);
-  const title2SplitRef = useRef<SplitTextHandle>(null);
-  const iconBox1Ref = useRef<HTMLDivElement>(null);
-  const iconBox2Ref = useRef<HTMLDivElement>(null);
-  const iconBoxButtonRef = useRef<HTMLDivElement>(null);
+  const missionCardRef = useRef<HTMLDivElement>(null);
+  const visionCardRef = useRef<HTMLDivElement>(null);
 
   useGSAP(() => {
+    if (!missionCardRef.current || !visionCardRef.current) return;
+
+    const missionChars = missionCardRef.current.querySelectorAll<HTMLElement>(
+      "[data-hero-type-char]",
+    );
+    const missionItems =
+      missionCardRef.current.querySelectorAll<HTMLElement>("[data-hero-item]");
+    const visionChars = visionCardRef.current.querySelectorAll<HTMLElement>(
+      "[data-hero-type-char]",
+    );
+    const visionItems =
+      visionCardRef.current.querySelectorAll<HTMLElement>("[data-hero-item]");
+
     // --- PAGE LOAD ANIMATION ---
     const loadTl = gsap.timeline({ delay: 0.15 });
 
@@ -79,9 +139,12 @@ export default function MainHero() {
       y: 40,
     });
     gsap.set("#def-hero-mission-vision", { autoAlpha: 0 });
-    gsap.set(iconBox1Ref.current, { autoAlpha: 0, y: 40 });
-    gsap.set(iconBox2Ref.current, { autoAlpha: 0, y: 40 });
-    gsap.set(iconBoxButtonRef.current, { autoAlpha: 0, y: 30 });
+    gsap.set(missionCardRef.current, { autoAlpha: 0 });
+    gsap.set(visionCardRef.current, { autoAlpha: 0 });
+    gsap.set(missionChars, { opacity: 0 });
+    gsap.set(visionChars, { opacity: 0 });
+    gsap.set(missionItems, { y: 40, opacity: 0 });
+    gsap.set(visionItems, { y: 40, opacity: 0 });
 
     // --- SCROLL TIMELINE (scrub, no snap) ---
     const tl = gsap.timeline({
@@ -117,8 +180,7 @@ export default function MainHero() {
         "#def-hero-title-2",
         { autoAlpha: 1, scale: 1, duration: 1.35, ease: "power1.out" },
         "centerReached",
-      )
-      .call(() => title2SplitRef.current?.play(), [], "centerReached+=0.6");
+      );
 
     // Stage 3: List items and button
     tl.addLabel("title2Visible")
@@ -143,29 +205,92 @@ export default function MainHero() {
       )
       .to(
         "#def-hero-mission-vision",
-        { autoAlpha: 1, duration: 0.01 },
+        { autoAlpha: 1, duration: 0.5, ease: "power2.out" },
         "listVisible+=3.5",
       )
-      .addLabel("missionStart", "listVisible+=3.5")
+      .addLabel("missionVisible", "listVisible+=3.6")
       .fromTo(
-        iconBox1Ref.current,
-        { autoAlpha: 0, y: 40 },
-        { autoAlpha: 1, y: 0, duration: 1.5, ease: "power2.out" },
-        "missionStart",
+        missionCardRef.current,
+        { autoAlpha: 0 },
+        { autoAlpha: 1, duration: 0.45, ease: "power2.out" },
+        "missionVisible",
+      )
+      .to(
+        missionChars,
+        {
+          opacity: 1,
+          duration: 0.04,
+          ease: "none",
+          stagger: 0.075,
+        },
+        "missionVisible",
+      )
+      .to(
+        missionItems,
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.7,
+          ease: "power2.out",
+          stagger: 0.18,
+        },
+        "missionVisible+=0.3",
+      )
+      .addLabel("visionVisible", "missionVisible+=1.2")
+      .to(
+        missionItems,
+        {
+          y: -30,
+          opacity: 0,
+          duration: 0.4,
+          ease: "power2.in",
+          stagger: 0.05,
+        },
+        "visionVisible",
+      )
+      .to(
+        missionChars,
+        {
+          opacity: 0,
+          duration: 0.03,
+          ease: "none",
+          stagger: { each: 0.018, from: "end" },
+        },
+        "visionVisible+=0.05",
+      )
+      .to(
+        missionCardRef.current,
+        { autoAlpha: 0, duration: 0.55, ease: "power2.inOut" },
+        "visionVisible+=0.18",
       )
       .fromTo(
-        iconBox2Ref.current,
-        { autoAlpha: 0, y: 40 },
-        { autoAlpha: 1, y: 0, duration: 1.5, ease: "power2.out" },
-        "missionStart+=0.3",
+        visionCardRef.current,
+        { autoAlpha: 0 },
+        { autoAlpha: 1, duration: 0.55, ease: "power2.inOut" },
+        "visionVisible+=0.18",
       )
-      .fromTo(
-        iconBoxButtonRef.current,
-        { autoAlpha: 0, y: 30 },
-        { autoAlpha: 1, y: 0, duration: 1, ease: "power2.out" },
-        "missionStart+=1.5",
+      .to(
+        visionChars,
+        {
+          opacity: 1,
+          duration: 0.04,
+          ease: "none",
+          stagger: 0.075,
+        },
+        "visionVisible+=0.3",
       )
-      .addLabel("missionVisible");
+      .to(
+        visionItems,
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.7,
+          ease: "power2.out",
+          stagger: 0.18,
+        },
+        "visionVisible+=0.5",
+      )
+      .addLabel("missionVisionComplete");
   }, []);
 
   return (
@@ -245,12 +370,6 @@ export default function MainHero() {
         id="def-hero-title-2"
         style={{ visibility: "hidden" }}
       >
-        <SplitText
-          ref={title2SplitRef}
-          startPaused
-          text="Property lending is overdue for a rebuild. Atomix is it."
-        />
-
         <div className="relative w-full max-w-[860px] mt-2">
           <div
             id="def-hero-title-2-list"
@@ -272,26 +391,20 @@ export default function MainHero() {
 
           <div
             id="def-hero-mission-vision"
-            className="absolute inset-x-0 top-0 flex flex-col gap-6 w-full"
+            className="absolute inset-x-0 top-0 w-full min-h-[520px] md:min-h-[420px]"
             style={{ visibility: "hidden" }}
           >
-            <div ref={iconBox1Ref}>
-              <IconBox
-                icon={<BadgeHeadingPill>Mission</BadgeHeadingPill>}
-                description=""
-                title="Rebuild UK property lending. Start with bridging. Extend into SME CRE term loans — same infrastructure, no rebuild."
-              />
-            </div>
-            <div ref={iconBox2Ref}>
-              <IconBox
-                icon={<BadgeHeadingPill>Vision</BadgeHeadingPill>}
-                description=""
-                title="Interconnected marketplaces — borrowers, lenders, capital providers and investors, each connected within a single ecosystem. Distribution partners deploy their own discrete, white-labelled environments within the same infrastructure. Property lending reimagined — starting in the UK, built for global scale."
-              />
-            </div>
-            <div ref={iconBoxButtonRef} className="mt-2">
-              <DefButton>Learn more</DefButton>
-            </div>
+            <MissionVisionCard
+              cardRef={missionCardRef}
+              title="Mission"
+              description="Rebuild UK property lending. Start with bridging. Extend into SME CRE term loans — same infrastructure, no rebuild."
+            />
+
+            <MissionVisionCard
+              cardRef={visionCardRef}
+              title="Vision"
+              description="Rebuild UK property lending. Start with bridging. Extend into SME CRE term loans — same infrastructure, no rebuild."
+            />
           </div>
         </div>
       </div>
