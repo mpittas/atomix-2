@@ -11,18 +11,12 @@ import { Button as DefButton } from "@/components/ui";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
+import {
+  CURRENT_STATUS_GLOW_CONFIG,
+  CURRENT_STATUS_GLOW_PATH_PROPS,
+} from "@/components/current-status/glowConfig";
 
 gsap.registerPlugin(ScrollTrigger);
-
-const GLOW_CONFIG = {
-  maxLength: 100,
-  maxOpacity: 1,
-  travelDuration: 3,
-  fadeInDuration: 0.4,
-  fadeOutDuration: 0.4,
-  repeatDelay: 1.5,
-  startDelay: 0.2,
-};
 
 interface StatusCardProps {
   quarter: string;
@@ -245,13 +239,13 @@ export default function CurrentStatusV2() {
         if (!glow) return;
 
         const len = path.getTotalLength ? path.getTotalLength() : 1000;
-        const glowLen = Math.min(GLOW_CONFIG.maxLength, len / 2);
+        const glowLen = Math.min(CURRENT_STATUS_GLOW_CONFIG.maxLength, len / 2);
         const previousTimeline = glowTimelinesRef.current[glowIndex];
         previousTimeline?.kill();
 
         const glowTl = gsap.timeline({
           repeat: -1,
-          repeatDelay: GLOW_CONFIG.repeatDelay,
+          repeatDelay: CURRENT_STATUS_GLOW_CONFIG.repeatDelay,
         });
         glowTimelinesRef.current[glowIndex] = glowTl;
 
@@ -265,14 +259,14 @@ export default function CurrentStatusV2() {
           })
           .to(glow, {
             attr: { "stroke-dashoffset": `${-len}` },
-            duration: GLOW_CONFIG.travelDuration,
+            duration: CURRENT_STATUS_GLOW_CONFIG.travelDuration,
             ease: "power1.inOut",
           })
           .to(
             glow,
             {
-              opacity: GLOW_CONFIG.maxOpacity,
-              duration: GLOW_CONFIG.fadeInDuration,
+              opacity: CURRENT_STATUS_GLOW_CONFIG.maxOpacity,
+              duration: CURRENT_STATUS_GLOW_CONFIG.fadeInDuration,
               ease: "power2.out",
             },
             "<",
@@ -281,10 +275,10 @@ export default function CurrentStatusV2() {
             glow,
             {
               opacity: 0,
-              duration: GLOW_CONFIG.fadeOutDuration,
+              duration: CURRENT_STATUS_GLOW_CONFIG.fadeOutDuration,
               ease: "power2.in",
             },
-            `-=${GLOW_CONFIG.fadeOutDuration}`,
+            `-=${CURRENT_STATUS_GLOW_CONFIG.fadeOutDuration}`,
           );
       };
 
@@ -306,7 +300,7 @@ export default function CurrentStatusV2() {
         if (glow) {
           pathTl.add(
             () => startGlowLoop(path, glow, glowIndex),
-            `<+=${GLOW_CONFIG.startDelay}`,
+            `<+=${CURRENT_STATUS_GLOW_CONFIG.startDelay}`,
           );
         }
 
@@ -358,8 +352,8 @@ export default function CurrentStatusV2() {
         const length = path.getTotalLength();
         gsap.set(glow, {
           attr: {
-            "stroke-dasharray": `${Math.min(GLOW_CONFIG.maxLength, length / 2)} ${length + 50}`,
-            "stroke-dashoffset": `${Math.min(GLOW_CONFIG.maxLength, length / 2)}`,
+            "stroke-dasharray": `${Math.min(CURRENT_STATUS_GLOW_CONFIG.maxLength, length / 2)} ${length + 50}`,
+            "stroke-dashoffset": `${Math.min(CURRENT_STATUS_GLOW_CONFIG.maxLength, length / 2)}`,
           },
           opacity: 0,
         });
@@ -368,8 +362,8 @@ export default function CurrentStatusV2() {
         const length = verticalLine.getTotalLength();
         gsap.set(verticalLineGlow, {
           attr: {
-            "stroke-dasharray": `${Math.min(GLOW_CONFIG.maxLength, length / 2)} ${length + 50}`,
-            "stroke-dashoffset": `${Math.min(GLOW_CONFIG.maxLength, length / 2)}`,
+            "stroke-dasharray": `${Math.min(CURRENT_STATUS_GLOW_CONFIG.maxLength, length / 2)} ${length + 50}`,
+            "stroke-dashoffset": `${Math.min(CURRENT_STATUS_GLOW_CONFIG.maxLength, length / 2)}`,
           },
           opacity: 0,
         });
@@ -389,8 +383,8 @@ export default function CurrentStatusV2() {
         const length = path.getTotalLength();
         gsap.set(glow, {
           attr: {
-            "stroke-dasharray": `${Math.min(GLOW_CONFIG.maxLength, length / 2)} ${length + 50}`,
-            "stroke-dashoffset": `${Math.min(GLOW_CONFIG.maxLength, length / 2)}`,
+            "stroke-dasharray": `${Math.min(CURRENT_STATUS_GLOW_CONFIG.maxLength, length / 2)} ${length + 50}`,
+            "stroke-dashoffset": `${Math.min(CURRENT_STATUS_GLOW_CONFIG.maxLength, length / 2)}`,
           },
           opacity: 0,
         });
@@ -635,14 +629,7 @@ export default function CurrentStatusV2() {
                 data-cs-inline-connector-glow-1
                 className="status-connector-glow"
                 d="M2 2 V25 Q2 40 17 40 H308 Q323 40 323 55 V78"
-                fill="none"
-                stroke="#ddf7ff"
-                strokeWidth="4"
-                strokeLinecap="round"
-                strokeDasharray="9999 9999"
-                strokeDashoffset="9999"
-                style={{ filter: "blur(10px)" }}
-                opacity="0"
+                {...CURRENT_STATUS_GLOW_PATH_PROPS}
               />
             </svg>
           </div>
@@ -672,14 +659,7 @@ export default function CurrentStatusV2() {
                 data-cs-inline-connector-glow-2
                 className="status-connector-glow"
                 d="M323 2 V25 Q323 40 308 40 H17 Q2 40 2 55 V78"
-                fill="none"
-                stroke="#ddf7ff"
-                strokeWidth="4"
-                strokeLinecap="round"
-                strokeDasharray="9999 9999"
-                strokeDashoffset="9999"
-                style={{ filter: "blur(10px)" }}
-                opacity="0"
+                {...CURRENT_STATUS_GLOW_PATH_PROPS}
               />
             </svg>
           </div>
@@ -713,14 +693,7 @@ export default function CurrentStatusV2() {
               data-cs-vertical-line-glow
               className="status-connector-glow"
               d="M1.5 1 V47"
-              fill="none"
-              stroke="#ddf7ff"
-              strokeWidth="4"
-              strokeLinecap="round"
-              strokeDasharray="9999 9999"
-              strokeDashoffset="9999"
-              style={{ filter: "blur(10px)" }}
-              opacity="0"
+              {...CURRENT_STATUS_GLOW_PATH_PROPS}
             />
           </svg>
         </div>
