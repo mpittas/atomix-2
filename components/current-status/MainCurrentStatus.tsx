@@ -239,7 +239,19 @@ export default function CurrentStatusV2() {
         if (!glow) return;
 
         const len = path.getTotalLength ? path.getTotalLength() : 1000;
-        const glowLen = Math.min(CURRENT_STATUS_GLOW_CONFIG.maxLength, len / 2);
+        const glowLen = Math.max(
+          CURRENT_STATUS_GLOW_CONFIG.minLength,
+          Math.min(CURRENT_STATUS_GLOW_CONFIG.maxLength, len / 2),
+        );
+        const secondaryGlowLen = Math.max(
+          CURRENT_STATUS_GLOW_CONFIG.minLength,
+          Math.min(glowLen * CURRENT_STATUS_GLOW_CONFIG.pulseScale, len * 0.7),
+        );
+        const travelDuration = gsap.utils.random(
+          CURRENT_STATUS_GLOW_CONFIG.travelDurationMin,
+          CURRENT_STATUS_GLOW_CONFIG.travelDurationMax,
+          0.05,
+        );
         const previousTimeline = glowTimelinesRef.current[glowIndex];
         previousTimeline?.kill();
 
@@ -255,30 +267,103 @@ export default function CurrentStatusV2() {
               "stroke-dasharray": `${glowLen} ${len + 50}`,
               "stroke-dashoffset": `${glowLen}`,
             },
+            stroke: CURRENT_STATUS_GLOW_CONFIG.color,
+            strokeWidth: CURRENT_STATUS_GLOW_CONFIG.strokeWidth,
             opacity: 0,
           })
+          .to(
+            glow,
+            {
+              opacity: CURRENT_STATUS_GLOW_CONFIG.secondaryOpacity,
+              duration: CURRENT_STATUS_GLOW_CONFIG.fadeInDuration * 0.65,
+              ease: "sine.inOut",
+            },
+            0,
+          )
+          .to(
+            glow,
+            {
+              strokeWidth:
+                CURRENT_STATUS_GLOW_CONFIG.strokeWidth *
+                CURRENT_STATUS_GLOW_CONFIG.pulseStrokeScale,
+              duration: travelDuration * 0.3,
+              ease: "power3.out",
+            },
+            0,
+          )
+          .to(
+            glow,
+            {
+              stroke: CURRENT_STATUS_GLOW_CONFIG.hotColor,
+              duration: travelDuration * 0.26,
+              ease: "sine.inOut",
+            },
+            travelDuration * 0.14,
+          )
+          .to(
+            glow,
+            {
+              attr: {
+                "stroke-dasharray": `${secondaryGlowLen} ${len + 50}`,
+              },
+              duration: travelDuration * 0.45,
+              ease: "sine.inOut",
+            },
+            0,
+          )
           .to(glow, {
             attr: { "stroke-dashoffset": `${-len}` },
-            duration: CURRENT_STATUS_GLOW_CONFIG.travelDuration,
-            ease: "power1.inOut",
+            duration: travelDuration,
+            ease: "sine.inOut",
           })
           .to(
             glow,
             {
               opacity: CURRENT_STATUS_GLOW_CONFIG.maxOpacity,
-              duration: CURRENT_STATUS_GLOW_CONFIG.fadeInDuration,
-              ease: "power2.out",
+              duration: CURRENT_STATUS_GLOW_CONFIG.fadeInDuration * 0.5,
+              ease: "power3.out",
             },
-            "<",
+            travelDuration * 0.22,
+          )
+          .to(
+            glow,
+            {
+              strokeWidth:
+                CURRENT_STATUS_GLOW_CONFIG.strokeWidth *
+                CURRENT_STATUS_GLOW_CONFIG.finalStrokeScale,
+              duration: travelDuration * 0.35,
+              ease: "sine.inOut",
+            },
+            travelDuration * 0.48,
+          )
+          .to(
+            glow,
+            {
+              attr: {
+                "stroke-dasharray": `${glowLen} ${len + 50}`,
+              },
+              duration: travelDuration * 0.4,
+              ease: "sine.inOut",
+            },
+            travelDuration * 0.55,
+          )
+          .to(
+            glow,
+            {
+              stroke: CURRENT_STATUS_GLOW_CONFIG.color,
+              duration: travelDuration * 0.35,
+              ease: "sine.inOut",
+            },
+            travelDuration * 0.6,
           )
           .to(
             glow,
             {
               opacity: 0,
-              duration: CURRENT_STATUS_GLOW_CONFIG.fadeOutDuration,
-              ease: "power2.in",
+              duration: CURRENT_STATUS_GLOW_CONFIG.fadeOutDuration * 0.75,
+              ease: "power3.in",
             },
-            `-=${CURRENT_STATUS_GLOW_CONFIG.fadeOutDuration}`,
+            travelDuration * 0.82,
           );
       };
 

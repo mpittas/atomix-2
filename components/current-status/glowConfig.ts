@@ -1,14 +1,25 @@
 export const CURRENT_STATUS_GLOW_CONFIG = {
-  maxLength: 20,
+  maxLength: 40,
+  minLength: 12,
   maxOpacity: 1,
+  minVisibleOpacity: 0.38,
   travelDuration: 2,
+  travelDurationMin: 1.8,
+  travelDurationMax: 2.8,
   fadeInDuration: 0.9,
   fadeOutDuration: 0.9,
-  repeatDelay: 1.5,
+  repeatDelay: 0,
   startDelay: 0.3,
-  color: "#68e9f5",
-  strokeWidth: 2,
-  blurPx: 6,
+  pulseScale: 1.45,
+  secondaryOpacity: 0.62,
+  color: "#3aefff",
+  hotColor: "#ffffff",
+  strokeWidth: 2.8,
+  pulseStrokeScale: 1.85,
+  finalStrokeScale: 0.9,
+  blurPx: 8,
+  glowShadowPx: 20,
+  glowShadowSoftPx: 40,
 };
 
 export const CURRENT_STATUS_GLOW_PATH_PROPS = {
@@ -18,6 +29,9 @@ export const CURRENT_STATUS_GLOW_PATH_PROPS = {
   strokeLinecap: "round" as const,
   strokeDasharray: "9999 9999",
   strokeDashoffset: "9999",
-  style: { filter: `blur(${CURRENT_STATUS_GLOW_CONFIG.blurPx}px)` },
+  style: {
+    filter: `blur(${CURRENT_STATUS_GLOW_CONFIG.blurPx}px) drop-shadow(0 0 ${CURRENT_STATUS_GLOW_CONFIG.glowShadowPx}px ${CURRENT_STATUS_GLOW_CONFIG.color}) drop-shadow(0 0 ${CURRENT_STATUS_GLOW_CONFIG.glowShadowSoftPx}px ${CURRENT_STATUS_GLOW_CONFIG.hotColor})`,
+    mixBlendMode: "screen" as const,
+  },
   opacity: "0",
 };
