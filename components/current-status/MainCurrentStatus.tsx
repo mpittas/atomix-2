@@ -236,6 +236,15 @@ export default function CurrentStatusV2() {
         verticalLineGlow,
         ...bottomConnectorGlowSequence,
       ].filter((glow): glow is SVGPathElement => Boolean(glow));
+      const ANIMATION_DURATION_SCALE = 1.6;
+      const ANIMATION_STAGGER_SCALE = 1.4;
+      const BOTTOM_SEQUENCE_DURATION_SCALE = 1;
+      const scaleDuration = (duration: number) =>
+        duration * ANIMATION_DURATION_SCALE;
+      const scaleStagger = (stagger: number) =>
+        stagger * ANIMATION_STAGGER_SCALE;
+      const scaleBottomDuration = (duration: number) =>
+        duration * BOTTOM_SEQUENCE_DURATION_SCALE;
 
       const stopGlowLoops = () => {
         glowTimelinesRef.current.forEach((timeline) => timeline?.kill());
@@ -462,6 +471,7 @@ export default function CurrentStatusV2() {
       });
 
       const tl = gsap.timeline({
+        delay: 1,
         scrollTrigger: {
           trigger: section,
           start: "top 80%",
@@ -474,13 +484,13 @@ export default function CurrentStatusV2() {
       tl.to(topCards, {
         autoAlpha: 1,
         y: 0,
-        duration: 1.6,
+        duration: scaleDuration(1.6),
         ease: "power2.out",
-        stagger: 0.5,
+        stagger: scaleStagger(0.5),
       })
         .to(inlineConnector1, {
           strokeDashoffset: 0,
-          duration: 1,
+          duration: scaleDuration(1),
           ease: "power2.inOut",
           onComplete: () => {
             if (!inlineConnector1) return;
@@ -489,7 +499,7 @@ export default function CurrentStatusV2() {
         })
         .to(inlineConnector2, {
           strokeDashoffset: 0,
-          duration: 1,
+          duration: scaleDuration(1),
           ease: "power2.inOut",
           onComplete: () => {
             if (!inlineConnector2) return;
@@ -501,7 +511,7 @@ export default function CurrentStatusV2() {
           {
             autoAlpha: 1,
             y: 0,
-            duration: 1.6,
+            duration: scaleDuration(1.6),
             ease: "power2.out",
           },
           "-=0.5",
@@ -510,7 +520,7 @@ export default function CurrentStatusV2() {
           verticalLine,
           {
             scaleY: 1,
-            duration: 0.8,
+            duration: scaleDuration(0.8),
             ease: "power2.out",
             onComplete: () => {
               if (!verticalLine) return;
@@ -524,7 +534,7 @@ export default function CurrentStatusV2() {
           {
             autoAlpha: 1,
             y: 0,
-            duration: 1.6,
+            duration: scaleDuration(1.6),
             ease: "power2.out",
           },
           "-=0.5",
@@ -540,7 +550,7 @@ export default function CurrentStatusV2() {
             animatePathAndGlow(
               path,
               bottomConnectorGlowSequence[index],
-              1,
+              scaleBottomDuration(1),
               index,
             ),
             isFirstStep ? "-=1" : ">",
@@ -559,7 +569,7 @@ export default function CurrentStatusV2() {
               autoAlpha: 1,
               y: 0,
               scale: 1,
-              duration: 1.35,
+              duration: scaleBottomDuration(1.35),
               ease: "power2.out",
               immediateRender: false,
             },
@@ -573,7 +583,7 @@ export default function CurrentStatusV2() {
         {
           autoAlpha: 1,
           y: 0,
-          duration: 1,
+          duration: scaleDuration(1),
           ease: "power4.inOut",
         },
         "-=6",
@@ -596,7 +606,7 @@ export default function CurrentStatusV2() {
               y: -10,
               height: 0,
               marginTop: 0,
-              duration: 1,
+              duration: scaleDuration(1),
               ease: "power2.inOut",
             },
             0,
@@ -610,7 +620,7 @@ export default function CurrentStatusV2() {
               marginTop: 0,
               paddingTop: 0,
               paddingBottom: 0,
-              duration: 1,
+              duration: scaleDuration(1),
               ease: "power2.inOut",
             },
             "<",

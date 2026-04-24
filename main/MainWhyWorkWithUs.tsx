@@ -35,8 +35,8 @@ export default function MainWhyWorkWithUs() {
         {
           opacity: 1,
           y: 0,
-          duration: 1.2,
-          stagger: 0.3,
+          duration: 2.4,
+          stagger: 0.6,
           ease: "power2.out",
         },
         "+=0.15",
