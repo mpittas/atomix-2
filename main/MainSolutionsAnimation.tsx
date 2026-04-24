@@ -6,26 +6,13 @@ import IconBox from "@/components/IconBox";
 import SoftAurora from "@/components/backgrounds/SoftAurora";
 import DefHeading from "@/components/typo/DefHeading";
 import { Button as DefButton } from "@/components/ui";
+import { CURRENT_STATUS_GLOW_CONFIG } from "@/components/current-status/glowConfig";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const GLOW_CONFIG = {
-  // Visual appearance
-  color: "#ddf7ff",
-  maxLength: 100,
-  strokeWidth: 4,
-  blur: 10,
-  maxOpacity: 1,
-
-  // Animation timing
-  travelDuration: 3,
-  fadeInDuration: 0.4,
-  fadeOutDuration: 0.4,
-  repeatDelay: 1.5,
-  startDelay: 0.2,
-
-  // Position (offset from main path animation)
-  staggerDelay: 0.2,
+  ...CURRENT_STATUS_GLOW_CONFIG,
+  blur: CURRENT_STATUS_GLOW_CONFIG.blurPx,
 };
 
 function IconText({ icon, text }: { icon: string; text: string }) {
@@ -160,46 +147,98 @@ export default function MainSolutionsAnimation() {
 
       if (glow) {
         const glowLen = Math.min(GLOW_CONFIG.maxLength, len / 2);
-        const startOffset = drawFromStart ? `${glowLen}` : `${-len}`;
-        const endOffset = drawFromStart ? `${-len}` : `${glowLen}`;
 
         tl.add(() => {
+          const durationScale = gsap.utils.random(
+            GLOW_CONFIG.minDurationScale,
+            GLOW_CONFIG.maxDurationScale,
+          );
+          const travelScale = gsap.utils.random(
+            GLOW_CONFIG.minTravelScale,
+            GLOW_CONFIG.maxTravelScale,
+          );
+          const travelDuration = GLOW_CONFIG.travelDuration * durationScale;
+          const fadeInDuration = GLOW_CONFIG.fadeInDuration * durationScale;
+          const fadeOutDuration = GLOW_CONFIG.fadeOutDuration * durationScale;
+          const peakOpacity =
+            GLOW_CONFIG.maxOpacity * GLOW_CONFIG.peakOpacityScale;
+          const midOpacity =
+            GLOW_CONFIG.maxOpacity * GLOW_CONFIG.midOpacityScale;
+          const tailOpacity =
+            GLOW_CONFIG.maxOpacity * GLOW_CONFIG.tailOpacityScale;
+          const pulseWidth =
+            GLOW_CONFIG.strokeWidth * GLOW_CONFIG.pulseWidthScale;
+          const startOffset = drawFromStart ? glowLen : -len * travelScale;
+          const endOffset = drawFromStart ? -len * travelScale : glowLen;
+
           const glowTl = gsap.timeline({
             repeat: -1,
             repeatDelay: GLOW_CONFIG.repeatDelay,
+            defaults: { overwrite: "auto" },
+            repeatRefresh: true,
           });
           glowTimelines.current.push(glowTl);
 
           glowTl
             .set(glow, {
               attr: {
-                "stroke-dasharray": `${glowLen} ${len}`,
-                "stroke-dashoffset": startOffset,
+                "stroke-dasharray": `${glowLen} ${len + 50}`,
+                "stroke-dashoffset": `${startOffset}`,
               },
               opacity: 0,
+              strokeWidth: GLOW_CONFIG.strokeWidth,
             })
             .to(glow, {
-              attr: { "stroke-dashoffset": endOffset },
-              duration: GLOW_CONFIG.travelDuration,
-              ease: "power1.inOut",
+              attr: { "stroke-dashoffset": `${endOffset}` },
+              duration: travelDuration,
+              ease: "sine.inOut",
             })
             .to(
               glow,
               {
-                opacity: GLOW_CONFIG.maxOpacity,
-                duration: GLOW_CONFIG.fadeInDuration,
-                ease: "power2.out",
+                opacity: peakOpacity,
+                duration: fadeInDuration,
+                ease: "sine.out",
               },
               "<",
             )
             .to(
               glow,
               {
-                opacity: 0,
-                duration: GLOW_CONFIG.fadeOutDuration,
-                ease: "power2.in",
+                opacity: midOpacity,
+                duration: Math.max(0.18, travelDuration * 0.32),
+                ease: "sine.inOut",
               },
-              `-=${GLOW_CONFIG.fadeOutDuration}`,
+              `<+${Math.max(0.06, travelDuration * 0.18)}`,
+            )
+            .to(
+              glow,
+              {
+                opacity: tailOpacity,
+                duration: Math.max(0.2, travelDuration * 0.34),
+                ease: "sine.inOut",
+              },
+              `<+${Math.max(0.08, travelDuration * 0.22)}`,
+            )
+            .to(
+              glow,
+              {
+                strokeWidth: pulseWidth,
+                duration: Math.max(0.2, travelDuration * 0.28),
+                ease: "sine.out",
+                yoyo: true,
+                repeat: 1,
+              },
+              `<+${Math.max(0.04, travelDuration * 0.14)}`,
+            )
+            .to(
+              glow,
+              {
+                opacity: 0,
+                duration: fadeOutDuration,
+                ease: "sine.in",
+              },
+              `-=${Math.max(0.1, fadeOutDuration * 0.75)}`,
             );
         }, `<+=${GLOW_CONFIG.startDelay}`);
       }
