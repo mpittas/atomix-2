@@ -41,7 +41,7 @@ const aboutAtomixItems = [
 ];
 
 function renderTypewriterTitle(title: string) {
-  const lines = ["Our", title];
+  const lines = [title];
   return lines.map((line, lineIdx) => (
     <span key={lineIdx} className="block leading-[1.05]">
       {Array.from(line).map((ch, i) => (
@@ -221,7 +221,7 @@ export default function MainHero() {
           opacity: 1,
           duration: 0.04,
           ease: "none",
-          stagger: 0.075,
+          stagger: 0.06,
         },
         "missionVisible",
       )
@@ -275,9 +275,9 @@ export default function MainHero() {
           opacity: 1,
           duration: 0.04,
           ease: "none",
-          stagger: 0.075,
+          stagger: 0.06,
         },
-        "visionVisible+=0.3",
+        "visionVisible+=0.78",
       )
       .to(
         visionItems,
@@ -288,7 +288,7 @@ export default function MainHero() {
           ease: "power2.out",
           stagger: 0.18,
         },
-        "visionVisible+=0.5",
+        "visionVisible+=1.0",
       )
       .addLabel("missionVisionComplete");
   }, []);
