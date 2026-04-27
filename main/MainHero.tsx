@@ -11,30 +11,32 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import SoftAurora from "@/components/backgrounds/SoftAurora";
 import IconBox from "@/components/IconBox";
+import IconBoxLight from "@/components/IconBoxLight";
 import { TbEyeClosed } from "react-icons/tb";
+import { IoShieldCheckmark } from "react-icons/io5";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const aboutAtomixItems = [
   {
-    icon: <TbEyeClosed />,
+    icon: <IoShieldCheckmark />,
     title: "What we are",
     subtitle:
       "a Platform-as-a-Service automating the full lifecycle of property loans, end-to-end; fully configurable and white-label ready",
   },
   {
-    icon: <TbEyeClosed />,
+    icon: <IoShieldCheckmark />,
     title: "What sets us apart",
     subtitle:
       "rules-first architecture, immutable on-chain audit and goal-driven intelligence operating within both; compliance enforced at every level, not bolted on",
   },
   {
-    icon: <TbEyeClosed />,
+    icon: <IoShieldCheckmark />,
     title: "Who we serve",
     subtitle: "lenders, capital providers, brokers and borrowers",
   },
   {
-    icon: <TbEyeClosed />,
+    icon: <IoShieldCheckmark />,
     title: "Where we operate",
     subtitle: "UK-based, with global expansion built into the model",
   },
@@ -134,6 +136,7 @@ export default function MainHero() {
       );
 
     // --- Set initial hidden states for scroll-animated elements ---
+    gsap.set("#def-hero-title-2-bg", { autoAlpha: 0 });
     gsap.set("#def-hero-title-2", { autoAlpha: 0, scale: 0 });
     gsap.set("#def-hero-title-2-list .hero-list-item", {
       autoAlpha: 0,
@@ -179,6 +182,11 @@ export default function MainHero() {
         "centerReached",
       )
       .to(
+        "#def-hero-title-2-bg",
+        { autoAlpha: 1, duration: 1.35, ease: "power1.out" },
+        "centerReached",
+      )
+      .to(
         "#def-hero-title-2",
         { autoAlpha: 1, scale: 1, duration: 1.35, ease: "power1.out" },
         "centerReached",
@@ -210,6 +218,11 @@ export default function MainHero() {
         "#def-hero-title-2-heading",
         { autoAlpha: 0, y: -24, duration: 1, ease: "power2.in" },
         "listVisible+=2.1",
+      )
+      .to(
+        "#def-hero-title-2-bg",
+        { autoAlpha: 0, duration: 0.5, ease: "power2.in" },
+        "listVisible+=4.7",
       )
       .to(
         "#def-hero-mission-vision",
@@ -372,13 +385,23 @@ export default function MainHero() {
         </div>
       </div>
 
-      {/* SECOND TITLE - scroll-driven animation */}
+      {/* SECOND TITLE BACKGROUND - scroll-driven animation */}
       <div
-        className="text-white max-w-[1000px] mx-auto flex flex-col gap-y-8 justify-center items-center text-center absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+        className="bg-[#EBEFF2] absolute top-0 left-0 w-full h-full min-w-full min-h-full"
+        id="def-hero-title-2-bg"
+        style={{ visibility: "hidden" }}
+      />
+
+      {/* SECOND TITLE CONTENT - scroll-driven animation */}
+      <div
+        className="text-[#011F27] flex flex-col gap-y-8 justify-center items-start text-left absolute top-0 left-0 w-full h-full min-w-full min-h-full p-8 md:p-12"
         id="def-hero-title-2"
         style={{ visibility: "hidden" }}
       >
-        <div id="def-hero-title-2-heading">
+        <div
+          id="def-hero-title-2-heading"
+          className="w-full max-w-[1200px] mx-auto"
+        >
           <SplitText
             ref={title2SplitRef}
             startPaused
@@ -386,20 +409,18 @@ export default function MainHero() {
           />
         </div>
 
-        <div className="relative w-full max-w-[860px] mt-2">
+        <div className="relative w-full max-w-[1200px] mx-auto mt-2">
           <div
             id="def-hero-title-2-list"
             className="w-full grid grid-cols-1 md:grid-cols-2 gap-4"
           >
             {aboutAtomixItems.map((item) => (
-              <div key={item.title} className="relative">
-                <IconBox
+              <div key={item.title} className="relative h-full">
+                <IconBoxLight
                   icon={item.icon}
                   title={item.title}
                   description={item.subtitle}
-                  imageSize="large"
-                  titleClassName="text-md"
-                  className="hero-list-item"
+                  className="hero-list-item h-full"
                 />
               </div>
             ))}
@@ -407,7 +428,7 @@ export default function MainHero() {
 
           <div
             id="def-hero-mission-vision"
-            className="absolute inset-x-0 top-0 w-full min-h-[520px] md:min-h-[420px]"
+            className="absolute inset-x-0 top-0 w-full min-h-[520px] md:min-h-[420px] text-white"
             style={{ visibility: "hidden" }}
           >
             <MissionVisionCard

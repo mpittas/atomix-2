@@ -341,7 +341,7 @@ export default function MainProblemsTabs() {
         />
       </div>
 
-      <div className="relative z-10 flex flex-col gap-y-12 w-full max-w-[1200px] px-8 py-32">
+      <div className="relative z-10 flex flex-col gap-y-12 max-w-[1200px] w-full px-8 py-32">
         <DefHeading
           theme="light"
           badgeText=""
