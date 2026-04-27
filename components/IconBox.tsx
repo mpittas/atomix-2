@@ -79,16 +79,14 @@ export default function IconBox({
     const blurGlowOpacity = 0.12 + edgeProximity * 0.24;
     const outerGlowStrength = 0.08 + edgeProximity * 0.14;
 
-    gsap.set(target, {
-      "--glow-angle": `${normalizedAngle.toFixed(2)}deg`,
-      "--glow-border-opacity": borderOpacity,
-      "--glow-ring-opacity": ringGlowOpacity,
-      "--glow-blur-opacity": blurGlowOpacity,
-    });
-
-    gsap.set(target, {
-      boxShadow: `0 0 0 1px rgba(88, 255, 252, ${0.22 + edgeProximity * 0.16}), 0 0 14px rgba(88, 255, 252, ${outerGlowStrength}), 0 0 28px rgba(88, 255, 252, ${outerGlowStrength * 0.65})`,
-    });
+    target.style.setProperty(
+      "--glow-angle",
+      `${normalizedAngle.toFixed(2)}deg`,
+    );
+    target.style.setProperty("--glow-border-opacity", String(borderOpacity));
+    target.style.setProperty("--glow-ring-opacity", String(ringGlowOpacity));
+    target.style.setProperty("--glow-blur-opacity", String(blurGlowOpacity));
+    target.style.boxShadow = `0 0 0 1px rgba(88, 255, 252, ${0.22 + edgeProximity * 0.16}), 0 0 14px rgba(88, 255, 252, ${outerGlowStrength}), 0 0 28px rgba(88, 255, 252, ${outerGlowStrength * 0.65})`;
   };
 
   const handleMouseEnter = (event: MouseEvent<HTMLDivElement>) => {
@@ -155,7 +153,7 @@ export default function IconBox({
 
   return (
     <div
-      className={`relative flex flex-col ${align === "left" ? "items-start text-left" : "items-center text-center"} gap-1 p-7 rounded-2xl h-full  bg-[#003746] overflow-hidden will-change-transform ${className}`}
+      className={`relative flex flex-col ${align === "left" ? "items-start text-left" : "items-center text-center"} gap-1 p-7 rounded-2xl h-full bg-[#145060] overflow-hidden will-change-transform ${className}`}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       onMouseMove={handleMouseMove}
@@ -210,8 +208,8 @@ export default function IconBox({
         }}
       />
       <div className="pointer-events-none absolute inset-0 rounded-2xl overflow-hidden">
-        <div className="absolute -top-5 -right-5 w-[45%] h-[45%] rounded-full bg-[#58fffc]/10  blur-xl" />
-        <div className="absolute -bottom-5 -left-5 w-[45%] h-[45%] rounded-full bg-[#58fffc]/10  blur-xl" />
+        <div className="absolute -top-5 -right-5 w-[45%] h-[45%] rounded-full bg-white/10  blur-xl" />
+        <div className="absolute -bottom-5 -left-5 w-[45%] h-[45%] rounded-full bg-white/10  blur-xl" />
       </div>
 
       <div
