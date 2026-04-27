@@ -8,6 +8,7 @@ import DefHeading from "@/components/typo/DefHeading";
 import { FaHouse, FaGavel } from "react-icons/fa6";
 import { TbTargetArrow } from "react-icons/tb";
 import { Button as DefButton } from "@/components/ui";
+import IconBox from "@/components/IconBox";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
@@ -72,33 +73,6 @@ function StatusCard({
           <span>{marketInfo}</span>
         </div>
       </div>
-    </div>
-  );
-}
-
-interface StatusFeatureCardProps {
-  icon: ReactNode;
-  title: string;
-  description: string;
-}
-
-function StatusFeatureCard({
-  icon,
-  title,
-  description,
-}: StatusFeatureCardProps) {
-  return (
-    <div
-      data-cs-feature-card
-      className="relative rounded-3xl border border-[#1491B3] bg-[#003746] p-6 overflow-hidden flex flex-col gap-y-3 text-left"
-    >
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute -top-8 -bottom-8 right-4 w-[15%] rotate-20 bg-[#58fffc]/15 blur-2xl" />
-        <div className="absolute -top-8 -bottom-8 right-65 w-[3%] rotate-20 bg-[#58fffc]/15 blur-xl" />
-      </div>
-      <div className="text-white">{icon}</div>
-      <h4 className="text-2xl font-semibold text-white">{title}</h4>
-      <div className="text-white/80">{description}</div>
     </div>
   );
 }
@@ -796,12 +770,15 @@ export default function CurrentStatusV2() {
 
         <div className="-mt-1 mb-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
           {TABS.map((tab) => (
-            <StatusFeatureCard
-              key={tab.title}
-              icon={<TbTargetArrow className="h-10 w-10" />}
-              title={tab.title}
-              description={tab.description}
-            />
+            <div key={tab.title} data-cs-feature-card className="h-full">
+              <IconBox
+                icon={<TbTargetArrow className="h-10 w-10" />}
+                title={tab.title}
+                description={tab.description}
+                align="left"
+                className="h-full"
+              />
+            </div>
           ))}
         </div>
 
