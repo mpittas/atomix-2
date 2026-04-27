@@ -18,6 +18,7 @@ interface IconBoxProps {
   iconSize?: number;
   align?: "center" | "left";
   hideIcon?: boolean;
+  children?: ReactNode;
 }
 
 export default function IconBox({
@@ -33,6 +34,7 @@ export default function IconBox({
   iconSize = 48,
   align = "center",
   hideIcon = false,
+  children,
 }: IconBoxProps) {
   const baseGlowAngle = "45deg";
   const baseBorderOpacity = 0.28;
@@ -221,34 +223,40 @@ export default function IconBox({
               : "items-center"
         }`}
       >
-        {!hideIcon && icon ? (
-          <div
-            className={`mb-2 flex items-center ${align === "left" ? "justify-start" : "justify-center"} text-white`}
-          >
-            {React.isValidElement<{ size?: number }>(icon) &&
-            icon.type !== "img"
-              ? React.cloneElement(icon, { size: iconSize })
-              : icon}
-          </div>
+        {children ? (
+          children
         ) : (
-          !hideIcon && (
-            <Image
-              src={src}
-              alt={title}
-              width={fullWidthImage ? 1200 : finalWidth}
-              height={fullWidthImage ? 720 : finalWidth}
-              className={
-                fullWidthImage ? "mb-3 w-full h-auto rounded-lg" : "mb-2"
-              }
+          <>
+            {!hideIcon && icon ? (
+              <div
+                className={`mb-2 flex items-center ${align === "left" ? "justify-start" : "justify-center"} text-white`}
+              >
+                {React.isValidElement<{ size?: number }>(icon) &&
+                icon.type !== "img"
+                  ? React.cloneElement(icon, { size: iconSize })
+                  : icon}
+              </div>
+            ) : (
+              !hideIcon && (
+                <Image
+                  src={src}
+                  alt={title}
+                  width={fullWidthImage ? 1200 : finalWidth}
+                  height={fullWidthImage ? 720 : finalWidth}
+                  className={
+                    fullWidthImage ? "mb-3 w-full h-auto rounded-lg" : "mb-2"
+                  }
+                />
+              )
+            )}
+            <div
+              className={`text-lg font-semibold leading-[1.3em] text-white ${titleClassName}`}
+              dangerouslySetInnerHTML={{ __html: title }}
             />
-          )
-        )}
-        <div
-          className={`text-lg font-semibold leading-[1.3em] text-white ${titleClassName}`}
-          dangerouslySetInnerHTML={{ __html: title }}
-        />
-        {description && (
-          <div className="text-md text-white/80 mt-2">{description}</div>
+            {description && (
+              <div className="text-md text-white/80 mt-2">{description}</div>
+            )}
+          </>
         )}
       </div>
     </div>
