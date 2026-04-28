@@ -456,7 +456,7 @@ export default function MainHero() {
 
       {/* SECOND TITLE BACKGROUND - scroll-driven animation */}
       <div
-        className="absolute top-0 left-0 w-full h-full min-w-full min-h-full overflow-hidden"
+        className="absolute top-0 left-0 w-full h-full min-w-full min-h-full overflow-hidden pointer-events-none"
         id="def-hero-title-2-bg"
       >
         <div
