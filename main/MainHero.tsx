@@ -19,24 +19,24 @@ gsap.registerPlugin(ScrollTrigger);
 
 const aboutAtomixItems = [
   {
-    icon: <IoShieldCheckmark />,
+    icon: <IoShieldCheckmark className="h-8 w-8" />,
     title: "What we are",
     subtitle:
       "a Platform-as-a-Service automating the full lifecycle of property loans, end-to-end; fully configurable and white-label ready",
   },
   {
-    icon: <IoShieldCheckmark />,
+    icon: <IoShieldCheckmark className="h-8 w-8" />,
     title: "What sets us apart",
     subtitle:
       "rules-first architecture, immutable on-chain audit and goal-driven intelligence operating within both; compliance enforced at every level, not bolted on",
   },
   {
-    icon: <IoShieldCheckmark />,
+    icon: <IoShieldCheckmark className="h-8 w-8" />,
     title: "Who we serve",
     subtitle: "lenders, capital providers, brokers and borrowers",
   },
   {
-    icon: <IoShieldCheckmark />,
+    icon: <IoShieldCheckmark className="h-8 w-8" />,
     title: "Where we operate",
     subtitle: "UK-based, with global expansion built into the model",
   },
@@ -96,6 +96,7 @@ export default function MainHero() {
   const title2SplitRef = useRef<SplitTextHandle>(null);
   const missionCardRef = useRef<HTMLDivElement>(null);
   const visionCardRef = useRef<HTMLDivElement>(null);
+  const scrollTlRef = useRef<gsap.core.Timeline | null>(null);
 
   useGSAP(() => {
     if (!missionCardRef.current || !visionCardRef.current) return;
@@ -137,7 +138,7 @@ export default function MainHero() {
 
     // --- Set initial hidden states for scroll-animated elements ---
     gsap.set("#def-hero-title-2-bg", { autoAlpha: 0 });
-    gsap.set("#def-hero-title-2", { autoAlpha: 0, scale: 0 });
+    gsap.set("#def-hero-title-2", { autoAlpha: 0 });
     gsap.set("#def-hero-title-2-list .hero-list-item", {
       autoAlpha: 0,
       y: 40,
@@ -161,6 +162,7 @@ export default function MainHero() {
         pin: true,
       },
     });
+    scrollTlRef.current = tl;
 
     // Stage 1: Title 1 exits upward, images rise to center
     tl.to("#def-hero-title-1", { top: "-20%", opacity: 0, duration: 1 }, 0).to(
@@ -188,10 +190,38 @@ export default function MainHero() {
       )
       .to(
         "#def-hero-title-2",
-        { autoAlpha: 1, scale: 1, duration: 1.35, ease: "power1.out" },
+        { autoAlpha: 1, duration: 1.35, ease: "power1.out" },
         "centerReached",
-      )
-      .call(() => title2SplitRef.current?.play(), [], "centerReached+=0.6");
+      );
+
+    // Defer adding split-char tweens until SplitText has populated its targets
+    const addSplitTweens = () => {
+      const t2Targets = title2SplitRef.current?.getTargets() ?? [];
+      if (t2Targets.length) {
+        gsap.set(t2Targets, { opacity: 0, y: 26 });
+        tl.fromTo(
+          t2Targets,
+          { opacity: 0, y: 26 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.6,
+            ease: "power3.out",
+            stagger: 0.02,
+          },
+          "centerReached+=0.6",
+        );
+      }
+    };
+
+    document.fonts.ready.then(() => {
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          addSplitTweens();
+          ScrollTrigger.refresh();
+        });
+      });
+    });
 
     // Stage 3: List items and button
     tl.addLabel("title2Visible")
@@ -216,7 +246,7 @@ export default function MainHero() {
       )
       .to(
         "#def-hero-title-2-heading",
-        { autoAlpha: 0, y: -24, duration: 1, ease: "power2.in" },
+        { display: "none", opacity: 0, duration: 1, ease: "power2.in" },
         "listVisible+=2.1",
       )
       .to(
@@ -338,7 +368,7 @@ export default function MainHero() {
 
       {/* FIRST TITLE - page load animation */}
       <div
-        className="text-white px-6 flex flex-col gap-y-8 justify-center items-center text-center absolute left-1/2 -translate-x-1/2 top-[10%] max-w-[1000px] w-full"
+        className="text-white px-6 flex flex-col gap-y-8 justify-center items-center text-center absolute left-1/2 -translate-x-1/2 top-[10%] max-w-[600px] w-full"
         id="def-hero-title-1"
       >
         <Image
@@ -354,7 +384,8 @@ export default function MainHero() {
           <SplitText
             ref={title1SplitRef}
             startPaused
-            text="Atomix offers a toolkit to structure loan and investment products which are fast, flexible, and secure."
+            text="Platform-as-a-Service [[accent:Automating Lending End-to-End]]"
+            accentColor="#5BC7E4"
           />
         </div>
         <div id="def-hero-load-btn" style={{ visibility: "hidden" }}>
@@ -380,7 +411,7 @@ export default function MainHero() {
           <img
             src="/dashboard/hero-mobile-img.svg"
             alt="Atomix mobile form preview"
-            className="absolute left-0 bottom-0 w-[22%] select-none object-contain"
+            className="absolute left-0 bottom-6 w-[22%] select-none object-contain"
           />
         </div>
       </div>
@@ -402,11 +433,14 @@ export default function MainHero() {
           id="def-hero-title-2-heading"
           className="w-full max-w-[1200px] mx-auto"
         >
-          <SplitText
-            ref={title2SplitRef}
-            startPaused
-            text="Property lending is overdue for a rebuild. Atomix is it."
-          />
+          <div className="max-w-[700px]">
+            <SplitText
+              ref={title2SplitRef}
+              startPaused
+              text="Property lending is overdue for a rebuild. Atomix is it."
+              textAlign="left"
+            />
+          </div>
         </div>
 
         <div className="relative w-full max-w-[1200px] mx-auto mt-2">

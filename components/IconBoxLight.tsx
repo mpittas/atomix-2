@@ -30,9 +30,7 @@ export default function IconBoxLight({
         style: { ...el.props.style, fill: gradientUrl },
       });
     }
-    return (
-      <FaShieldHalved className="h-12 w-12" style={{ fill: gradientUrl }} />
-    );
+    return <FaShieldHalved className="h-7 w-7" style={{ fill: gradientUrl }} />;
   };
 
   return (
