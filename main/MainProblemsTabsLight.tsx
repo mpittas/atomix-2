@@ -51,6 +51,12 @@ const TAB_ANIMATION = {
   contentEase: "power2.out",
 };
 
+const getTabButtons = (ref: React.RefObject<HTMLDivElement | null>) =>
+  ref.current ? Array.from(ref.current.querySelectorAll("[data-tab]")) : [];
+
+const getIconBoxes = (ref: React.RefObject<HTMLDivElement | null>) =>
+  ref.current ? Array.from(ref.current.children) : [];
+
 const icons = {
   noVisibility: <FaBinoculars className="h-7 w-7" />,
   noCompliance: <FaShieldHalved className="h-7 w-7" />,
@@ -215,18 +221,12 @@ export default function MainProblemsTabsLight() {
 
   // Set initial hidden state for tab buttons and content
   useGSAP(() => {
-    if (tabButtonsRef.current) {
-      gsap.set(
-        Array.from(tabButtonsRef.current.querySelectorAll("[data-tab]")),
-        { opacity: 0 },
-      );
-    }
-    if (iconBoxContainerRef.current) {
-      gsap.set(Array.from(iconBoxContainerRef.current.children), {
-        opacity: 0,
-        y: 30,
-      });
-    }
+    const tabButtons = getTabButtons(tabButtonsRef);
+    if (tabButtons.length) gsap.set(tabButtons, { opacity: 0 });
+
+    const iconBoxes = getIconBoxes(iconBoxContainerRef);
+    if (iconBoxes.length) gsap.set(iconBoxes, { opacity: 0, y: 30 });
+
     if (learnMoreRef.current) {
       gsap.set(learnMoreRef.current, { opacity: 0, y: 20 });
     }
@@ -235,9 +235,9 @@ export default function MainProblemsTabsLight() {
   // Tab-switch animation — skip on initial render (handled by entrance chain)
   useGSAP(
     () => {
-      if (!iconBoxContainerRef.current) return;
       if (!initialAnimDone.current) return;
-      const boxes = iconBoxContainerRef.current.children;
+      const boxes = getIconBoxes(iconBoxContainerRef);
+      if (!boxes.length) return;
       gsap.fromTo(
         boxes,
         { y: 30, opacity: 0 },
@@ -261,8 +261,9 @@ export default function MainProblemsTabsLight() {
     const tl = gsap.timeline({ delay: 1 });
 
     // 1. Tab buttons fade in up with stagger
-    if (tabButtonsRef.current) {
-      tl.to(Array.from(tabButtonsRef.current.querySelectorAll("[data-tab]")), {
+    const tabButtons = getTabButtons(tabButtonsRef);
+    if (tabButtons.length) {
+      tl.to(tabButtons, {
         opacity: 1,
         duration: TAB_ANIMATION.buttonDuration,
         stagger: TAB_ANIMATION.buttonStagger,
@@ -276,9 +277,10 @@ export default function MainProblemsTabsLight() {
     });
 
     // 2. Tab content fade in up (same animation as tab switch)
-    if (iconBoxContainerRef.current) {
+    const iconBoxes = getIconBoxes(iconBoxContainerRef);
+    if (iconBoxes.length) {
       tl.to(
-        Array.from(iconBoxContainerRef.current.children),
+        iconBoxes,
         {
           opacity: 1,
           y: 0,
@@ -305,20 +307,23 @@ export default function MainProblemsTabsLight() {
     }
   }, []);
 
-  useGSAP(() => {
-    if (!tabButtonsRef.current) return;
+  useGSAP(
+    () => {
+      if (!tabButtonsRef.current) return;
 
-    const trigger = ScrollTrigger.create({
-      trigger: tabButtonsRef.current,
-      start: "top 92%",
-      once: true,
-      onEnter: startTabsEntrance,
-    });
+      const trigger = ScrollTrigger.create({
+        trigger: tabButtonsRef.current,
+        start: "top 92%",
+        once: true,
+        onEnter: startTabsEntrance,
+      });
 
-    return () => {
-      trigger.kill();
-    };
-  }, [startTabsEntrance]);
+      return () => {
+        trigger.kill();
+      };
+    },
+    { dependencies: [startTabsEntrance] },
+  );
 
   return (
     <div className="min-h-[calc(100vh-126px)] rounded-3xl bg-[#EBEFF2] relative overflow-hidden flex flex-col justify-center items-center">
