@@ -499,7 +499,26 @@ export default function MainHero() {
             className="w-full grid grid-cols-1 md:grid-cols-2 gap-4"
           >
             {aboutAtomixItems.map((item) => (
-              <div key={item.title} className="relative h-full">
+              <div
+                key={item.title}
+                className="relative h-full will-change-transform"
+                onMouseEnter={(e) => {
+                  gsap.to(e.currentTarget, {
+                    scale: 1.2,
+                    zIndex: 10,
+                    duration: 0.25,
+                    ease: "power2.out",
+                  });
+                }}
+                onMouseLeave={(e) => {
+                  gsap.to(e.currentTarget, {
+                    scale: 1,
+                    zIndex: 1,
+                    duration: 0.3,
+                    ease: "power2.out",
+                  });
+                }}
+              >
                 <IconBoxLight
                   icon={item.icon}
                   title={item.title}

@@ -417,7 +417,26 @@ export default function MainProblemsTabsLight() {
             } gap-5 w-full`}
           >
             {tabsData[activeIndex].iconBoxes.map((iconBox, index) => (
-              <div key={`${activeIndex}-${index}`} className="relative h-full">
+              <div
+                key={`${activeIndex}-${index}`}
+                className="relative h-full will-change-transform"
+                onMouseEnter={(e) => {
+                  gsap.to(e.currentTarget, {
+                    scale: 1.2,
+                    zIndex: 10,
+                    duration: 0.25,
+                    ease: "power2.out",
+                  });
+                }}
+                onMouseLeave={(e) => {
+                  gsap.to(e.currentTarget, {
+                    scale: 1,
+                    zIndex: 1,
+                    duration: 0.3,
+                    ease: "power2.out",
+                  });
+                }}
+              >
                 <IconBoxLight
                   icon={iconBox.icon}
                   title={iconBox.title}
