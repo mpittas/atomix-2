@@ -10,6 +10,8 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import SoftAurora from "@/components/backgrounds/SoftAurora";
+import InkSpill from "@/components/backgrounds/InkSpill";
+import type { InkSpillHandle } from "@/components/backgrounds/InkSpill";
 import IconBox from "@/components/IconBox";
 import IconBoxLight from "@/components/IconBoxLight";
 import { TbEyeClosed } from "react-icons/tb";
@@ -96,7 +98,7 @@ export default function MainHero() {
   const title2SplitRef = useRef<SplitTextHandle>(null);
   const missionCardRef = useRef<HTMLDivElement>(null);
   const visionCardRef = useRef<HTMLDivElement>(null);
-  const scrollTlRef = useRef<gsap.core.Timeline | null>(null);
+  const inkSpillRef = useRef<InkSpillHandle>(null);
 
   useGSAP(() => {
     if (!missionCardRef.current || !visionCardRef.current) return;
@@ -137,7 +139,9 @@ export default function MainHero() {
       );
 
     // --- Set initial hidden states for scroll-animated elements ---
-    gsap.set("#def-hero-title-2-bg", { autoAlpha: 0 });
+    const inkProgress = { value: 0 };
+    gsap.set("#def-hero-title-2-bg", { autoAlpha: 1 });
+    gsap.set("#def-hero-title-2-bg-shader", { opacity: 1 });
     gsap.set("#def-hero-title-2", { autoAlpha: 0 });
     gsap.set("#def-hero-title-2-list .hero-list-item", {
       autoAlpha: 0,
@@ -162,7 +166,6 @@ export default function MainHero() {
         pin: true,
       },
     });
-    scrollTlRef.current = tl;
 
     // Stage 1: Title 1 exits upward, images rise to center
     tl.to("#def-hero-title-1", { top: "-20%", opacity: 0, duration: 1 }, 0).to(
@@ -184,8 +187,13 @@ export default function MainHero() {
         "centerReached",
       )
       .to(
-        "#def-hero-title-2-bg",
-        { autoAlpha: 1, duration: 1.35, ease: "power1.out" },
+        inkProgress,
+        {
+          value: 1,
+          duration: 3.6,
+          ease: "power2.out",
+          onUpdate: () => inkSpillRef.current?.setProgress(inkProgress.value),
+        },
         "centerReached",
       )
       .to(
@@ -241,25 +249,55 @@ export default function MainHero() {
       // Stage 4: Fade out list items, reveal mission/vision boxes in place
       .to(
         "#def-hero-title-2-list .hero-list-item",
-        { autoAlpha: 0, y: -40, duration: 1, ease: "power2.in", stagger: 0.2 },
+        {
+          autoAlpha: 0,
+          y: -24,
+          duration: 1.8,
+          ease: "power2.inOut",
+          stagger: 0.18,
+        },
+        "listVisible+=2.1",
+      )
+      .to(
+        () => title2SplitRef.current?.getTargets() ?? [],
+        {
+          opacity: 0,
+          y: -16,
+          duration: 1.4,
+          ease: "power2.inOut",
+          stagger: { each: 0.018, from: "start" },
+        },
         "listVisible+=2.1",
       )
       .to(
         "#def-hero-title-2-heading",
-        { display: "none", opacity: 0, duration: 1, ease: "power2.in" },
-        "listVisible+=2.1",
+        {
+          autoAlpha: 0,
+          height: 0,
+          marginBottom: 0,
+          paddingTop: 0,
+          paddingBottom: 0,
+          duration: 1.6,
+          ease: "power2.inOut",
+        },
+        "listVisible+=2.4",
       )
       .to(
-        "#def-hero-title-2-bg",
-        { autoAlpha: 0, duration: 0.5, ease: "power2.in" },
-        "listVisible+=4.7",
+        inkProgress,
+        {
+          value: 0,
+          duration: 2.6,
+          ease: "power2.in",
+          onUpdate: () => inkSpillRef.current?.setProgress(inkProgress.value),
+        },
+        "listVisible+=3.5",
       )
       .to(
         "#def-hero-mission-vision",
         { autoAlpha: 1, duration: 0.5, ease: "power2.out" },
-        "listVisible+=4.7",
+        "listVisible+=5.7",
       )
-      .addLabel("missionVisible", "listVisible+=4.9")
+      .addLabel("missionVisible", "listVisible+=5.9")
       .fromTo(
         missionCardRef.current,
         { autoAlpha: 0 },
@@ -418,20 +456,32 @@ export default function MainHero() {
 
       {/* SECOND TITLE BACKGROUND - scroll-driven animation */}
       <div
-        className="bg-[#EBEFF2] absolute top-0 left-0 w-full h-full min-w-full min-h-full"
+        className="absolute top-0 left-0 w-full h-full min-w-full min-h-full overflow-hidden"
         id="def-hero-title-2-bg"
-        style={{ visibility: "hidden" }}
-      />
+      >
+        <div
+          id="def-hero-title-2-bg-shader"
+          className="absolute inset-0 pointer-events-none"
+        >
+          <InkSpill
+            ref={inkSpillRef}
+            color="#EBEFF2"
+            speed={0.9}
+            scale={1.8}
+            edgeSoftness={0.22}
+          />
+        </div>
+      </div>
 
       {/* SECOND TITLE CONTENT - scroll-driven animation */}
       <div
-        className="text-[#011F27] flex flex-col gap-y-8 justify-center items-start text-left absolute top-0 left-0 w-full h-full min-w-full min-h-full p-8 md:p-12"
+        className="text-[#011F27] flex flex-col justify-center items-start text-left absolute top-0 left-0 w-full h-full min-w-full min-h-full p-8 md:p-12"
         id="def-hero-title-2"
         style={{ visibility: "hidden" }}
       >
         <div
           id="def-hero-title-2-heading"
-          className="w-full max-w-[1200px] mx-auto"
+          className="w-full max-w-[1200px] mx-auto mb-8 overflow-hidden"
         >
           <div className="max-w-[700px]">
             <SplitText
