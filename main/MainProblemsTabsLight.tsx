@@ -383,7 +383,7 @@ export default function MainProblemsTabsLight() {
             {/* Sliding active pill */}
             <div
               ref={activePillRef}
-              className="absolute top-1.5 bottom-1.5 rounded-xl bg-white shadow-sm transition-all duration-300 ease-out pointer-events-none"
+              className="absolute top-1.5 bottom-1.5 rounded-2xl bg-white shadow-sm transition-all duration-300 ease-out pointer-events-none"
               style={{
                 width: `calc((100% - 0.75rem) / ${tabsData.length})`,
                 left: `calc(0.375rem + ${activeIndex} * (100% - 0.75rem) / ${tabsData.length})`,

@@ -1,6 +1,7 @@
 ### Tasks:
 
 - [ ] Make IconBoxLight have inner shadow so it resembles more the Figma design
+- [ ] Make IconBoxLight have scale on hover as we dfo for the normal IconBox
 
 - [ ] For the Main Pyramid page, please make the left side content that appears alongside the pyramid to ahve update list design as shown in the image
 

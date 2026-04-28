@@ -35,12 +35,17 @@ export default function IconBoxLight({
 
   return (
     <div
-      className={`group relative rounded-2xl border border-white/60 bg-white/40 backdrop-blur-md p-6 overflow-hidden transition-all duration-300 ${className}`}
+      className={`group relative rounded-3xl border border-white/60 bg-white/40 backdrop-blur-md p-6 overflow-hidden transition-all duration-300 ${className}`}
       style={{
         boxShadow:
-          "inset 0 1px 2px rgba(255,255,255,0.6), inset 0 -1px 2px rgba(0,0,0,0.03)",
+          "inset 0 1px 2px rgba(255,255,255,0.6), inset 5px 5px 20px rgba(10, 21, 44, 0.06)",
       }}
     >
+      <div className="pointer-events-none absolute inset-0 rounded-2xl overflow-hidden">
+        <div className="absolute -top-5 -right-5 w-[45%] h-[45%] rounded-full bg-white/60  blur-xl" />
+        <div className="absolute -bottom-5 -left-5 w-[45%] h-[45%] rounded-full bg-white/60  blur-xl" />
+      </div>
+
       <div className="relative flex flex-col gap-3 items-start text-left">
         {/* Gradient definition */}
         <svg width="0" height="0" className="absolute" aria-hidden="true">
