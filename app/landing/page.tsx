@@ -16,6 +16,7 @@ import MainTheMarket from "@/main/MainTheMarket";
 import MainWhyWorkWithUs from "@/main/MainWhyWorkWithUs";
 import MainCurrentStatus from "@/components/current-status/MainCurrentStatus";
 import MainPropertyLanding from "@/main/MainPropertyLanding";
+import MainProblemsTabsLight from "@/main/MainProblemsTabsLight";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -173,7 +174,9 @@ export default function LandingGradientV1Page() {
       <div className="px-12 mt-2 mb-12 flex flex-col gap-6">
         {/* <MainPropertyLanding /> */}
 
-        <MainProblemsTabs />
+        <MainProblemsTabsLight />
+
+        {/* <MainProblemsTabs /> */}
 
         <MainPyramidWrapper />
 

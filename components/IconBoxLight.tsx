@@ -1,6 +1,6 @@
 "use client";
 
-import { type ReactNode } from "react";
+import { type ReactNode, useId, isValidElement, cloneElement } from "react";
 import { FaShieldHalved } from "react-icons/fa6";
 
 interface IconBoxLightProps {
@@ -16,18 +16,53 @@ export default function IconBoxLight({
   description,
   className = "",
 }: IconBoxLightProps) {
+  const gradientId = useId().replace(/:/g, "");
+  const gradientUrl = `url(#${gradientId})`;
+
+  const renderIcon = () => {
+    if (icon && isValidElement(icon)) {
+      const el = icon as React.ReactElement<{
+        style?: React.CSSProperties;
+        className?: string;
+      }>;
+      return cloneElement(el, {
+        className: el.props.className || "",
+        style: { ...el.props.style, fill: gradientUrl },
+      });
+    }
+    return (
+      <FaShieldHalved className="h-12 w-12" style={{ fill: gradientUrl }} />
+    );
+  };
+
   return (
     <div
-      className={`group relative rounded-2xl border border-white/60 bg-white/40 backdrop-blur-md p-6 overflow-hidden transition-all duration-300   ${className}`}
+      className={`group relative rounded-2xl border border-white/60 bg-white/40 backdrop-blur-md p-6 overflow-hidden transition-all duration-300 ${className}`}
+      style={{
+        boxShadow:
+          "inset 0 1px 2px rgba(255,255,255,0.6), inset 0 -1px 2px rgba(0,0,0,0.03)",
+      }}
     >
       <div className="relative flex flex-col gap-3 items-start text-left">
+        {/* Gradient definition */}
+        <svg width="0" height="0" className="absolute" aria-hidden="true">
+          <defs>
+            <linearGradient id={gradientId} x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#0693B9" />
+              <stop offset="100%" stopColor="#39C6ED" />
+            </linearGradient>
+          </defs>
+        </svg>
+
         {/* Icon badge */}
-        <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-[#D8E9EE] text-[#19a1c6]">
-          {icon || <FaShieldHalved className="h-12 w-12" />}
+        <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-[#D8E9EE]">
+          {renderIcon()}
         </div>
 
         {/* Title */}
-        <h3 className="text-lg font-semibold text-[#011F27]">{title}</h3>
+        <h3 className="text-lg font-semibold leading-6 text-[#011F27]">
+          {title}
+        </h3>
 
         {/* Description */}
         <p className="text-md leading-relaxed text-[#4B6066]">{description}</p>
