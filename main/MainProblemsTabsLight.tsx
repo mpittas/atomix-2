@@ -215,14 +215,23 @@ export default function MainProblemsTabsLight() {
   const [activeIndex, setActiveIndex] = useState(0);
   const iconBoxContainerRef = useRef<HTMLDivElement>(null);
   const tabButtonsRef = useRef<HTMLDivElement>(null);
+  const activePillRef = useRef<HTMLDivElement>(null);
   const initialAnimDone = useRef(false);
   const learnMoreRef = useRef<HTMLDivElement>(null);
   const entranceStartedRef = useRef(false);
 
   // Set initial hidden state for tab buttons and content
   useGSAP(() => {
+    if (tabButtonsRef.current) {
+      gsap.set(tabButtonsRef.current, { opacity: 0 });
+    }
+
     const tabButtons = getTabButtons(tabButtonsRef);
-    if (tabButtons.length) gsap.set(tabButtons, { opacity: 0 });
+    if (tabButtons.length) gsap.set(tabButtons, { opacity: 0, y: 15 });
+
+    if (activePillRef.current) {
+      gsap.set(activePillRef.current, { opacity: 0, scale: 0.85 });
+    }
 
     const iconBoxes = getIconBoxes(iconBoxContainerRef);
     if (iconBoxes.length) gsap.set(iconBoxes, { opacity: 0, y: 30 });
@@ -260,15 +269,43 @@ export default function MainProblemsTabsLight() {
 
     const tl = gsap.timeline({ delay: 1 });
 
-    // 1. Tab buttons fade in up with stagger
+    // 1. Background container fades in first
+    if (tabButtonsRef.current) {
+      tl.to(tabButtonsRef.current, {
+        opacity: 1,
+        duration: 0.5,
+        ease: "power2.out",
+      });
+    }
+
+    // 2. Active pill scales in
+    if (activePillRef.current) {
+      tl.to(
+        activePillRef.current,
+        {
+          opacity: 1,
+          scale: 1,
+          duration: 0.6,
+          ease: "back.out(1.7)",
+        },
+        "-=0.3",
+      );
+    }
+
+    // 3. Tab buttons slide up and fade in with stagger
     const tabButtons = getTabButtons(tabButtonsRef);
     if (tabButtons.length) {
-      tl.to(tabButtons, {
-        opacity: 1,
-        duration: TAB_ANIMATION.buttonDuration,
-        stagger: TAB_ANIMATION.buttonStagger,
-        ease: TAB_ANIMATION.buttonEase,
-      });
+      tl.to(
+        tabButtons,
+        {
+          opacity: 1,
+          y: 0,
+          duration: TAB_ANIMATION.buttonDuration,
+          stagger: TAB_ANIMATION.buttonStagger,
+          ease: TAB_ANIMATION.buttonEase,
+        },
+        "-=0.4",
+      );
     }
 
     // Mark entrance done so tab-switch animation is unlocked
@@ -345,6 +382,7 @@ export default function MainProblemsTabsLight() {
           >
             {/* Sliding active pill */}
             <div
+              ref={activePillRef}
               className="absolute top-1.5 bottom-1.5 rounded-xl bg-white shadow-sm transition-all duration-300 ease-out pointer-events-none"
               style={{
                 width: `calc((100% - 0.75rem) / ${tabsData.length})`,
