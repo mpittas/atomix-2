@@ -5,9 +5,10 @@ import SoftAurora from "@/components/backgrounds/SoftAurora";
 import CurrentStatusConnectorsV2 from "@/main/CurrentStatusConnectorsV2";
 import DefHeading from "@/components/typo/DefHeading";
 import { FaHouse, FaGavel } from "react-icons/fa6";
-import { TbTargetArrow } from "react-icons/tb";
+import { PiTargetBold } from "react-icons/pi";
+
 import { Button as DefButton } from "@/components/ui";
-import IconBox from "@/components/IconBox";
+import IconBoxLight from "@/components/IconBoxLight";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
@@ -18,7 +19,7 @@ import {
 
 gsap.registerPlugin(ScrollTrigger);
 
-const CONNECTOR_STROKE = "#7ccbe6";
+const CONNECTOR_STROKE = "#CDD2D7";
 
 interface TabData {
   title: string;
@@ -556,10 +557,10 @@ export default function MainCurrentStatusLight() {
   return (
     <div
       ref={sectionRef}
-      className="min-h-[calc(100vh-126px)] rounded-3xl bg-linear-to-b from-[#004152] via-[#01485C] to-[#004152] relative overflow-hidden flex flex-col justify-center items-center py-28"
+      className="min-h-[calc(100vh-126px)] rounded-3xl bg-[#EBEFF2] relative overflow-hidden flex flex-col justify-center items-center py-28"
     >
       <div className="absolute top-0 left-0 w-full h-[500px]">
-        <SoftAurora
+        {/* <SoftAurora
           speed={1.3}
           scale={1.2}
           brightness={0.65}
@@ -574,11 +575,11 @@ export default function MainCurrentStatusLight() {
           colorSpeed={1}
           enableMouseInteraction={false}
           mouseInfluence={0.2}
-        />
+        /> */}
       </div>
 
       <DefHeading
-        theme="light"
+        theme="dark"
         badgeText=""
         title="Current Status"
         description="Atomix is live and building — two product launches confirmed for 2026: quick home sale MVP (Q2) and auction finance MVP (Q3)."
@@ -588,20 +589,20 @@ export default function MainCurrentStatusLight() {
       <div className="max-w-[1200px] mx-auto px-8 mt-14 flex flex-col">
         <div className="flex gap-x-6">
           <div data-cs-top-card className="flex-1">
-            <IconBox className="h-full" align="left">
+            <IconBoxLight className="h-full">
               <div className="relative flex flex-col justify-between h-full">
                 <div data-cs-top-card-content>
                   <div className="mb-6 flex items-center justify-between">
-                    <span className="rounded-full px-4 py-1 text-sm font-semibold uppercase text-white bg-linear-to-r from-[#3C6671] to-[#184A57]">
+                    <span className="rounded-full px-4 py-1 text-sm font-semibold uppercase text-[#0B97BE] bg-linear-to-r from-[#D4E7EE] to-[#ECF1F5]">
                       Q2 2026
                     </span>
                   </div>
 
-                  <h3 className="text-3xl leading-6 font-semibold text-white">
+                  <h3 className="text-3xl leading-6 font-semibold text-[#011F27]">
                     Quick Home Sale MVP
                   </h3>
 
-                  <p data-cs-top-card-desc className="mt-4 text-white/80">
+                  <p data-cs-top-card-desc className="mt-4 text-[#4B6066]">
                     Quick home sale providers depend on speed and certainty of
                     funding. Atomix is built for this model — repeat,
                     high-volume bridging with a pre-approved offer generated
@@ -611,32 +612,32 @@ export default function MainCurrentStatusLight() {
 
                 <div
                   data-cs-top-card-market
-                  className="mt-4 rounded-xl bg-gradient-to-r from-[#19a1c6]/30 to-[#2bb9df]/30 p-2.5 text-lg leading-6 text-white flex items-center gap-2"
+                  className="mt-4 rounded-xl bg-gradient-to-r from-[#d6e8ef] to-[#eceeee] p-2.5 text-lg leading-6 text-[#011F27] flex items-center gap-2"
                 >
-                  <span className="shrink-0 text-white mr-1">
+                  <span className="shrink-0 text-[#011F27] mr-1">
                     <FaHouse className="h-6 w-6" />
                   </span>
                   <span>Part of the £350bn UK annual property loan market</span>
                 </div>
               </div>
-            </IconBox>
+            </IconBoxLight>
           </div>
 
           <div data-cs-top-card className="flex-1">
-            <IconBox className="h-full" align="left">
+            <IconBoxLight className="h-full">
               <div className="relative flex flex-col justify-between h-full">
                 <div data-cs-top-card-content>
                   <div className="mb-6 flex items-center justify-between">
-                    <span className="rounded-full px-4 py-1 text-sm font-semibold uppercase text-white bg-linear-to-r from-[#3C6671] to-[#184A57]">
+                    <span className="rounded-full px-4 py-1 text-sm font-semibold uppercase text-[#0B97BE] bg-linear-to-r from-[#D4E7EE] to-[#ECF1F5]">
                       Q3 2026
                     </span>
                   </div>
 
-                  <h3 className="text-3xl leading-6 font-semibold text-white">
+                  <h3 className="text-3xl leading-6 font-semibold text-[#011F27]">
                     Auction Finance MVP
                   </h3>
 
-                  <p data-cs-top-card-desc className="mt-4 text-white/80">
+                  <p data-cs-top-card-desc className="mt-4 text-[#4B6066]">
                     Pre-approved finance embedded into the auction experience —
                     certainty of funding before the hammer falls, within the
                     28-day completion window.
@@ -645,9 +646,9 @@ export default function MainCurrentStatusLight() {
 
                 <div
                   data-cs-top-card-market
-                  className="mt-4 rounded-xl bg-gradient-to-r from-[#19a1c6]/30 to-[#2bb9df]/30 p-2.5 text-lg leading-6 text-white flex items-center gap-2"
+                  className="mt-4 rounded-xl bg-gradient-to-r from-[#d6e8ef] to-[#eceeee] p-2.5 text-lg leading-6 text-[#011F27] flex items-center gap-2"
                 >
-                  <span className="shrink-0 text-white mr-1">
+                  <span className="shrink-0 text-[#011F27] mr-1">
                     <FaGavel className="h-6 w-6" />
                   </span>
                   <span>
@@ -655,7 +656,7 @@ export default function MainCurrentStatusLight() {
                   </span>
                 </div>
               </div>
-            </IconBox>
+            </IconBoxLight>
           </div>
         </div>
 
@@ -723,7 +724,7 @@ export default function MainCurrentStatusLight() {
 
         <div
           data-cs-statement-1
-          className="text-3xl text-white text-center font-semibold py-4"
+          className="text-3xl text-[#011F27] text-center font-semibold py-4"
         >
           Atomix is live and building — two product launches confirmed for 2026:
           quick home sale MVP (Q2) and auction finance MVP (Q3).
@@ -756,7 +757,7 @@ export default function MainCurrentStatusLight() {
 
         <div
           data-cs-statement-2
-          className="text-3xl text-white text-center font-semibold py-4"
+          className="text-3xl text-[#011F27] text-center font-semibold py-4"
         >
           Statement 2 comes here
         </div>
@@ -769,11 +770,10 @@ export default function MainCurrentStatusLight() {
         <div className="-mt-1 mb-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
           {TABS.map((tab) => (
             <div key={tab.title} data-cs-feature-card className="h-full">
-              <IconBox
-                icon={<TbTargetArrow className="h-10 w-10" />}
+              <IconBoxLight
+                icon={<PiTargetBold className="h-10 w-10" />}
                 title={tab.title}
                 description={tab.description}
-                align="left"
                 className="h-full"
               />
             </div>
