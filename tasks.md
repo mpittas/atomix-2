@@ -7,7 +7,7 @@
 
 - [x] Duplicate current Benefits section and make it light themed with udpated design as in Figma
 
-- [ ] Update the MainTheMarket section boxes to resemble more the design
+- [x] Update the MainTheMarket section boxes to resemble more the design
 
 - [ ] Dulpicate MainCurrentStatus and make it light themed with update design as in Figma
 

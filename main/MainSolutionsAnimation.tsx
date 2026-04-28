@@ -28,7 +28,7 @@ function IconText({ icon, text }: { icon: string; text: string }) {
 
 function SquareBadge({ text }: { text: string }) {
   return (
-    <div className="w-full px-3 py-2 border border-[#1491B3] bg-[#003746] rounded-md text-center text-sm text-white font-bold">
+    <div className="w-full px-3 py-2 border border-white/14 bg-[#165161] rounded-md text-center text-sm text-white font-bold">
       {text}
     </div>
   );
