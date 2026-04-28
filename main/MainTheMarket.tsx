@@ -111,13 +111,13 @@ function MainStatCard({
 
   return (
     <div
-      className={`relative h-full overflow-hidden rounded-3xl bg-[#003746] p-6 ${className || ""}`}
+      className={`relative h-full overflow-hidden rounded-3xl bg-[#145060] border border-white/8 p-6 ${className || ""}`}
     >
       {/* <div className="absolute inset-0 bg-gradient-to-br from-[#4a8a9a]/10 via-transparent to-transparent" /> */}
 
       <div className="pointer-events-none absolute inset-0">
-        <div className="absolute -top-5 -right-5 w-[35%] h-[35%] rounded-full bg-[#58fffc]/10 blur-xl" />
-        <div className="absolute -bottom-5 -left-5 w-[35%] h-[35%] rounded-full bg-[#58fffc]/10 blur-xl" />
+        <div className="absolute -top-5 -right-5 w-[45%] h-[45%] rounded-full bg-white/10  blur-xl" />
+        <div className="absolute -bottom-5 -left-5 w-[45%] h-[45%] rounded-full bg-white/10  blur-xl" />
       </div>
 
       <div className="relative z-10">
