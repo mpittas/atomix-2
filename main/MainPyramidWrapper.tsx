@@ -21,7 +21,8 @@ type IconBoxData = {
 
 type HighlightInfo = {
   title: string;
-  items: Array<{ positive: boolean; text: string }>;
+  description: string;
+  items: Array<{ positive: boolean; title: string; description: string }>;
 };
 
 const iconBoxesData: IconBoxData[] = [
@@ -61,26 +62,67 @@ const iconBoxesData: IconBoxData[] = [
 const highlightSequenceData: HighlightInfo[] = [
   {
     title: "Bespoke builds",
+    description:
+      "automated and complex, but £500k+ upfront and expensive to change",
     items: [
-      { positive: true, text: "Automated" },
-      { positive: true, text: "Complex logic" },
-      { positive: false, text: "£600k+, slow to change" },
+      {
+        positive: true,
+        title: "Automated",
+        description: "End-to-end processing without manual intervention",
+      },
+      {
+        positive: true,
+        title: "Complex logic",
+        description: "Handles sophisticated lending scenarios",
+      },
+      {
+        positive: false,
+        title: "£600k+, slow to change",
+        description: "Expensive upfront and costly to maintain",
+      },
     ],
   },
   {
     title: "Simple SaaS",
+    description: "automated and easy to change, but simple products only",
     items: [
-      { positive: true, text: "Automated" },
-      { positive: true, text: "Cheap to build" },
-      { positive: false, text: "Simple products only" },
+      {
+        positive: true,
+        title: "Automated",
+        description: "Lorem ipsum dolor sit amet lorem ipsum",
+      },
+      {
+        positive: true,
+        title: "Cheap to build",
+        description: "Lorem ipsum dolor sit amet",
+      },
+      {
+        positive: false,
+        title: "Simple products only",
+        description: "Lorem ipsum dolor sit amet lorem ipsum ",
+      },
     ],
   },
   {
     title: "Disconnected stacks",
+    description:
+      "complex and configurable, but humans are the glue; nothing is truly automated",
     items: [
-      { positive: true, text: "Complex logic" },
-      { positive: true, text: "Cheap to build" },
-      { positive: false, text: "Not automated" },
+      {
+        positive: true,
+        title: "Complex logic",
+        description: "Flexible for various product types",
+      },
+      {
+        positive: true,
+        title: "Cheap to build",
+        description: "Lower initial investment required",
+      },
+      {
+        positive: false,
+        title: "Not automated",
+        description: "Humans required to connect the gaps",
+      },
     ],
   },
 ];
@@ -97,6 +139,7 @@ export default function MainPyramidWrapper() {
   const highlightBoxRef = useRef<HTMLDivElement>(null);
   const highlightContentRef = useRef<HTMLDivElement>(null);
   const highlightTitleRef = useRef<HTMLHeadingElement>(null);
+  const highlightDescRef = useRef<HTMLParagraphElement>(null);
   const highlightItemsRef = useRef<Array<HTMLLIElement | null>>([]);
   const [highlightIndex, setHighlightIndex] = useState(0);
   const lastHighlightIndexRef = useRef(0);
@@ -211,6 +254,7 @@ export default function MainPyramidWrapper() {
   useEffect(() => {
     const content = highlightContentRef.current;
     const title = highlightTitleRef.current;
+    const desc = highlightDescRef.current;
     const items = highlightItemsRef.current.filter(
       (item): item is HTMLLIElement => item !== null,
     );
@@ -220,6 +264,7 @@ export default function MainPyramidWrapper() {
     const ctx = gsap.context(() => {
       // Set initial state for animation
       gsap.set(title, { opacity: 0, y: 16 });
+      if (desc) gsap.set(desc, { opacity: 0, y: 12 });
       gsap.set(items, { opacity: 0, x: -12 });
 
       // Create entrance animation timeline
@@ -227,12 +272,26 @@ export default function MainPyramidWrapper() {
         defaults: { ease: "power2.out" },
       });
 
-      // Animate title first, then items staggered
+      // Animate title first, then description, then items staggered
       tl.to(title, {
         opacity: 1,
         y: 0,
         duration: isFirstRenderRef.current ? 0.8 : 0.7,
-      }).to(
+      });
+
+      if (desc) {
+        tl.to(
+          desc,
+          {
+            opacity: 1,
+            y: 0,
+            duration: isFirstRenderRef.current ? 0.6 : 0.5,
+          },
+          isFirstRenderRef.current ? "-=0.4" : "-=0.3",
+        );
+      }
+
+      tl.to(
         items,
         {
           opacity: 1,
@@ -240,7 +299,7 @@ export default function MainPyramidWrapper() {
           duration: 0.8,
           stagger: 0.15,
         },
-        isFirstRenderRef.current ? "-=0.35" : "-=0.25",
+        isFirstRenderRef.current ? "-=0.3" : "-=0.2",
       );
 
       isFirstRenderRef.current = false;
@@ -277,7 +336,7 @@ export default function MainPyramidWrapper() {
         {/* Left highlight info box - absolutely positioned on left during pyramid highlight sequence */}
         <div
           ref={highlightBoxRef}
-          className="absolute left-34 top-1/2 -translate-y-1/2 w-[340px] opacity-0"
+          className="absolute left-34 top-1/2 -translate-y-1/2 w-[440px] opacity-0"
         >
           {(() => {
             const info =
@@ -285,29 +344,50 @@ export default function MainPyramidWrapper() {
             return (
               <div
                 ref={highlightContentRef}
-                className="highlight-content backdrop-blur-sm rounded-2xl"
+                className="highlight-content rounded-2xl"
               >
                 <h3
                   ref={highlightTitleRef}
-                  className="text-white font-semibold text-3xl mb-4"
+                  className="text-white font-semibold text-3xl mb-3"
                 >
                   {info.title}
                 </h3>
-                <ul className="space-y-2">
+                <p
+                  ref={highlightDescRef}
+                  className="text-white/80 text-md leading-relaxed mb-9"
+                >
+                  {info.description}
+                </p>
+                <ul className="space-y-6">
                   {info.items.map((item, idx) => (
                     <li
                       key={idx}
                       ref={(el) => {
                         highlightItemsRef.current[idx] = el;
                       }}
-                      className="flex items-center gap-2 text-lg text-white/80"
+                      className="flex items-start gap-4"
                     >
-                      {item.positive ? (
-                        <FiCheck className="w-4 h-4 shrink-0" />
-                      ) : (
-                        <FiX className="w-4 h-4 shrink-0" />
-                      )}
-                      {item.text}
+                      <div
+                        className={`w-11 h-11 rounded-xl flex items-center justify-center shrink-0 border-2 ${
+                          item.positive
+                            ? "border-white/0 bg-[#0C596E]"
+                            : "border-white/30 bg-transparent"
+                        }`}
+                      >
+                        {item.positive ? (
+                          <FiCheck className="w-6 h-6 text-[#39C6ED]" />
+                        ) : (
+                          <FiX className="w-6 h-6 text-white/60" />
+                        )}
+                      </div>
+                      <div className="flex flex-col pt-0.5">
+                        <span className="text-white font-semibold text-base leading-tight">
+                          {item.title}
+                        </span>
+                        <span className="text-white/80 text-md leading-relaxed mt-0.5">
+                          {item.description}
+                        </span>
+                      </div>
                     </li>
                   ))}
                 </ul>
