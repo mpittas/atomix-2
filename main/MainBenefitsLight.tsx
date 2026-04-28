@@ -17,8 +17,11 @@ const TAB_ANIMATION = {
   buttonStagger: 0.1,
   contentDuration: 1.4,
   contentStagger: 0.22,
+  cardDuration: 1.2,
+  cardStagger: 0.18,
   buttonEase: "power1.out",
   contentEase: "power2.out",
+  cardEase: "power2.out",
 };
 
 interface TabItem {
@@ -148,6 +151,17 @@ export default function MainBenefitsLight() {
   const initialAnimDone = useRef(false);
   const entranceStartedRef = useRef(false);
 
+  // Card animation refs
+  const cardBgRef = useRef<HTMLDivElement>(null);
+  const cardBlursRef = useRef<HTMLDivElement>(null);
+  const rightColumnRef = useRef<HTMLDivElement>(null);
+  const rightColumnBlurRef = useRef<HTMLDivElement>(null);
+  const titleRef = useRef<HTMLHeadingElement>(null);
+  const descRef = useRef<HTMLParagraphElement>(null);
+  const listRef = useRef<HTMLUListElement>(null);
+  const mainImageRef = useRef<HTMLImageElement>(null);
+  const smallImageRef = useRef<HTMLImageElement>(null);
+
   const animateActivePanel = () => {
     const panel = contentRef.current?.firstElementChild as HTMLElement | null;
     if (!panel) return;
@@ -210,7 +224,39 @@ export default function MainBenefitsLight() {
     }
 
     const tabContent = getTabContent(contentRef);
-    if (tabContent.length) gsap.set(tabContent, { opacity: 0, y: 30 });
+    if (tabContent.length) gsap.set(tabContent, { autoAlpha: 0 });
+
+    // Card content initial states (use autoAlpha like benefits-tabs)
+    if (contentRef.current) {
+      gsap.set(contentRef.current, { autoAlpha: 0 });
+    }
+    if (cardBgRef.current) {
+      gsap.set(cardBgRef.current, { autoAlpha: 0, scale: 0.98 });
+    }
+    if (cardBlursRef.current) {
+      gsap.set(cardBlursRef.current, { autoAlpha: 0 });
+    }
+    if (rightColumnRef.current) {
+      gsap.set(rightColumnRef.current, { autoAlpha: 0 });
+    }
+    if (rightColumnBlurRef.current) {
+      gsap.set(rightColumnBlurRef.current, { autoAlpha: 0, scale: 0.8 });
+    }
+    if (titleRef.current) {
+      gsap.set(titleRef.current, { autoAlpha: 0, y: 24 });
+    }
+    if (descRef.current) {
+      gsap.set(descRef.current, { autoAlpha: 0, y: 18 });
+    }
+    if (listRef.current) {
+      gsap.set(listRef.current.children, { autoAlpha: 0, y: 16 });
+    }
+    if (mainImageRef.current) {
+      gsap.set(mainImageRef.current, { autoAlpha: 0, x: 60 });
+    }
+    if (smallImageRef.current) {
+      gsap.set(smallImageRef.current, { autoAlpha: 0, x: -40 });
+    }
   });
 
   // Tab-switch animation — skip on initial render (handled by entrance chain)
@@ -221,6 +267,124 @@ export default function MainBenefitsLight() {
     },
     { dependencies: [activeIndex] },
   );
+
+  // Card content entrance animation - slower like benefits-tabs
+  const animateCardContent = useCallback(() => {
+    const tl = gsap.timeline({ defaults: { overwrite: "auto" } });
+
+    // Step 1: Fade in card background with blurred circles (slower)
+    if (cardBgRef.current) {
+      tl.to(cardBgRef.current, {
+        autoAlpha: 1,
+        scale: 1,
+        duration: TAB_ANIMATION.cardDuration,
+        ease: TAB_ANIMATION.cardEase,
+      });
+    }
+    if (cardBlursRef.current) {
+      tl.to(
+        cardBlursRef.current,
+        {
+          autoAlpha: 1,
+          duration: TAB_ANIMATION.cardDuration * 0.8,
+          ease: TAB_ANIMATION.cardEase,
+        },
+        "-=0.8",
+      );
+    }
+
+    // Step 2: Fade in right column (blue bg) with its blur (slower)
+    if (rightColumnRef.current) {
+      tl.to(
+        rightColumnRef.current,
+        {
+          autoAlpha: 1,
+          duration: TAB_ANIMATION.cardDuration,
+          ease: TAB_ANIMATION.cardEase,
+        },
+        "-=0.6",
+      );
+    }
+    if (rightColumnBlurRef.current) {
+      tl.to(
+        rightColumnBlurRef.current,
+        {
+          autoAlpha: 1,
+          scale: 1,
+          duration: TAB_ANIMATION.cardDuration * 1.1,
+          ease: "back.out(1.7)",
+        },
+        "-=0.9",
+      );
+    }
+
+    // Step 3: Animate left side elements - title, description, list items (slower with more stagger)
+    if (titleRef.current) {
+      tl.to(
+        titleRef.current,
+        {
+          autoAlpha: 1,
+          y: 0,
+          duration: TAB_ANIMATION.cardDuration,
+          ease: TAB_ANIMATION.cardEase,
+        },
+        "-=0.6",
+      );
+    }
+    if (descRef.current) {
+      tl.to(
+        descRef.current,
+        {
+          autoAlpha: 0.9,
+          y: 0,
+          duration: TAB_ANIMATION.cardDuration,
+          ease: TAB_ANIMATION.cardEase,
+        },
+        "-=0.85",
+      );
+    }
+    if (listRef.current && listRef.current.children.length) {
+      tl.to(
+        listRef.current.children,
+        {
+          autoAlpha: 1,
+          y: 0,
+          duration: TAB_ANIMATION.cardDuration,
+          stagger: TAB_ANIMATION.cardStagger,
+          ease: TAB_ANIMATION.cardEase,
+        },
+        "-=0.75",
+      );
+    }
+
+    // Step 4: Animate main image from right - STARTS EARLIER (overlaps with list items)
+    if (mainImageRef.current) {
+      tl.to(
+        mainImageRef.current,
+        {
+          autoAlpha: 1,
+          x: 0,
+          duration: TAB_ANIMATION.cardDuration * 1.4,
+          ease: TAB_ANIMATION.cardEase,
+        },
+        "-=2.2",
+      );
+    }
+
+    // Step 5: Animate small image from right - STARTS EARLIER (overlaps with list items)
+    if (smallImageRef.current) {
+      tl.to(
+        smallImageRef.current,
+        {
+          autoAlpha: 1,
+          x: 0,
+          duration: TAB_ANIMATION.cardDuration * 1.4,
+          ease: TAB_ANIMATION.cardEase,
+        },
+        "-=2.4",
+      );
+    }
+  }, []);
 
   // Called when DefHeading finishes its full animation sequence
   const startTabsEntrance = useCallback(() => {
@@ -273,22 +437,12 @@ export default function MainBenefitsLight() {
       initialAnimDone.current = true;
     });
 
-    // 4. Tab content fade in up
-    const tabContent = getTabContent(contentRef);
-    if (tabContent.length) {
-      tl.to(
-        tabContent,
-        {
-          opacity: 1,
-          y: 0,
-          duration: TAB_ANIMATION.contentDuration,
-          stagger: TAB_ANIMATION.contentStagger,
-          ease: TAB_ANIMATION.contentEase,
-        },
-        "+=0.15",
-      );
+    // 4. Reveal content wrapper earlier, then animate card content
+    if (contentRef.current) {
+      tl.set(contentRef.current, { autoAlpha: 1 }, "-=1.25");
+      tl.add(animateCardContent, ">");
     }
-  }, []);
+  }, [animateCardContent]);
 
   useGSAP(() => {
     if (!tabButtonsRef.current) return;
@@ -352,13 +506,17 @@ export default function MainBenefitsLight() {
           {/* Tab content with card layout */}
           <div ref={contentRef} key={activeIndex} className="">
             <div
+              ref={cardBgRef}
               className="group relative rounded-3xl border border-white/60 bg-white/40 backdrop-blur-md p-2 overflow-hidden transition-all duration-300"
               style={{
                 boxShadow:
                   "inset 0 1px 2px rgba(255,255,255,0.6), inset 5px 5px 20px rgba(10, 21, 44, 0.06)",
               }}
             >
-              <div className="pointer-events-none absolute inset-0 rounded-2xl overflow-hidden">
+              <div
+                ref={cardBlursRef}
+                className="pointer-events-none absolute inset-0 rounded-2xl overflow-hidden"
+              >
                 <div className="absolute -top-5 -right-5 w-[45%] h-[45%] rounded-full bg-white/60  blur-xl" />
                 <div className="absolute -bottom-5 -left-5 w-[45%] h-[45%] rounded-full bg-white/60  blur-xl" />
               </div>
@@ -367,15 +525,15 @@ export default function MainBenefitsLight() {
                 {/* Left side - Content */}
                 <div className="p-14">
                   <h2
-                    data-wa-item
+                    ref={titleRef}
                     className="text-4xl font-semibold mb-4 text-[#011F27]"
                   >
                     {tabsData[activeIndex].title}
                   </h2>
-                  <p data-wa-item className="text-[#495F64] mb-10">
+                  <p ref={descRef} className="text-[#495F64] mb-10">
                     {tabsData[activeIndex].description}
                   </p>
-                  <ul data-wa-items className="space-y-5">
+                  <ul ref={listRef} className="space-y-5">
                     {tabsData[activeIndex].items.map((item, idx) => (
                       <li key={idx} className="flex items-start gap-3">
                         <div className="">
@@ -387,26 +545,35 @@ export default function MainBenefitsLight() {
                   </ul>
                 </div>
 
-                {/* Right side - Images (user will provide) */}
-                <div className="bg-[#004152] rounded-2xl relative min-h-[400px] lg:min-h-full overflow-hidden">
-                  <div className="w-50 h-50 rounded-full blur-[100px] bg-white/50 absolute -top-25 -right-25"></div>
-                  {/* Placeholder for user images */}
+                {/* Right side - Images */}
+                <div
+                  ref={rightColumnRef}
+                  className="bg-[#004152] rounded-2xl relative min-h-[400px] lg:min-h-full overflow-hidden"
+                >
+                  <div
+                    ref={rightColumnBlurRef}
+                    className="w-50 h-50 rounded-full blur-[100px] bg-white/50 absolute -top-25 -right-25"
+                  ></div>
 
-                  <Image
-                    src="/dashboard/benefits-tab-1-img-lg.svg"
-                    alt=""
-                    width={600}
-                    height={400}
-                    className="absolute top-1/2 -translate-y-1/2 -right-10 object-contain rounded-lg w-[85%] h-auto"
-                  />
+                  <div>
+                    <Image
+                      ref={mainImageRef}
+                      src="/dashboard/benefits-tab-1-img-lg.svg"
+                      alt=""
+                      width={600}
+                      height={400}
+                      className="absolute top-1/2 -translate-y-1/2 -right-10 object-contain rounded-lg w-[85%] h-auto"
+                    />
 
-                  <Image
-                    src="/dashboard/benefits-tab-1-img-sm.png"
-                    alt=""
-                    width={600}
-                    height={400}
-                    className="absolute top-1/2 -translate-y-1/2 right-70 object-contain rounded-lg w-[40%] h-auto"
-                  />
+                    <Image
+                      ref={smallImageRef}
+                      src="/dashboard/benefits-tab-1-img-sm.png"
+                      alt=""
+                      width={600}
+                      height={400}
+                      className="absolute top-1/2 left-20 -translate-y-1/2 object-contain rounded-lg w-[40%] h-auto"
+                    />
+                  </div>
                 </div>
               </div>
             </div>
