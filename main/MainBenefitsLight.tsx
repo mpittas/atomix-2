@@ -163,51 +163,95 @@ export default function MainBenefitsLight() {
   const smallImageRef = useRef<HTMLImageElement>(null);
 
   const animateActivePanel = () => {
-    const panel = contentRef.current?.firstElementChild as HTMLElement | null;
-    if (!panel) return;
+    // Kill any existing tweens on animated elements
+    const elementsToAnimate = [
+      titleRef.current,
+      descRef.current,
+      ...(listRef.current?.children
+        ? Array.from(listRef.current.children)
+        : []),
+      mainImageRef.current,
+      smallImageRef.current,
+    ].filter(Boolean);
 
-    const imageItems = panel.querySelectorAll(".wa-image-item");
-    const textItems = panel.querySelectorAll("[data-wa-item]");
-    const listItems = panel.querySelectorAll("[data-wa-items] > div");
+    gsap.killTweensOf(elementsToAnimate);
 
-    gsap.killTweensOf([imageItems, textItems, listItems]);
-
-    gsap.set(imageItems, { autoAlpha: 0, y: 24, scale: 0.96 });
-    gsap.set(textItems, { autoAlpha: 0, y: 18 });
-    gsap.set(listItems, { autoAlpha: 0, y: 16 });
+    // Reset initial states
+    if (titleRef.current) gsap.set(titleRef.current, { autoAlpha: 0, y: 24 });
+    if (descRef.current) gsap.set(descRef.current, { autoAlpha: 0, y: 18 });
+    if (listRef.current?.children) {
+      gsap.set(listRef.current.children, { autoAlpha: 0, y: 16 });
+    }
+    if (mainImageRef.current)
+      gsap.set(mainImageRef.current, { autoAlpha: 0, x: 60 });
+    if (smallImageRef.current)
+      gsap.set(smallImageRef.current, { autoAlpha: 0, x: -40 });
 
     const tl = gsap.timeline({ defaults: { overwrite: "auto" } });
 
-    tl.to(imageItems, {
-      autoAlpha: 1,
-      y: 0,
-      scale: 1,
-      duration: TAB_ANIMATION.contentDuration,
-      stagger: TAB_ANIMATION.contentStagger,
-      ease: TAB_ANIMATION.contentEase,
-    })
-      .to(
-        textItems,
+    // Animate left side content
+    if (titleRef.current) {
+      tl.to(titleRef.current, {
+        autoAlpha: 1,
+        y: 0,
+        duration: TAB_ANIMATION.contentDuration,
+        ease: TAB_ANIMATION.contentEase,
+      });
+    }
+
+    if (descRef.current) {
+      tl.to(
+        descRef.current,
         {
-          autoAlpha: 1,
+          autoAlpha: 0.9,
           y: 0,
           duration: TAB_ANIMATION.contentDuration,
-          stagger: TAB_ANIMATION.contentStagger,
           ease: TAB_ANIMATION.contentEase,
         },
-        "-=0.35",
-      )
-      .to(
-        listItems,
-        {
-          autoAlpha: 1,
-          y: 0,
-          duration: TAB_ANIMATION.contentDuration,
-          stagger: TAB_ANIMATION.contentStagger,
-          ease: TAB_ANIMATION.contentEase,
-        },
-        "-=0.25",
+        "-=0.6",
       );
+    }
+
+    if (listRef.current?.children.length) {
+      tl.to(
+        listRef.current.children,
+        {
+          autoAlpha: 1,
+          y: 0,
+          duration: TAB_ANIMATION.contentDuration,
+          stagger: TAB_ANIMATION.contentStagger,
+          ease: TAB_ANIMATION.contentEase,
+        },
+        "-=0.5",
+      );
+    }
+
+    // Animate right side images
+    if (mainImageRef.current) {
+      tl.to(
+        mainImageRef.current,
+        {
+          autoAlpha: 1,
+          x: 0,
+          duration: TAB_ANIMATION.contentDuration,
+          ease: TAB_ANIMATION.contentEase,
+        },
+        "-=0.8",
+      );
+    }
+
+    if (smallImageRef.current) {
+      tl.to(
+        smallImageRef.current,
+        {
+          autoAlpha: 1,
+          x: 0,
+          duration: TAB_ANIMATION.contentDuration,
+          ease: TAB_ANIMATION.contentEase,
+        },
+        "-=0.9",
+      );
+    }
   };
 
   // Set initial hidden state for tab buttons and content
@@ -534,14 +578,95 @@ export default function MainBenefitsLight() {
                     {tabsData[activeIndex].description}
                   </p>
                   <ul ref={listRef} className="space-y-5">
-                    {tabsData[activeIndex].items.map((item, idx) => (
-                      <li key={idx} className="flex items-start gap-3">
-                        <div className="">
-                          <IoShieldCheckmark className="w-6 h-6 text-[#39C6ED]" />
-                        </div>
-                        <span className="text-[#495F64]">{item.text}</span>
-                      </li>
-                    ))}
+                    {activeIndex === 0 ? (
+                      tabsData[activeIndex].items.map((item, idx) => (
+                        <li key={idx} className="flex items-start gap-3">
+                          <div className="">
+                            <IoShieldCheckmark className="w-6 h-6 text-[#39C6ED]" />
+                          </div>
+                          <span className="text-[#495F64]">{item.text}</span>
+                        </li>
+                      ))
+                    ) : activeIndex === 1 ? (
+                      <>
+                        <li className="flex items-start gap-3">
+                          <div className="">
+                            <IoShieldCheckmark className="w-6 h-6 text-[#39C6ED]" />
+                          </div>
+                          <span className="text-[#495F64]">
+                            Lorem ipsum dolor sit amet, consectetur adipiscing
+                            elit. Sed do eiusmod tempor incididunt ut labore.
+                          </span>
+                        </li>
+                        <li className="flex items-start gap-3">
+                          <div className="">
+                            <IoShieldCheckmark className="w-6 h-6 text-[#39C6ED]" />
+                          </div>
+                          <span className="text-[#495F64]">
+                            Ut enim ad minim veniam, quis nostrud exercitation
+                            ullamco laboris nisi ut aliquip ex ea commodo.
+                          </span>
+                        </li>
+                        <li className="flex items-start gap-3">
+                          <div className="">
+                            <IoShieldCheckmark className="w-6 h-6 text-[#39C6ED]" />
+                          </div>
+                          <span className="text-[#495F64]">
+                            Duis aute irure dolor in reprehenderit in voluptate
+                            velit esse cillum dolore eu fugiat nulla.
+                          </span>
+                        </li>
+                        <li className="flex items-start gap-3">
+                          <div className="">
+                            <IoShieldCheckmark className="w-6 h-6 text-[#39C6ED]" />
+                          </div>
+                          <span className="text-[#495F64]">
+                            Excepteur sint occaecat cupidatat non proident, sunt
+                            in culpa qui officia deserunt mollit anim.
+                          </span>
+                        </li>
+                      </>
+                    ) : (
+                      <>
+                        <li className="flex items-start gap-3">
+                          <div className="">
+                            <IoShieldCheckmark className="w-6 h-6 text-[#39C6ED]" />
+                          </div>
+                          <span className="text-[#495F64]">
+                            Sed ut perspiciatis unde omnis iste natus error sit
+                            voluptatem accusantium doloremque laudantium.
+                          </span>
+                        </li>
+                        <li className="flex items-start gap-3">
+                          <div className="">
+                            <IoShieldCheckmark className="w-6 h-6 text-[#39C6ED]" />
+                          </div>
+                          <span className="text-[#495F64]">
+                            Nemo enim ipsam voluptatem quia voluptas sit
+                            aspernatur aut odit aut fugit, sed quia
+                            consequuntur.
+                          </span>
+                        </li>
+                        <li className="flex items-start gap-3">
+                          <div className="">
+                            <IoShieldCheckmark className="w-6 h-6 text-[#39C6ED]" />
+                          </div>
+                          <span className="text-[#495F64]">
+                            Neque porro quisquam est, qui dolorem ipsum quia
+                            dolor sit amet, consectetur, adipisci velit.
+                          </span>
+                        </li>
+                        <li className="flex items-start gap-3">
+                          <div className="">
+                            <IoShieldCheckmark className="w-6 h-6 text-[#39C6ED]" />
+                          </div>
+                          <span className="text-[#495F64]">
+                            Quis autem vel eum iure reprehenderit qui in ea
+                            voluptate velit esse quam nihil molestiae.
+                          </span>
+                        </li>
+                      </>
+                    )}
                   </ul>
                 </div>
 
@@ -558,7 +683,11 @@ export default function MainBenefitsLight() {
                   <div>
                     <Image
                       ref={mainImageRef}
-                      src="/dashboard/benefits-tab-1-img-lg.svg"
+                      src={
+                        activeIndex === 0
+                          ? "/dashboard/benefits-tab-1-img-lg.svg"
+                          : "/images/dashboard-lenders-main.svg"
+                      }
                       alt=""
                       width={600}
                       height={400}
@@ -567,7 +696,13 @@ export default function MainBenefitsLight() {
 
                     <Image
                       ref={smallImageRef}
-                      src="/dashboard/benefits-tab-1-img-sm.png"
+                      src={
+                        activeIndex === 0
+                          ? "/dashboard/benefits-tab-1-img-sm.png"
+                          : activeIndex === 1
+                            ? "/images/dashboard-lenders-small.svg"
+                            : "/images/dashboard-partner-small.svg"
+                      }
                       alt=""
                       width={600}
                       height={400}

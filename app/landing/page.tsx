@@ -18,6 +18,7 @@ import MainCurrentStatus from "@/components/current-status/MainCurrentStatus";
 import MainPropertyLanding from "@/main/MainPropertyLanding";
 import MainProblemsTabsLight from "@/main/MainProblemsTabsLight";
 import MainBenefitsLight from "@/main/MainBenefitsLight";
+import SliderWhyWorkWithUs from "@/components/SliderWhyWorkWithUs";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -190,7 +191,8 @@ export default function LandingGradientV1Page() {
 
         <MainCurrentStatus />
 
-        <MainWhyWorkWithUs />
+        {/* <MainWhyWorkWithUs /> */}
+        <SliderWhyWorkWithUs />
       </div>
 
       <DefCta title="Build the Future of Asset-Backed Lending" />
