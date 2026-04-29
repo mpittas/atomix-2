@@ -44,8 +44,8 @@ export default function IconBoxLight({
       }}
     >
       <div className="pointer-events-none absolute inset-0 rounded-2xl overflow-hidden">
-        <div className="absolute -top-5 -right-5 w-[45%] h-[45%] rounded-full bg-white/60  blur-xl" />
-        <div className="absolute -bottom-5 -left-5 w-[45%] h-[45%] rounded-full bg-white/60  blur-xl" />
+        <div className="absolute -top-5 -right-5 w-[35%] h-[35%] rounded-full bg-white/60  blur-xl" />
+        <div className="absolute -bottom-5 -left-5 w-[35%] h-[35%] rounded-full bg-white/60  blur-xl" />
       </div>
 
       <div className="relative flex flex-col gap-3 items-start text-left h-full">

@@ -588,7 +588,26 @@ export default function MainCurrentStatusLight() {
 
       <div className="max-w-[1200px] mx-auto px-8 mt-14 flex flex-col">
         <div className="flex gap-x-6">
-          <div data-cs-top-card className="flex-1">
+          <div
+            data-cs-top-card
+            className="flex-1 relative h-full will-change-transform"
+            onMouseEnter={(e) => {
+              gsap.to(e.currentTarget, {
+                scale: 1.2,
+                zIndex: 50,
+                duration: 0.25,
+                ease: "power2.out",
+              });
+            }}
+            onMouseLeave={(e) => {
+              gsap.to(e.currentTarget, {
+                scale: 1,
+                zIndex: 0,
+                duration: 0.3,
+                ease: "power2.out",
+              });
+            }}
+          >
             <IconBoxLight className="h-full">
               <div className="relative flex flex-col justify-between h-full">
                 <div data-cs-top-card-content>
@@ -623,7 +642,26 @@ export default function MainCurrentStatusLight() {
             </IconBoxLight>
           </div>
 
-          <div data-cs-top-card className="flex-1">
+          <div
+            data-cs-top-card
+            className="flex-1 relative h-full will-change-transform"
+            onMouseEnter={(e) => {
+              gsap.to(e.currentTarget, {
+                scale: 1.2,
+                zIndex: 50,
+                duration: 0.25,
+                ease: "power2.out",
+              });
+            }}
+            onMouseLeave={(e) => {
+              gsap.to(e.currentTarget, {
+                scale: 1,
+                zIndex: 0,
+                duration: 0.3,
+                ease: "power2.out",
+              });
+            }}
+          >
             <IconBoxLight className="h-full">
               <div className="relative flex flex-col justify-between h-full">
                 <div data-cs-top-card-content>
@@ -769,7 +807,27 @@ export default function MainCurrentStatusLight() {
 
         <div className="-mt-1 mb-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
           {TABS.map((tab) => (
-            <div key={tab.title} data-cs-feature-card className="h-full">
+            <div
+              key={tab.title}
+              data-cs-feature-card
+              className="h-full relative will-change-transform"
+              onMouseEnter={(e) => {
+                gsap.to(e.currentTarget, {
+                  scale: 1.2,
+                  zIndex: 50,
+                  duration: 0.25,
+                  ease: "power2.out",
+                });
+              }}
+              onMouseLeave={(e) => {
+                gsap.to(e.currentTarget, {
+                  scale: 1,
+                  zIndex: 0,
+                  duration: 0.3,
+                  ease: "power2.out",
+                });
+              }}
+            >
               <IconBoxLight
                 icon={<PiTargetBold className="h-10 w-10" />}
                 title={tab.title}
@@ -783,7 +841,7 @@ export default function MainCurrentStatusLight() {
         <div data-cs-buttons className="w-full flex gap-x-4 justify-center">
           <DefButton>Learn more</DefButton>
 
-          <DefButton variant="dark">Watch Videos</DefButton>
+          <DefButton variant="outline">Watch Videos</DefButton>
         </div>
       </div>
     </div>

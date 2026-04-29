@@ -2,8 +2,7 @@ import React from "react";
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   size?: "small" | "medium" | "large";
-  variant?: "primary" | "dark";
-  gradient?: boolean | string;
+  variant?: "primary" | "dark" | "outline";
   children: React.ReactNode;
   href?: string;
 }
@@ -16,7 +15,6 @@ const Button = React.forwardRef<
     {
       size = "medium",
       variant = "primary",
-      gradient = true,
       className = "",
       children,
       href,
@@ -35,19 +33,14 @@ const Button = React.forwardRef<
         return "bg-[#003746] hover:bg-[#004a5e] border border-[#1491B3]";
       }
 
-      if (gradient === false) {
-        return "bg-blue-600 hover:bg-blue-700";
+      if (variant === "outline") {
+        return "bg-transparent border border-[#D9DEE2] text-[#011F27] hover:bg-white";
       }
 
-      if (typeof gradient === "string") {
-        return gradient;
-      }
-
-      return "bg-gradient-to-r from-[#19A1C6] to-[#2BB9DF]";
+      return "bg-gradient-to-r from-[#19A1C6] to-[#2BB9DF] hover:opacity-90";
     };
 
-    const baseClasses =
-      "font-semibold text-white rounded-full transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 active:scale-95 cursor-pointer";
+    const baseClasses = `font-semibold rounded-full transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 active:scale-95 cursor-pointer ${variant === "outline" ? "" : "text-white"}`;
 
     if (href) {
       return (
