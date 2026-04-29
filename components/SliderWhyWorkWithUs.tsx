@@ -202,7 +202,7 @@ export default function SliderWhyWorkWithUs() {
   return (
     <div
       ref={containerRef}
-      className="min-h-[calc(100vh-126px)] rounded-3xl bg-linear-to-b from-[#004152] via-[#01485C] to-[#004152] relative overflow-hidden flex flex-col justify-center items-center py-28 select-none"
+      className="min-h-[calc(100vh-126px)] rounded-3xl bg-linear-to-b from-[#004152] via-[#01485C] to-[#004152] relative overflow-hidden flex flex-col justify-center items-center py-28"
     >
       {/* Base content */}
       <div className="w-full px-8 mt-14 relative z-10">
@@ -234,7 +234,7 @@ export default function SliderWhyWorkWithUs() {
       {/* Overlay content revealed on drag (covers the OPPORTUNITIES side) */}
       <div
         ref={overlayRef}
-        className="absolute inset-0 z-20 bg-linear-to-b from-[#004152] via-[#01485C] to-[#004152] pointer-events-none"
+        className="absolute inset-0 z-20 bg-linear-to-b from-[#004152] via-[#01485C] to-[#004152]"
         // style={{ clipPath: "inset(0 50% 0 50%)" }}
       >
         <OverlayContent innerRef={overlayContentRef} />
