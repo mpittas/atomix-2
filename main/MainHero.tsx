@@ -142,6 +142,7 @@ export default function MainHero() {
     const inkProgress = { value: 0 };
     gsap.set("#def-hero-title-2-bg", { autoAlpha: 1 });
     gsap.set("#def-hero-title-2-bg-shader", { opacity: 1 });
+    gsap.set("#def-hero-title-2-bg-aurora", { autoAlpha: 0 });
     gsap.set("#def-hero-title-2", { autoAlpha: 0 });
     gsap.set("#def-hero-title-2-list .hero-list-item", {
       autoAlpha: 0,
@@ -199,6 +200,11 @@ export default function MainHero() {
       .to(
         "#def-hero-title-2",
         { autoAlpha: 1, duration: 1.35, ease: "power1.out" },
+        "centerReached",
+      )
+      .to(
+        "#def-hero-title-2-bg-aurora",
+        { autoAlpha: 1, duration: 1.2, ease: "power2.out" },
         "centerReached",
       );
 
@@ -281,6 +287,11 @@ export default function MainHero() {
           ease: "power2.inOut",
         },
         "listVisible+=2.4",
+      )
+      .to(
+        "#def-hero-title-2-bg-aurora",
+        { autoAlpha: 0, duration: 0.8, ease: "power2.inOut" },
+        "listVisible+=5",
       )
       .to(
         inkProgress,
@@ -470,6 +481,28 @@ export default function MainHero() {
             scale={1.8}
             edgeSoftness={0.22}
           />
+          <div
+            id="def-hero-title-2-bg-aurora"
+            className="absolute inset-0 pointer-events-none mix-blend-multiply"
+            style={{ visibility: "hidden" }}
+          >
+            <SoftAurora
+              speed={1.3}
+              scale={1.2}
+              brightness={0.65}
+              color1="#e6e6e6"
+              color2="#dfdfdf"
+              noiseFrequency={1}
+              noiseAmplitude={3.5}
+              bandHeight={0.85}
+              bandSpread={1}
+              octaveDecay={0.12}
+              layerOffset={0.5}
+              colorSpeed={1}
+              enableMouseInteraction={false}
+              mouseInfluence={0.2}
+            />
+          </div>
         </div>
       </div>
 
