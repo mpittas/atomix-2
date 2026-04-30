@@ -14,6 +14,10 @@ interface WhyCardProps {
   description: string;
   buttonText?: string;
   linkText?: string;
+  className?: string;
+  titleClassName?: string;
+  descriptionClassName?: string;
+  buttonClassName?: string;
 }
 
 interface OverlayItemCardProps {
@@ -22,14 +26,23 @@ interface OverlayItemCardProps {
   description: string;
 }
 
-function WhyCard({ title, description, buttonText, linkText }: WhyCardProps) {
+function WhyCard({
+  title,
+  description,
+  buttonText,
+  linkText,
+  className = "text-white",
+  titleClassName = "",
+  descriptionClassName = "",
+  buttonClassName = "border-white",
+}: WhyCardProps) {
   return (
-    <div className="text-white flex flex-col items-start gap-y-7 max-w-sm">
-      <div className="text-5xl uppercase">{title}</div>
-      <div className="text-lg">{description}</div>
+    <div className={`${className} flex flex-col items-start gap-y-7 max-w-sm`}>
+      <div className={`text-5xl uppercase ${titleClassName}`}>{title}</div>
+      <div className={`text-lg ${descriptionClassName}`}>{description}</div>
       <a
         href={linkText || "#"}
-        className="py-2 px-4 border border-white rounded-full"
+        className={`py-3.5 px-7 border font-semibold rounded-full ${buttonClassName} transition-all duration-300 hover:bg-white hover:text-black`}
       >
         {buttonText || "See Opportunities"}
       </a>
@@ -95,13 +108,13 @@ function OverlayContent({
   const rightOverlayItems = overlayItems.slice(3, 6);
 
   return (
-    <div
-      ref={innerRef}
-      className="w-full px-8 h-full flex"
-      style={{ opacity: 0 }}
-    >
-      <div className="flex-1 min-h-[100px] bg-green-500/0 flex justify-center items-center">
-        <div className="max-w-lg flex flex-col items-end text-white text-center gap-y-3">
+    <div ref={innerRef} className="w-full h-full flex">
+      <div className="flex-1 min-h-[100px] bg-[#EBEFF2] flex justify-center items-center">
+        <div
+          className="max-w-lg flex flex-col items-end text-white text-center gap-y-3"
+          data-overlay-content
+          style={{ opacity: 0 }}
+        >
           {leftOverlayItems.map((item, index) => (
             <OverlayItemCard
               key={`${item.title}-${index}`}
@@ -113,8 +126,12 @@ function OverlayContent({
         </div>
       </div>
 
-      <div className="flex-1 min-h-[100px] bg-red-500/0 flex justify-center items-center">
-        <div className="max-w-lg flex flex-col items-end text-white text-center gap-y-3">
+      <div className="flex-1 min-h-[100px] bg-[#499DB8] flex justify-center items-center">
+        <div
+          className="max-w-lg flex flex-col items-end text-white text-center gap-y-3"
+          data-overlay-content
+          style={{ opacity: 0 }}
+        >
           {rightOverlayItems.map((item, index) => (
             <OverlayItemCard
               key={`${item.title}-${index}`}
@@ -149,6 +166,7 @@ export default function SliderWhyWorkWithUs() {
       const rightProgress = Math.max(0, signedProgress);
       const leftProgress = Math.max(0, -signedProgress);
       const revealProgress = Math.abs(signedProgress);
+      const contentOpacity = gsap.utils.clamp(0, 1, revealProgress * 12);
       if (overlayRef.current) {
         const leftInset = (1 - leftProgress) * 50;
         const rightInset = (1 - rightProgress) * 50;
@@ -162,9 +180,12 @@ export default function SliderWhyWorkWithUs() {
         gsap.set(fadeCardRef.current, { opacity: 1 - rightProgress });
       }
       if (overlayContentRef.current) {
-        gsap.set(overlayContentRef.current, {
-          opacity: DEBUG_SHOW_FULL_OVERLAY ? 1 : revealProgress,
-        });
+        gsap.set(
+          overlayContentRef.current.querySelectorAll("[data-overlay-content]"),
+          {
+            opacity: DEBUG_SHOW_FULL_OVERLAY ? 1 : contentOpacity,
+          }
+        );
       }
       if (dividerRef.current) {
         gsap.set(dividerRef.current, { x });
@@ -202,12 +223,12 @@ export default function SliderWhyWorkWithUs() {
   return (
     <div
       ref={containerRef}
-      className="min-h-[calc(100vh-126px)] rounded-3xl bg-linear-to-b from-[#004152] via-[#01485C] to-[#004152] relative overflow-hidden flex flex-col justify-center items-center py-28"
+      className="min-h-[calc(100vh-126px)] rounded-3xl bg-[#499DB8] relative overflow-hidden flex flex-col justify-center items-center"
     >
       {/* Base content */}
-      <div className="w-full px-8 mt-14 relative z-10">
-        <div className="w-full flex justify-between">
-          <div className="w-1/2 bg-yellow-500/0 flex justify-center">
+      <div className="w-full relative z-10 flex-1 flex flex-col justify-center">
+        <div className="w-full flex justify-between flex-1">
+          <div className="w-1/2 bg-[#499DB8] flex flex-col items-center justify-center">
             <WhyCard
               title="Team"
               description="Lorem ipsum dolor sit amet, consectetur adipiscing elit.
@@ -217,16 +238,20 @@ export default function SliderWhyWorkWithUs() {
             />
           </div>
           <div
-            ref={fadeCardRef}
-            className="w-1/2 bg-yellow-500/0 flex justify-center"
+            className="w-1/2 bg-[#EBEFF2]  flex flex-col items-center justify-center"
           >
-            <WhyCard
-              title="OPPORTUNITIES"
-              description="Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-              Suspendisse varius lorem eget leo vehicula consectetur."
-              buttonText="See Opportunities"
-              linkText="#"
-            />
+            <div ref={fadeCardRef}>
+              <WhyCard
+                title="OPPORTUNITIES"
+                description="Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                Suspendisse varius lorem eget leo vehicula consectetur."
+                buttonText="See Opportunities"
+                linkText="#"
+                className="text-[#011F27]"
+                descriptionClassName="text-[#4B6166]"
+                buttonClassName="border-[#d2d5d8] hover:bg-[#d2d5d8] bg-transparent text-[#011F27]"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -234,7 +259,7 @@ export default function SliderWhyWorkWithUs() {
       {/* Overlay content revealed on drag (covers the OPPORTUNITIES side) */}
       <div
         ref={overlayRef}
-        className="absolute inset-0 z-20 bg-linear-to-b from-[#004152] via-[#01485C] to-[#004152]"
+        className="absolute inset-0 z-20"
         // style={{ clipPath: "inset(0 50% 0 50%)" }}
       >
         <OverlayContent innerRef={overlayContentRef} />
@@ -243,7 +268,7 @@ export default function SliderWhyWorkWithUs() {
       {/* Vertical divider line (moves with the handle) */}
       <div
         ref={dividerRef}
-        className="absolute top-0 bottom-0 left-1/2 w-px bg-white/20 z-30 pointer-events-none"
+        className="absolute top-0 bottom-0 left-1/2 w-px bg-transparent z-30 pointer-events-none"
       />
 
       {/* Draggable handle */}
