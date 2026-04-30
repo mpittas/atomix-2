@@ -582,11 +582,13 @@ export default function MainCurrentStatusLight() {
         theme="dark"
         badgeText=""
         title="Current Status"
-        description="Atomix is live and building — two product launches confirmed for 2026: quick home sale MVP (Q2) and auction finance MVP (Q3)."
+        // description="Atomix is live and building — two product launches confirmed for 2026: quick home sale MVP (Q2) and auction finance MVP (Q3)."
+        description=""
+        className="!w-full !items-start"
         showBadge={false}
       />
 
-      <div className="max-w-[1200px] mx-auto px-8 mt-14 flex flex-col">
+      <div className="max-w-[1200px] mx-auto mt-6 flex flex-col">
         <div className="flex gap-x-6">
           <div
             data-cs-top-card
