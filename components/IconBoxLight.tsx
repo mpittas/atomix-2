@@ -1,6 +1,6 @@
 "use client";
 
-import React, { type ReactNode, useId, isValidElement, cloneElement, useRef } from "react";
+import React, { type ReactNode, useId, isValidElement, cloneElement, useRef, memo, useCallback, useMemo } from "react";
 import { MouseEvent } from "react";
 import gsap from "gsap";
 import { FaShieldHalved } from "react-icons/fa6";
@@ -13,7 +13,7 @@ interface IconBoxLightProps {
   children?: ReactNode;
 }
 
-export default function IconBoxLight({
+const IconBoxLight = memo(function IconBoxLight({
   icon,
   title,
   description,
@@ -21,57 +21,68 @@ export default function IconBoxLight({
   children,
 }: IconBoxLightProps) {
   const gradientId = useId().replace(/:/g, "");
-  const gradientUrl = `url(#${gradientId})`;
+  const gradientUrl = useMemo(() => `url(#${gradientId})`, [gradientId]);
 
   const baseGlowAngle = "45deg";
   const baseBorderOpacity = 0;
   const baseRingOpacity = 0;
   const baseBlurOpacity = 0;
   const lastGlowAngleRef = useRef(45);
+  const rectRef = useRef<DOMRect | null>(null);
 
-  const normalizeGlowAngle = (nextAngle: number) => {
+  const normalizeGlowAngle = useCallback((nextAngle: number) => {
     const previousAngle = lastGlowAngleRef.current;
     const delta = ((nextAngle - previousAngle + 540) % 360) - 180;
     const normalizedAngle = previousAngle + delta;
     lastGlowAngleRef.current = normalizedAngle;
     return normalizedAngle;
-  };
+  }, []);
 
-  const updateGlowPosition = (
+  const updateGlowPosition = useCallback((
     target: HTMLDivElement,
     clientX: number,
     clientY: number,
   ) => {
-    const rect = target.getBoundingClientRect();
+    if (!rectRef.current) rectRef.current = target.getBoundingClientRect();
+    const rect = rectRef.current;
+    
     const x = clientX - rect.left;
     const y = clientY - rect.top;
     const centerX = rect.width / 2;
     const centerY = rect.height / 2;
     const dx = x - centerX;
     const dy = y - centerY;
+    
     let angle = Math.atan2(dy, dx) * (180 / Math.PI) + 90;
     if (angle < 0) angle += 360;
     const normalizedAngle = normalizeGlowAngle(angle);
+    
     const distanceToEdge = Math.min(x, rect.width - x, y, rect.height - y);
     const maxDistance = Math.max(Math.min(rect.width, rect.height) / 2, 1);
     const edgeProximity = 1 - Math.min(Math.max(distanceToEdge / maxDistance, 0), 1);
+    
     const borderOpacity = 0.74 + edgeProximity * 0.26;
     const ringGlowOpacity = 0.4 + edgeProximity * 0.5;
     const blurGlowOpacity = 0.12 + edgeProximity * 0.24;
     const outerGlowStrength = 0.08 + edgeProximity * 0.14;
+    
     target.style.setProperty("--glow-angle", `${normalizedAngle.toFixed(2)}deg`);
     target.style.setProperty("--glow-border-opacity", String(borderOpacity));
     target.style.setProperty("--glow-ring-opacity", String(ringGlowOpacity));
     target.style.setProperty("--glow-blur-opacity", String(blurGlowOpacity));
-    target.style.boxShadow = `inset 0 1px 2px rgba(255,255,255,0.6), inset 5px 5px 20px rgba(10,21,44,0.06), 0 0 0 1px rgba(6, 147, 185, ${0.22 + edgeProximity * 0.16}), 0 0 14px rgba(6, 147, 185, ${outerGlowStrength}), 0 0 28px rgba(6, 147, 185, ${outerGlowStrength * 0.65})`;
-  };
+    target.style.setProperty("--glow-border-alpha", String(0.22 + edgeProximity * 0.16));
+    target.style.setProperty("--glow-outer-1-alpha", String(outerGlowStrength));
+    target.style.setProperty("--glow-outer-2-alpha", String(outerGlowStrength * 0.65));
+  }, [normalizeGlowAngle]);
 
-  const handleMouseEnter = (event: MouseEvent<HTMLDivElement>) => {
+  const handleMouseEnter = useCallback((event: MouseEvent<HTMLDivElement>) => {
     const target = event.currentTarget;
     const parent = target.parentElement;
+    rectRef.current = target.getBoundingClientRect();
     updateGlowPosition(target, event.clientX, event.clientY);
     gsap.to(target, {
       scale: 1.02,
+      force3D: true,
       "--glow-border-opacity": 1,
       "--glow-ring-opacity": 0.96,
       "--glow-blur-opacity": 0.3,
@@ -79,29 +90,34 @@ export default function IconBoxLight({
       ease: "power2.out",
     });
     if (parent) gsap.to(parent, { zIndex: 10, duration: 0.25, ease: "power2.out" });
-  };
+  }, [updateGlowPosition]);
 
-  const handleMouseLeave = (event: MouseEvent<HTMLDivElement>) => {
+  const handleMouseLeave = useCallback((event: MouseEvent<HTMLDivElement>) => {
     const target = event.currentTarget;
     const parent = target.parentElement;
     gsap.to(target, {
       scale: 1,
+      force3D: true,
       "--glow-border-opacity": baseBorderOpacity,
       "--glow-ring-opacity": baseRingOpacity,
       "--glow-blur-opacity": baseBlurOpacity,
-      boxShadow:
-        "inset 0 1px 2px rgba(255,255,255,0.6), inset 5px 5px 20px rgba(10,21,44,0.06)",
+      "--glow-border-alpha": 0,
+      "--glow-outer-1-alpha": 0,
+      "--glow-outer-2-alpha": 0,
       duration: 0.3,
       ease: "power2.out",
+      onComplete: () => {
+        rectRef.current = null;
+      }
     });
     if (parent) gsap.to(parent, { zIndex: 1, duration: 0.3, ease: "power2.out" });
-  };
+  }, [baseBorderOpacity, baseRingOpacity, baseBlurOpacity]);
 
-  const handleMouseMove = (event: MouseEvent<HTMLDivElement>) => {
+  const handleMouseMove = useCallback((event: MouseEvent<HTMLDivElement>) => {
     updateGlowPosition(event.currentTarget, event.clientX, event.clientY);
-  };
+  }, [updateGlowPosition]);
 
-  const renderIcon = () => {
+  const renderIcon = useCallback(() => {
     if (icon && isValidElement(icon)) {
       const el = icon as React.ReactElement<{
         style?: React.CSSProperties;
@@ -113,11 +129,11 @@ export default function IconBoxLight({
       });
     }
     return <FaShieldHalved className="h-7 w-7" style={{ fill: gradientUrl }} />;
-  };
+  }, [icon, gradientUrl]);
 
   return (
     <div
-      className={`group relative rounded-3xl bg-white/40 backdrop-blur-md p-6 overflow-hidden will-change-transform ${className}`}
+      className={`group relative rounded-3xl bg-white/40 backdrop-blur-md p-6 overflow-hidden ${className}`}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       onMouseMove={handleMouseMove}
@@ -126,8 +142,15 @@ export default function IconBoxLight({
         "--glow-border-opacity": baseBorderOpacity,
         "--glow-ring-opacity": baseRingOpacity,
         "--glow-blur-opacity": baseBlurOpacity,
+        "--glow-border-alpha": 0,
+        "--glow-outer-1-alpha": 0,
+        "--glow-outer-2-alpha": 0,
         boxShadow:
-          "inset 0 1px 2px rgba(255,255,255,0.6), inset 5px 5px 20px rgba(10,21,44,0.06)",
+          "inset 0 1px 2px rgba(255,255,255,0.6), inset 5px 5px 20px rgba(10,21,44,0.06), 0 0 0 1px rgba(6, 147, 185, var(--glow-border-alpha)), 0 0 14px rgba(6, 147, 185, var(--glow-outer-1-alpha)), 0 0 28px rgba(6, 147, 185, var(--glow-outer-2-alpha))",
+        backfaceVisibility: "hidden",
+        WebkitBackfaceVisibility: "hidden",
+        transform: "translateZ(0)",
+        WebkitFontSmoothing: "subpixel-antialiased",
       } as React.CSSProperties}
     >
       {/* Conic glow border */}
@@ -208,4 +231,6 @@ export default function IconBoxLight({
       </div>
     </div>
   );
-}
+});
+
+export default IconBoxLight;

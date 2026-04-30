@@ -16,6 +16,7 @@ import IconBox from "@/components/IconBox";
 import IconBoxLight from "@/components/IconBoxLight";
 import { TbEyeClosed } from "react-icons/tb";
 import { IoShieldCheckmark } from "react-icons/io5";
+import { memo, useCallback } from "react";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -428,6 +429,7 @@ export default function MainHero() {
           className="w-[150px] md:w-[200px] h-auto"
           id="def-hero-logo"
           style={{ visibility: "hidden" }}
+          priority
         />
         <div id="def-hero-split-text" style={{ visibility: "hidden" }}>
           <SplitText
@@ -449,18 +451,24 @@ export default function MainHero() {
         style={{ visibility: "hidden" }}
       >
         <div className="relative w-full" id="def-hero-image-desktop">
-          <img
+          <Image
             src="/dashboard/hero-desktop-img.svg"
             alt="Atomix desktop dashboard preview"
+            width={1200}
+            height={800}
             className="w-full select-none object-contain pl-[12%]"
+            priority
           />
         </div>
 
         <div id="def-hero-image-mobile">
-          <img
+          <Image
             src="/dashboard/hero-mobile-img.svg"
             alt="Atomix mobile form preview"
+            width={300}
+            height={600}
             className="absolute left-0 bottom-6 w-[22%] select-none object-contain"
+            priority
           />
         </div>
       </div>
