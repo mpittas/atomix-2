@@ -498,11 +498,11 @@ export default function MainHero() {
               speed={1.3}
               scale={1.2}
               brightness={0.65}
-              color1="#ffffff"
-              color2="#ffffff"
+              color1="#effaffff"
+              color2="#d7f6faff"
               noiseFrequency={1}
               noiseAmplitude={3.5}
-              bandHeight={0.85}
+              bandHeight={0.25}
               bandSpread={1}
               octaveDecay={0.12}
               layerOffset={0.5}

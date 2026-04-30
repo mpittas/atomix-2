@@ -165,7 +165,7 @@ void main() {
   col *= uBrightness;
   float intensity = (layer1 + layer2) * uBrightness;
   float alpha = clamp(intensity, 0.0, 1.0);
-  alpha = pow(alpha, 5.0);
+  alpha = pow(alpha, 6.0);
   gl_FragColor = vec4(col, alpha);
 }
 `;
