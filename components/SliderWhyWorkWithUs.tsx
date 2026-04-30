@@ -1,7 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { useEffect, useRef } from "react";
+import { cloneElement, isValidElement, useEffect, useId, useMemo, useRef } from "react";
 import {
   FiArrowLeft,
   FiArrowRight,
@@ -10,7 +10,11 @@ import {
   FiKey,
   FiUsers,
 } from "react-icons/fi";
-import { FaLandmark, FaRocket } from "react-icons/fa6";
+import { Button as DefButton } from "@/components/ui";
+import { CgArrowsHAlt } from "react-icons/cg";
+import { FaUsers, FaMicrochip, FaKey , FaRocket, FaGlobe } from "react-icons/fa";
+
+
 
 interface WhyCardProps {
   title: string;
@@ -20,6 +24,7 @@ interface WhyCardProps {
   className?: string;
   titleClassName?: string;
   descriptionClassName?: string;
+  buttonVariant?: "primary" | "dark" | "outline" | "outline-white";
   buttonClassName?: string;
 }
 
@@ -30,6 +35,9 @@ interface OverlayItemCardProps {
   className?: string;
   titleClassName?: string;
   descriptionClassName?: string;
+  glowTopClassName?: string;
+  glowBottomClassName?: string;
+  iconGradientUrl?: string;
 }
 
 function clamp(min: number, max: number, value: number) {
@@ -44,18 +52,16 @@ function WhyCard({
   className = "text-white",
   titleClassName = "",
   descriptionClassName = "",
-  buttonClassName = "border-white",
+  buttonVariant = "primary",
+  buttonClassName = "",
 }: WhyCardProps) {
   return (
-    <div className={`${className} flex flex-col items-start gap-y-7 max-w-sm`}>
-      <div className={`text-5xl uppercase ${titleClassName}`}>{title}</div>
-      <div className={`text-lg ${descriptionClassName}`}>{description}</div>
-      <a
-        href={linkText || "#"}
-        className={`py-3.5 px-7 border font-semibold rounded-full ${buttonClassName} transition-colors duration-300 hover:bg-white hover:text-black`}
-      >
+    <div className={`${className} flex flex-col items-start gap-y-7 max-w-md`}>
+      <div className={`text-[52px] font-semibold uppercase ${titleClassName}`}>{title}</div>
+      <div className={`text-xl leading-[1.5em] ${descriptionClassName}`}>{description}</div>
+      <DefButton href={linkText || "#"} variant={buttonVariant} size="medium" className={buttonClassName}>
         {buttonText || "See Opportunities"}
-      </a>
+      </DefButton>
     </div>
   );
 }
@@ -64,17 +70,52 @@ function OverlayItemCard({
   icon,
   title,
   description,
-  className = "bg-[#003746] text-white",
+  className = "bg-white text-white",
   titleClassName = "",
   descriptionClassName = "text-white/80",
+  glowTopClassName = "bg-white/70",
+  glowBottomClassName = "bg-white/70",
+  iconGradientUrl,
 }: OverlayItemCardProps) {
+  const renderIcon = () => {
+    if (!iconGradientUrl || !icon) return icon;
+    if (!isValidElement(icon)) return icon;
+
+    const el = icon as React.ReactElement<{
+      style?: React.CSSProperties;
+      className?: string;
+    }>;
+
+    // Same gradient technique as IconBoxLight (defs + url(#id)),
+    // but we set both fill and stroke for better react-icons coverage.
+    return cloneElement(el, {
+      className: el.props.className || "",
+      style: {
+        ...el.props.style,
+        fill: iconGradientUrl,
+        stroke: iconGradientUrl,
+      },
+    });
+  };
+
   return (
     <div
-      className={`flex flex-col items-start text-left gap-y-3 rounded-[20px] p-4 ${className}`}
+      className={`relative flex flex-col items-start text-left gap-y-3 rounded-[29px] bg-white/10 inset-shadow-[0_0_10px_rgba(0,0,0,0.05)] border border-white/18 p-6 ${className}`}
     >
-      <div>{icon}</div>
-      <div className={`text-xl font-semibold ${titleClassName}`}>{title}</div>
-      <div className={descriptionClassName}>{description}</div>
+      <div className="pointer-events-none absolute inset-0 rounded-3xl overflow-hidden">
+        <div
+          className={`absolute -top-5 -right-5 w-[35%] h-[35%] rounded-full blur-xl ${glowTopClassName}`}
+        />
+        <div
+          className={`absolute -bottom-5 -left-5 w-[35%] h-[35%] rounded-full blur-xl ${glowBottomClassName}`}
+        />
+      </div>
+
+      <div className="relative flex flex-col items-start text-left gap-y-2">
+        <div className="mb-2">{renderIcon()}</div>
+        <div className={`text-xl font-semibold ${titleClassName}`}>{title}</div>
+        <div className={descriptionClassName}>{description}</div>
+      </div>
     </div>
   );
 }
@@ -83,25 +124,25 @@ const ICON_CLASS_NAME = "h-8 w-8";
 
 const OVERLAY_ITEMS: OverlayItemCardProps[] = [
   {
-    icon: <FiUsers className={ICON_CLASS_NAME} aria-hidden="true" />,
+    icon: <FaUsers className={ICON_CLASS_NAME} aria-hidden="true" />,
     title: "Small Team, Big Impact",
     description:
       "Join a focused team where every contribution directly shapes the product, technology, and company.",
   },
   {
-    icon: <FiCpu className={ICON_CLASS_NAME} aria-hidden="true" />,
+    icon: <FaMicrochip className={ICON_CLASS_NAME} aria-hidden="true" />,
     title: "Cutting-Edge Technology",
     description:
       "Work across AI, automation, data systems, and blockchain-backed infrastructure.",
   },
   {
-    icon: <FaLandmark className={ICON_CLASS_NAME} aria-hidden="true" />,
+    icon: <FaGlobe className={ICON_CLASS_NAME} aria-hidden="true" />,
     title: "Real-World Financial Infrastructure",
     description:
       "Build technology that powers real lending markets and impacts billions in asset-backed finance.",
   },
   {
-    icon: <FiKey className={ICON_CLASS_NAME} aria-hidden="true" />,
+    icon: <FaKey className={ICON_CLASS_NAME} aria-hidden="true" />,
     title: "Ownership From Day One",
     description:
       "Take ownership of key systems early and help define both architecture and product direction.",
@@ -113,7 +154,7 @@ const OVERLAY_ITEMS: OverlayItemCardProps[] = [
       "Ship quickly with short feedback loops, rapid experiments, and direct collaboration across teams.",
   },
   {
-    icon: <FiGlobe className={ICON_CLASS_NAME} aria-hidden="true" />,
+    icon: <FaGlobe className={ICON_CLASS_NAME} aria-hidden="true" />,
     title: "Global Scope, Practical Impact",
     description:
       "Deliver infrastructure used across regions, turning complex financial workflows into scalable products.",
@@ -128,6 +169,9 @@ function OverlayContent({
 }: {
   innerRef?: React.RefObject<HTMLDivElement | null>;
 }) {
+  const leftGradientId = useId().replace(/:/g, "");
+  const leftGradientUrl = useMemo(() => `url(#${leftGradientId})`, [leftGradientId]);
+
   return (
     <div ref={innerRef} className="w-full h-full flex">
       <div className="flex-1 min-h-[100px] bg-[#EBEFF2] flex justify-center items-center">
@@ -136,14 +180,24 @@ function OverlayContent({
           data-overlay-content
           style={{ opacity: 0, willChange: "opacity" }}
         >
+          <svg width="0" height="0" className="absolute" aria-hidden="true">
+            <defs>
+              <linearGradient id={leftGradientId} x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#0693B9" />
+                <stop offset="100%" stopColor="#39C6ED" />
+              </linearGradient>
+            </defs>
+          </svg>
+
           {LEFT_OVERLAY_ITEMS.map((item, index) => (
             <OverlayItemCard
               key={`${item.title}-${index}`}
               icon={item.icon}
               title={item.title}
               description={item.description}
-              className="bg-white text-[#011F27]"
-              descriptionClassName="text-[#4B6166]"
+              className="bg-white/30 inset-shadow-[0_0_10px_rgba(0,0,0,0.05)] border border-white/30 text-[#011F27]"
+              descriptionClassName="text-[#4C6268]"
+              iconGradientUrl={leftGradientUrl}
             />
           ))}
         </div>
@@ -163,6 +217,8 @@ function OverlayContent({
               description={item.description}
               className="bg-[#003746] text-white"
               descriptionClassName="text-white/80"
+              glowTopClassName="bg-white/20"
+              glowBottomClassName="bg-white/20"
             />
           ))}
         </div>
@@ -317,11 +373,10 @@ export default function SliderWhyWorkWithUs() {
               Suspendisse varius lorem eget leo vehicula consectetur."
               buttonText="See Team"
               linkText="#"
+              buttonVariant="outline-white"
             />
           </div>
-          <div
-            className="w-1/2 bg-[#EBEFF2]  flex flex-col items-center justify-center"
-          >
+          <div className="w-1/2 bg-[#EBEFF2] flex flex-col items-center justify-center -ml-px">
             <div ref={fadeCardRef}>
               <WhyCard
                 title="OPPORTUNITIES"
@@ -331,7 +386,8 @@ export default function SliderWhyWorkWithUs() {
                 linkText="#"
                 className="text-[#011F27]"
                 descriptionClassName="text-[#4B6166]"
-                buttonClassName="border-[#d2d5d8] hover:bg-[#d2d5d8] bg-transparent text-[#011F27]"
+                buttonVariant="outline"
+                buttonClassName="border-[#d2d5d8] hover:bg-[#d2d5d8] bg-transparent text-[#011F27] hover:text-[#011F27] focus:ring-[#d2d5d8] focus:ring-offset-0"
               />
             </div>
           </div>
@@ -351,7 +407,7 @@ export default function SliderWhyWorkWithUs() {
       {/* Vertical divider line (moves with the handle) */}
       <div
         ref={dividerRef}
-        className="absolute top-0 bottom-0 left-1/2 w-px bg-transparent z-30 pointer-events-none will-change-transform"
+        className="absolute top-0 bottom-0 left-1/2 w-none bg-transparent z-30 pointer-events-none will-change-transform"
       />
 
       {/* Draggable handle */}
@@ -361,7 +417,7 @@ export default function SliderWhyWorkWithUs() {
       >
         <div
           ref={handleRef}
-          className="w-12 h-12 rounded-full border border-white/60 flex items-center justify-center bg-white/5 backdrop-blur-sm cursor-ew-resize focus:outline-none focus:ring-2 focus:ring-white/50 will-change-transform"
+          className="w-[72px] h-[72px] rounded-full border-2 border-white flex items-center justify-center bg-[#499DB8] cursor-ew-resize focus:outline-none focus:ring-2 focus:ring-white/50 will-change-transform"
           style={{ touchAction: "none" }}
           aria-label="Drag to reveal"
           role="slider"
@@ -372,8 +428,7 @@ export default function SliderWhyWorkWithUs() {
           aria-valuetext="Drag left or right to reveal"
         >
           <span className="flex items-center justify-center gap-x-1 text-white">
-            <FiArrowLeft className="h-5 w-5" aria-hidden="true" />
-            <FiArrowRight className="h-5 w-5" aria-hidden="true" />
+            <CgArrowsHAlt className="h-8 w-8" aria-hidden="true" />
           </span>
         </div>
       </div>

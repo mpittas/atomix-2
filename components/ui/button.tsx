@@ -2,7 +2,7 @@ import React from "react";
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   size?: "small" | "medium" | "large";
-  variant?: "primary" | "dark" | "outline";
+  variant?: "primary" | "dark" | "outline" | "outline-white";
   children: React.ReactNode;
   href?: string;
 }
@@ -34,13 +34,19 @@ const Button = React.forwardRef<
       }
 
       if (variant === "outline") {
-        return "bg-transparent border border-[#D9DEE2] text-[#011F27] hover:bg-white";
+        return "bg-transparent border border-[#D9DEE2] text-[#011F27] hover:bg-[#D9DEE2]";
+      }
+
+      if (variant === "outline-white") {
+        return "bg-transparent border border-[#fff] text-[#fff] hover:bg-white hover:text-[#011F27]";
       }
 
       return "bg-gradient-to-r from-[#19A1C6] to-[#2BB9DF] hover:opacity-90";
     };
 
-    const baseClasses = `font-semibold rounded-full transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 active:scale-95 cursor-pointer ${variant === "outline" ? "" : "text-white"}`;
+    const baseClasses = `font-semibold rounded-full transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 active:scale-95 cursor-pointer ${
+      variant === "outline" || variant === "outline-white" ? "" : "text-white"
+    }`;
 
     if (href) {
       return (
