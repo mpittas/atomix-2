@@ -334,7 +334,7 @@ export default function MainPyramidWrapper() {
   return (
     <div
       ref={pyramidSectionRef}
-      className="min-h-[calc(100vh-126px)] rounded-3xl bg-linear-to-b from-[#004152] via-[#01485C] to-[#004152] relative overflow-hidden flex flex-col justify-center items-center"
+      className="h-[calc(100vh-130px)] rounded-3xl bg-linear-to-b from-[#004152] via-[#01485C] to-[#004152] relative overflow-hidden flex flex-col justify-center items-center"
     >
       <div className="absolute top-0 left-0 w-full h-[500px]">
         <SoftAurora
