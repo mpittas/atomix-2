@@ -93,8 +93,8 @@ function AboutSectionCard({
         priority
       />
       <div className="absolute inset-0 bg-gradient-to-t from-[#004054]/90 via-[#004054]/60 to-[#004054]/40" />
-      <div className="absolute inset-0 p-8 md:p-12 flex flex-col justify-end">
-        <p className="text-white text-lg md:text-xl leading-relaxed max-w-lg">
+      <div className="absolute inset-0 p-8 md:p-12 flex flex-col justify-center items-start">
+        <p className="text-white text-lg md:text-xl leading-relaxed max-w-sm">
           {description}
         </p>
       </div>
@@ -414,43 +414,48 @@ export default function MainHero() {
           className="w-full h-full"
           style={{ visibility: "hidden" }}
         >
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 h-full items-center max-w-[1200px] mx-auto">
-            {/* Left side - Section navigation */}
-            <div className="flex flex-col justify-center">
-              <div className="mb-8">
-                <h2 className="text-3xl md:text-4xl font-semibold text-[#011F27] mb-2">
-                  Atomix it is.
-                </h2>
-                <p className="text-[#011F27]/70 text-base">
-                  Property lending is overdue for a rebuild.
-                </p>
+          <div className="flex flex-col  justify-center h-full max-w-[1200px] mx-auto">
+            {/* Top heading row */}
+            <div className="mb-6">
+              <h2 className="text-3xl md:text-4xl font-semibold text-[#011F27] mb-2">
+                Atomix it is.
+              </h2>
+              <p className="text-[#011F27]/70 text-base">
+                Property lending is overdue for a rebuild.
+              </p>
+            </div>
+
+            {/* Bottom two-column row */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16  items-center">
+              {/* Left side - Section navigation */}
+              <div className="flex flex-col justify-center">
+                <div className="space-y-1">
+                  {aboutAtomixSections.map((section, index) => (
+                    <AboutSectionNavItem
+                      key={section.id}
+                      section={section}
+                      isActive={activeSection === index}
+                      onClick={() => setActiveSection(index)}
+                      itemRef={(el) => { aboutNavRefs.current[index] = el; }}
+                    />
+                  ))}
+                </div>
               </div>
-              <div className="space-y-1">
+
+              {/* Right side - Image cards */}
+              <div className="relative h-[270px]">
                 {aboutAtomixSections.map((section, index) => (
-                  <AboutSectionNavItem
+                  <AboutSectionCard
                     key={section.id}
-                    section={section}
+                    cardRef={(el) => { aboutCardRefs.current[index] = el; }}
+                    title={section.title}
+                    description={section.description}
+                    image={section.image}
                     isActive={activeSection === index}
-                    onClick={() => setActiveSection(index)}
-                    itemRef={(el) => { aboutNavRefs.current[index] = el; }}
+                    index={index}
                   />
                 ))}
               </div>
-            </div>
-
-            {/* Right side - Image cards */}
-            <div className="relative h-[300px] md:h-[400px] lg:h-[450px]">
-              {aboutAtomixSections.map((section, index) => (
-                <AboutSectionCard
-                  key={section.id}
-                  cardRef={(el) => { aboutCardRefs.current[index] = el; }}
-                  title={section.title}
-                  description={section.description}
-                  image={section.image}
-                  isActive={activeSection === index}
-                  index={index}
-                />
-              ))}
             </div>
           </div>
         </div>
