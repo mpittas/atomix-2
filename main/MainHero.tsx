@@ -117,16 +117,16 @@ function AboutSectionNavItem({ section, isActive, onClick, itemRef }: AboutSecti
       data-nav-item
       onClick={onClick}
       className={`group w-full text-left flex items-center justify-between py-4 border-b border-[#011F27]/10 transition-all duration-300 ${
-        isActive ? 'text-[#5BC7E4]' : 'text-[#011F27] hover:text-[#5BC7E4]'
+        isActive ? 'text-[#1BA8CE]' : 'text-[#011F27] hover:text-[#1BA8CE]'
       }`}
     >
-      <span className={`text-lg md:text-xl font-medium transition-all duration-300 ${
+      <span className={`text-2xl font-medium transition-all duration-300 ${
         isActive ? 'translate-x-2' : 'group-hover:translate-x-1'
       }`}>
         {section.title}
       </span>
       <FaArrowRight className={`w-5 h-5 transition-all duration-300 ${
-        isActive ? 'opacity-100 translate-x-0 text-[#5BC7E4]' : 'opacity-0 -translate-x-2 group-hover:opacity-50 group-hover:translate-x-0'
+        isActive ? 'opacity-100 translate-x-0 text-[#1BA8CE]' : 'opacity-0 -translate-x-2 group-hover:opacity-50 group-hover:translate-x-0'
       }`} />
     </button>
   );
@@ -469,7 +469,7 @@ export default function MainHero() {
               <h2 className="text-3xl md:text-4xl font-semibold text-[#011F27] mb-2">
                 Atomix it is.
               </h2>
-              <p className="text-[#011F27]/70 text-base">
+              <p className="text-[#485E64] text-base">
                 Property lending is overdue for a rebuild.
               </p>
             </div>
