@@ -465,11 +465,11 @@ export default function MainHero() {
         >
           <div className="flex flex-col  justify-center h-full max-w-[1200px] mx-auto">
             {/* Top heading row */}
-            <div className="mb-6">
-              <h2 className="text-3xl md:text-4xl font-semibold text-[#011F27] mb-2">
+            <div className="mb-10">
+              <h2 className="text-3xl md:text-[40px] font-semibold text-[#011F27] mb-3">
                 Atomix it is.
               </h2>
-              <p className="text-[#485E64] text-base">
+              <p className="text-[#485E64] text-xl">
                 Property lending is overdue for a rebuild.
               </p>
             </div>
