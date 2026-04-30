@@ -12,36 +12,37 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import SoftAurora from "@/components/backgrounds/SoftAurora";
 import InkSpill from "@/components/backgrounds/InkSpill";
 import type { InkSpillHandle } from "@/components/backgrounds/InkSpill";
-import IconBox from "@/components/IconBox";
-import IconBoxLight from "@/components/IconBoxLight";
-import { TbEyeClosed } from "react-icons/tb";
-import { IoShieldCheckmark } from "react-icons/io5";
-import { memo, useCallback } from "react";
+import { FaArrowRight } from "react-icons/fa";
+import { memo, useCallback, useState } from "react";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const aboutAtomixItems = [
+const aboutAtomixSections = [
   {
-    icon: <IoShieldCheckmark className="h-8 w-8" />,
+    id: "what-we-are",
     title: "What we are",
-    subtitle:
-      "a Platform-as-a-Service automating the full lifecycle of property loans, end-to-end; fully configurable and white-label ready",
+    description:
+      "A Platform-as-a-Service automating the full lifecycle of property loans, end-to-end; fully configurable and white-label ready",
+    image: "/images/atomix-it-is-1.jpg",
   },
   {
-    icon: <IoShieldCheckmark className="h-8 w-8" />,
+    id: "what-sets-us-apart",
     title: "What sets us apart",
-    subtitle:
-      "rules-first architecture, immutable on-chain audit and goal-driven intelligence operating within both; compliance enforced at every level, not bolted on",
+    description:
+      "Rules-first architecture, immutable on-chain audit and goal-driven intelligence operating within both; compliance enforced at every level, not bolted on",
+    image: "/images/atomix-it-is-2.jpg",
   },
   {
-    icon: <IoShieldCheckmark className="h-8 w-8" />,
+    id: "who-we-serve",
     title: "Who we serve",
-    subtitle: "lenders, capital providers, brokers and borrowers",
+    description: "Lenders, capital providers, brokers and borrowers",
+    image: "/images/atomix-it-is-3.jpg",
   },
   {
-    icon: <IoShieldCheckmark className="h-8 w-8" />,
+    id: "where-we-operate",
     title: "Where we operate",
-    subtitle: "UK-based, with global expansion built into the model",
+    description: "UK-based, with global expansion built into the model",
+    image: "/images/atomix-it-is-4.jpg",
   },
 ];
 
@@ -62,58 +63,82 @@ function renderTypewriterTitle(title: string) {
   ));
 }
 
-interface MissionVisionCardProps {
-  cardRef: RefObject<HTMLDivElement | null>;
+interface AboutSectionCardProps {
+  cardRef: ((el: HTMLDivElement | null) => void) | RefObject<HTMLDivElement | null>;
   title: string;
   description: string;
+  image: string;
+  isActive: boolean;
+  index: number;
 }
 
-function MissionVisionCard({
+function AboutSectionCard({
   cardRef,
-  title,
   description,
-}: MissionVisionCardProps) {
+  image,
+  isActive,
+  index,
+}: AboutSectionCardProps) {
   return (
     <div
-      ref={cardRef}
-      className="absolute left-1/2 top-1/2 -translate-1/2 md:p-8 text-center flex flex-col justify-center gap-5 w-3xl"
+      ref={cardRef as React.RefObject<HTMLDivElement>}
+      data-section-index={index}
+      className={`absolute inset-0 rounded-2xl overflow-hidden transition-opacity duration-500 ${isActive ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
     >
-      <h3 className="text-4xl md:text-8xl uppercase leading-[1.05]">
-        {renderTypewriterTitle(title)}
-      </h3>
-      <div data-hero-item className="w-full h-px bg-white/20 mb-3" />
-      <div data-hero-item className="text-2xl leading-relaxed mb-6">
-        {description}
-      </div>
-      <div data-hero-item>
-        <DefButton href="#" size="large">
-          Learn More
-        </DefButton>
+      <Image
+        src={image}
+        alt=""
+        fill
+        className="object-cover"
+        priority
+      />
+      <div className="absolute inset-0 bg-gradient-to-t from-[#004054]/90 via-[#004054]/60 to-[#004054]/40" />
+      <div className="absolute inset-0 p-8 md:p-12 flex flex-col justify-end">
+        <p className="text-white text-lg md:text-xl leading-relaxed max-w-lg">
+          {description}
+        </p>
       </div>
     </div>
   );
 }
 
+interface AboutSectionNavItemProps {
+  section: typeof aboutAtomixSections[0];
+  isActive: boolean;
+  onClick: () => void;
+  itemRef: ((el: HTMLButtonElement | null) => void) | RefObject<HTMLButtonElement | null>;
+}
+
+function AboutSectionNavItem({ section, isActive, onClick, itemRef }: AboutSectionNavItemProps) {
+  return (
+    <button
+      ref={itemRef as React.RefObject<HTMLButtonElement>}
+      data-nav-item
+      onClick={onClick}
+      className={`group w-full text-left flex items-center justify-between py-4 border-b border-[#011F27]/10 transition-all duration-300 ${
+        isActive ? 'text-[#5BC7E4]' : 'text-[#011F27] hover:text-[#5BC7E4]'
+      }`}
+    >
+      <span className={`text-lg md:text-xl font-medium transition-all duration-300 ${
+        isActive ? 'translate-x-2' : 'group-hover:translate-x-1'
+      }`}>
+        {section.title}
+      </span>
+      <FaArrowRight className={`w-5 h-5 transition-all duration-300 ${
+        isActive ? 'opacity-100 translate-x-0 text-[#5BC7E4]' : 'opacity-0 -translate-x-2 group-hover:opacity-50 group-hover:translate-x-0'
+      }`} />
+    </button>
+  );
+}
+
 export default function MainHero() {
   const title1SplitRef = useRef<SplitTextHandle>(null);
-  const title2SplitRef = useRef<SplitTextHandle>(null);
-  const missionCardRef = useRef<HTMLDivElement>(null);
-  const visionCardRef = useRef<HTMLDivElement>(null);
   const inkSpillRef = useRef<InkSpillHandle>(null);
+  const aboutCardRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const aboutNavRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const [activeSection, setActiveSection] = useState(0);
 
   useGSAP(() => {
-    if (!missionCardRef.current || !visionCardRef.current) return;
-
-    const missionChars = missionCardRef.current.querySelectorAll<HTMLElement>(
-      "[data-hero-type-char]",
-    );
-    const missionItems =
-      missionCardRef.current.querySelectorAll<HTMLElement>("[data-hero-item]");
-    const visionChars = visionCardRef.current.querySelectorAll<HTMLElement>(
-      "[data-hero-type-char]",
-    );
-    const visionItems =
-      visionCardRef.current.querySelectorAll<HTMLElement>("[data-hero-item]");
 
     // --- PAGE LOAD ANIMATION ---
     const loadTl = gsap.timeline({ delay: 0.15 });
@@ -145,25 +170,19 @@ export default function MainHero() {
     gsap.set("#def-hero-title-2-bg-shader", { opacity: 1 });
     gsap.set("#def-hero-title-2-bg-aurora", { autoAlpha: 0 });
     gsap.set("#def-hero-title-2", { autoAlpha: 0 });
-    gsap.set("#def-hero-title-2-list .hero-list-item", {
-      autoAlpha: 0,
-      y: 40,
+    gsap.set("#def-hero-about-sections", { autoAlpha: 0 });
+    
+    // Hide all about cards except first
+    aboutCardRefs.current.forEach((card, i) => {
+      if (card) gsap.set(card, { opacity: i === 0 ? 1 : 0, scale: i === 0 ? 1 : 1.05 });
     });
-    gsap.set("#def-hero-title-2-heading", { autoAlpha: 1, y: 0 });
-    gsap.set("#def-hero-mission-vision", { autoAlpha: 0 });
-    gsap.set(missionCardRef.current, { autoAlpha: 0 });
-    gsap.set(visionCardRef.current, { autoAlpha: 0 });
-    gsap.set(missionChars, { opacity: 0 });
-    gsap.set(visionChars, { opacity: 0 });
-    gsap.set(missionItems, { y: 40, opacity: 0 });
-    gsap.set(visionItems, { y: 40, opacity: 0 });
 
     // --- SCROLL TIMELINE (scrub, no snap) ---
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: "#def-hero-main",
         start: "top top",
-        end: "+=7000",
+        end: "+=6500",
         scrub: 2.5,
         pin: true,
       },
@@ -209,189 +228,59 @@ export default function MainHero() {
         "centerReached",
       );
 
-    // Defer adding split-char tweens until SplitText has populated its targets
-    const addSplitTweens = () => {
-      const t2Targets = title2SplitRef.current?.getTargets() ?? [];
-      if (t2Targets.length) {
-        gsap.set(t2Targets, { opacity: 0, y: 26 });
-        tl.fromTo(
-          t2Targets,
-          { opacity: 0, y: 26 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.6,
-            ease: "power3.out",
-            stagger: 0.02,
-          },
-          "centerReached+=0.6",
-        );
-      }
-    };
-
-    document.fonts.ready.then(() => {
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          addSplitTweens();
-          ScrollTrigger.refresh();
-        });
-      });
-    });
-
-    // Stage 3: List items and button
-    tl.addLabel("title2Visible")
+    // Stage 3: About sections fade in (white shader stays visible)
+    tl.addLabel("aboutVisible", "centerReached+=1.1")
       .to(
-        "#def-hero-title-2-list .hero-list-item",
-        {
-          autoAlpha: 1,
-          y: 0,
-          duration: 2,
-          ease: "power3.out",
-          stagger: 0.72,
-        },
-        "title2Visible+=0.9",
+        "#def-hero-about-sections",
+        { autoAlpha: 1, duration: 0.8, ease: "power2.out" },
+        "aboutVisible",
       )
-      .addLabel("listVisible")
-
-      // Stage 4: Fade out list items, reveal mission/vision boxes in place
+      // Keep white shader visible - don't fade it out since we scroll to next section after
+      // Section 1 active
+      .addLabel("section1", "aboutVisible+=0.8")
+      .call(() => setActiveSection(0), undefined, "section1")
+      // Section 2 transition
+      .addLabel("section2", "section1+=1.2")
+      .call(() => setActiveSection(1), undefined, "section2")
       .to(
-        "#def-hero-title-2-list .hero-list-item",
-        {
-          autoAlpha: 0,
-          y: -24,
-          duration: 1.8,
-          ease: "power2.inOut",
-          stagger: 0.18,
-        },
-        "listVisible+=2.1",
+        aboutCardRefs.current[1],
+        { opacity: 1, scale: 1, duration: 0.5, ease: "power2.out" },
+        "section2",
       )
       .to(
-        () => title2SplitRef.current?.getTargets() ?? [],
-        {
-          opacity: 0,
-          y: -16,
-          duration: 1.4,
-          ease: "power2.inOut",
-          stagger: { each: 0.018, from: "start" },
-        },
-        "listVisible+=2.1",
+        aboutCardRefs.current[0],
+        { opacity: 0, scale: 0.98, duration: 0.4, ease: "power2.in" },
+        "section2",
+      )
+      // Section 3 transition
+      .addLabel("section3", "section2+=1.2")
+      .call(() => setActiveSection(2), undefined, "section3")
+      .to(
+        aboutCardRefs.current[2],
+        { opacity: 1, scale: 1, duration: 0.5, ease: "power2.out" },
+        "section3",
       )
       .to(
-        "#def-hero-title-2-heading",
-        {
-          autoAlpha: 0,
-          height: 0,
-          marginBottom: 0,
-          paddingTop: 0,
-          paddingBottom: 0,
-          duration: 1.6,
-          ease: "power2.inOut",
-        },
-        "listVisible+=2.4",
+        aboutCardRefs.current[1],
+        { opacity: 0, scale: 0.98, duration: 0.4, ease: "power2.in" },
+        "section3",
+      )
+      // Section 4 transition
+      .addLabel("section4", "section3+=1.2")
+      .call(() => setActiveSection(3), undefined, "section4")
+      .to(
+        aboutCardRefs.current[3],
+        { opacity: 1, scale: 1, duration: 0.5, ease: "power2.out" },
+        "section4",
       )
       .to(
-        "#def-hero-title-2-bg-aurora",
-        { autoAlpha: 0, duration: 0.8, ease: "power2.inOut" },
-        "listVisible+=5",
+        aboutCardRefs.current[2],
+        { opacity: 0, scale: 0.98, duration: 0.4, ease: "power2.in" },
+        "section4",
       )
-      .to(
-        inkProgress,
-        {
-          value: 0,
-          duration: 2.6,
-          ease: "power2.in",
-          onUpdate: () => inkSpillRef.current?.setProgress(inkProgress.value),
-        },
-        "listVisible+=3.5",
-      )
-      .to(
-        "#def-hero-mission-vision",
-        { autoAlpha: 1, duration: 0.5, ease: "power2.out" },
-        "listVisible+=5.7",
-      )
-      .addLabel("missionVisible", "listVisible+=5.9")
-      .fromTo(
-        missionCardRef.current,
-        { autoAlpha: 0 },
-        { autoAlpha: 1, duration: 0.45, ease: "power2.out" },
-        "missionVisible",
-      )
-      .to(
-        missionChars,
-        {
-          opacity: 1,
-          duration: 0.06,
-          ease: "none",
-          stagger: 0.095,
-        },
-        "missionVisible",
-      )
-      .to(
-        missionItems,
-        {
-          y: 0,
-          opacity: 1,
-          duration: 1.05,
-          ease: "power2.out",
-          stagger: 0.28,
-        },
-        "missionVisible+=0.45",
-      )
-      .addLabel("visionVisible", "missionVisible+=2.4")
-      .to(
-        missionItems,
-        {
-          y: -30,
-          opacity: 0,
-          duration: 0.4,
-          ease: "power2.in",
-          stagger: 0.05,
-        },
-        "visionVisible",
-      )
-      .to(
-        missionChars,
-        {
-          opacity: 0,
-          duration: 0.03,
-          ease: "none",
-          stagger: { each: 0.018, from: "end" },
-        },
-        "visionVisible+=0.05",
-      )
-      .to(
-        missionCardRef.current,
-        { autoAlpha: 0, duration: 0.55, ease: "power2.inOut" },
-        "visionVisible+=0.3",
-      )
-      .fromTo(
-        visionCardRef.current,
-        { autoAlpha: 0 },
-        { autoAlpha: 1, duration: 0.55, ease: "power2.inOut" },
-        "visionVisible+=0.3",
-      )
-      .to(
-        visionChars,
-        {
-          opacity: 1,
-          duration: 0.06,
-          ease: "none",
-          stagger: 0.095,
-        },
-        "visionVisible+=1.15",
-      )
-      .to(
-        visionItems,
-        {
-          y: 0,
-          opacity: 1,
-          duration: 1.05,
-          ease: "power2.out",
-          stagger: 0.28,
-        },
-        "visionVisible+=1.7",
-      )
-      .addLabel("missionVisionComplete");
+      .addLabel("aboutComplete")
+      // Stay on last section for a bit before unpinning
+      .to({}, { duration: 1.2 }, "aboutComplete");
   }, []);
 
   return (
@@ -521,71 +410,48 @@ export default function MainHero() {
         style={{ visibility: "hidden" }}
       >
         <div
-          id="def-hero-title-2-heading"
-          className="w-full max-w-[1200px] mx-auto mb-8 overflow-hidden"
+          id="def-hero-about-sections"
+          className="w-full h-full"
+          style={{ visibility: "hidden" }}
         >
-          <div className="max-w-[700px]">
-            <SplitText
-              ref={title2SplitRef}
-              startPaused
-              text="Property lending is overdue for a rebuild. Atomix is it."
-              textAlign="left"
-            />
-          </div>
-        </div>
-
-        <div className="relative w-full max-w-[1200px] mx-auto mt-2">
-          <div
-            id="def-hero-title-2-list"
-            className="w-full grid grid-cols-1 md:grid-cols-2 gap-4"
-          >
-            {aboutAtomixItems.map((item) => (
-              <div
-                key={item.title}
-                className="relative h-full will-change-transform"
-                onMouseEnter={(e) => {
-                  gsap.to(e.currentTarget, {
-                    scale: 1.2,
-                    zIndex: 10,
-                    duration: 0.25,
-                    ease: "power2.out",
-                  });
-                }}
-                onMouseLeave={(e) => {
-                  gsap.to(e.currentTarget, {
-                    scale: 1,
-                    zIndex: 1,
-                    duration: 0.3,
-                    ease: "power2.out",
-                  });
-                }}
-              >
-                <IconBoxLight
-                  icon={item.icon}
-                  title={item.title}
-                  description={item.subtitle}
-                  className="hero-list-item h-full"
-                />
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 h-full items-center max-w-[1200px] mx-auto">
+            {/* Left side - Section navigation */}
+            <div className="flex flex-col justify-center">
+              <div className="mb-8">
+                <h2 className="text-3xl md:text-4xl font-semibold text-[#011F27] mb-2">
+                  Atomix it is.
+                </h2>
+                <p className="text-[#011F27]/70 text-base">
+                  Property lending is overdue for a rebuild.
+                </p>
               </div>
-            ))}
-          </div>
+              <div className="space-y-1">
+                {aboutAtomixSections.map((section, index) => (
+                  <AboutSectionNavItem
+                    key={section.id}
+                    section={section}
+                    isActive={activeSection === index}
+                    onClick={() => setActiveSection(index)}
+                    itemRef={(el) => { aboutNavRefs.current[index] = el; }}
+                  />
+                ))}
+              </div>
+            </div>
 
-          <div
-            id="def-hero-mission-vision"
-            className="absolute inset-x-0 top-0 w-full min-h-[520px] md:min-h-[420px] text-white"
-            style={{ visibility: "hidden" }}
-          >
-            <MissionVisionCard
-              cardRef={missionCardRef}
-              title="Mission"
-              description="Rebuild UK property lending. Start with bridging. Extend into SME CRE term loans — same infrastructure, no rebuild."
-            />
-
-            <MissionVisionCard
-              cardRef={visionCardRef}
-              title="Vision"
-              description="Rebuild UK property lending. Start with bridging. Extend into SME CRE term loans — same infrastructure, no rebuild."
-            />
+            {/* Right side - Image cards */}
+            <div className="relative h-[300px] md:h-[400px] lg:h-[450px]">
+              {aboutAtomixSections.map((section, index) => (
+                <AboutSectionCard
+                  key={section.id}
+                  cardRef={(el) => { aboutCardRefs.current[index] = el; }}
+                  title={section.title}
+                  description={section.description}
+                  image={section.image}
+                  isActive={activeSection === index}
+                  index={index}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </div>
