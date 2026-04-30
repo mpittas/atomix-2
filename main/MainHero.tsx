@@ -93,7 +93,7 @@ function AboutSectionCard({
         className="object-cover"
         priority
       />
-      <div className="absolute inset-0 bg-gradient-to-t from-[#004054]/90 via-[#004054]/60 to-[#004054]/40" />
+      <div className="absolute inset-0 bg-gradient-to-b from-[#041B21]/0 to-[#041B21]/100 opacity-70" />
       <div className="absolute inset-0 p-8 md:p-12 flex flex-col justify-center items-start">
         <p className="text-white text-lg md:text-xl leading-relaxed max-w-sm">
           {description}
@@ -116,7 +116,7 @@ function AboutSectionNavItem({ section, isActive, onClick, itemRef }: AboutSecti
       ref={itemRef as React.RefObject<HTMLButtonElement>}
       data-nav-item
       onClick={onClick}
-      className={`group w-full text-left flex items-center justify-between py-4 border-b border-[#011F27]/10 transition-all duration-300 ${
+      className={`group w-full text-left flex items-center justify-between py-4 transition-all duration-300 ${
         isActive ? 'text-[#1BA8CE]' : 'text-[#011F27] hover:text-[#1BA8CE]'
       }`}
     >
@@ -126,7 +126,7 @@ function AboutSectionNavItem({ section, isActive, onClick, itemRef }: AboutSecti
         {section.title}
       </span>
       <FaArrowRight className={`w-5 h-5 transition-all duration-300 ${
-        isActive ? 'opacity-100 translate-x-0 text-[#1BA8CE]' : 'opacity-0 -translate-x-2 group-hover:opacity-50 group-hover:translate-x-0'
+        isActive ? 'opacity-100 translate-x-0 text-[#1BA8CE]' : 'group-hover:translate-x-0'
       }`} />
     </button>
   );
@@ -475,9 +475,9 @@ export default function MainHero() {
             </div>
 
             {/* Bottom two-column row */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16  items-center">
+            <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-16 items-center">
               {/* Left side - Section navigation */}
-              <div className="flex flex-col justify-center">
+              <div className="lg:col-span-2 flex flex-col justify-center">
                 <div className="space-y-1">
                   {aboutAtomixSections.map((section, index) => (
                     <AboutSectionNavItem
@@ -492,7 +492,7 @@ export default function MainHero() {
               </div>
 
               {/* Right side - Image cards */}
-              <div className="relative h-[270px]">
+              <div className="lg:col-span-3 relative h-[270px]">
                 {aboutAtomixSections.map((section, index) => (
                   <AboutSectionCard
                     key={section.id}
