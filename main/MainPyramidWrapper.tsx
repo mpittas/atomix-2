@@ -28,32 +28,32 @@ type HighlightInfo = {
 
 const iconBoxesData: IconBoxData[] = [
   {
-    icon: "/icons/white/shield-check-white.svg",
+    icon: "/icons/gradient/shield-blue-gradient.png",
     title: "Simple SaaS",
     description: "automated and easy to change, but simple products only",
   },
   {
-    icon: "/icons/white/target-arrow.svg",
+    icon: "/icons/gradient/target-blue-gradient.png",
     title: "Bespoke builds",
     description:
       "automated and complex, but £500k+ upfront and expensive to change",
     items: [
       {
-        icon: <FiCheck className="text-white/80 w-5 h-5 shrink-0" />,
+        icon: <FiCheck className="text-white/70 w-5 h-5 shrink-0" />,
         text: "Automated",
       },
       {
-        icon: <FiCheck className="text-white/80 w-5 h-5 shrink-0" />,
+        icon: <FiCheck className="text-white/70 w-5 h-5 shrink-0" />,
         text: "Complex logic",
       },
       {
-        icon: <FiX className="text-white/80 w-5 h-5 shrink-0" />,
+        icon: <FiX className="text-white/70 w-5 h-5 shrink-0" />,
         text: "£600k, slow to change",
       },
     ],
   },
   {
-    icon: "/icons/white/module-simple.svg",
+    icon: "/icons/gradient/links-blue-gradient.png",
     title: "Disconnected stacks",
     description:
       "complex and configurable, but humans are the glue; nothing is truly automated",
@@ -366,7 +366,7 @@ export default function MainPyramidWrapper() {
           />
         </div>
 
-        <div ref={animationWrapRef} className="w-full flex relative -mt-20">
+        <div ref={animationWrapRef} className="w-full flex relative -mt-16">
         {/* Left highlight info box - absolutely positioned on left during pyramid highlight sequence */}
         <div
           ref={highlightBoxRef}
@@ -388,7 +388,7 @@ export default function MainPyramidWrapper() {
                 </h3>
                 <p
                   ref={highlightDescRef}
-                  className="text-white/80 text-md leading-relaxed mb-9"
+                  className="text-white/70 text-md leading-relaxed mb-9"
                 >
                   {info.description}
                 </p>
@@ -402,7 +402,7 @@ export default function MainPyramidWrapper() {
                       className="flex items-start gap-4"
                     >
                       <div
-                        className={`w-11 h-11 rounded-xl flex items-center justify-center shrink-0 border-2 ${
+                        className={`w-13 h-13 rounded-xl flex items-center justify-center shrink-0 border-2 ${
                           item.positive
                             ? "border-white/0 bg-[#0C596E]"
                             : "border-white/30 bg-transparent"
@@ -418,7 +418,7 @@ export default function MainPyramidWrapper() {
                         <span className="text-white font-semibold text-base leading-tight">
                           {item.title}
                         </span>
-                        <span className="text-white/80 text-md leading-relaxed mt-0.5">
+                        <span className="text-white/70 text-md leading-relaxed mt-0.5">
                           {item.description}
                         </span>
                       </div>
@@ -440,26 +440,28 @@ export default function MainPyramidWrapper() {
           />
         </div>
 
-        <div className="flex-1 flex flex-col justify-center gap-12 pl-20 max-w-lg">
+        <div className="flex-1 flex flex-col justify-center gap-8 pl-20 max-w-lg">
           {iconBoxesData.map((box, index) => (
             <div
               key={index}
               ref={(el) => {
                 iconBoxRefs.current[index] = el;
               }}
-              className="flex items-start gap-4"
+              className="flex items-start gap-6"
             >
-              <img
-                src={box.icon}
-                alt={box.title}
-                className="w-10 h-10 shrink-0 mt-1"
-              />
+              <div className="w-13 h-13 shrink-0 flex justify-center items-center rounded-xl bg-[#015167]">
+                <img
+                  src={box.icon}
+                  alt={box.title}
+                  className="w-8 h-8"
+                />
+              </div>
               <div>
                 <h3 className="text-white font-semibold text-lg mb-1">
                   {box.title}
                 </h3>
                 <p
-                  className={`text-white/80 text-base leading-relaxed ${
+                  className={`text-white/70 text-base leading-relaxed ${
                     box.items ? "mb-4" : ""
                   }`}
                 >
@@ -470,7 +472,7 @@ export default function MainPyramidWrapper() {
                     {box.items.map((item, itemIndex) => (
                       <li
                         key={itemIndex}
-                        className="flex items-center gap-3 text-white/80"
+                        className="flex items-center gap-3 text-white/70"
                       >
                         {item.icon} {item.text}
                       </li>
