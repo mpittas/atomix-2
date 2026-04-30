@@ -174,6 +174,11 @@ export default function MainHero() {
     gsap.set("#def-hero-title-2-bg-aurora", { autoAlpha: 0 });
     gsap.set("#def-hero-title-2", { autoAlpha: 0 });
     gsap.set("#def-hero-about-sections", { autoAlpha: 0 });
+    gsap.set("#def-hero-images", { xPercent: -50, yPercent: 0, force3D: true });
+    gsap.set(["#def-hero-image-mobile", "#def-hero-image-desktop"], {
+      xPercent: 0,
+      force3D: true,
+    });
     
     // Hide all about cards except first
     aboutCardRefs.current.forEach((card, i) => {
@@ -195,7 +200,7 @@ export default function MainHero() {
     // Stage 1: Title 1 exits upward, images rise to center
     tl.to("#def-hero-title-1", { top: "-20%", opacity: 0, duration: 1 }, 0).to(
       "#def-hero-images",
-      { top: "50%", y: "-50%", duration: 1 },
+      { top: "50%", yPercent: -50, duration: 1 },
       0,
     );
 
@@ -379,7 +384,7 @@ export default function MainHero() {
 
       {/* IMAGES - page load animation */}
       <div
-        className="absolute top-[70%] left-1/2 -translate-x-1/2 w-[65%]"
+        className="absolute top-[70%] left-1/2 w-[65%]"
         id="def-hero-images"
         style={{ visibility: "hidden" }}
       >
@@ -435,7 +440,7 @@ export default function MainHero() {
               color2="#d7f6faff"
               noiseFrequency={1}
               noiseAmplitude={3.5}
-              bandHeight={0.25}
+              bandHeight={0.4}
               bandSpread={1}
               octaveDecay={0.12}
               layerOffset={0.5}
