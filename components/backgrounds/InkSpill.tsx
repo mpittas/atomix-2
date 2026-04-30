@@ -79,18 +79,17 @@ void main() {
   float n2 = fbm(p * uScale * 1.7 - vec2(uTime * 0.03, uTime * 0.05));
   float n = (n1 * 0.65 + n2 * 0.35);
 
-  // Radial bias: highest at center so ink starts from the middle and spills outward
-  float r = length(p);
-  float radial = 1.0 - r * 0.85;
+  // Bottom bias: highest at bottom so ink starts from the bottom and spills upward
+  float bottomBias = 1.0 - uv.y; // 1.0 at bottom, 0.0 at top
 
   // Combined "ink field" — higher means more likely to be inked
-  float field = n * 0.7 + radial;
+  float field = n * 0.8 + bottomBias * 1.2;
 
   // Map progress (0..1) to threshold; lower threshold = more ink visible.
   // Range is chosen so progress=0 -> mask is fully 0 (field max ~ 1.7),
   // and progress=1 -> mask is fully 1 (so the slide ends as a solid color).
   float prog = clamp(uProgress, 0.0, 1.0);
-  float threshold = mix(2.0, -0.5, prog);
+  float threshold = mix(2.5, -0.5, prog);
   float mask = smoothstep(threshold, threshold + uEdge, field);
 
   // Hard guarantee: no leftover ink at progress=0, full cover at progress=1.
@@ -121,7 +120,11 @@ const InkSpill = forwardRef<InkSpillHandle, InkSpillProps>(function InkSpill(
   useEffect(() => {
     if (!containerRef.current) return;
     const container = containerRef.current;
-    const renderer = new Renderer({ alpha: true, premultipliedAlpha: false });
+    const renderer = new Renderer({ 
+      alpha: true, 
+      premultipliedAlpha: false,
+      dpr: typeof window !== "undefined" ? window.devicePixelRatio : 1 
+    });
     const gl = renderer.gl;
     gl.clearColor(0, 0, 0, 0);
 
@@ -140,12 +143,12 @@ const InkSpill = forwardRef<InkSpillHandle, InkSpillProps>(function InkSpill(
     });
     const mesh = new Mesh(gl, { geometry, program });
 
-    function resize() {
+    const resizeObserver = new ResizeObserver(() => {
+      renderer.dpr = window.devicePixelRatio || 1;
       renderer.setSize(container.offsetWidth, container.offsetHeight);
       program.uniforms.uResolution.value = [gl.canvas.width, gl.canvas.height];
-    }
-    window.addEventListener("resize", resize);
-    resize();
+    });
+    resizeObserver.observe(container);
 
     container.appendChild(gl.canvas);
 
@@ -160,7 +163,7 @@ const InkSpill = forwardRef<InkSpillHandle, InkSpillProps>(function InkSpill(
 
     return () => {
       cancelAnimationFrame(animationFrameId);
-      window.removeEventListener("resize", resize);
+      resizeObserver.disconnect();
       if (gl.canvas.parentNode === container) {
         container.removeChild(gl.canvas);
       }

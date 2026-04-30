@@ -191,7 +191,11 @@ export default function SoftAurora({
   useEffect(() => {
     if (!containerRef.current) return;
     const container = containerRef.current;
-    const renderer = new Renderer({ alpha: true, premultipliedAlpha: false });
+    const renderer = new Renderer({ 
+      alpha: true, 
+      premultipliedAlpha: false,
+      dpr: typeof window !== "undefined" ? window.devicePixelRatio : 1
+    });
     const gl = renderer.gl;
     gl.clearColor(0, 0, 0, 0);
 
@@ -211,7 +215,8 @@ export default function SoftAurora({
       targetMouse = [0.5, 0.5];
     }
 
-    function resize() {
+    const resizeObserver = new ResizeObserver(() => {
+      renderer.dpr = window.devicePixelRatio || 1;
       renderer.setSize(container.offsetWidth, container.offsetHeight);
       if (program) {
         program.uniforms.uResolution.value = [
@@ -220,9 +225,8 @@ export default function SoftAurora({
           gl.canvas.width / gl.canvas.height,
         ];
       }
-    }
-    window.addEventListener("resize", resize);
-    resize();
+    });
+    resizeObserver.observe(container);
 
     const geometry = new Triangle(gl);
     program = new Program(gl, {
@@ -285,7 +289,7 @@ export default function SoftAurora({
 
     return () => {
       cancelAnimationFrame(animationFrameId);
-      window.removeEventListener("resize", resize);
+      resizeObserver.disconnect();
       if (enableMouseInteraction) {
         gl.canvas.removeEventListener("mousemove", handleMouseMove);
         gl.canvas.removeEventListener("mouseleave", handleMouseLeave);

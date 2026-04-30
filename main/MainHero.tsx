@@ -76,13 +76,13 @@ function MissionVisionCard({
   return (
     <div
       ref={cardRef}
-      className="absolute left-1/2 top-1/2 -translate-1/2 md:p-8 text-left flex flex-col justify-center gap-5 w-xl"
+      className="absolute left-1/2 top-1/2 -translate-1/2 md:p-8 text-center flex flex-col justify-center gap-5 w-3xl"
     >
       <h3 className="text-4xl md:text-8xl uppercase leading-[1.05]">
         {renderTypewriterTitle(title)}
       </h3>
       <div data-hero-item className="w-full h-px bg-white/20 mb-3" />
-      <div data-hero-item className="text-base md:text-xl leading-relaxed mb-6">
+      <div data-hero-item className="text-2xl leading-relaxed mb-6">
         {description}
       </div>
       <div data-hero-item>
