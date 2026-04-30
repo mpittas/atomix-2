@@ -7,6 +7,7 @@ import { useGSAP } from "@gsap/react";
 import AtomixPyramidNewDesign from "@/animations/AtomixPyramidNewDesign";
 import { FiCheck, FiX } from "react-icons/fi";
 import SoftAurora from "@/components/backgrounds/SoftAurora";
+import DefHeading from "@/components/typo/DefHeading";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -133,6 +134,8 @@ const HIGHLIGHT_PHASE_2_END = 0.6;
 
 export default function MainPyramidWrapper() {
   const pyramidSectionRef = useRef<HTMLDivElement>(null);
+  const headingWrapRef = useRef<HTMLDivElement>(null);
+  const animationWrapRef = useRef<HTMLDivElement>(null);
   const pyramidColRef = useRef<HTMLDivElement>(null);
   const iconBoxRefs = useRef<Array<HTMLDivElement | null>>([]);
   const pyramidApiRef = useRef<{ setSlider: (v: number) => void } | null>(null);
@@ -147,14 +150,18 @@ export default function MainPyramidWrapper() {
 
   useGSAP(() => {
     const section = pyramidSectionRef.current;
+    const headingWrap = headingWrapRef.current;
+    const animationWrap = animationWrapRef.current;
     const pyramidCol = pyramidColRef.current;
     const boxes = iconBoxRefs.current.filter(
       (box): box is HTMLDivElement => box !== null,
     );
-    if (!section || !pyramidCol || boxes.length === 0) return;
+    if (!section || !headingWrap || !animationWrap || !pyramidCol || boxes.length === 0) return;
 
     // Initial state: pyramid on the right side of the wrapper,
     // icon boxes hidden, highlight box visible with first content.
+    gsap.set(headingWrap, { autoAlpha: 0, y: 32 });
+    gsap.set(animationWrap, { autoAlpha: 0, y: 28 });
     gsap.set(pyramidCol, { xPercent: 85 });
     gsap.set(boxes, { autoAlpha: 0, y: 32 });
     gsap.set(highlightBoxRef.current, { autoAlpha: 1 });
@@ -193,7 +200,23 @@ export default function MainPyramidWrapper() {
     });
     resizeObserver.observe(document.body);
 
-    tl.to(pyramidProgress, {
+    tl.to(headingWrap, {
+      autoAlpha: 1,
+      y: 0,
+      ease: "power2.out",
+      duration: 0.22,
+    })
+      .to(
+        animationWrap,
+        {
+          autoAlpha: 1,
+          y: 0,
+          ease: "power2.out",
+          duration: 0.18,
+        },
+        0.18,
+      )
+      .to(pyramidProgress, {
       value: 1,
       ease: "none",
       duration: 1,
@@ -219,16 +242,16 @@ export default function MainPyramidWrapper() {
           setHighlightIndex(newIndex);
         }
       },
-    })
+    }, 0.32)
       .to(
         pyramidCol,
         { xPercent: 0, ease: "none", duration: 0.22 },
-        HIGHLIGHT_SEQUENCE_END,
+        0.32 + HIGHLIGHT_SEQUENCE_END,
       )
       .to(
         highlightBoxRef.current,
         { autoAlpha: 0, ease: "power2.out", duration: 0.15 },
-        HIGHLIGHT_SEQUENCE_END,
+        0.32 + HIGHLIGHT_SEQUENCE_END,
       )
       .to(
         boxes,
@@ -239,7 +262,7 @@ export default function MainPyramidWrapper() {
           duration: 0.25,
           stagger: 0.08,
         },
-        0.8,
+        1.12,
       );
 
     return () => {
@@ -332,7 +355,18 @@ export default function MainPyramidWrapper() {
         />
       </div>
 
-      <div className="max-w-[1200px] min-h-[200px] my-auto flex relative">
+      <div className="relative z-10 my-auto flex w-full max-w-[1200px] flex-col items-center justify-center gap-4 px-6">
+        <div ref={headingWrapRef} className="w-full mt-20">
+          <DefHeading
+            theme="light"
+            badgeText=""
+            title="The Existing Problems"
+            description="Property lending is manual, opaque and structurally exposed to fraud — not by intent, but by design. Legacy infrastructure was never built to handle the volume, complexity or transparency this market demands."
+            showBadge={false}
+          />
+        </div>
+
+        <div ref={animationWrapRef} className="w-full flex relative -mt-20">
         {/* Left highlight info box - absolutely positioned on left during pyramid highlight sequence */}
         <div
           ref={highlightBoxRef}
@@ -446,6 +480,7 @@ export default function MainPyramidWrapper() {
               </div>
             </div>
           ))}
+          </div>
         </div>
       </div>
     </div>
